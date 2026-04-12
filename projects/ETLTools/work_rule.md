@@ -183,7 +183,7 @@ AI Agent thực hiện:
 
 1. **Domain Layer First** (Core Business Logic)
    ```
-   src/ETLTools.Domain/Features/{Feature}/
+   src/Lifes.Domain/Features/{Feature}/
    ├── Entities/
    ├── ValueObjects/
    └── Enums/
@@ -191,7 +191,7 @@ AI Agent thực hiện:
 
 2. **Application Layer** (Use Cases)
    ```
-   src/ETLTools.Application/Features/{Feature}/
+   src/Lifes.Application/Features/{Feature}/
    ├── Commands/
    ├── Queries/
    └── DTOs/
@@ -199,13 +199,13 @@ AI Agent thực hiện:
 
 3. **Infrastructure Layer** (External Services)
    ```
-   src/ETLTools.Infrastructure/Features/{Feature}/
+   src/Lifes.Infrastructure/Features/{Feature}/
    └── Services/
    ```
 
 4. **Presentation Layer** (UI)
    ```
-   src/ETLTools.Presentation.WPF/Features/{Feature}/
+   src/Lifes.Presentation.WPF/Features/{Feature}/
    ├── [Feature]View.xaml
    ├── [Feature]ViewModel.cs
    └── Models/
@@ -213,7 +213,7 @@ AI Agent thực hiện:
 
 5. **Core Layer** (Shared Interfaces)
    ```
-   src/ETLTools.Core/
+   src/Lifes.Core/
    ├── Interfaces/
    └── Models/
    ```
@@ -435,11 +435,11 @@ Update Product Requirements Document với thông tin mới:
 
 ```
 src/
-├── ETLTools.Presentation.WPF/
-├── ETLTools.Application/
-├── ETLTools.Domain/
-├── ETLTools.Infrastructure/
-└── ETLTools.Core/
+├── Lifes.Presentation.WPF/
+├── Lifes.Application/
+├── Lifes.Domain/
+├── Lifes.Infrastructure/
+└── Lifes.Core/
 ```
 
 ## Features
@@ -486,18 +486,18 @@ src/
 ### Directory Structure
 
 ```
-ETLTools/
+Lifes/
 ├── src/                                    # Source code
-│   ├── ETLTools.Presentation.WPF/
-│   ├── ETLTools.Application/
-│   ├── ETLTools.Domain/
-│   ├── ETLTools.Infrastructure/
-│   └── ETLTools.Core/
+│   ├── Lifes.Presentation.WPF/
+│   ├── Lifes.Application/
+│   ├── Lifes.Domain/
+│   ├── Lifes.Infrastructure/
+│   └── Lifes.Core/
 │
 ├── tests/                                  # Test projects
-│   ├── ETLTools.Application.Tests/
-│   ├── ETLTools.Domain.Tests/
-│   └── ETLTools.Infrastructure.Tests/
+│   ├── Lifes.Application.Tests/
+│   ├── Lifes.Domain.Tests/
+│   └── Lifes.Infrastructure.Tests/
 │
 ├── docs/                                   # Documentation
 │   ├── user-stories/                      # User stories
@@ -527,7 +527,7 @@ ETLTools/
 Each feature follows Clean Architecture with feature-based folders:
 
 ```
-src/ETLTools.{Layer}/Features/{Feature}/
+src/Lifes.{Layer}/Features/{Feature}/
 ├── Commands/                   # Application layer
 ├── Queries/                    # Application layer
 ├── Entities/                   # Domain layer

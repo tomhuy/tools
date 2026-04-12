@@ -1,5 +1,5 @@
 # ============================================
-# ETLTools - Main Automation Menu
+# Lifes - Main Automation Menu
 # ============================================
 # Central navigation hub for all automation tasks
 # ============================================
@@ -8,7 +8,7 @@ function Show-Banner {
     Clear-Host
     Write-Host ""
     Write-Host "========================================" -ForegroundColor Cyan
-    Write-Host "    ETLTools - Automation Menu" -ForegroundColor Cyan
+    Write-Host "    Lifes - Automation Menu" -ForegroundColor Cyan
     Write-Host "========================================" -ForegroundColor Cyan
     Write-Host ""
 }

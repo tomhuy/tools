@@ -2,7 +2,7 @@
 
 ## Overview
 
-Automation scripts để build và deploy ETLTools WPF application. Scripts hỗ trợ:
+Automation scripts để build và deploy Lifes WPF application. Scripts hỗ trợ:
 - Build với Debug/Release configuration
 - Clean build option
 - Deploy đến target directory
@@ -100,10 +100,10 @@ Configuration file cho deployment settings:
 
 ```json
 {
-  "deployPath": "C:\\Tools\\ETLTools",
-  "backupPath": "C:\\Tools\\ETLTools_Backups",
+  "deployPath": "C:\\Tools\\Lifes",
+  "backupPath": "C:\\Tools\\Lifes_Backups",
   "configuration": "Release",
-  "projectPath": "src/ETLTools.Presentation.WPF/ETLTools.Presentation.WPF.csproj",
+  "projectPath": "src/Lifes.Presentation.WPF/Lifes.Presentation.WPF.csproj",
   "excludeFiles": [
     "appsettings.user.json",
     "*.pdb",
@@ -122,7 +122,7 @@ Configuration file cho deployment settings:
   "backupSettings": {
     "enabled": true,
     "keepZipOnly": true,
-    "zipNameFormat": "ETLTools_yyyyMMdd_HHmmss"
+    "zipNameFormat": "Lifes_yyyyMMdd_HHmmss"
   }
 }
 ```
@@ -159,14 +159,14 @@ Trước khi deploy, script tự động backup existing deployment:
 1. Create backup directory (nếu chưa có)
 2. Generate timestamp: `yyyyMMdd_HHmmss`
 3. Copy all files từ deploy location vào temp folder
-4. Compress temp folder thành zip: `ETLTools_20260206_143025.zip`
+4. Compress temp folder thành zip: `Lifes_20260206_143025.zip`
 5. Delete temp folder (chỉ giữ zip)
 6. Continue deployment
 
-**Backup Location**: Configured trong `backupPath` (default: `C:\Tools\ETLTools_Backups`)
+**Backup Location**: Configured trong `backupPath` (default: `C:\Tools\Lifes_Backups`)
 
-**Zip Format**: `ETLTools_yyyyMMdd_HHmmss.zip`
-- Example: `ETLTools_20260206_143025.zip` (2026-02-06 14:30:25)
+**Zip Format**: `Lifes_yyyyMMdd_HHmmss.zip`
+- Example: `Lifes_20260206_143025.zip` (2026-02-06 14:30:25)
 
 **Options**:
 - Enable/disable: Edit `backupSettings.enabled` trong config
@@ -228,7 +228,7 @@ Useful khi:
 # Step 1: Building...
 # Step 2: Backing up existing deployment...
 #   Creating zip archive...
-#   Backup created: ETLTools_20260206_143025.zip
+#   Backup created: Lifes_20260206_143025.zip
 # Step 3: Deploying application...
 #   New binaries copied
 #   appsettings.user.json preserved
@@ -250,26 +250,26 @@ Useful khi:
 
 **Debug**:
 ```
-src/ETLTools.Presentation.WPF/bin/Debug/net6.0-windows/
+src/Lifes.Presentation.WPF/bin/Debug/net6.0-windows/
 ```
 
 **Release**:
 ```
-src/ETLTools.Presentation.WPF/bin/Release/net6.0-windows/
+src/Lifes.Presentation.WPF/bin/Release/net6.0-windows/
 ```
 
 ### Deploy Output
 
-Default: `F:\Deploy\ETLTools` (configurable in deploy-config.json)
+Default: `F:\Deploy\Lifes` (configurable in deploy-config.json)
 
 Structure:
 ```
-F:\Deploy\ETLTools/
-├── ETLTools.Presentation.WPF.exe
-├── ETLTools.Application.dll
-├── ETLTools.Domain.dll
-├── ETLTools.Infrastructure.dll
-├── ETLTools.Core.dll
+F:\Deploy\Lifes/
+├── Lifes.Presentation.WPF.exe
+├── Lifes.Application.dll
+├── Lifes.Domain.dll
+├── Lifes.Infrastructure.dll
+├── Lifes.Core.dll
 ├── appsettings.json
 ├── appsettings.user.json    (preserved if exists)
 └── (other dependencies)
@@ -333,10 +333,10 @@ F:\Deploy\ETLTools/
 **Solution**:
 ```powershell
 # Find backup in backup directory
-cd C:\Tools\ETLTools_Backups
+cd C:\Tools\Lifes_Backups
 
 # Extract zip to deploy location
-Expand-Archive -Path "ETLTools_20260206_143025.zip" -DestinationPath "C:\Tools\ETLTools" -Force
+Expand-Archive -Path "Lifes_20260206_143025.zip" -DestinationPath "C:\Tools\Lifes" -Force
 ```
 
 ---
@@ -353,8 +353,8 @@ PS> .\build-deploy.ps1
 # Build successful!
 # Creating deploy directory...
 # Copying files...
-#   Copied: ETLTools.Presentation.WPF.exe
-#   Copied: ETLTools.Application.dll
+#   Copied: Lifes.Presentation.WPF.exe
+#   Copied: Lifes.Application.dll
 #   ...
 #   Excluded: appsettings.user.json
 # Deployment Successful!
@@ -374,13 +374,13 @@ PS> .\build-deploy.ps1
 # Step 2: Backing up existing deployment...
 # Copying 52 files...
 # Creating zip archive...
-# Backup created: ETLTools_20260206_143025.zip
+# Backup created: Lifes_20260206_143025.zip
 # Backup complete!
 #
 # Step 3: Deploying application...
 # Backed up: appsettings.user.json
 # Copying files...
-#   Copied: ETLTools.Presentation.WPF.exe
+#   Copied: Lifes.Presentation.WPF.exe
 #   ...
 #   Excluded: appsettings.user.json
 # Restoring preserved files...
@@ -389,7 +389,7 @@ PS> .\build-deploy.ps1
 # Files Copied: 45
 # Files Excluded: 3
 # Files Preserved: 1
-# Backup Created: ETLTools_20260206_143025.zip
+# Backup Created: Lifes_20260206_143025.zip
 ```
 
 ### Example 3: Custom Deploy Location
@@ -407,7 +407,7 @@ PS> .\build-deploy.ps1 -DeployPath "D:\CustomLocation"
 Scripts được integrate vào main menu (`run.ps1`):
 
 ```
-ETLTools - Automation Menu
+Lifes - Automation Menu
 ========================================
 
 1. Run Tests (Quick)

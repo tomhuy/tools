@@ -1,5 +1,5 @@
 # ============================================
-# ETLTools - Build Script
+# Lifes - Build Script
 # ============================================
 # Build WPF application with specified configuration
 # ============================================
@@ -15,7 +15,7 @@ param(
 
 Write-Host ""
 Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "ETLTools - Build Application" -ForegroundColor Cyan
+Write-Host "Lifes - Build Application" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
 
@@ -30,7 +30,7 @@ if (Test-Path $configPath) {
     $projectPath = Join-Path $projectRoot $config.projectPath
 } else {
     Write-Host "Warning: deploy-config.json not found, using default path" -ForegroundColor Yellow
-    $projectPath = Join-Path $projectRoot "src\ETLTools.Presentation.WPF\ETLTools.Presentation.WPF.csproj"
+    $projectPath = Join-Path $projectRoot "src\Lifes.Presentation.WPF\Lifes.Presentation.WPF.csproj"
 }
 
 # Change to project root

@@ -57,8 +57,8 @@ Edit `deploy-config.json`:
 
 ```json
 {
-  "deployPath": "C:\\Tools\\ETLTools",         // ← Change this
-  "backupPath": "C:\\Tools\\ETLTools_Backups", // ← Backup location
+  "deployPath": "C:\\Tools\\Lifes",         // ← Change this
+  "backupPath": "C:\\Tools\\Lifes_Backups", // ← Backup location
   "excludeFiles": [
     "appsettings.user.json"                    // ← Add files to exclude
   ],
@@ -86,7 +86,7 @@ Edit `deploy-config.json`:
 ```powershell
 .\build-deploy.ps1
 # Auto backup → Deploy → Preserve user settings
-# Backup: ETLTools_yyyyMMdd_HHmmss.zip
+# Backup: Lifes_yyyyMMdd_HHmmss.zip
 ```
 
 ---
@@ -109,7 +109,7 @@ Check permissions on `backupPath`, or use `-NoBackup`
 
 ### Restore backup?
 ```powershell
-Expand-Archive "C:\Tools\ETLTools_Backups\ETLTools_20260206_143025.zip" -DestinationPath "C:\Tools\ETLTools" -Force
+Expand-Archive "C:\Tools\Lifes_Backups\Lifes_20260206_143025.zip" -DestinationPath "C:\Tools\Lifes" -Force
 ```
 
 ---

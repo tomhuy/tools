@@ -1,5 +1,5 @@
 # ============================================
-# ETLTools - Run Tests With Coverage Report
+# Lifes - Run Tests With Coverage Report
 # ============================================
 
 param(
@@ -10,7 +10,7 @@ param(
 
 Write-Host ""
 Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "ETLTools - Test Runner with Coverage" -ForegroundColor Cyan
+Write-Host "Lifes - Test Runner with Coverage" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
 

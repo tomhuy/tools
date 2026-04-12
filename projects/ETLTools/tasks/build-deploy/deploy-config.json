@@ -1,8 +1,8 @@
 {
-  "deployPath": "C:\\Tools\\ETLTools",
-  "backupPath": "C:\\Tools\\ETLTools_Backups",
+  "deployPath": "C:\\Tools\\Lifes",
+  "backupPath": "C:\\Tools\\Lifes_Backups",
   "configuration": "Release",
-  "projectPath": "src/ETLTools.Presentation.WPF/ETLTools.Presentation.WPF.csproj",
+  "projectPath": "src/Lifes.Presentation.WPF/Lifes.Presentation.WPF.csproj",
   "excludeFiles": [
     "appsettings.user.json",
     "*.pdb",
@@ -21,6 +21,6 @@
   "backupSettings": {
     "enabled": true,
     "keepZipOnly": true,
-    "zipNameFormat": "ETLTools_yyyyMMdd_HHmmss"
+    "zipNameFormat": "Lifes_yyyyMMdd_HHmmss"
   }
 }

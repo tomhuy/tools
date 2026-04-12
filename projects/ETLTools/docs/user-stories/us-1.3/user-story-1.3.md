@@ -81,7 +81,7 @@
 
 ### Clean Architecture Layers
 
-#### **Presentation Layer** (`ETLTools.Presentation.WPF`)
+#### **Presentation Layer** (`Lifes.Presentation.WPF`)
 - `Features/VersionIncrease/VersionIncreaseViewModel.cs` (extend)
   - Commands:
     - `CommitAndPushCommand`
@@ -105,7 +105,7 @@
     - `CommitCommand`
     - `CancelCommand`
 
-#### **Application Layer** (`ETLTools.Application`)
+#### **Application Layer** (`Lifes.Application`)
 - `Features/VersionIncrease/Commands/CommitChangesCommand.cs`
   - Input: `CommitChangesDto`
   - Output: `Result<CommitResultDto>`
@@ -133,7 +133,7 @@
     - `int FilesCommitted`
     - `string ErrorMessage`
 
-#### **Domain Layer** (`ETLTools.Domain`)
+#### **Domain Layer** (`Lifes.Domain`)
 - `Features/VersionIncrease/ValueObjects/GitCommitInfo.cs`
   - Properties:
     - `IEnumerable<string> ModifiedFiles`
@@ -162,7 +162,7 @@
       }
       ```
 
-#### **Infrastructure Layer** (`ETLTools.Infrastructure`)
+#### **Infrastructure Layer** (`Lifes.Infrastructure`)
 - `Features/VersionIncrease/Git/GitService.cs`
   - Implements: `IGitService`
   - Uses: `LibGit2Sharp` library
@@ -175,7 +175,7 @@
     - `Task<Result<string>> CommitAsync(string repoPath, string message)`
     - `Task<Result> PushAsync(string repoPath, string remoteName, string branchName)`
 
-#### **Core Layer** (`ETLTools.Core`)
+#### **Core Layer** (`Lifes.Core`)
 - `Interfaces/IGitService.cs`
   ```csharp
   public interface IGitService
@@ -193,23 +193,23 @@
 ### Files to Create/Modify
 
 #### Presentation Layer
-- [x] `src/ETLTools.Presentation.WPF/Features/VersionIncrease/VersionIncreaseViewModel.cs` (extend)
-- [x] `src/ETLTools.Presentation.WPF/Features/VersionIncrease/Views/GitCommitDialog.xaml`
-- [x] `src/ETLTools.Presentation.WPF/Features/VersionIncrease/ViewModels/GitCommitDialogViewModel.cs`
+- [x] `src/Lifes.Presentation.WPF/Features/VersionIncrease/VersionIncreaseViewModel.cs` (extend)
+- [x] `src/Lifes.Presentation.WPF/Features/VersionIncrease/Views/GitCommitDialog.xaml`
+- [x] `src/Lifes.Presentation.WPF/Features/VersionIncrease/ViewModels/GitCommitDialogViewModel.cs`
 
 #### Application Layer
-- [x] `src/ETLTools.Application/Features/VersionIncrease/Commands/CommitChangesCommand.cs`
-- [x] `src/ETLTools.Application/Features/VersionIncrease/DTOs/CommitChangesDto.cs`
-- [x] `src/ETLTools.Application/Features/VersionIncrease/DTOs/CommitResultDto.cs`
+- [x] `src/Lifes.Application/Features/VersionIncrease/Commands/CommitChangesCommand.cs`
+- [x] `src/Lifes.Application/Features/VersionIncrease/DTOs/CommitChangesDto.cs`
+- [x] `src/Lifes.Application/Features/VersionIncrease/DTOs/CommitResultDto.cs`
 
 #### Domain Layer
-- [x] `src/ETLTools.Domain/Features/VersionIncrease/ValueObjects/GitCommitInfo.cs`
+- [x] `src/Lifes.Domain/Features/VersionIncrease/ValueObjects/GitCommitInfo.cs`
 
 #### Infrastructure Layer
-- [x] `src/ETLTools.Infrastructure/Features/VersionIncrease/Git/GitService.cs`
+- [x] `src/Lifes.Infrastructure/Features/VersionIncrease/Git/GitService.cs`
 
 #### Core Layer
-- [x] `src/ETLTools.Core/Interfaces/IGitService.cs`
+- [x] `src/Lifes.Core/Interfaces/IGitService.cs`
 
 ## Tasks Breakdown
 
@@ -383,21 +383,21 @@ public async Task<Result> CommitAsync(string repoPath, string message)
 ## Implementation Progress
 
 ### Files Created
-- [x] `src/ETLTools.Core/Interfaces/IGitService.cs`
-- [x] `src/ETLTools.Domain/Features/VersionIncrease/ValueObjects/GitCommitInfo.cs`
-- [x] `src/ETLTools.Infrastructure/Features/VersionIncrease/Git/GitService.cs`
-- [x] `src/ETLTools.Application/Features/VersionIncrease/Commands/CommitChangesCommand.cs`
-- [x] `src/ETLTools.Application/Features/VersionIncrease/DTOs/CommitChangesDto.cs`
-- [x] `src/ETLTools.Application/Features/VersionIncrease/DTOs/CommitResultDto.cs`
-- [x] `src/ETLTools.Presentation.WPF/Features/VersionIncrease/ViewModels/GitCommitDialogViewModel.cs`
-- [x] `src/ETLTools.Presentation.WPF/Features/VersionIncrease/Views/GitCommitDialog.xaml`
-- [x] `src/ETLTools.Presentation.WPF/Features/VersionIncrease/Views/GitCommitDialog.xaml.cs`
+- [x] `src/Lifes.Core/Interfaces/IGitService.cs`
+- [x] `src/Lifes.Domain/Features/VersionIncrease/ValueObjects/GitCommitInfo.cs`
+- [x] `src/Lifes.Infrastructure/Features/VersionIncrease/Git/GitService.cs`
+- [x] `src/Lifes.Application/Features/VersionIncrease/Commands/CommitChangesCommand.cs`
+- [x] `src/Lifes.Application/Features/VersionIncrease/DTOs/CommitChangesDto.cs`
+- [x] `src/Lifes.Application/Features/VersionIncrease/DTOs/CommitResultDto.cs`
+- [x] `src/Lifes.Presentation.WPF/Features/VersionIncrease/ViewModels/GitCommitDialogViewModel.cs`
+- [x] `src/Lifes.Presentation.WPF/Features/VersionIncrease/Views/GitCommitDialog.xaml`
+- [x] `src/Lifes.Presentation.WPF/Features/VersionIncrease/Views/GitCommitDialog.xaml.cs`
 
 ### Files Modified
-- [x] `src/ETLTools.Presentation.WPF/Features/VersionIncrease/VersionIncreaseViewModel.cs`
-- [x] `src/ETLTools.Presentation.WPF/Features/VersionIncrease/VersionIncreaseView.xaml`
-- [x] `src/ETLTools.Presentation.WPF/App.xaml.cs`
-- [x] `src/ETLTools.Infrastructure/ETLTools.Infrastructure.csproj`
+- [x] `src/Lifes.Presentation.WPF/Features/VersionIncrease/VersionIncreaseViewModel.cs`
+- [x] `src/Lifes.Presentation.WPF/Features/VersionIncrease/VersionIncreaseView.xaml`
+- [x] `src/Lifes.Presentation.WPF/App.xaml.cs`
+- [x] `src/Lifes.Infrastructure/Lifes.Infrastructure.csproj`
 
 ### Current Status
 - **Status**: ✅ Completed

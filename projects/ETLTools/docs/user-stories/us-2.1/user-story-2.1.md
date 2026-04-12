@@ -26,7 +26,7 @@
 
 ### Problem Statement
 
-Hiện tại dự án ETLTools chưa có testing infrastructure:
+Hiện tại dự án Lifes chưa có testing infrastructure:
 - ⚠️ Không có unit tests cho business logic
 - ⚠️ Không có integration tests cho infrastructure layer
 - ⚠️ Khó phát hiện bugs khi refactor code
@@ -49,14 +49,14 @@ Xây dựng testing infrastructure hoàn chỉnh bao gồm:
 ## Acceptance Criteria
 
 ### AC-1: Test Project Structure
-**Given** dự án ETLTools với Clean Architecture  
+**Given** dự án Lifes với Clean Architecture  
 **When** developer xem solution structure  
 **Then** phải có các test projects sau:
-- `ETLTools.Domain.Tests` - Unit tests cho Domain layer
-- `ETLTools.Application.Tests` - Unit tests cho Application layer
-- `ETLTools.Infrastructure.Tests` - Integration tests cho Infrastructure layer
-- `ETLTools.Presentation.WPF.Tests` - Tests cho ViewModels
-- `ETLTools.Integration.Tests` - End-to-end integration tests
+- `Lifes.Domain.Tests` - Unit tests cho Domain layer
+- `Lifes.Application.Tests` - Unit tests cho Application layer
+- `Lifes.Infrastructure.Tests` - Integration tests cho Infrastructure layer
+- `Lifes.Presentation.WPF.Tests` - Tests cho ViewModels
+- `Lifes.Integration.Tests` - End-to-end integration tests
 
 ### AC-2: Testing Framework Configuration
 **Given** test projects đã được tạo  
@@ -131,7 +131,7 @@ Xây dựng testing infrastructure hoàn chỉnh bao gồm:
 
 ```
 tests/
-├── ETLTools.Domain.Tests/                      # Unit Tests - Domain
+├── Lifes.Domain.Tests/                      # Unit Tests - Domain
 │   ├── Features/
 │   │   └── VersionIncrease/
 │   │       ├── Entities/
@@ -143,7 +143,7 @@ tests/
 │   └── TestUtilities/
 │       └── DomainTestFixtures.cs
 │
-├── ETLTools.Application.Tests/                # Unit Tests - Application
+├── Lifes.Application.Tests/                # Unit Tests - Application
 │   ├── Features/
 │   │   └── VersionIncrease/
 │   │       ├── Commands/
@@ -155,7 +155,7 @@ tests/
 │       ├── MockFactory.cs
 │       └── ApplicationTestFixtures.cs
 │
-├── ETLTools.Infrastructure.Tests/             # Integration Tests - Infrastructure
+├── Lifes.Infrastructure.Tests/             # Integration Tests - Infrastructure
 │   ├── Features/
 │   │   └── VersionIncrease/
 │   │       └── Services/
@@ -171,14 +171,14 @@ tests/
 │       ├── FileSystemTestHelper.cs
 │       └── InfrastructureTestFixtures.cs
 │
-├── ETLTools.Presentation.WPF.Tests/           # UI Tests - Presentation
+├── Lifes.Presentation.WPF.Tests/           # UI Tests - Presentation
 │   ├── Features/
 │   │   └── VersionIncrease/
 │   │       └── VersionIncreaseViewModelTests.cs
 │   └── TestUtilities/
 │       └── ViewModelTestHelper.cs
 │
-└── ETLTools.Integration.Tests/                # E2E Integration Tests
+└── Lifes.Integration.Tests/                # E2E Integration Tests
     ├── Features/
     │   └── VersionIncrease/
     │       └── VersionIncreaseE2ETests.cs
@@ -543,11 +543,11 @@ public class FileSystemTestHelper : IDisposable
 ### Phase 1: Setup Test Projects (2 hours)
 
 - [ ] Task 1.1: Create test project structure
-  - [ ] Create `ETLTools.Domain.Tests` project
-  - [ ] Create `ETLTools.Application.Tests` project
-  - [ ] Create `ETLTools.Infrastructure.Tests` project
-  - [ ] Create `ETLTools.Presentation.WPF.Tests` project
-  - [ ] Create `ETLTools.Integration.Tests` project
+  - [ ] Create `Lifes.Domain.Tests` project
+  - [ ] Create `Lifes.Application.Tests` project
+  - [ ] Create `Lifes.Infrastructure.Tests` project
+  - [ ] Create `Lifes.Presentation.WPF.Tests` project
+  - [ ] Create `Lifes.Integration.Tests` project
 
 - [ ] Task 1.2: Add NuGet packages
   - [ ] Add xUnit to all test projects
@@ -639,41 +639,41 @@ public class FileSystemTestHelper : IDisposable
 
 ### New Test Projects
 
-- [ ] `tests/ETLTools.Domain.Tests/ETLTools.Domain.Tests.csproj`
-- [ ] `tests/ETLTools.Application.Tests/ETLTools.Application.Tests.csproj`
-- [ ] `tests/ETLTools.Infrastructure.Tests/ETLTools.Infrastructure.Tests.csproj`
-- [ ] `tests/ETLTools.Presentation.WPF.Tests/ETLTools.Presentation.WPF.Tests.csproj`
-- [ ] `tests/ETLTools.Integration.Tests/ETLTools.Integration.Tests.csproj`
+- [ ] `tests/Lifes.Domain.Tests/Lifes.Domain.Tests.csproj`
+- [ ] `tests/Lifes.Application.Tests/Lifes.Application.Tests.csproj`
+- [ ] `tests/Lifes.Infrastructure.Tests/Lifes.Infrastructure.Tests.csproj`
+- [ ] `tests/Lifes.Presentation.WPF.Tests/Lifes.Presentation.WPF.Tests.csproj`
+- [ ] `tests/Lifes.Integration.Tests/Lifes.Integration.Tests.csproj`
 
 ### Test Utilities
 
-- [ ] `tests/ETLTools.Application.Tests/TestUtilities/MockFactory.cs`
-- [ ] `tests/ETLTools.Domain.Tests/TestUtilities/DomainTestFixtures.cs`
-- [ ] `tests/ETLTools.Infrastructure.Tests/TestUtilities/FileSystemTestHelper.cs`
-- [ ] `tests/ETLTools.Infrastructure.Tests/TestUtilities/InfrastructureTestFixtures.cs`
+- [ ] `tests/Lifes.Application.Tests/TestUtilities/MockFactory.cs`
+- [ ] `tests/Lifes.Domain.Tests/TestUtilities/DomainTestFixtures.cs`
+- [ ] `tests/Lifes.Infrastructure.Tests/TestUtilities/FileSystemTestHelper.cs`
+- [ ] `tests/Lifes.Infrastructure.Tests/TestUtilities/InfrastructureTestFixtures.cs`
 
 ### Sample Tests
 
 **Domain Tests:**
-- [ ] `tests/ETLTools.Domain.Tests/Features/VersionIncrease/ValueObjects/VersionInfoTests.cs`
-- [ ] `tests/ETLTools.Domain.Tests/Features/VersionIncrease/Entities/ProjectFileTests.cs`
+- [ ] `tests/Lifes.Domain.Tests/Features/VersionIncrease/ValueObjects/VersionInfoTests.cs`
+- [ ] `tests/Lifes.Domain.Tests/Features/VersionIncrease/Entities/ProjectFileTests.cs`
 
 **Application Tests:**
-- [ ] `tests/ETLTools.Application.Tests/Features/VersionIncrease/Commands/ScanProjectsCommandTests.cs`
-- [ ] `tests/ETLTools.Application.Tests/Features/VersionIncrease/Commands/UpdateVersionsCommandTests.cs`
+- [ ] `tests/Lifes.Application.Tests/Features/VersionIncrease/Commands/ScanProjectsCommandTests.cs`
+- [ ] `tests/Lifes.Application.Tests/Features/VersionIncrease/Commands/UpdateVersionsCommandTests.cs`
 
 **Infrastructure Tests:**
-- [ ] `tests/ETLTools.Infrastructure.Tests/Features/VersionIncrease/Services/ProjectScannerTests.cs`
-- [ ] `tests/ETLTools.Infrastructure.Tests/Features/VersionIncrease/Services/ProjectFileServiceTests.cs`
-- [ ] `tests/ETLTools.Infrastructure.Tests/Features/VersionIncrease/Services/VersionServiceTests.cs`
+- [ ] `tests/Lifes.Infrastructure.Tests/Features/VersionIncrease/Services/ProjectScannerTests.cs`
+- [ ] `tests/Lifes.Infrastructure.Tests/Features/VersionIncrease/Services/ProjectFileServiceTests.cs`
+- [ ] `tests/Lifes.Infrastructure.Tests/Features/VersionIncrease/Services/VersionServiceTests.cs`
 
 **Presentation Tests:**
-- [ ] `tests/ETLTools.Presentation.WPF.Tests/Features/VersionIncrease/VersionIncreaseViewModelTests.cs`
+- [ ] `tests/Lifes.Presentation.WPF.Tests/Features/VersionIncrease/VersionIncreaseViewModelTests.cs`
 
 ### Test Data
 
-- [ ] `tests/ETLTools.Infrastructure.Tests/TestData/SampleProjects/Test.ETL.csproj`
-- [ ] `tests/ETLTools.Infrastructure.Tests/TestData/SampleProjects/ShareProject.ETL.csproj`
+- [ ] `tests/Lifes.Infrastructure.Tests/TestData/SampleProjects/Test.ETL.csproj`
+- [ ] `tests/Lifes.Infrastructure.Tests/TestData/SampleProjects/ShareProject.ETL.csproj`
 
 ### Configuration
 
@@ -798,18 +798,18 @@ public class FileSystemTestHelper : IDisposable
 ### Implementation Progress
 
 #### Files Created
-- [x] `tests/ETLTools.Domain.Tests/Features/VersionIncrease/ValueObjects/VersionInfoTests.cs`
-- [x] `tests/ETLTools.Domain.Tests/Features/VersionIncrease/Entities/ProjectFileTests.cs`
-- [x] `tests/ETLTools.Application.Tests/Features/VersionIncrease/Commands/ScanProjectsCommandTests.cs`
-- [x] `tests/ETLTools.Application.Tests/Features/VersionIncrease/Commands/UpdateVersionsCommandTests.cs`
-- [x] `tests/ETLTools.Infrastructure.Tests/Features/VersionIncrease/Services/ProjectScannerTests.cs`
-- [x] `tests/ETLTools.Infrastructure.Tests/Features/VersionIncrease/Services/ProjectFileServiceTests.cs`
-- [x] `tests/ETLTools.Infrastructure.Tests/Features/VersionIncrease/Services/VersionServiceTests.cs`
-- [x] `tests/ETLTools.Presentation.WPF.Tests/Features/VersionIncrease/VersionIncreaseViewModelTests.cs`
-- [x] `tests/ETLTools.Domain.Tests/TestUtilities/DomainTestFixtures.cs`
-- [x] `tests/ETLTools.Application.Tests/TestUtilities/AppMockFactory.cs`
-- [x] `tests/ETLTools.Infrastructure.Tests/TestUtilities/FileSystemTestHelper.cs`
-- [x] `tests/ETLTools.Infrastructure.Tests/TestUtilities/InfrastructureTestFixtures.cs`
+- [x] `tests/Lifes.Domain.Tests/Features/VersionIncrease/ValueObjects/VersionInfoTests.cs`
+- [x] `tests/Lifes.Domain.Tests/Features/VersionIncrease/Entities/ProjectFileTests.cs`
+- [x] `tests/Lifes.Application.Tests/Features/VersionIncrease/Commands/ScanProjectsCommandTests.cs`
+- [x] `tests/Lifes.Application.Tests/Features/VersionIncrease/Commands/UpdateVersionsCommandTests.cs`
+- [x] `tests/Lifes.Infrastructure.Tests/Features/VersionIncrease/Services/ProjectScannerTests.cs`
+- [x] `tests/Lifes.Infrastructure.Tests/Features/VersionIncrease/Services/ProjectFileServiceTests.cs`
+- [x] `tests/Lifes.Infrastructure.Tests/Features/VersionIncrease/Services/VersionServiceTests.cs`
+- [x] `tests/Lifes.Presentation.WPF.Tests/Features/VersionIncrease/VersionIncreaseViewModelTests.cs`
+- [x] `tests/Lifes.Domain.Tests/TestUtilities/DomainTestFixtures.cs`
+- [x] `tests/Lifes.Application.Tests/TestUtilities/AppMockFactory.cs`
+- [x] `tests/Lifes.Infrastructure.Tests/TestUtilities/FileSystemTestHelper.cs`
+- [x] `tests/Lifes.Infrastructure.Tests/TestUtilities/InfrastructureTestFixtures.cs`
 - [x] `coverlet.runsettings`
 - [x] `docs/structures/testing-structure.md`
 - [x] `docs/guidelines/testing-guidelines.md`

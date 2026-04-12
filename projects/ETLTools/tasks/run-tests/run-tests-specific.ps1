@@ -1,5 +1,5 @@
 # ============================================
-# ETLTools - Run Specific Test Project
+# Lifes - Run Specific Test Project
 # ============================================
 # Run tests for a specific test project
 # ============================================
@@ -15,7 +15,7 @@ param(
 
 Write-Host ""
 Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "🎯 ETLTools - Specific Test Runner" -ForegroundColor Cyan
+Write-Host "🎯 Lifes - Specific Test Runner" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
 
@@ -25,11 +25,11 @@ $projectRoot = Resolve-Path (Join-Path $scriptDir "..\..")
 
 # Map project names to paths (relative to project root)
 $projectPaths = @{
-    "Domain" = "tests\ETLTools.Domain.Tests"
-    "Application" = "tests\ETLTools.Application.Tests"
-    "Infrastructure" = "tests\ETLTools.Infrastructure.Tests"
-    "Presentation" = "tests\ETLTools.Presentation.WPF.Tests"
-    "Integration" = "tests\ETLTools.Integration.Tests"
+    "Domain" = "tests\Lifes.Domain.Tests"
+    "Application" = "tests\Lifes.Application.Tests"
+    "Infrastructure" = "tests\Lifes.Infrastructure.Tests"
+    "Presentation" = "tests\Lifes.Presentation.WPF.Tests"
+    "Integration" = "tests\Lifes.Integration.Tests"
 }
 
 if ($Project -eq "All") {

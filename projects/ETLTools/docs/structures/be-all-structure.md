@@ -10,7 +10,7 @@ ETL Deployment Tools Suite follows **Clean Architecture** with **feature-based o
 
 ```
 src/
-├── ETLTools.Core/                  # Shared interfaces and models
+├── Lifes.Core/                  # Shared interfaces and models
 │   ├── Interfaces/
 │   │   ├── IProjectScanner.cs
 │   │   ├── IProjectFileService.cs
@@ -23,7 +23,7 @@ src/
 │       ├── ToolDefinition.cs       # US-5.1 — tool metadata
 │       └── ToolNavigatedEventArgs.cs # US-5.1 — navigation event args
 │
-├── ETLTools.Domain/                # Business logic and entities
+├── Lifes.Domain/                # Business logic and entities
 │   ├── Common/                     # US-1.2.1
 │   │   └── ValueObjects/
 │   │       └── AppSettings.cs      # Settings validation logic
@@ -37,7 +37,7 @@ src/
 │           └── Enums/
 │               └── ProjectStatus.cs
 │
-├── ETLTools.Infrastructure/        # External services
+├── Lifes.Infrastructure/        # External services
 │   ├── Common/                     # US-1.2.1
 │   │   └── Configuration/
 │   │       └── SettingsService.cs  # JSON file persistence
@@ -50,7 +50,7 @@ src/
 │           └── Git/                # US-1.3
 │               └── GitService.cs   # LibGit2Sharp implementation
 │
-├── ETLTools.Application/           # Use cases and commands
+├── Lifes.Application/           # Use cases and commands
 │   ├── Common/                     # US-1.2.1
 │   │   ├── Commands/
 │   │   │   ├── LoadSettingsCommand.cs
@@ -72,7 +72,7 @@ src/
 │               ├── ProjectUpdateDto.cs
 │               └── VersionUpdateResultDto.cs
 │
-├── ETLTools.Presentation.WPF/     # WPF UI
+├── Lifes.Presentation.WPF/     # WPF UI
 │   ├── Constants/                  # US-5.1
 │   │   └── ToolIds.cs              # Well-known tool ID constants
 │   ├── Controls/                   # US-5.1
@@ -100,31 +100,31 @@ src/
 │   └── MainWindow.xaml.cs          # Handles ToolNavigated → swap views (US-5.1)
 │
 └── tests/                          # Testing Layer (US-2.1)
-    ├── ETLTools.Domain.Tests/      # Unit tests for Domain
+    ├── Lifes.Domain.Tests/      # Unit tests for Domain
     │   ├── Features/VersionIncrease/
     │   │   ├── ValueObjects/
     │   │   └── Entities/
     │   └── TestUtilities/
     │       └── DomainTestFixtures.cs
     │
-    ├── ETLTools.Application.Tests/ # Unit tests for Application
+    ├── Lifes.Application.Tests/ # Unit tests for Application
     │   ├── Features/VersionIncrease/
     │   │   └── Commands/
     │   └── TestUtilities/
     │       └── AppMockFactory.cs
     │
-    ├── ETLTools.Infrastructure.Tests/ # Integration tests
+    ├── Lifes.Infrastructure.Tests/ # Integration tests
     │   ├── Features/VersionIncrease/
     │   │   └── Services/
     │   └── TestUtilities/
     │       ├── FileSystemTestHelper.cs
     │       └── InfrastructureTestFixtures.cs
     │
-    ├── ETLTools.Presentation.WPF.Tests/ # UI tests
+    ├── Lifes.Presentation.WPF.Tests/ # UI tests
     │   └── Features/VersionIncrease/
     │       └── VersionIncreaseViewModelTests.cs
     │
-    └── ETLTools.Integration.Tests/ # E2E tests
+    └── Lifes.Integration.Tests/ # E2E tests
         └── Features/VersionIncrease/
 ```
 
@@ -399,11 +399,11 @@ The Testing Layer provides comprehensive test coverage across all layers of the 
 
 | Test Project | Purpose | Test Type | Coverage Goal |
 |--------------|---------|-----------|---------------|
-| **ETLTools.Domain.Tests** | Test pure business logic | Unit Tests | >= 80% |
-| **ETLTools.Application.Tests** | Test use cases and workflows | Unit Tests (with mocks) | >= 70% |
-| **ETLTools.Infrastructure.Tests** | Test infrastructure implementations | Integration Tests | >= 60% |
-| **ETLTools.Presentation.WPF.Tests** | Test ViewModels and UI logic | Unit Tests (with mocks) | >= 50% |
-| **ETLTools.Integration.Tests** | Test end-to-end workflows | E2E Tests | Key scenarios |
+| **Lifes.Domain.Tests** | Test pure business logic | Unit Tests | >= 80% |
+| **Lifes.Application.Tests** | Test use cases and workflows | Unit Tests (with mocks) | >= 70% |
+| **Lifes.Infrastructure.Tests** | Test infrastructure implementations | Integration Tests | >= 60% |
+| **Lifes.Presentation.WPF.Tests** | Test ViewModels and UI logic | Unit Tests (with mocks) | >= 50% |
+| **Lifes.Integration.Tests** | Test end-to-end workflows | E2E Tests | Key scenarios |
 
 ### Testing Technology Stack
 
@@ -434,7 +434,7 @@ The Testing Layer provides comprehensive test coverage across all layers of the 
 ### Key Test Utilities
 
 #### AppMockFactory.cs
-**Location**: `tests/ETLTools.Application.Tests/TestUtilities/`  
+**Location**: `tests/Lifes.Application.Tests/TestUtilities/`  
 **Purpose**: Centralized mock creation for common interfaces
 - Mock for `IProjectScanner`
 - Mock for `IProjectFileService`
@@ -442,14 +442,14 @@ The Testing Layer provides comprehensive test coverage across all layers of the 
 - Mock for `ISettingsService`
 
 #### TestFixtures.cs
-**Location**: `tests/ETLTools.Domain.Tests/TestUtilities/`  
+**Location**: `tests/Lifes.Domain.Tests/TestUtilities/`  
 **Purpose**: Test data generation
 - Create test `ProjectFile` instances
 - Create test `VersionInfo` instances
 - Create test project lists
 
 #### FileSystemTestHelper.cs
-**Location**: `tests/ETLTools.Infrastructure.Tests/TestUtilities/`  
+**Location**: `tests/Lifes.Infrastructure.Tests/TestUtilities/`  
 **Purpose**: File system test fixtures and cleanup
 - Create temporary test directories
 - Create test .csproj files

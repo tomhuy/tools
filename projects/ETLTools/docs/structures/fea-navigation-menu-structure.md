@@ -15,7 +15,7 @@ Navigation Menu là một **shared UI/UX enhancement** cho toàn bộ ETL Tools 
 
 Feature này được thiết kế theo **Clean Architecture** với navigation service ở Application layer và control ở Presentation layer.
 
-### Core Layer — `src/ETLTools.Core/`
+### Core Layer — `src/Lifes.Core/`
 
 | File | Purpose |
 |------|---------|
@@ -23,13 +23,13 @@ Feature này được thiết kế theo **Clean Architecture** với navigation 
 | `Models/ToolDefinition.cs` | Metadata của một tool (Id, Name, Description, IconPath) |
 | `Models/ToolNavigatedEventArgs.cs` | EventArgs cho event `ToolNavigated` |
 
-### Application Layer — `src/ETLTools.Application/Services/`
+### Application Layer — `src/Lifes.Application/Services/`
 
 | File | Purpose |
 |------|---------|
 | `NavigationService.cs` | Singleton implementation của `INavigationService`; thread-safe với `lock` |
 
-### Presentation Layer — `src/ETLTools.Presentation.WPF/`
+### Presentation Layer — `src/Lifes.Presentation.WPF/`
 
 | File | Purpose |
 |------|---------|
@@ -54,7 +54,7 @@ Feature này được thiết kế theo **Clean Architecture** với navigation 
 ## Key Classes
 
 ### INavigationService
-**Location**: `src/ETLTools.Core/Interfaces/INavigationService.cs`  
+**Location**: `src/Lifes.Core/Interfaces/INavigationService.cs`  
 **Purpose**: Contract cho navigation service  
 **Methods**:
 - `RegisterTool(ToolDefinition)` — đăng ký tool khi startup
@@ -63,13 +63,13 @@ Feature này được thiết kế theo **Clean Architecture** với navigation 
 - `GetCurrentTool()` — trả về tool đang active
 
 ### NavigationService
-**Location**: `src/ETLTools.Application/Services/NavigationService.cs`  
+**Location**: `src/Lifes.Application/Services/NavigationService.cs`  
 **Purpose**: Thread-safe singleton implementation  
 **Dependencies**: None (pure application logic)  
 **Used by**: `App.xaml.cs` (registration), `VersionIncreaseViewModel` (query tools), `MainWindow` (subscribe event)
 
 ### NavigationMenuButton
-**Location**: `src/ETLTools.Presentation.WPF/Controls/NavigationMenuButton.xaml`  
+**Location**: `src/Lifes.Presentation.WPF/Controls/NavigationMenuButton.xaml`  
 **Purpose**: Reusable UserControl hiển thị navigation button và dropdown  
 **DependencyProperty**: `ToolItems` (ObservableCollection\<ToolMenuItem\>)  
 **Behavior**:
@@ -79,7 +79,7 @@ Feature này được thiết kế theo **Clean Architecture** với navigation 
 - Escape key → close popup immediately
 
 ### ToolMenuItem
-**Location**: `src/ETLTools.Presentation.WPF/Models/ToolMenuItem.cs`  
+**Location**: `src/Lifes.Presentation.WPF/Models/ToolMenuItem.cs`  
 **Purpose**: ViewModel cho một row trong dropdown  
 **Properties**: `Id`, `Name`, `Description`, `IsActive` (bool), `NavigateCommand`  
 **Active state**: `IsActive = true` khi tool này đang được hiển thị; hiển thị màu `#3ECF8E` (green) và dấu ✓

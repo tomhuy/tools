@@ -69,7 +69,7 @@
 
 ### Clean Architecture Layers
 
-#### **Presentation Layer** (`ETLTools.Presentation.WPF`)
+#### **Presentation Layer** (`Lifes.Presentation.WPF`)
 - `Features/VersionIncrease/VersionIncreaseViewModel.cs` (extend existing)
   - Commands:
     - `IncreaseVersionCommand` - Main update command
@@ -82,7 +82,7 @@
     - `async Task IncreaseVersionAsync()`
     - `bool CanIncreaseVersion()` - At least 1 selected
 
-#### **Application Layer** (`ETLTools.Application`)
+#### **Application Layer** (`Lifes.Application`)
 - `Features/VersionIncrease/Commands/UpdateVersionsCommand.cs`
   - Input: `IEnumerable<ProjectFileDto>` (selected projects)
   - Output: `Result<VersionUpdateResultDto>`
@@ -111,7 +111,7 @@
     - `bool Success`
     - `string ErrorMessage`
 
-#### **Domain Layer** (`ETLTools.Domain`)
+#### **Domain Layer** (`Lifes.Domain`)
 - `Features/VersionIncrease/ValueObjects/VersionInfo.cs` (extend existing)
   - Methods:
     - `VersionInfo Increment(DateTime targetDate)` - Core business logic
@@ -146,7 +146,7 @@
       ```
     - `bool IsSameDate(DateTime date)`
 
-#### **Infrastructure Layer** (`ETLTools.Infrastructure`)
+#### **Infrastructure Layer** (`Lifes.Infrastructure`)
 - `Features/VersionIncrease/Services/VersionService.cs`
   - Implements: `IVersionService`
   - Methods:
@@ -163,7 +163,7 @@
       - Preserve formatting
       - Save file
 
-#### **Core Layer** (`ETLTools.Core`)
+#### **Core Layer** (`Lifes.Core`)
 - `Interfaces/IVersionService.cs`
   ```csharp
   public interface IVersionService
@@ -177,22 +177,22 @@
 ### Files to Create/Modify
 
 #### Presentation Layer
-- [x] `src/ETLTools.Presentation.WPF/Features/VersionIncrease/VersionIncreaseViewModel.cs` (extend)
+- [x] `src/Lifes.Presentation.WPF/Features/VersionIncrease/VersionIncreaseViewModel.cs` (extend)
 
 #### Application Layer
-- [ ] `src/ETLTools.Application/Features/VersionIncrease/Commands/UpdateVersionsCommand.cs`
-- [ ] `src/ETLTools.Application/Features/VersionIncrease/DTOs/VersionUpdateResultDto.cs`
-- [ ] `src/ETLTools.Application/Features/VersionIncrease/DTOs/ProjectUpdateDto.cs`
+- [ ] `src/Lifes.Application/Features/VersionIncrease/Commands/UpdateVersionsCommand.cs`
+- [ ] `src/Lifes.Application/Features/VersionIncrease/DTOs/VersionUpdateResultDto.cs`
+- [ ] `src/Lifes.Application/Features/VersionIncrease/DTOs/ProjectUpdateDto.cs`
 
 #### Domain Layer
-- [x] `src/ETLTools.Domain/Features/VersionIncrease/ValueObjects/VersionInfo.cs` (extend)
+- [x] `src/Lifes.Domain/Features/VersionIncrease/ValueObjects/VersionInfo.cs` (extend)
 
 #### Infrastructure Layer
-- [ ] `src/ETLTools.Infrastructure/Features/VersionIncrease/Services/VersionService.cs`
-- [x] `src/ETLTools.Infrastructure/Features/VersionIncrease/Services/ProjectFileService.cs` (extend)
+- [ ] `src/Lifes.Infrastructure/Features/VersionIncrease/Services/VersionService.cs`
+- [x] `src/Lifes.Infrastructure/Features/VersionIncrease/Services/ProjectFileService.cs` (extend)
 
 #### Core Layer
-- [ ] `src/ETLTools.Core/Interfaces/IVersionService.cs`
+- [ ] `src/Lifes.Core/Interfaces/IVersionService.cs`
 
 ## Tasks Breakdown
 

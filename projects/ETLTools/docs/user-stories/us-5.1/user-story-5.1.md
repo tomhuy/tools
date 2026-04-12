@@ -116,7 +116,7 @@ Thêm navigation menu system vào ETL Tool forms:
 ### Clean Architecture Layers
 
 #### Presentation Layer (WPF)
-**Location**: `src/ETLTools.Presentation.WPF/`
+**Location**: `src/Lifes.Presentation.WPF/`
 
 **New Components:**
 - `Controls/NavigationMenuButton.xaml` - Custom control for navigation button with dropdown
@@ -131,7 +131,7 @@ Thêm navigation menu system vào ETL Tool forms:
 - `MainWindow.xaml.cs` - Wire up navigation
 
 #### Application Layer
-**Location**: `src/ETLTools.Application/`
+**Location**: `src/Lifes.Application/`
 
 **New Files:**
 - `Services/INavigationService.cs` - Interface for navigation
@@ -144,7 +144,7 @@ Thêm navigation menu system vào ETL Tool forms:
 - Provide tool metadata for menu rendering
 
 #### Core Layer
-**Location**: `src/ETLTools.Core/`
+**Location**: `src/Lifes.Core/`
 
 **New/Modified:**
 - `Interfaces/INavigationService.cs` - Core navigation interface
@@ -154,7 +154,7 @@ Thêm navigation menu system vào ETL Tool forms:
 
 #### NavigationMenuButton (UserControl)
 
-**Location**: `src/ETLTools.Presentation.WPF/Controls/NavigationMenuButton.xaml`
+**Location**: `src/Lifes.Presentation.WPF/Controls/NavigationMenuButton.xaml`
 
 **Purpose**: Reusable control hiển thị navigation button và dropdown menu
 
@@ -174,7 +174,7 @@ Thêm navigation menu system vào ETL Tool forms:
 
 #### INavigationService Interface
 
-**Location**: `src/ETLTools.Core/Interfaces/INavigationService.cs`
+**Location**: `src/Lifes.Core/Interfaces/INavigationService.cs`
 
 **Purpose**: Service để manage navigation giữa các tools
 
@@ -189,7 +189,7 @@ Thêm navigation menu system vào ETL Tool forms:
 
 #### ToolMenuItem Model
 
-**Location**: `src/ETLTools.Presentation.WPF/Models/ToolMenuItem.cs`
+**Location**: `src/Lifes.Presentation.WPF/Models/ToolMenuItem.cs`
 
 **Properties:**
 ```csharp
@@ -246,20 +246,20 @@ Thêm navigation menu system vào ETL Tool forms:
 ### Files to Create/Modify
 
 #### New Files
-- [ ] `src/ETLTools.Presentation.WPF/Controls/NavigationMenuButton.xaml`
-- [ ] `src/ETLTools.Presentation.WPF/Controls/NavigationMenuButton.xaml.cs`
-- [ ] `src/ETLTools.Presentation.WPF/Styles/NavigationMenuStyles.xaml`
-- [ ] `src/ETLTools.Presentation.WPF/Models/ToolMenuItem.cs`
-- [ ] `src/ETLTools.Core/Interfaces/INavigationService.cs`
-- [ ] `src/ETLTools.Core/Models/ToolDefinition.cs`
-- [ ] `src/ETLTools.Application/Services/NavigationService.cs`
+- [ ] `src/Lifes.Presentation.WPF/Controls/NavigationMenuButton.xaml`
+- [ ] `src/Lifes.Presentation.WPF/Controls/NavigationMenuButton.xaml.cs`
+- [ ] `src/Lifes.Presentation.WPF/Styles/NavigationMenuStyles.xaml`
+- [ ] `src/Lifes.Presentation.WPF/Models/ToolMenuItem.cs`
+- [ ] `src/Lifes.Core/Interfaces/INavigationService.cs`
+- [ ] `src/Lifes.Core/Models/ToolDefinition.cs`
+- [ ] `src/Lifes.Application/Services/NavigationService.cs`
 
 #### Modified Files
-- [ ] `src/ETLTools.Presentation.WPF/Features/VersionIncrease/VersionIncreaseView.xaml`
-- [ ] `src/ETLTools.Presentation.WPF/Features/VersionIncrease/VersionIncreaseViewModel.cs`
-- [ ] `src/ETLTools.Presentation.WPF/MainWindow.xaml`
-- [ ] `src/ETLTools.Presentation.WPF/MainWindow.xaml.cs`
-- [ ] `src/ETLTools.Presentation.WPF/App.xaml` (register navigation service in DI)
+- [ ] `src/Lifes.Presentation.WPF/Features/VersionIncrease/VersionIncreaseView.xaml`
+- [ ] `src/Lifes.Presentation.WPF/Features/VersionIncrease/VersionIncreaseViewModel.cs`
+- [ ] `src/Lifes.Presentation.WPF/MainWindow.xaml`
+- [ ] `src/Lifes.Presentation.WPF/MainWindow.xaml.cs`
+- [ ] `src/Lifes.Presentation.WPF/App.xaml` (register navigation service in DI)
 
 ---
 

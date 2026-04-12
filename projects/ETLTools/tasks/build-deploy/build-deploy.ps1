@@ -1,5 +1,5 @@
 # ============================================
-# ETLTools - Build & Deploy Script
+# Lifes - Build & Deploy Script
 # ============================================
 # Build and deploy WPF application to target directory
 # ============================================
@@ -19,7 +19,7 @@ param(
 
 Write-Host ""
 Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "ETLTools - Build & Deploy" -ForegroundColor Cyan
+Write-Host "Lifes - Build & Deploy" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
 
@@ -92,7 +92,7 @@ try {
         
         # Generate timestamp for backup
         $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
-        $zipFileName = "ETLTools_$timestamp.zip"
+        $zipFileName = "Lifes_$timestamp.zip"
         $zipFilePath = Join-Path $backupPath $zipFileName
         
         # Create temp folder for backup
@@ -228,7 +228,7 @@ try {
     Write-Host "  Files Excluded: $excludedFiles" -ForegroundColor Gray
     Write-Host "  Files Preserved: $($backupFiles.Count)" -ForegroundColor Cyan
     if ($backupEnabled -and (Test-Path $DeployPath)) {
-        $latestBackup = Get-ChildItem $backupPath -Filter "ETLTools_*.zip" | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+        $latestBackup = Get-ChildItem $backupPath -Filter "Lifes_*.zip" | Sort-Object LastWriteTime -Descending | Select-Object -First 1
         if ($latestBackup) {
             Write-Host "  Backup Created: $($latestBackup.Name)" -ForegroundColor Cyan
         }

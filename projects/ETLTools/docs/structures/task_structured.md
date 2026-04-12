@@ -14,7 +14,7 @@
 
 ## 🎯 Overview
 
-Tài liệu này cung cấp overview về toàn bộ automation infrastructure của ETLTools, bao gồm cấu trúc file, các tasks đã implement, và hướng dẫn sử dụng.
+Tài liệu này cung cấp overview về toàn bộ automation infrastructure của Lifes, bao gồm cấu trúc file, các tasks đã implement, và hướng dẫn sử dụng.
 
 **Để biết chi tiết về quy tắc và guidelines**, xem: [`tasks_rule.md`](tasks_rule.md)
 
@@ -25,7 +25,7 @@ Tài liệu này cung cấp overview về toàn bộ automation infrastructure c
 ### Complete File Structure
 
 ```
-ETLTools/
+Lifes/
 ├── run.ps1                                # Main menu - entry point
 ├── test.ps1                               # Quick alias - test with coverage
 ├── test-quick.ps1                         # Quick alias - fast test
@@ -73,7 +73,7 @@ Output directories (generated):
 │   └── *.trx                             # Test result files
 │
 └── [backup-path]/                         # Deployment backups (configurable)
-    └── ETLTools_yyyyMMdd_HHmmss.zip      # Timestamped backups
+    └── Lifes_yyyyMMdd_HHmmss.zip      # Timestamped backups
 ```
 
 ---
@@ -152,7 +152,7 @@ Output directories (generated):
 2. **`build-deploy.ps1`** (v1.1.0)
    - Build + Deploy in one command
    - **Automatic backup before deploy** (NEW v1.1.0)
-     - Creates timestamped zip: `ETLTools_yyyyMMdd_HHmmss.zip`
+     - Creates timestamped zip: `Lifes_yyyyMMdd_HHmmss.zip`
      - Configurable backup location
      - Keep only zip files
    - Exclude files (*.pdb, *.xml, user settings)
@@ -164,16 +164,16 @@ Output directories (generated):
 **`deploy-config.json`**:
 ```json
 {
-  "deployPath": "C:\\Tools\\ETLTools",
-  "backupPath": "C:\\Tools\\ETLTools_Backups",
+  "deployPath": "C:\\Tools\\Lifes",
+  "backupPath": "C:\\Tools\\Lifes_Backups",
   "configuration": "Release",
-  "projectPath": "src/ETLTools.Presentation.WPF/ETLTools.Presentation.WPF.csproj",
+  "projectPath": "src/Lifes.Presentation.WPF/Lifes.Presentation.WPF.csproj",
   "excludeFiles": ["appsettings.user.json", "*.pdb", "*.xml"],
   "preserveFiles": ["appsettings.user.json"],
   "backupSettings": {
     "enabled": true,
     "keepZipOnly": true,
-    "zipNameFormat": "ETLTools_yyyyMMdd_HHmmss"
+    "zipNameFormat": "Lifes_yyyyMMdd_HHmmss"
   }
 }
 ```
@@ -202,8 +202,8 @@ Output directories (generated):
 .\tasks\build-deploy\build-deploy.ps1 -NoBackup
 
 # Rollback from backup
-Expand-Archive "C:\Tools\ETLTools_Backups\ETLTools_20260206_143025.zip" `
-  -DestinationPath "C:\Tools\ETLTools" -Force
+Expand-Archive "C:\Tools\Lifes_Backups\Lifes_20260206_143025.zip" `
+  -DestinationPath "C:\Tools\Lifes" -Force
 ```
 
 ---
@@ -217,7 +217,7 @@ Expand-Archive "C:\Tools\ETLTools_Backups\ETLTools_20260206_143025.zip" `
 
 ```
 ========================================
-    ETLTools - Automation Menu
+    Lifes - Automation Menu
 ========================================
 
 Select an option:

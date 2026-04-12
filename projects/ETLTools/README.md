@@ -20,28 +20,28 @@ Built using **Clean Architecture** with feature-based organization:
 
 ```
 src/
-├── ETLTools.Core/               # Shared interfaces and models
+├── Lifes.Core/               # Shared interfaces and models
 │   ├── Interfaces/             # IProjectScanner, IProjectFileService, IVersionService
 │   └── Models/                 # Result<T> pattern
 │
-├── ETLTools.Domain/            # Domain logic and entities
+├── Lifes.Domain/            # Domain logic and entities
 │   └── Features/VersionIncrease/
 │       ├── Entities/           # ProjectFile
 │       ├── ValueObjects/       # VersionInfo (with increment logic)
 │       └── Enums/              # ProjectStatus
 │
-├── ETLTools.Infrastructure/    # External services implementation
+├── Lifes.Infrastructure/    # External services implementation
 │   └── Features/VersionIncrease/Services/
 │       ├── ProjectScanner.cs   # File system scanning
 │       ├── ProjectFileService.cs # XML file manipulation
 │       └── VersionService.cs   # Version parsing and formatting
 │
-├── ETLTools.Application/       # Use cases and commands
+├── Lifes.Application/       # Use cases and commands
 │   └── Features/VersionIncrease/
 │       ├── Commands/           # ScanProjectsCommand, UpdateVersionsCommand
 │       └── DTOs/               # Data transfer objects
 │
-└── ETLTools.Presentation.WPF/ # UI layer
+└── Lifes.Presentation.WPF/ # UI layer
     ├── Features/VersionIncrease/
     │   ├── VersionIncreaseView.xaml
     │   ├── VersionIncreaseViewModel.cs
@@ -86,7 +86,7 @@ Presentation → Application → Domain ← Infrastructure
 ```bash
 # Clone the repository
 git clone <repository-url>
-cd ETLTools
+cd Lifes
 
 # Restore NuGet packages
 dotnet restore
@@ -95,7 +95,7 @@ dotnet restore
 dotnet build
 
 # Run the application
-dotnet run --project src/ETLTools.Presentation.WPF/ETLTools.Presentation.WPF.csproj
+dotnet run --project src/Lifes.Presentation.WPF/Lifes.Presentation.WPF.csproj
 ```
 
 ## 💻 Usage
@@ -157,7 +157,7 @@ XML formatting and indentation are preserved.
 
 Logs are written to:
 - **Console**: Real-time logging during development
-- **File**: `logs/etltools-{Date}.txt` (rolling daily, 30-day retention)
+- **File**: `logs/Lifes-{Date}.txt` (rolling daily, 30-day retention)
 
 ## 🧪 Testing
 
@@ -166,8 +166,8 @@ Logs are written to:
 dotnet test
 
 # Run tests for specific project
-dotnet test tests/ETLTools.Domain.Tests
-dotnet test tests/ETLTools.Infrastructure.Tests
+dotnet test tests/Lifes.Domain.Tests
+dotnet test tests/Lifes.Infrastructure.Tests
 ```
 
 ## 📚 Documentation

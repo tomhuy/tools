@@ -1,6 +1,6 @@
 # Testing Guidelines
 
-This document provides guidelines and best practices for writing tests in the ETLTools project.
+This document provides guidelines and best practices for writing tests in the Lifes project.
 
 ## General Principles
 

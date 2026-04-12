@@ -82,7 +82,7 @@
 
 ### Clean Architecture Layers
 
-#### **Presentation Layer** (`ETLTools.Presentation.WPF`)
+#### **Presentation Layer** (`Lifes.Presentation.WPF`)
 
 **Extend: `Features/VersionIncrease/VersionIncreaseView.xaml`**
 - Add Search section above DataGrid:
@@ -118,7 +118,7 @@
 - Search trong: FileName, RelativePath, CurrentVersion
 - Case-insensitive search
 
-#### **Application Layer** (`ETLTools.Application`)
+#### **Application Layer** (`Lifes.Application`)
 
 **New: `Common/Commands/SaveSettingsCommand.cs`**
 - Input: `AppSettingsDto`
@@ -136,7 +136,7 @@
   - `string LastDirectory` - Last used directory path
   - (Future: other settings like FilePattern, GitAutoPush, etc.)
 
-#### **Domain Layer** (`ETLTools.Domain`)
+#### **Domain Layer** (`Lifes.Domain`)
 
 **New: `Common/ValueObjects/AppSettings.cs`**
 - Value object representing application settings
@@ -147,7 +147,7 @@
   - `Result Validate()` - Validates settings (directory exists, etc.)
   - `AppSettings WithLastDirectory(string path)` - Immutable update
 
-#### **Infrastructure Layer** (`ETLTools.Infrastructure`)
+#### **Infrastructure Layer** (`Lifes.Infrastructure`)
 
 **New: `Common/Configuration/SettingsService.cs`**
 - Implements: `ISettingsService`
@@ -158,7 +158,7 @@
 - File location: Application directory / `appsettings.user.json`
 - Error handling: Graceful fallback to defaults if file missing/corrupt
 
-#### **Core Layer** (`ETLTools.Core`)
+#### **Core Layer** (`Lifes.Core`)
 
 **New: `Interfaces/ISettingsService.cs`**
 ```csharp
@@ -179,26 +179,26 @@ public interface ISettingsService
 ### Files to Create/Modify
 
 #### Presentation Layer
-- [x] `src/ETLTools.Presentation.WPF/Features/VersionIncrease/VersionIncreaseView.xaml` (modify - add search UI)
-- [x] `src/ETLTools.Presentation.WPF/Features/VersionIncrease/VersionIncreaseViewModel.cs` (modify - add search logic, settings)
-- [ ] `src/ETLTools.Presentation.WPF/Features/VersionIncrease/Helpers/ProjectFilterHelper.cs` (new)
+- [x] `src/Lifes.Presentation.WPF/Features/VersionIncrease/VersionIncreaseView.xaml` (modify - add search UI)
+- [x] `src/Lifes.Presentation.WPF/Features/VersionIncrease/VersionIncreaseViewModel.cs` (modify - add search logic, settings)
+- [ ] `src/Lifes.Presentation.WPF/Features/VersionIncrease/Helpers/ProjectFilterHelper.cs` (new)
 
 #### Application Layer
-- [ ] `src/ETLTools.Application/Common/Commands/LoadSettingsCommand.cs` (new)
-- [ ] `src/ETLTools.Application/Common/Commands/SaveSettingsCommand.cs` (new)
-- [ ] `src/ETLTools.Application/Common/DTOs/AppSettingsDto.cs` (new)
+- [ ] `src/Lifes.Application/Common/Commands/LoadSettingsCommand.cs` (new)
+- [ ] `src/Lifes.Application/Common/Commands/SaveSettingsCommand.cs` (new)
+- [ ] `src/Lifes.Application/Common/DTOs/AppSettingsDto.cs` (new)
 
 #### Domain Layer
-- [ ] `src/ETLTools.Domain/Common/ValueObjects/AppSettings.cs` (new)
+- [ ] `src/Lifes.Domain/Common/ValueObjects/AppSettings.cs` (new)
 
 #### Infrastructure Layer
-- [ ] `src/ETLTools.Infrastructure/Common/Configuration/SettingsService.cs` (new)
+- [ ] `src/Lifes.Infrastructure/Common/Configuration/SettingsService.cs` (new)
 
 #### Core Layer
-- [ ] `src/ETLTools.Core/Interfaces/ISettingsService.cs` (new)
+- [ ] `src/Lifes.Core/Interfaces/ISettingsService.cs` (new)
 
 #### Application Setup
-- [x] `src/ETLTools.Presentation.WPF/App.xaml.cs` (modify - register ISettingsService in DI)
+- [x] `src/Lifes.Presentation.WPF/App.xaml.cs` (modify - register ISettingsService in DI)
 
 #### Configuration Files
 - [ ] `appsettings.user.json` (created automatically by app)
@@ -427,18 +427,18 @@ All errors are graceful - app continues to work with defaults.
 ## Implementation Progress
 
 ### Files Created
-- [x] `src/ETLTools.Core/Interfaces/ISettingsService.cs` - Settings service interface with AppSettings model
-- [x] `src/ETLTools.Domain/Common/ValueObjects/AppSettings.cs` - Domain value object with validation
-- [x] `src/ETLTools.Infrastructure/Common/Configuration/SettingsService.cs` - JSON file storage implementation
-- [x] `src/ETLTools.Application/Common/DTOs/AppSettingsDto.cs` - Application DTO
-- [x] `src/ETLTools.Application/Common/Commands/LoadSettingsCommand.cs` - Load settings command
-- [x] `src/ETLTools.Application/Common/Commands/SaveSettingsCommand.cs` - Save settings command
-- [x] `src/ETLTools.Presentation.WPF/Features/VersionIncrease/Helpers/ProjectFilterHelper.cs` - Search filtering logic
+- [x] `src/Lifes.Core/Interfaces/ISettingsService.cs` - Settings service interface with AppSettings model
+- [x] `src/Lifes.Domain/Common/ValueObjects/AppSettings.cs` - Domain value object with validation
+- [x] `src/Lifes.Infrastructure/Common/Configuration/SettingsService.cs` - JSON file storage implementation
+- [x] `src/Lifes.Application/Common/DTOs/AppSettingsDto.cs` - Application DTO
+- [x] `src/Lifes.Application/Common/Commands/LoadSettingsCommand.cs` - Load settings command
+- [x] `src/Lifes.Application/Common/Commands/SaveSettingsCommand.cs` - Save settings command
+- [x] `src/Lifes.Presentation.WPF/Features/VersionIncrease/Helpers/ProjectFilterHelper.cs` - Search filtering logic
 
 ### Files Modified
-- [x] `src/ETLTools.Presentation.WPF/Features/VersionIncrease/VersionIncreaseViewModel.cs` - Added search properties, settings integration, filter logic
-- [x] `src/ETLTools.Presentation.WPF/Features/VersionIncrease/VersionIncreaseView.xaml` - Added search UI with TextBox and Clear button
-- [x] `src/ETLTools.Presentation.WPF/App.xaml.cs` - Registered settings services in DI
+- [x] `src/Lifes.Presentation.WPF/Features/VersionIncrease/VersionIncreaseViewModel.cs` - Added search properties, settings integration, filter logic
+- [x] `src/Lifes.Presentation.WPF/Features/VersionIncrease/VersionIncreaseView.xaml` - Added search UI with TextBox and Clear button
+- [x] `src/Lifes.Presentation.WPF/App.xaml.cs` - Registered settings services in DI
 
 ### Current Status
 - **Status**: ✅ Completed

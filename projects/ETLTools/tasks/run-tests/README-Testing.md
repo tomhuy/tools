@@ -1,6 +1,6 @@
-# 🧪 ETLTools Testing Guide
+# 🧪 Lifes Testing Guide
 
-Hướng dẫn chạy tests và xem coverage reports cho ETLTools project.
+Hướng dẫn chạy tests và xem coverage reports cho Lifes project.
 
 ---
 
@@ -147,7 +147,7 @@ cat .\CoverageReport\Summary.txt
 
 ```powershell
 # Run tests trong namespace cụ thể
-.\tasks\run-tests\run-tests-quick.ps1 -Filter "FullyQualifiedName~ETLTools.Domain.Tests"
+.\tasks\run-tests\run-tests-quick.ps1 -Filter "FullyQualifiedName~Lifes.Domain.Tests"
 ```
 
 ### Filter By Category/Trait

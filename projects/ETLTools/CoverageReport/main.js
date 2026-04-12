@@ -211,45 +211,45 @@ for (i = 0, l = charts.length; i < l; i++) {
 
 var assemblies = [
   {
-    "name": "ETLTools.Application",
+    "name": "Lifes.Application",
     "classes": [
-      { "name": "ETLTools.Application.Common.Commands.LoadSettingsCommand", "rp": "ETLTools.Application_LoadSettingsCommand.html", "cl": 0, "ucl": 4, "cal": 4, "tl": 71, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ETLTools.Application.Common.Commands.SaveSettingsCommand", "rp": "ETLTools.Application_SaveSettingsCommand.html", "cl": 0, "ucl": 4, "cal": 4, "tl": 79, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ETLTools.Application.Features.VersionIncrease.Commands.ScanProjectsCommand", "rp": "ETLTools.Application_ScanProjectsCommand.html", "cl": 14, "ucl": 3, "cal": 17, "tl": 105, "cb": 1, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ETLTools.Application.Features.VersionIncrease.Commands.UpdateVersionsCommand", "rp": "ETLTools.Application_UpdateVersionsCommand.html", "cl": 5, "ucl": 0, "cal": 5, "tl": 161, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ETLTools.Application.Features.VersionIncrease.DTOs.VersionUpdateResultDto", "rp": "ETLTools.Application_VersionUpdateResultDto.html", "cl": 1, "ucl": 1, "cal": 2, "tl": 15, "cb": 0, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Lifes.Application.Common.Commands.LoadSettingsCommand", "rp": "Lifes.Application_LoadSettingsCommand.html", "cl": 0, "ucl": 4, "cal": 4, "tl": 71, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Lifes.Application.Common.Commands.SaveSettingsCommand", "rp": "Lifes.Application_SaveSettingsCommand.html", "cl": 0, "ucl": 4, "cal": 4, "tl": 79, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Lifes.Application.Features.VersionIncrease.Commands.ScanProjectsCommand", "rp": "Lifes.Application_ScanProjectsCommand.html", "cl": 14, "ucl": 3, "cal": 17, "tl": 105, "cb": 1, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Lifes.Application.Features.VersionIncrease.Commands.UpdateVersionsCommand", "rp": "Lifes.Application_UpdateVersionsCommand.html", "cl": 5, "ucl": 0, "cal": 5, "tl": 161, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Lifes.Application.Features.VersionIncrease.DTOs.VersionUpdateResultDto", "rp": "Lifes.Application_VersionUpdateResultDto.html", "cl": 1, "ucl": 1, "cal": 2, "tl": 15, "cb": 0, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
     ]},
   {
-    "name": "ETLTools.Core",
+    "name": "Lifes.Core",
     "classes": [
-      { "name": "ETLTools.Core.Interfaces.VersionInfo", "rp": "ETLTools.Core_VersionInfo.html", "cl": 1, "ucl": 1, "cal": 2, "tl": 46, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ETLTools.Core.Models.Result", "rp": "ETLTools.Core_Result.html", "cl": 5, "ucl": 1, "cal": 6, "tl": 60, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ETLTools.Core.Models.Result<T>", "rp": "ETLTools.Core_Result_1.html", "cl": 6, "ucl": 0, "cal": 6, "tl": 60, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Lifes.Core.Interfaces.VersionInfo", "rp": "Lifes.Core_VersionInfo.html", "cl": 1, "ucl": 1, "cal": 2, "tl": 46, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Lifes.Core.Models.Result", "rp": "Lifes.Core_Result.html", "cl": 5, "ucl": 1, "cal": 6, "tl": 60, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Lifes.Core.Models.Result<T>", "rp": "Lifes.Core_Result_1.html", "cl": 6, "ucl": 0, "cal": 6, "tl": 60, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
     ]},
   {
-    "name": "ETLTools.Domain",
+    "name": "Lifes.Domain",
     "classes": [
-      { "name": "ETLTools.Domain.Common.ValueObjects.AppSettings", "rp": "ETLTools.Domain_AppSettings.html", "cl": 0, "ucl": 47, "cal": 47, "tl": 105, "cb": 0, "tb": 10, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ETLTools.Domain.Features.VersionIncrease.Entities.ProjectFile", "rp": "ETLTools.Domain_ProjectFile.html", "cl": 11, "ucl": 1, "cal": 12, "tl": 44, "cb": 7, "tb": 8, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ETLTools.Domain.Features.VersionIncrease.ValueObjects.VersionInfo", "rp": "ETLTools.Domain_VersionInfo.html", "cl": 51, "ucl": 3, "cal": 54, "tl": 112, "cb": 26, "tb": 26, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Lifes.Domain.Common.ValueObjects.AppSettings", "rp": "Lifes.Domain_AppSettings.html", "cl": 0, "ucl": 47, "cal": 47, "tl": 105, "cb": 0, "tb": 10, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Lifes.Domain.Features.VersionIncrease.Entities.ProjectFile", "rp": "Lifes.Domain_ProjectFile.html", "cl": 11, "ucl": 1, "cal": 12, "tl": 44, "cb": 7, "tb": 8, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Lifes.Domain.Features.VersionIncrease.ValueObjects.VersionInfo", "rp": "Lifes.Domain_VersionInfo.html", "cl": 51, "ucl": 3, "cal": 54, "tl": 112, "cb": 26, "tb": 26, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
     ]},
   {
-    "name": "ETLTools.Infrastructure",
+    "name": "Lifes.Infrastructure",
     "classes": [
-      { "name": "ETLTools.Infrastructure.Common.Configuration.SettingsService", "rp": "ETLTools.Infrastructure_SettingsService.html", "cl": 0, "ucl": 11, "cal": 11, "tl": 136, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ETLTools.Infrastructure.Features.VersionIncrease.Services.ProjectFileService", "rp": "ETLTools.Infrastructure_ProjectFileService.html", "cl": 44, "ucl": 11, "cal": 55, "tl": 322, "cb": 20, "tb": 26, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ETLTools.Infrastructure.Features.VersionIncrease.Services.ProjectScanner", "rp": "ETLTools.Infrastructure_ProjectScanner.html", "cl": 3, "ucl": 0, "cal": 3, "tl": 73, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ETLTools.Infrastructure.Features.VersionIncrease.Services.VersionService", "rp": "ETLTools.Infrastructure_VersionService.html", "cl": 46, "ucl": 16, "cal": 62, "tl": 111, "cb": 4, "tb": 6, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Lifes.Infrastructure.Common.Configuration.SettingsService", "rp": "Lifes.Infrastructure_SettingsService.html", "cl": 0, "ucl": 11, "cal": 11, "tl": 136, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Lifes.Infrastructure.Features.VersionIncrease.Services.ProjectFileService", "rp": "Lifes.Infrastructure_ProjectFileService.html", "cl": 44, "ucl": 11, "cal": 55, "tl": 322, "cb": 20, "tb": 26, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Lifes.Infrastructure.Features.VersionIncrease.Services.ProjectScanner", "rp": "Lifes.Infrastructure_ProjectScanner.html", "cl": 3, "ucl": 0, "cal": 3, "tl": 73, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Lifes.Infrastructure.Features.VersionIncrease.Services.VersionService", "rp": "Lifes.Infrastructure_VersionService.html", "cl": 46, "ucl": 16, "cal": 62, "tl": 111, "cb": 4, "tb": 6, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
     ]},
   {
-    "name": "ETLTools.Presentation.WPF",
+    "name": "Lifes.Presentation.WPF",
     "classes": [
-      { "name": "ETLTools.Presentation.WPF.App", "rp": "ETLTools.Presentation.WPF_App.html", "cl": 0, "ucl": 36, "cal": 36, "tl": 87, "cb": 0, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ETLTools.Presentation.WPF.Features.VersionIncrease.Helpers.ProjectFilterHelper", "rp": "ETLTools.Presentation.WPF_ProjectFilterHelper.html", "cl": 18, "ucl": 2, "cal": 20, "tl": 57, "cb": 7, "tb": 8, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ETLTools.Presentation.WPF.Features.VersionIncrease.Models.ProjectFileViewModel", "rp": "ETLTools.Presentation.WPF_ProjectFileViewModel.html", "cl": 4, "ucl": 0, "cal": 4, "tl": 26, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ETLTools.Presentation.WPF.Features.VersionIncrease.VersionIncreaseView", "rp": "ETLTools.Presentation.WPF_VersionIncreaseView.html", "cl": 0, "ucl": 10, "cal": 10, "tl": 23, "cb": 0, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ETLTools.Presentation.WPF.Features.VersionIncrease.VersionIncreaseViewModel", "rp": "ETLTools.Presentation.WPF_VersionIncreaseViewModel.html", "cl": 47, "ucl": 36, "cal": 83, "tl": 417, "cb": 0, "tb": 10, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ETLTools.Presentation.WPF.MainWindow", "rp": "ETLTools.Presentation.WPF_MainWindow.html", "cl": 0, "ucl": 14, "cal": 14, "tl": 34, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Lifes.Presentation.WPF.App", "rp": "Lifes.Presentation.WPF_App.html", "cl": 0, "ucl": 36, "cal": 36, "tl": 87, "cb": 0, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Lifes.Presentation.WPF.Features.VersionIncrease.Helpers.ProjectFilterHelper", "rp": "Lifes.Presentation.WPF_ProjectFilterHelper.html", "cl": 18, "ucl": 2, "cal": 20, "tl": 57, "cb": 7, "tb": 8, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Lifes.Presentation.WPF.Features.VersionIncrease.Models.ProjectFileViewModel", "rp": "Lifes.Presentation.WPF_ProjectFileViewModel.html", "cl": 4, "ucl": 0, "cal": 4, "tl": 26, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Lifes.Presentation.WPF.Features.VersionIncrease.VersionIncreaseView", "rp": "Lifes.Presentation.WPF_VersionIncreaseView.html", "cl": 0, "ucl": 10, "cal": 10, "tl": 23, "cb": 0, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Lifes.Presentation.WPF.Features.VersionIncrease.VersionIncreaseViewModel", "rp": "Lifes.Presentation.WPF_VersionIncreaseViewModel.html", "cl": 47, "ucl": 36, "cal": 83, "tl": 417, "cb": 0, "tb": 10, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Lifes.Presentation.WPF.MainWindow", "rp": "Lifes.Presentation.WPF_MainWindow.html", "cl": 0, "ucl": 14, "cal": 14, "tl": 34, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
     ]},
 ];
 
@@ -264,13 +264,13 @@ var riskHotspotMetrics = [
 
 var riskHotspots = [
   {
-    "assembly": "ETLTools.Domain", "class": "ETLTools.Domain.Features.VersionIncrease.ValueObjects.VersionInfo", "reportPath": "ETLTools.Domain_VersionInfo.html", "methodName": "Parse(System.String)", "methodShortName": "Parse(...)", "fileIndex": 0, "line": 29,
+    "assembly": "Lifes.Domain", "class": "Lifes.Domain.Features.VersionIncrease.ValueObjects.VersionInfo", "reportPath": "Lifes.Domain_VersionInfo.html", "methodName": "Parse(System.String)", "methodShortName": "Parse(...)", "fileIndex": 0, "line": 29,
     "metrics": [
       { "value": 24, "exceeded": false },
       { "value": 24, "exceeded": true },
     ]},
   {
-    "assembly": "ETLTools.Infrastructure", "class": "ETLTools.Infrastructure.Features.VersionIncrease.Services.ProjectFileService", "reportPath": "ETLTools.Infrastructure_ProjectFileService.html", "methodName": "UpdateVersionLines(System.String[],System.String)", "methodShortName": "UpdateVersionLines(...)", "fileIndex": 0, "line": 253,
+    "assembly": "Lifes.Infrastructure", "class": "Lifes.Infrastructure.Features.VersionIncrease.Services.ProjectFileService", "reportPath": "Lifes.Infrastructure_ProjectFileService.html", "methodName": "UpdateVersionLines(System.String[],System.String)", "methodShortName": "UpdateVersionLines(...)", "fileIndex": 0, "line": 253,
     "metrics": [
       { "value": 26, "exceeded": false },
       { "value": 20, "exceeded": true },

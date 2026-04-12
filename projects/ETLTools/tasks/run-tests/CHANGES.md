@@ -86,7 +86,7 @@ cd tasks\run-tests
 ## 📁 File Structure After Changes
 
 ```
-ETLTools/                             # Project root
+Lifes/                             # Project root
 ├── test.ps1                          # ← NEW: Root alias
 ├── test-quick.ps1                    # ← NEW: Root alias  
 ├── coverlet.runsettings             # Coverage config (unchanged)
@@ -101,8 +101,8 @@ ETLTools/                             # Project root
 │       └── CHANGES.md                    # ← This file
 │
 ├── tests/                            # Test projects (unchanged)
-│   ├── ETLTools.Domain.Tests/
-│   ├── ETLTools.Application.Tests/
+│   ├── Lifes.Domain.Tests/
+│   ├── Lifes.Application.Tests/
 │   └── ...
 │
 ├── TestResults/                      # Generated: test output

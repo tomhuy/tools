@@ -61,7 +61,7 @@ Version Increase Tool được xây dựng theo **Clean Architecture** với 5 l
 ## File Structure
 
 ### Presentation Layer
-**Location**: `src/ETLTools.Presentation.WPF/Features/VersionIncrease/`
+**Location**: `src/Lifes.Presentation.WPF/Features/VersionIncrease/`
 
 #### VersionIncreaseView.xaml
 - **Purpose**: Main UI for Version Increase Tool
@@ -200,7 +200,7 @@ Version Increase Tool được xây dựng theo **Clean Architecture** với 5 l
 ---
 
 ### Application Layer
-**Location**: `src/ETLTools.Application/Features/VersionIncrease/`
+**Location**: `src/Lifes.Application/Features/VersionIncrease/`
 
 #### Commands/ScanProjectsCommand.cs
 - **Purpose**: Orchestrates project scanning workflow
@@ -314,7 +314,7 @@ Version Increase Tool được xây dựng theo **Clean Architecture** với 5 l
 ---
 
 ### Application Layer - Common (US-1.2.1)
-**Location**: `src/ETLTools.Application/Common/`
+**Location**: `src/Lifes.Application/Common/`
 
 #### Commands/LoadSettingsCommand.cs
 - **Purpose**: Load application settings from persistence
@@ -352,7 +352,7 @@ Version Increase Tool được xây dựng theo **Clean Architecture** với 5 l
 ---
 
 ### Domain Layer
-**Location**: `src/ETLTools.Domain/Features/VersionIncrease/`
+**Location**: `src/Lifes.Domain/Features/VersionIncrease/`
 
 #### Entities/ProjectFile.cs
 - **Purpose**: Domain entity representing a project file
@@ -399,7 +399,7 @@ Version Increase Tool được xây dựng theo **Clean Architecture** với 5 l
 ---
 
 ### Domain Layer - Common (US-1.2.1)
-**Location**: `src/ETLTools.Domain/Common/ValueObjects/`
+**Location**: `src/Lifes.Domain/Common/ValueObjects/`
 
 #### AppSettings.cs
 - **Purpose**: Domain value object for application settings with validation
@@ -423,7 +423,7 @@ Version Increase Tool được xây dựng theo **Clean Architecture** với 5 l
 ---
 
 ### Infrastructure Layer
-**Location**: `src/ETLTools.Infrastructure/Features/VersionIncrease/Services/`
+**Location**: `src/Lifes.Infrastructure/Features/VersionIncrease/Services/`
 
 #### ProjectScanner.cs
 - **Purpose**: Scans file system for .csproj files
@@ -460,7 +460,7 @@ Version Increase Tool được xây dựng theo **Clean Architecture** với 5 l
 #### Git/GitService.cs (US-1.3)
 - **Purpose**: Git operations using LibGit2Sharp library
 - **Implements**: `IGitService`
-- **Location**: `src/ETLTools.Infrastructure/Features/VersionIncrease/Git/`
+- **Location**: `src/Lifes.Infrastructure/Features/VersionIncrease/Git/`
 - **Methods**:
   - `IsGitRepositoryAsync()` - Uses `Repository.Discover()` to check for Git repo
   - `HasChangesAsync()` - Uses `repo.RetrieveStatus()` to check for dirty working tree
@@ -498,7 +498,7 @@ Version Increase Tool được xây dựng theo **Clean Architecture** với 5 l
 ---
 
 ### Infrastructure Layer - Common (US-1.2.1)
-**Location**: `src/ETLTools.Infrastructure/Common/Configuration/`
+**Location**: `src/Lifes.Infrastructure/Common/Configuration/`
 
 #### SettingsService.cs
 - **Purpose**: Persists application settings to JSON file
@@ -522,7 +522,7 @@ Version Increase Tool được xây dựng theo **Clean Architecture** với 5 l
 ---
 
 ### Core Layer
-**Location**: `src/ETLTools.Core/`
+**Location**: `src/Lifes.Core/`
 
 #### Interfaces/IProjectScanner.cs
 - **Purpose**: Contract for project scanning

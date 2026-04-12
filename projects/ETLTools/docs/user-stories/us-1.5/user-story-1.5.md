@@ -69,7 +69,7 @@
 
 ### Clean Architecture Layers
 
-#### **Presentation Layer** (`ETLTools.Presentation.WPF`)
+#### **Presentation Layer** (`Lifes.Presentation.WPF`)
 - `Shared/Views/SettingsDialog.xaml`
   - Base directory TextBox + Browse button
   - File pattern TextBox
@@ -98,7 +98,7 @@
     - `ResetToDefaults()`
     - `ValidateSettings()`
 
-#### **Application Layer** (`ETLTools.Application`)
+#### **Application Layer** (`Lifes.Application`)
 - `Common/Commands/LoadSettingsCommand.cs`
   - Input: None
   - Output: `Result<AppSettingsDto>`
@@ -116,7 +116,7 @@
     - `string LogLevel`
     - `int LogRetentionDays`
 
-#### **Domain Layer** (`ETLTools.Domain`)
+#### **Domain Layer** (`Lifes.Domain`)
 - `Common/ValueObjects/AppSettings.cs`
   - Properties:
     - `string BaseDirectory`
@@ -130,7 +130,7 @@
     - `bool IsValid()` - Validation rules
     - `Result Validate()` - Detailed validation
 
-#### **Infrastructure Layer** (`ETLTools.Infrastructure`)
+#### **Infrastructure Layer** (`Lifes.Infrastructure`)
 - `Common/Configuration/SettingsService.cs`
   - Implements: `ISettingsService`
   - Uses: `Microsoft.Extensions.Configuration`
@@ -145,7 +145,7 @@
     - `Task<Result> ResetSettingsAsync()`
       - Delete `appsettings.user.json`
 
-#### **Core Layer** (`ETLTools.Core`)
+#### **Core Layer** (`Lifes.Core`)
 - `Interfaces/ISettingsService.cs`
   ```csharp
   public interface ISettingsService
@@ -160,23 +160,23 @@
 ### Files to Create/Modify
 
 #### Presentation Layer
-- [ ] `src/ETLTools.Presentation.WPF/Shared/Views/SettingsDialog.xaml`
-- [ ] `src/ETLTools.Presentation.WPF/Shared/ViewModels/SettingsViewModel.cs`
-- [x] `src/ETLTools.Presentation.WPF/Shared/MainWindow.xaml` (add Settings button)
+- [ ] `src/Lifes.Presentation.WPF/Shared/Views/SettingsDialog.xaml`
+- [ ] `src/Lifes.Presentation.WPF/Shared/ViewModels/SettingsViewModel.cs`
+- [x] `src/Lifes.Presentation.WPF/Shared/MainWindow.xaml` (add Settings button)
 
 #### Application Layer
-- [ ] `src/ETLTools.Application/Common/Commands/LoadSettingsCommand.cs`
-- [ ] `src/ETLTools.Application/Common/Commands/SaveSettingsCommand.cs`
-- [ ] `src/ETLTools.Application/Common/DTOs/AppSettingsDto.cs`
+- [ ] `src/Lifes.Application/Common/Commands/LoadSettingsCommand.cs`
+- [ ] `src/Lifes.Application/Common/Commands/SaveSettingsCommand.cs`
+- [ ] `src/Lifes.Application/Common/DTOs/AppSettingsDto.cs`
 
 #### Domain Layer
-- [ ] `src/ETLTools.Domain/Common/ValueObjects/AppSettings.cs`
+- [ ] `src/Lifes.Domain/Common/ValueObjects/AppSettings.cs`
 
 #### Infrastructure Layer
-- [ ] `src/ETLTools.Infrastructure/Common/Configuration/SettingsService.cs`
+- [ ] `src/Lifes.Infrastructure/Common/Configuration/SettingsService.cs`
 
 #### Core Layer
-- [ ] `src/ETLTools.Core/Interfaces/ISettingsService.cs`
+- [ ] `src/Lifes.Core/Interfaces/ISettingsService.cs`
 
 #### Configuration Files
 - [x] `appsettings.json` (default settings)

@@ -1,9 +1,0 @@
-namespace ETLTools.Presentation.WPF.Constants;
-
-/// <summary>
-/// Well-known tool identifiers used for navigation registration and routing.
-/// </summary>
-public static class ToolIds
-{
-    public const string VersionIncrease = "version-increase";
-}

@@ -1,5 +1,5 @@
 # ============================================
-# ETLTools - Quick Test Runner
+# Lifes - Quick Test Runner
 # ============================================
 # Run tests quickly without coverage report
 # ============================================
@@ -11,7 +11,7 @@ param(
 
 Write-Host ""
 Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "⚡ ETLTools - Quick Test Runner" -ForegroundColor Cyan
+Write-Host "⚡ Lifes - Quick Test Runner" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
 

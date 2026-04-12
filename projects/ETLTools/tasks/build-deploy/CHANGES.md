@@ -10,7 +10,7 @@
 1. Build application (Step 1)
 2. **Backup existing deployment** (Step 2) - NEW!
    - Copy all files from deploy location to temp folder
-   - Create zip: `ETLTools_yyyyMMdd_HHmmss.zip`
+   - Create zip: `Lifes_yyyyMMdd_HHmmss.zip`
    - Delete temp folder (keep only zip)
 3. Deploy new version (Step 3)
 4. Preserve user settings
@@ -18,11 +18,11 @@
 **Configuration**:
 ```json
 {
-  "backupPath": "C:\\Tools\\ETLTools_Backups",
+  "backupPath": "C:\\Tools\\Lifes_Backups",
   "backupSettings": {
     "enabled": true,
     "keepZipOnly": true,
-    "zipNameFormat": "ETLTools_yyyyMMdd_HHmmss"
+    "zipNameFormat": "Lifes_yyyyMMdd_HHmmss"
   }
 }
 ```
@@ -38,10 +38,10 @@
 
 **Backup Example**:
 ```
-C:\Tools\ETLTools_Backups\
-  - ETLTools_20260206_143025.zip
-  - ETLTools_20260206_095412.zip
-  - ETLTools_20260205_172033.zip
+C:\Tools\Lifes_Backups\
+  - Lifes_20260206_143025.zip
+  - Lifes_20260206_095412.zip
+  - Lifes_20260205_172033.zip
 ```
 
 ---
@@ -50,7 +50,7 @@ C:\Tools\ETLTools_Backups\
 
 ### What's New?
 
-Created build and deploy automation system for ETLTools WPF application (US-3.1).
+Created build and deploy automation system for Lifes WPF application (US-3.1).
 
 ---
 
@@ -112,7 +112,7 @@ Created build and deploy automation system for ETLTools WPF application (US-3.1)
 
 ### 1. Main Menu Navigation
 ```
-ETLTools - Automation Menu
+Lifes - Automation Menu
 1. Run Tests (Quick)
 2. Run Tests (With Coverage)
 3. Build Application
@@ -143,7 +143,7 @@ ETLTools - Automation Menu
 ## 📁 File Structure
 
 ```
-ETLTools/
+Lifes/
 ├── run.ps1                         # NEW: Main menu
 ├── test.ps1                        # Updated: Kept as alias
 ├── test-quick.ps1                  # Kept as alias
@@ -190,7 +190,7 @@ Edit `deploy-config.json` to customize:
 
 ```json
 {
-  "deployPath": "F:\\Deploy\\ETLTools",     // Change deploy location
+  "deployPath": "F:\\Deploy\\Lifes",     // Change deploy location
   "configuration": "Release",                // Default build config
   "excludeFiles": [                          // Files to skip
     "appsettings.user.json",

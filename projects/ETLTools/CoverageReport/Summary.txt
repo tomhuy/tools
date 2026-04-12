@@ -19,33 +19,33 @@ Summary
   Fully covered methods: 23
   Total methods: 59
 
-ETLTools.Application                                                               62.5%
-  ETLTools.Application.Common.Commands.LoadSettingsCommand                            0%
-  ETLTools.Application.Common.Commands.SaveSettingsCommand                            0%
-  ETLTools.Application.Features.VersionIncrease.Commands.ScanProjectsCommand       82.3%
-  ETLTools.Application.Features.VersionIncrease.Commands.UpdateVersionsCommand      100%
-  ETLTools.Application.Features.VersionIncrease.DTOs.VersionUpdateResultDto          50%
+Lifes.Application                                                               62.5%
+  Lifes.Application.Common.Commands.LoadSettingsCommand                            0%
+  Lifes.Application.Common.Commands.SaveSettingsCommand                            0%
+  Lifes.Application.Features.VersionIncrease.Commands.ScanProjectsCommand       82.3%
+  Lifes.Application.Features.VersionIncrease.Commands.UpdateVersionsCommand      100%
+  Lifes.Application.Features.VersionIncrease.DTOs.VersionUpdateResultDto          50%
 
-ETLTools.Core                                                                      85.7%
-  ETLTools.Core.Interfaces.VersionInfo                                               50%
-  ETLTools.Core.Models.Result                                                      83.3%
-  ETLTools.Core.Models.Result<T>                                                    100%
+Lifes.Core                                                                      85.7%
+  Lifes.Core.Interfaces.VersionInfo                                               50%
+  Lifes.Core.Models.Result                                                      83.3%
+  Lifes.Core.Models.Result<T>                                                    100%
 
-ETLTools.Domain                                                                    54.8%
-  ETLTools.Domain.Common.ValueObjects.AppSettings                                     0%
-  ETLTools.Domain.Features.VersionIncrease.Entities.ProjectFile                    91.6%
-  ETLTools.Domain.Features.VersionIncrease.ValueObjects.VersionInfo                94.4%
+Lifes.Domain                                                                    54.8%
+  Lifes.Domain.Common.ValueObjects.AppSettings                                     0%
+  Lifes.Domain.Features.VersionIncrease.Entities.ProjectFile                    91.6%
+  Lifes.Domain.Features.VersionIncrease.ValueObjects.VersionInfo                94.4%
 
-ETLTools.Infrastructure                                                            70.9%
-  ETLTools.Infrastructure.Common.Configuration.SettingsService                        0%
-  ETLTools.Infrastructure.Features.VersionIncrease.Services.ProjectFileService       80%
-  ETLTools.Infrastructure.Features.VersionIncrease.Services.ProjectScanner          100%
-  ETLTools.Infrastructure.Features.VersionIncrease.Services.VersionService         74.1%
+Lifes.Infrastructure                                                            70.9%
+  Lifes.Infrastructure.Common.Configuration.SettingsService                        0%
+  Lifes.Infrastructure.Features.VersionIncrease.Services.ProjectFileService       80%
+  Lifes.Infrastructure.Features.VersionIncrease.Services.ProjectScanner          100%
+  Lifes.Infrastructure.Features.VersionIncrease.Services.VersionService         74.1%
 
-ETLTools.Presentation.WPF                                                          41.3%
-  ETLTools.Presentation.WPF.App                                                       0%
-  ETLTools.Presentation.WPF.Features.VersionIncrease.Helpers.ProjectFilterHelper     90%
-  ETLTools.Presentation.WPF.Features.VersionIncrease.Models.ProjectFileViewModel    100%
-  ETLTools.Presentation.WPF.Features.VersionIncrease.VersionIncreaseView              0%
-  ETLTools.Presentation.WPF.Features.VersionIncrease.VersionIncreaseViewModel      56.6%
-  ETLTools.Presentation.WPF.MainWindow                                                0%
+Lifes.Presentation.WPF                                                          41.3%
+  Lifes.Presentation.WPF.App                                                       0%
+  Lifes.Presentation.WPF.Features.VersionIncrease.Helpers.ProjectFilterHelper     90%
+  Lifes.Presentation.WPF.Features.VersionIncrease.Models.ProjectFileViewModel    100%
+  Lifes.Presentation.WPF.Features.VersionIncrease.VersionIncreaseView              0%
+  Lifes.Presentation.WPF.Features.VersionIncrease.VersionIncreaseViewModel      56.6%
+  Lifes.Presentation.WPF.MainWindow                                                0%

@@ -14,7 +14,7 @@
 
 ## 🎯 Overview
 
-Tài liệu này định nghĩa cấu trúc và quy tắc cho các automation tasks và scripts trong dự án ETLTools. Mỗi automation task được tổ chức theo cấu trúc rõ ràng để dễ maintain và reuse.
+Tài liệu này định nghĩa cấu trúc và quy tắc cho các automation tasks và scripts trong dự án Lifes. Mỗi automation task được tổ chức theo cấu trúc rõ ràng để dễ maintain và reuse.
 
 ---
 

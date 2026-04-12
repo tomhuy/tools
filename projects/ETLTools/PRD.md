@@ -357,27 +357,27 @@ Models/                                 │   └── Services/
 **Service Interfaces (in Core):**
 
 ```csharp
-// ETLTools.Core/Interfaces/IProjectScanner.cs
+// Lifes.Core/Interfaces/IProjectScanner.cs
 public interface IProjectScanner
 {
     Task<Result<IEnumerable<ProjectFile>>> ScanProjectsAsync(string basePath);
 }
 
-// ETLTools.Core/Interfaces/IVersionService.cs
+// Lifes.Core/Interfaces/IVersionService.cs
 public interface IVersionService
 {
     Result<VersionInfo> ParseVersion(string versionString);
     Result<string> IncrementVersion(VersionInfo current, DateTime targetDate);
 }
 
-// ETLTools.Core/Interfaces/IProjectFileService.cs
+// Lifes.Core/Interfaces/IProjectFileService.cs
 public interface IProjectFileService
 {
     Task<Result<string>> ReadVersionAsync(string filePath);
     Task<Result> UpdateVersionAsync(string filePath, string newVersion);
 }
 
-// ETLTools.Core/Interfaces/IGitService.cs
+// Lifes.Core/Interfaces/IGitService.cs
 public interface IGitService
 {
     Task<Result<bool>> HasChangesAsync();
@@ -385,7 +385,7 @@ public interface IGitService
     Task<Result> PushAsync(string remoteName, string branchName);
 }
 
-// ETLTools.Core/Models/Result.cs - Result Pattern
+// Lifes.Core/Models/Result.cs - Result Pattern
 public class Result
 {
     public bool IsSuccess { get; }
@@ -407,7 +407,7 @@ public class Result<T> : Result
 **Service Implementations (in Infrastructure):**
 
 ```csharp
-// ETLTools.Infrastructure/Features/VersionIncrease/Services/ProjectScanner.cs
+// Lifes.Infrastructure/Features/VersionIncrease/Services/ProjectScanner.cs
 public class ProjectScanner : IProjectScanner
 {
     private readonly ILogger<ProjectScanner> _logger;
@@ -467,10 +467,10 @@ private void ConfigureServices(IServiceCollection services)
 **Project Structure:**
 
 ```
-ETLTools.sln
+Lifes.sln
 │
 ├── src/
-│   ├── ETLTools.Presentation.WPF/        # 🎨 Presentation Layer (WPF)
+│   ├── Lifes.Presentation.WPF/        # 🎨 Presentation Layer (WPF)
 │   │   ├── Features/                      # Feature-based organization
 │   │   │   ├── VersionIncrease/           # Version Increase Tool
 │   │   │   │   ├── VersionIncreaseView.xaml
@@ -497,7 +497,7 @@ ETLTools.sln
 │   │   ├── App.xaml
 │   │   └── App.xaml.cs                    # DI configuration
 │   │
-│   ├── ETLTools.Application/              # 💼 Application Layer
+│   ├── Lifes.Application/              # 💼 Application Layer
 │   │   ├── Features/                      # Use cases per feature
 │   │   │   ├── VersionIncrease/
 │   │   │   │   ├── Commands/
@@ -517,7 +517,7 @@ ETLTools.sln
 │   │       ├── Interfaces/
 │   │       └── Behaviors/
 │   │
-│   ├── ETLTools.Domain/                   # 🎯 Domain Layer (Core Business Logic)
+│   ├── Lifes.Domain/                   # 🎯 Domain Layer (Core Business Logic)
 │   │   ├── Features/                      # Domain models per feature
 │   │   │   ├── VersionIncrease/
 │   │   │   │   ├── Entities/
@@ -535,7 +535,7 @@ ETLTools.sln
 │   │       ├── Interfaces/
 │   │       └── Exceptions/
 │   │
-│   ├── ETLTools.Infrastructure/           # 🔧 Infrastructure Layer
+│   ├── Lifes.Infrastructure/           # 🔧 Infrastructure Layer
 │   │   ├── Features/                      # Infrastructure per feature
 │   │   │   ├── VersionIncrease/
 │   │   │   │   ├── Services/
@@ -554,7 +554,7 @@ ETLTools.sln
 │   │       ├── FileSystem/
 │   │       └── Configuration/
 │   │
-│   └── ETLTools.Core/                     # 🔄 Shared Across All Layers
+│   └── Lifes.Core/                     # 🔄 Shared Across All Layers
 │       ├── Interfaces/                    # Shared contracts
 │       │   ├── IProjectScanner.cs
 │       │   ├── IVersionService.cs
@@ -572,9 +572,9 @@ ETLTools.sln
 │           └── AppConstants.cs
 │
 └── tests/                                 # Test projects mirror src structure
-    ├── ETLTools.Application.Tests/
-    ├── ETLTools.Domain.Tests/
-    └── ETLTools.Infrastructure.Tests/
+    ├── Lifes.Application.Tests/
+    ├── Lifes.Domain.Tests/
+    └── Lifes.Infrastructure.Tests/
 ```
 
 **Dependency Flow (Clean Architecture):**
@@ -1279,7 +1279,7 @@ private string GetLevelColor(string level)
 2. Install Git for Windows (if not installed)
    - Download: https://git-scm.com/download/win
 3. Extract application files to desired location
-4. Run `ETLTools.exe` (or `ETLTools.WPF.exe`)
+4. Run `Lifes.exe` (or `Lifes.WPF.exe`)
 5. Configure base directory on first launch
 
 ### Configuration
@@ -1305,7 +1305,7 @@ private string GetLevelColor(string level)
       {
         "Name": "File",
         "Args": {
-          "path": "logs/etltools-.txt",
+          "path": "logs/Lifes-.txt",
           "rollingInterval": "Day"
         }
       }

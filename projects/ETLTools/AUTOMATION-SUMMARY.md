@@ -1,8 +1,8 @@
-# 🤖 ETLTools Automation Summary
+# 🤖 Lifes Automation Summary
 
 ## Overview
 
-Tổng quan về automation system đã được implement cho ETLTools project.
+Tổng quan về automation system đã được implement cho Lifes project.
 
 ---
 
@@ -34,7 +34,7 @@ Tổng quan về automation system đã được implement cho ETLTools project.
 
 **Features**:
 - **Auto backup before deploy** (v1.1.0)
-  - Timestamped zip: `ETLTools_yyyyMMdd_HHmmss.zip`
+  - Timestamped zip: `Lifes_yyyyMMdd_HHmmss.zip`
   - Configurable backup path
   - Optional `-NoBackup` parameter
 - Debug/Release builds
@@ -50,7 +50,7 @@ Tổng quan về automation system đã được implement cho ETLTools project.
 
 ```
 ========================================
-    ETLTools - Automation Menu
+    Lifes - Automation Menu
 ========================================
 
 Select an option:
@@ -67,7 +67,7 @@ Select an option:
 ## 📁 Structure
 
 ```
-ETLTools/
+Lifes/
 ├── run.ps1                         # Main menu
 ├── test.ps1                        # Test with coverage alias
 ├── test-quick.ps1                  # Quick test alias
@@ -139,8 +139,8 @@ Edit to customize deployment:
 
 ```json
 {
-  "deployPath": "C:\\Tools\\ETLTools",         // Change this
-  "backupPath": "C:\\Tools\\ETLTools_Backups", // Backup location (v1.1.0)
+  "deployPath": "C:\\Tools\\Lifes",         // Change this
+  "backupPath": "C:\\Tools\\Lifes_Backups", // Backup location (v1.1.0)
   "configuration": "Release",
   "excludeFiles": [
     "appsettings.user.json",                   // Won't be deployed
@@ -152,7 +152,7 @@ Edit to customize deployment:
   "backupSettings": {                          // NEW v1.1.0
     "enabled": true,                           // Enable/disable backup
     "keepZipOnly": true,
-    "zipNameFormat": "ETLTools_yyyyMMdd_HHmmss"
+    "zipNameFormat": "Lifes_yyyyMMdd_HHmmss"
   }
 }
 ```
@@ -264,7 +264,7 @@ All automation scripts follow `tasks_rule.md` guidelines:
 3. **Test Deploy** (with backup):
    ```powershell
    .\tasks\build-deploy\build-deploy.ps1
-   # Check backup created: YOUR_BACKUP_PATH\ETLTools_yyyyMMdd_HHmmss.zip
+   # Check backup created: YOUR_BACKUP_PATH\Lifes_yyyyMMdd_HHmmss.zip
    ```
 
 4. **Use Main Menu**:
@@ -328,10 +328,10 @@ dotnet --version  # Should be 6.0+
 **Solution**:
 ```powershell
 # Check backup path exists
-Test-Path "C:\Tools\ETLTools_Backups"
+Test-Path "C:\Tools\Lifes_Backups"
 
 # Create manually if needed
-New-Item -ItemType Directory -Path "C:\Tools\ETLTools_Backups" -Force
+New-Item -ItemType Directory -Path "C:\Tools\Lifes_Backups" -Force
 
 # Or skip backup
 .\tasks\build-deploy\build-deploy.ps1 -NoBackup
@@ -344,11 +344,11 @@ New-Item -ItemType Directory -Path "C:\Tools\ETLTools_Backups" -Force
 **Solution**:
 ```powershell
 # Find latest backup
-$backupPath = "C:\Tools\ETLTools_Backups"
-Get-ChildItem $backupPath -Filter "ETLTools_*.zip" | Sort-Object LastWriteTime -Descending
+$backupPath = "C:\Tools\Lifes_Backups"
+Get-ChildItem $backupPath -Filter "Lifes_*.zip" | Sort-Object LastWriteTime -Descending
 
 # Restore from backup
-Expand-Archive "$backupPath\ETLTools_20260206_143025.zip" -DestinationPath "C:\Tools\ETLTools" -Force
+Expand-Archive "$backupPath\Lifes_20260206_143025.zip" -DestinationPath "C:\Tools\Lifes" -Force
 ```
 
 ---

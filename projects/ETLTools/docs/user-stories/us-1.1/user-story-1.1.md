@@ -53,7 +53,7 @@
 
 ### Clean Architecture Layers
 
-#### **Presentation Layer** (`ETLTools.Presentation.WPF`)
+#### **Presentation Layer** (`Lifes.Presentation.WPF`)
 - `Features/VersionIncrease/VersionIncreaseView.xaml`
   - Base directory TextBox with Browse button
   - "Scan Projects", "Select All", "Deselect All" buttons
@@ -81,7 +81,7 @@
     - `string RelativePath`
     - `string FullPath`
 
-#### **Application Layer** (`ETLTools.Application`)
+#### **Application Layer** (`Lifes.Application`)
 - `Features/VersionIncrease/Commands/ScanProjectsCommand.cs`
   - Input: `string basePath`
   - Output: `Result<IEnumerable<ProjectFileDto>>`
@@ -102,7 +102,7 @@
     - `string RelativePath`
     - `string CurrentVersion`
 
-#### **Domain Layer** (`ETLTools.Domain`)
+#### **Domain Layer** (`Lifes.Domain`)
 - `Features/VersionIncrease/Entities/ProjectFile.cs`
   - Pure domain entity representing a project file
   - Properties:
@@ -128,7 +128,7 @@
 - `Features/VersionIncrease/Enums/ProjectStatus.cs`
   - `Ready`, `Processing`, `Updated`, `Failed`, `Skipped`
 
-#### **Infrastructure Layer** (`ETLTools.Infrastructure`)
+#### **Infrastructure Layer** (`Lifes.Infrastructure`)
 - `Features/VersionIncrease/Services/ProjectScanner.cs`
   - Implements: `IProjectScanner`
   - Scans file system for .csproj files
@@ -141,7 +141,7 @@
   - Parses `<AssemblyVersion>` tag
   - Returns version string
 
-#### **Core Layer** (`ETLTools.Core`)
+#### **Core Layer** (`Lifes.Core`)
 - `Interfaces/IProjectScanner.cs`
   ```csharp
   public interface IProjectScanner
@@ -171,28 +171,28 @@
 ### Files to Create/Modify
 
 #### Presentation Layer
-- [ ] `src/ETLTools.Presentation.WPF/Features/VersionIncrease/VersionIncreaseView.xaml`
-- [ ] `src/ETLTools.Presentation.WPF/Features/VersionIncrease/VersionIncreaseViewModel.cs`
-- [ ] `src/ETLTools.Presentation.WPF/Features/VersionIncrease/Models/ProjectFileViewModel.cs`
+- [ ] `src/Lifes.Presentation.WPF/Features/VersionIncrease/VersionIncreaseView.xaml`
+- [ ] `src/Lifes.Presentation.WPF/Features/VersionIncrease/VersionIncreaseViewModel.cs`
+- [ ] `src/Lifes.Presentation.WPF/Features/VersionIncrease/Models/ProjectFileViewModel.cs`
 
 #### Application Layer
-- [ ] `src/ETLTools.Application/Features/VersionIncrease/Commands/ScanProjectsCommand.cs`
-- [ ] `src/ETLTools.Application/Features/VersionIncrease/Queries/GetProjectVersionQuery.cs`
-- [ ] `src/ETLTools.Application/Features/VersionIncrease/DTOs/ProjectFileDto.cs`
+- [ ] `src/Lifes.Application/Features/VersionIncrease/Commands/ScanProjectsCommand.cs`
+- [ ] `src/Lifes.Application/Features/VersionIncrease/Queries/GetProjectVersionQuery.cs`
+- [ ] `src/Lifes.Application/Features/VersionIncrease/DTOs/ProjectFileDto.cs`
 
 #### Domain Layer
-- [ ] `src/ETLTools.Domain/Features/VersionIncrease/Entities/ProjectFile.cs`
-- [ ] `src/ETLTools.Domain/Features/VersionIncrease/ValueObjects/VersionInfo.cs`
-- [ ] `src/ETLTools.Domain/Features/VersionIncrease/Enums/ProjectStatus.cs`
+- [ ] `src/Lifes.Domain/Features/VersionIncrease/Entities/ProjectFile.cs`
+- [ ] `src/Lifes.Domain/Features/VersionIncrease/ValueObjects/VersionInfo.cs`
+- [ ] `src/Lifes.Domain/Features/VersionIncrease/Enums/ProjectStatus.cs`
 
 #### Infrastructure Layer
-- [ ] `src/ETLTools.Infrastructure/Features/VersionIncrease/Services/ProjectScanner.cs`
-- [ ] `src/ETLTools.Infrastructure/Features/VersionIncrease/Services/ProjectFileService.cs`
+- [ ] `src/Lifes.Infrastructure/Features/VersionIncrease/Services/ProjectScanner.cs`
+- [ ] `src/Lifes.Infrastructure/Features/VersionIncrease/Services/ProjectFileService.cs`
 
 #### Core Layer
-- [ ] `src/ETLTools.Core/Interfaces/IProjectScanner.cs`
-- [ ] `src/ETLTools.Core/Interfaces/IProjectFileService.cs`
-- [ ] `src/ETLTools.Core/Models/Result.cs`
+- [ ] `src/Lifes.Core/Interfaces/IProjectScanner.cs`
+- [ ] `src/Lifes.Core/Interfaces/IProjectFileService.cs`
+- [ ] `src/Lifes.Core/Models/Result.cs`
 
 ## Tasks Breakdown
 

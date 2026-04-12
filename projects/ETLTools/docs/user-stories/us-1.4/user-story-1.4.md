@@ -69,12 +69,12 @@
 8. **Given** user clicks "Export Logs" button
    **When** save dialog opens
    **Then** logs exported to .txt file với timestamp filename:
-   - Format: `etltools-logs-{yyyy-MM-dd-HHmmss}.txt`
+   - Format: `Lifes-logs-{yyyy-MM-dd-HHmmss}.txt`
 
 9. **Given** log file writing
    **When** application runs
    **Then** logs also written to file:
-   - Location: `logs/etltools-{yyyy-MM-dd}.txt`
+   - Location: `logs/Lifes-{yyyy-MM-dd}.txt`
    - Rolling daily (new file each day)
    - Retains last 30 days
 
@@ -90,7 +90,7 @@
 
 ### Clean Architecture Layers
 
-#### **Presentation Layer** (`ETLTools.Presentation.WPF`)
+#### **Presentation Layer** (`Lifes.Presentation.WPF`)
 - `Features/VersionIncrease/VersionIncreaseView.xaml` (extend)
   - Add Log section:
     - ListView with 3 columns: Time, Level, Message
@@ -113,7 +113,7 @@
     - `string Message`
     - `SolidColorBrush LevelColor` - Color based on level
 
-#### **Infrastructure Layer** (`ETLTools.Infrastructure`)
+#### **Infrastructure Layer** (`Lifes.Infrastructure`)
 - `Common/Logging/WpfListViewSink.cs`
   - Custom Serilog sink for WPF
   - Implements: `ILogEventSink`
@@ -128,7 +128,7 @@
     - Console sink (debug)
     - Log level filtering
 
-#### **Core Layer** (`ETLTools.Core`)
+#### **Core Layer** (`Lifes.Core`)
 - `Models/LogEntry.cs`
   - Properties:
     - `DateTime Timestamp`
@@ -139,19 +139,19 @@
 ### Files to Create/Modify
 
 #### Presentation Layer
-- [x] `src/ETLTools.Presentation.WPF/Features/VersionIncrease/VersionIncreaseView.xaml` (extend)
-- [x] `src/ETLTools.Presentation.WPF/Features/VersionIncrease/VersionIncreaseViewModel.cs` (extend)
-- [ ] `src/ETLTools.Presentation.WPF/Features/VersionIncrease/Models/LogEntryViewModel.cs`
+- [x] `src/Lifes.Presentation.WPF/Features/VersionIncrease/VersionIncreaseView.xaml` (extend)
+- [x] `src/Lifes.Presentation.WPF/Features/VersionIncrease/VersionIncreaseViewModel.cs` (extend)
+- [ ] `src/Lifes.Presentation.WPF/Features/VersionIncrease/Models/LogEntryViewModel.cs`
 
 #### Infrastructure Layer
-- [ ] `src/ETLTools.Infrastructure/Common/Logging/WpfListViewSink.cs`
-- [ ] `src/ETLTools.Infrastructure/Common/Logging/LoggingConfiguration.cs`
+- [ ] `src/Lifes.Infrastructure/Common/Logging/WpfListViewSink.cs`
+- [ ] `src/Lifes.Infrastructure/Common/Logging/LoggingConfiguration.cs`
 
 #### Core Layer
-- [ ] `src/ETLTools.Core/Models/LogEntry.cs`
+- [ ] `src/Lifes.Core/Models/LogEntry.cs`
 
 #### Application Startup
-- [x] `src/ETLTools.Presentation.WPF/App.xaml.cs` (extend)
+- [x] `src/Lifes.Presentation.WPF/App.xaml.cs` (extend)
   - Configure Serilog on startup
 
 ## Tasks Breakdown
@@ -164,7 +164,7 @@
 - [ ] Create `LoggingConfiguration` class
 - [ ] Configure file sink:
   - Rolling daily logs
-  - Path: `logs/etltools-{Date}.txt`
+  - Path: `logs/Lifes-{Date}.txt`
   - Retain 30 days
 - [ ] Configure console sink (debug only)
 - [ ] Set minimum log levels

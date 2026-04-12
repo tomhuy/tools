@@ -159,7 +159,7 @@ doc.Save(filePath); // ❌ Reformats entire file
 
 ### Clean Architecture Layers
 
-#### **Infrastructure Layer** (`ETLTools.Infrastructure`)
+#### **Infrastructure Layer** (`Lifes.Infrastructure`)
 
 **Modify: `Services/ProjectFileService.cs`**
 
@@ -401,7 +401,7 @@ private string DetectLineEnding(string filePath)
 ### Files to Modify
 
 #### Infrastructure Layer
-- [x] `src/ETLTools.Infrastructure/Features/VersionIncrease/Services/ProjectFileService.cs`
+- [x] `src/Lifes.Infrastructure/Features/VersionIncrease/Services/ProjectFileService.cs`
   - Replace `UpdateVersionAsync()` implementation
   - Add helper methods: `UpdateVersionLines()`, `GetIndentation()`, `DetectEncoding()`, `DetectLineEnding()`
   - Remove XDocument dependency for update (keep for read)
@@ -620,7 +620,7 @@ Tool sẽ tự động detect indentation từ file:
 - [ ] None (only modify existing)
 
 ### Files Modified
-- [x] `src/ETLTools.Infrastructure/Features/VersionIncrease/Services/ProjectFileService.cs`
+- [x] `src/Lifes.Infrastructure/Features/VersionIncrease/Services/ProjectFileService.cs`
 
 ### Current Status
 - **Status**: ✅ Implemented (Testing Required)

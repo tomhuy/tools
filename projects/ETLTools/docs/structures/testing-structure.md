@@ -1,50 +1,50 @@
 # Testing Layer Infrastructure
 
-This document describes the testing architecture and strategy for the ETLTools project.
+This document describes the testing architecture and strategy for the Lifes project.
 
 ## Testing Architecture
 
 The project follows a pyramid testing strategy with three main layers:
 
 1.  **Unit Tests (60%)**
-    *   **Location**: `tests/ETLTools.Domain.Tests`, `tests/ETLTools.Application.Tests`
+    *   **Location**: `tests/Lifes.Domain.Tests`, `tests/Lifes.Application.Tests`
     *   **Focus**: Domain logic, value objects, application services, and commands.
     *   **Isolation**: Fully isolated using mocks for all external dependencies.
     *   **Frameworks**: xUnit, Moq, FluentAssertions.
 
 2.  **Integration Tests (30%)**
-    *   **Location**: `tests/ETLTools.Infrastructure.Tests`
+    *   **Location**: `tests/Lifes.Infrastructure.Tests`
     *   **Focus**: Infrastructure implementations (ProjectScanner, ProjectFileService).
     *   **Dependencies**: Real file system (using temporary test directories), real XML parsing.
     *   **Helpers**: `FileSystemTestHelper` for managing test files.
 
 3.  **UI/Presentation Tests**
-    *   **Location**: `tests/ETLTools.Presentation.WPF.Tests`
+    *   **Location**: `tests/Lifes.Presentation.WPF.Tests`
     *   **Focus**: ViewModels, commands, and UI logic.
     *   **Frameworks**: xUnit, Moq (mocking Application layer commands).
 
 4.  **End-to-End Integration Tests (10%)**
-    *   **Location**: `tests/ETLTools.Integration.Tests`
+    *   **Location**: `tests/Lifes.Integration.Tests`
     *   **Focus**: Full workflows from Application to Infrastructure.
 
 ## Test Project Structure
 
 ```text
 tests/
-├── ETLTools.Domain.Tests/                      # Unit Tests - Domain
+├── Lifes.Domain.Tests/                      # Unit Tests - Domain
 │   ├── Features/VersionIncrease/
 │   │   ├── Entities/ProjectFileTests.cs
 │   │   └── ValueObjects/VersionInfoTests.cs
 │   └── TestUtilities/DomainTestFixtures.cs
 │
-├── ETLTools.Application.Tests/                 # Unit Tests - Application
+├── Lifes.Application.Tests/                 # Unit Tests - Application
 │   ├── Features/VersionIncrease/
 │   │   └── Commands/
 │   │       ├── ScanProjectsCommandTests.cs
 │   │       └── UpdateVersionsCommandTests.cs
 │   └── TestUtilities/AppMockFactory.cs
 │
-├── ETLTools.Infrastructure.Tests/              # Integration Tests - Infrastructure
+├── Lifes.Infrastructure.Tests/              # Integration Tests - Infrastructure
 │   ├── Features/VersionIncrease/
 │   │   └── Services/
 │   │       ├── ProjectScannerTests.cs
@@ -54,7 +54,7 @@ tests/
 │       ├── FileSystemTestHelper.cs
 │       └── InfrastructureTestFixtures.cs
 │
-└── ETLTools.Presentation.WPF.Tests/            # UI Tests - Presentation
+└── Lifes.Presentation.WPF.Tests/            # UI Tests - Presentation
     └── Features/VersionIncrease/
         └── VersionIncreaseViewModelTests.cs
 ```

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ============================================ -->
-<!-- ETLTools - Coverlet Configuration          -->
+<!-- Lifes - Coverlet Configuration          -->
 <!-- ============================================ -->
 <!-- This file configures code coverage collection -->
-<!-- for the ETLTools project                     -->
+<!-- for the Lifes project                     -->
 <!-- ============================================ -->
 <RunSettings>
   <!-- DataCollectionRunSettings -->
@@ -24,7 +24,7 @@
           <ExcludeByFile>**/Migrations/**,**/obj/**,**/bin/**</ExcludeByFile>
           
           <!-- Include Assemblies -->
-          <Include>[ETLTools.Core]*,[ETLTools.Domain]*,[ETLTools.Application]*,[ETLTools.Infrastructure]*,[ETLTools.Presentation.WPF]*</Include>
+          <Include>[Lifes.Core]*,[Lifes.Domain]*,[Lifes.Application]*,[Lifes.Infrastructure]*,[Lifes.Presentation.WPF]*</Include>
           
           <!-- Single Hit -->
           <SingleHit>false</SingleHit>

@@ -61,7 +61,7 @@ Tạo automation system bao gồm:
 ```
 
 ### AC-2: Build Script
-**Given** WPF project tại `src/ETLTools.Presentation.WPF/`  
+**Given** WPF project tại `src/Lifes.Presentation.WPF/`  
 **When** developer chọn "Build Application"  
 **Then**:
 - Build project với configuration (Debug/Release)
@@ -115,7 +115,7 @@ Tạo automation system bao gồm:
 ### Automation Structure
 
 ```
-ETLTools/
+Lifes/
 ├── run.ps1                         # Main menu navigation (NEW)
 ├── test.ps1                        # Quick test alias (existing)
 ├── test-quick.ps1                  # Quick test alias (existing)
@@ -173,8 +173,8 @@ ETLTools/
 7. Show output location
 
 **Output Location**:
-- Debug: `src/ETLTools.Presentation.WPF/bin/Debug/net6.0-windows/`
-- Release: `src/ETLTools.Presentation.WPF/bin/Release/net6.0-windows/`
+- Debug: `src/Lifes.Presentation.WPF/bin/Debug/net6.0-windows/`
+- Release: `src/Lifes.Presentation.WPF/bin/Release/net6.0-windows/`
 
 #### 3. build-deploy.ps1
 
@@ -206,7 +206,7 @@ ETLTools/
 
 ```json
 {
-  "deployPath": "C:\\Deploy\\ETLTools",
+  "deployPath": "C:\\Deploy\\Lifes",
   "configuration": "Release",
   "excludeFiles": [
     "appsettings.user.json",
@@ -372,7 +372,7 @@ ETLTools/
 
 ```json
 {
-  "deployPath": "F:\\Deploy\\ETLTools",
+  "deployPath": "F:\\Deploy\\Lifes",
   "configuration": "Release",
   "excludeFiles": [
     "appsettings.user.json",
@@ -404,7 +404,7 @@ ETLTools/
 
 # Output:
 # ========================================
-# ETLTools - Automation Menu
+# Lifes - Automation Menu
 # ========================================
 # 
 # 1. Run Tests (Quick)

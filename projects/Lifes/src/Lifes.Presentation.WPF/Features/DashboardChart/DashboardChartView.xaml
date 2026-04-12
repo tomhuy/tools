@@ -1,0 +1,101 @@
+<UserControl x:Class="Lifes.Presentation.WPF.Features.DashboardChart.DashboardChartView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:converters="clr-namespace:Lifes.Presentation.WPF.Features.DashboardChart.Converters"
+             xmlns:controls="clr-namespace:Lifes.Presentation.WPF.Features.DashboardChart.Controls"
+             xmlns:navControls="clr-namespace:Lifes.Presentation.WPF.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="720" d:DesignWidth="1280"
+             Background="#1E1E2E"
+             Foreground="White">
+    <UserControl.Resources>
+        <converters:IndexToGridRowConverter x:Key="IndexToRow" />
+        <converters:IndexToGridColumnConverter x:Key="IndexToCol" />
+    </UserControl.Resources>
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Navigation Menu -->
+        <navControls:NavigationMenuButton ToolItems="{Binding NavigationMenuItems}"
+                                         HorizontalAlignment="Left"
+                                         VerticalAlignment="Top"
+                                         Grid.RowSpan="4"
+                                         Grid.ColumnSpan="4"
+                                         Margin="0,0,0,0"
+                                         Panel.ZIndex="10"/>
+
+        <ItemsControl ItemsSource="{Binding Blocks}" 
+                     Grid.RowSpan="4" Grid.ColumnSpan="4">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <controls:DashboardBlockHost Block="{Binding}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemContainerStyle>
+                <Style TargetType="ContentPresenter">
+                    <Setter Property="Grid.Row" Value="{Binding Index, Converter={StaticResource IndexToRow}}" />
+                    <Setter Property="Grid.Column" Value="{Binding Index, Converter={StaticResource IndexToCol}}" />
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+        </ItemsControl>
+
+        <Border Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Grid.ColumnSpan="2"
+                Background="#252535" CornerRadius="12" BorderBrush="#3ECF8E" BorderThickness="1" Margin="12" Padding="20">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="{Binding CenterInfo.Title}" FontSize="28" FontWeight="Bold" Foreground="#F0B030" HorizontalAlignment="Center" Margin="0,0,0,16"/>
+                <TextBlock Text="{Binding CenterInfo.SolarDate}" FontSize="14" Foreground="#E0E0E0" HorizontalAlignment="Center" Margin="2"/>
+                <TextBlock Text="{Binding CenterInfo.LunarDate}" FontSize="14" Foreground="#E0E0E0" HorizontalAlignment="Center" Margin="2"/>
+                <TextBlock Text="{Binding CenterInfo.Bazi}" FontSize="14" Foreground="#E0E0E0" HorizontalAlignment="Center" Margin="2"/>
+                <TextBlock Text="{Binding CenterInfo.BirthTime}" FontSize="14" Foreground="#E0E0E0" HorizontalAlignment="Center" Margin="2"/>
+                <TextBlock Text="{Binding CenterInfo.Gender}" FontSize="14" Foreground="#E0E0E0" HorizontalAlignment="Center" Margin="2"/>
+                <TextBlock Text="{Binding CenterInfo.Element}" FontSize="16" FontWeight="SemiBold" Foreground="#3ECF8E" HorizontalAlignment="Center" Margin="0,16,0,8"/>
+                
+                <Border Background="#403080" CornerRadius="10" Padding="12,4" HorizontalAlignment="Center" Margin="0,0,0,12">
+                    <TextBlock Text="{Binding CenterInfo.ElementBureau}" Foreground="White" FontSize="14"/>
+                </Border>
+                
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="4">
+                    <TextBlock Text="{Binding CenterInfo.DestinyMaster}" Margin="0,0,16,0" Foreground="#A0A0FF"/>
+                    <TextBlock Text="{Binding CenterInfo.BodyMaster}" Foreground="#A0A0FF"/>
+                </StackPanel>
+                
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="4">
+                    <TextBlock Text="{Binding CenterInfo.ZodiacAnimal}" Margin="0,0,16,0" Foreground="#E0E0E0"/>
+                    <TextBlock Text="{Binding CenterInfo.ZodiacSign}" Foreground="#E0E0E0"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

@@ -6,4 +6,5 @@ namespace Lifes.Presentation.WPF.Constants;
 public static class ToolIds
 {
     public const string VersionIncrease = "version-increase";
+    public const string DashboardChart = "dashboard-chart";
 }

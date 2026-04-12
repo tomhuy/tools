@@ -83,6 +83,16 @@ src/
 │   ├── Styles/                     # US-5.1
 │   │   └── NavigationMenuStyles.xaml   # NavButtonStyle, NavMenuItemStyle
 │   ├── Features/
+│   │   ├── DashboardChart/             # US-6.1
+│   │   │   ├── Controls/
+│   │   │   │   └── DashboardBlockHost.cs
+│   │   │   ├── Registries/
+│   │   │   │   └── DashboardViewRegistry.cs
+│   │   │   ├── Views/
+│   │   │   │   ├── AstrologyCellView.xaml
+│   │   │   │   └── DefaultDashboardBlockView.xaml
+│   │   │   ├── DashboardChartView.xaml
+│   │   │   └── DashboardChartViewModel.cs
 │   │   └── VersionIncrease/
 │   │       ├── VersionIncreaseView.xaml      # Search UI + Commit button + Nav button (US-1.2.1, US-1.3, US-5.1)
 │   │       ├── VersionIncreaseViewModel.cs   # Search + Settings + Git + Navigation (US-1.2.1, US-1.3, US-5.1)
@@ -186,6 +196,16 @@ src/
 - ⏳ US-1.5: Advanced Settings và Configuration
 
 **Documentation**: [fea-version-increase-structure.md](./fea-version-increase-structure.md)
+
+### 2. Dashboard Chart Layout
+**Status**: ✅ Completed
+**User Stories**: US-6.1
+**Documentation**: [fea-dashboard-chart-structure.md](./fea-dashboard-chart-structure.md)
+
+**Key Components**:
+- `DashboardBlockHost` & `DashboardViewRegistry` (UI Injection)
+- `DashboardBlock` (Dynamic data domain object)
+- `IDashboardBlockView` & `DashboardBlockAttribute`
 
 **Key Components**:
 

@@ -1,5 +1,6 @@
 using System.Windows;
 using Lifes.Application.Common.Commands;
+using Lifes.Application.Features.DashboardChart.Implements;
 using Lifes.Application.Features.VersionIncrease.Commands;
 using Lifes.Application.Services;
 using Lifes.Core.Interfaces;
@@ -8,6 +9,8 @@ using Lifes.Infrastructure.Common.Configuration;
 using Lifes.Infrastructure.Features.VersionIncrease.Services;
 using Lifes.Presentation.WPF.Constants;
 using Lifes.Presentation.WPF.Features.VersionIncrease;
+using Lifes.Application.Features.DashboardChart.Interfaces;
+using Lifes.Presentation.WPF.Features.DashboardChart;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
@@ -80,6 +83,10 @@ public partial class App : System.Windows.Application
 
         // Presentation Layer - ViewModels
         services.AddTransient<VersionIncreaseViewModel>();
+        services.AddTransient<DashboardChartViewModel>();
+
+        // Dashboard Services
+        services.AddSingleton<IDashboardDataService, MockDashboardDataService>();
 
         // Presentation Layer - Views & Windows
         services.AddSingleton<MainWindow>();
@@ -98,6 +105,13 @@ public partial class App : System.Windows.Application
             Id = ToolIds.VersionIncrease,
             Name = "Version Increase Tool",
             Description = "Increment version numbers for ETL projects"
+        });
+
+        nav.RegisterTool(new ToolDefinition
+        {
+            Id = ToolIds.DashboardChart,
+            Name = "Dashboard Chart",
+            Description = "View dynamic dashboard chart layout"
         });
     }
 

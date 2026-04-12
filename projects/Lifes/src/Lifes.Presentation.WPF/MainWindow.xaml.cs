@@ -33,10 +33,10 @@ public partial class MainWindow : Window
         // Subscribe before showing any view so no navigation event is missed
         _navigationService.ToolNavigated += OnToolNavigated;
 
-        // Show the initial Version Increase view
-        ShowVersionIncreaseView();
+        // Show the initial Dashboard view
+        ShowDashboardChartView();
 
-        _logger.LogInformation("Main window initialized with Version Increase Tool");
+        _logger.LogInformation("Main window initialized with Dashboard Chart Tool");
     }
 
     private void ShowVersionIncreaseView()

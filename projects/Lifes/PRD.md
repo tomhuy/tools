@@ -274,6 +274,23 @@ ETL Deployment Tools Suite cung cấp:
 - ✅ **Independent of Database**: Có thể swap file system → SQL → NoSQL
 - ✅ **Independent of External Services**: Business logic không biết về Git, HTTP, hay service nào
 
+---
+
+### 5. Dashboard Chart Layout (US-6.1)
+**Status**: ✅ Completed (US-6.1 Done)
+**User Stories**: US-6.1
+**Documentation**: [fea-dashboard-chart-structure.md](./docs/structures/fea-dashboard-chart-structure.md)
+
+**Purpose**: Hỗ trợ layout dashboard và injection UI đa hình thông qua DashboardBlockHost cho các cell của lưới trực quan.
+
+**Key Components**:
+- `IDashboardBlockView` & `DashboardBlockAttribute`: Định nghĩa Custom View cho Dashboard.
+- `DashboardBlockHost`: Custom ContentControl tự động nạp View tương ứng dựa theo `BlockType` của data object.
+- `DashboardViewRegistry`: Tự động quét Assembly lúc Application Startup để map UI theo loại data.
+- `DashboardChartViewModel` & `DashboardBlock` entity: Liên kết dữ liệu UI động và chứa cấu trúc `Data` linh hoạt.
+
+---
+
 **Why Feature-based Organization?**
 - ✅ **High Cohesion**: Code liên quan đến một feature nằm gần nhau
 - ✅ **Easy Navigation**: Tìm code nhanh hơn - nhìn feature thay vì tìm trong nhiều layer folders
@@ -1486,6 +1503,6 @@ private string GetLevelColor(string level)
 
 ---
 
-**Document Version:** 1.5.0  
-**Last Updated:** 2026-04-12  
-**Status:** ✅ Active (75% Complete - US-1.1, US-1.2, US-1.2.1, US-1.3, US-2.1, US-5.1, US-6.1 Done)
+**Document Version:** 1.5.1
+**Last Updated:** 2026-04-12
+**Status:** ✅ Active (85% Complete - US-1.1, US-1.2, US-1.2.1, US-1.3, US-2.1, US-5.1, US-6.1 Done)

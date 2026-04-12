@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ============================================ -->
+<!-- ETLTools - Coverlet Configuration          -->
+<!-- ============================================ -->
+<!-- This file configures code coverage collection -->
+<!-- for the ETLTools project                     -->
+<!-- ============================================ -->
+<RunSettings>
+  <!-- DataCollectionRunSettings -->
+  <DataCollectionRunSettings>
+    <DataCollectors>
+      <DataCollector friendlyName="XPlat code coverage">
+        <Configuration>
+          <!-- Output Formats -->
+          <Format>cobertura,opencover</Format>
+          
+          <!-- Exclude Test Projects -->
+          <Exclude>[*.Tests]*</Exclude>
+          
+          <!-- Exclude by Attribute -->
+          <ExcludeByAttribute>Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute</ExcludeByAttribute>
+          
+          <!-- Exclude by File Pattern -->
+          <ExcludeByFile>**/Migrations/**,**/obj/**,**/bin/**</ExcludeByFile>
+          
+          <!-- Include Assemblies -->
+          <Include>[ETLTools.Core]*,[ETLTools.Domain]*,[ETLTools.Application]*,[ETLTools.Infrastructure]*,[ETLTools.Presentation.WPF]*</Include>
+          
+          <!-- Single Hit -->
+          <SingleHit>false</SingleHit>
+          
+          <!-- Include Test Assembly -->
+          <IncludeTestAssembly>false</IncludeTestAssembly>
+          
+          <!-- Skip Auto Props -->
+          <SkipAutoProps>true</SkipAutoProps>
+          
+          <!-- Use Source Link -->
+          <UseSourceLink>false</UseSourceLink>
+        </Configuration>
+      </DataCollector>
+    </DataCollectors>
+  </DataCollectionRunSettings>
+  
+  <!-- Logger Settings -->
+  <LoggerRunSettings>
+    <Loggers>
+      <!-- Console Logger -->
+      <Logger friendlyName="console" enabled="True">
+        <Configuration>
+          <Verbosity>normal</Verbosity>
+        </Configuration>
+      </Logger>
+      
+      <!-- TRX Logger (Visual Studio) -->
+      <Logger friendlyName="trx" enabled="True">
+        <Configuration>
+          <LogFileName>TestResults.trx</LogFileName>
+        </Configuration>
+      </Logger>
+      
+      <!-- HTML Logger -->
+      <Logger friendlyName="html" enabled="False">
+        <Configuration>
+          <LogFileName>TestResults.html</LogFileName>
+        </Configuration>
+      </Logger>
+    </Loggers>
+  </LoggerRunSettings>
+  
+  <!-- Test Run Parameters -->
+  <TestRunParameters>
+    <Parameter name="Environment" value="Test" />
+  </TestRunParameters>
+</RunSettings>

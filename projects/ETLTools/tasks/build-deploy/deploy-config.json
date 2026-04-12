@@ -1,0 +1,26 @@
+{
+  "deployPath": "C:\\Tools\\ETLTools",
+  "backupPath": "C:\\Tools\\ETLTools_Backups",
+  "configuration": "Release",
+  "projectPath": "src/ETLTools.Presentation.WPF/ETLTools.Presentation.WPF.csproj",
+  "excludeFiles": [
+    "appsettings.user.json",
+    "*.pdb",
+    "*.xml"
+  ],
+  "preserveFiles": [
+    "appsettings.user.json"
+  ],
+  "includePatterns": [
+    "*.dll",
+    "*.exe",
+    "*.exe.config",
+    "*.json",
+    "*.xaml"
+  ],
+  "backupSettings": {
+    "enabled": true,
+    "keepZipOnly": true,
+    "zipNameFormat": "ETLTools_yyyyMMdd_HHmmss"
+  }
+}

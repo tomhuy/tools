@@ -1,0 +1,51 @@
+Summary
+  Generated on: 2/6/2026 - 8:26:08 PM
+  Coverage date: 2/6/2026 - 8:26:05 PM - 2/6/2026 - 8:26:07 PM
+  Parser: MultiReport (8x Cobertura)
+  Assemblies: 5
+  Classes: 21
+  Files: 20
+  Line coverage: 56%
+  Covered lines: 256
+  Uncovered lines: 201
+  Coverable lines: 457
+  Total lines: 2084
+  Branch coverage: 63.7% (65 of 102)
+  Covered branches: 65
+  Total branches: 102
+  Method coverage: 52.5% (31 of 59)
+  Full method coverage: 38.9% (23 of 59)
+  Covered methods: 31
+  Fully covered methods: 23
+  Total methods: 59
+
+ETLTools.Application                                                               62.5%
+  ETLTools.Application.Common.Commands.LoadSettingsCommand                            0%
+  ETLTools.Application.Common.Commands.SaveSettingsCommand                            0%
+  ETLTools.Application.Features.VersionIncrease.Commands.ScanProjectsCommand       82.3%
+  ETLTools.Application.Features.VersionIncrease.Commands.UpdateVersionsCommand      100%
+  ETLTools.Application.Features.VersionIncrease.DTOs.VersionUpdateResultDto          50%
+
+ETLTools.Core                                                                      85.7%
+  ETLTools.Core.Interfaces.VersionInfo                                               50%
+  ETLTools.Core.Models.Result                                                      83.3%
+  ETLTools.Core.Models.Result<T>                                                    100%
+
+ETLTools.Domain                                                                    54.8%
+  ETLTools.Domain.Common.ValueObjects.AppSettings                                     0%
+  ETLTools.Domain.Features.VersionIncrease.Entities.ProjectFile                    91.6%
+  ETLTools.Domain.Features.VersionIncrease.ValueObjects.VersionInfo                94.4%
+
+ETLTools.Infrastructure                                                            70.9%
+  ETLTools.Infrastructure.Common.Configuration.SettingsService                        0%
+  ETLTools.Infrastructure.Features.VersionIncrease.Services.ProjectFileService       80%
+  ETLTools.Infrastructure.Features.VersionIncrease.Services.ProjectScanner          100%
+  ETLTools.Infrastructure.Features.VersionIncrease.Services.VersionService         74.1%
+
+ETLTools.Presentation.WPF                                                          41.3%
+  ETLTools.Presentation.WPF.App                                                       0%
+  ETLTools.Presentation.WPF.Features.VersionIncrease.Helpers.ProjectFilterHelper     90%
+  ETLTools.Presentation.WPF.Features.VersionIncrease.Models.ProjectFileViewModel    100%
+  ETLTools.Presentation.WPF.Features.VersionIncrease.VersionIncreaseView              0%
+  ETLTools.Presentation.WPF.Features.VersionIncrease.VersionIncreaseViewModel      56.6%
+  ETLTools.Presentation.WPF.MainWindow                                                0%

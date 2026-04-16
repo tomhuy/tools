@@ -41,6 +41,9 @@ public partial class MonthlyCalendarViewModel : ObservableObject
     private void InitializeAvailableMonths()
     {
         var today = DateTime.Today;
+        // Calculate the start of the quarter (1-3, 4-6, 7-9, 10-12)
+        int startMonth = ((today.Month - 1) / 3) * 3 + 1;
+
         for (int i = 1; i <= 12; i++)
         {
             var monthName = DateTimeFormatInfo.CurrentInfo.GetMonthName(i);
@@ -48,11 +51,14 @@ public partial class MonthlyCalendarViewModel : ObservableObject
             {
                 Value = i,
                 Name = monthName,
-                IsSelected = i == today.Month // Default to current month
+                IsSelected = i >= startMonth && i < startMonth + 3
             };
             month.SelectedChanged += (s, e) => _ = LoadDataAsync();
             AvailableMonths.Add(month);
         }
+
+        // Trigger initial data load
+        _ = LoadDataAsync();
     }
 
     private void InitializeNavigationMenu()

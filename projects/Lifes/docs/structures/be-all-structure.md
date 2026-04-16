@@ -21,7 +21,9 @@ src/
 │   └── Models/
 │       ├── Result.cs               # Result<T> pattern
 │       ├── ToolDefinition.cs       # US-5.1 — tool metadata
-│       └── ToolNavigatedEventArgs.cs # US-5.1 — navigation event args
+│       ├── ToolNavigatedEventArgs.cs # US-5.1 — navigation event args
+│       ├── CalendarEventModel.cs   # US-8.4 — Multi-phase event entity
+│       └── CalendarEventPhaseModel.cs # US-8.4 — event phase detail
 │
 ├── Lifes.Domain/                # Business logic and entities
 │   ├── Common/                     # US-1.2.1
@@ -42,13 +44,16 @@ src/
 │   │   └── Configuration/
 │   │       └── SettingsService.cs  # JSON file persistence
 │   └── Features/
-│       └── VersionIncrease/
-│           ├── Services/
-│           │   ├── ProjectScanner.cs
-│           │   ├── ProjectFileService.cs
-│           │   └── VersionService.cs
-│           └── Git/                # US-1.3
-│               └── GitService.cs   # LibGit2Sharp implementation
+│       ├── VersionIncrease/
+│       │   ├── Services/
+│       │   │   ├── ProjectScanner.cs
+│       │   │   ├── ProjectFileService.cs
+│       │   │   └── VersionService.cs
+│       │   └── Git/                # US-1.3
+│       │       └── GitService.cs   # LibGit2Sharp implementation
+│       └── AnnualCalendar/
+│           └── Services/
+│               └── MockCalendarService.cs # US-8.4 — Multi-phase mock data
 │
 ├── Lifes.Application/           # Use cases and commands
 │   ├── Common/                     # US-1.2.1
@@ -93,9 +98,17 @@ src/
 │   │   │   │   └── DefaultDashboardBlockView.xaml
 │   │   │   ├── DashboardChartView.xaml
 │   │   │   └── DashboardChartViewModel.cs
+│   │   ├── AnnualCalendar/             # US-8.4, US-8.5
+│   │   │   ├── AnnualCalendarView.xaml
+│   │   │   ├── AnnualCalendarViewModel.cs
+│   │   │   ├── MonthlyCalendarView.xaml
+│   │   │   └── MonthlyCalendarViewModel.cs
+│   │   ├── DocumentManagement/         # US-7.1
+│   │   │   ├── DocumentManagementView.xaml
+│   │   │   └── DocumentManagementViewModel.cs
 │   │   └── VersionIncrease/
-│   │       ├── VersionIncreaseView.xaml      # Search UI + Commit button + Nav button (US-1.2.1, US-1.3, US-5.1)
-│   │       ├── VersionIncreaseViewModel.cs   # Search + Settings + Git + Navigation (US-1.2.1, US-1.3, US-5.1)
+│   │       ├── VersionIncreaseView.xaml      # Search UI + Commit button + Hamburger (US-1.2.1, US-1.3, US-8.5)
+│   │       ├── VersionIncreaseViewModel.cs   # Search + Settings + Git + Navigation (US-1.2.1, US-1.3, US-8.5)
 │   │       ├── Helpers/                      # US-1.2.1
 │   │       │   └── ProjectFilterHelper.cs    # Search/filter logic
 │   │       ├── Models/
@@ -105,7 +118,7 @@ src/
 │   │       └── Views/                        # US-1.3
 │   │           ├── GitCommitDialog.xaml
 │   │           └── GitCommitDialog.xaml.cs
-│   ├── App.xaml                    # DI config + merged NavigationMenuStyles (US-5.1)
+│   ├── App.xaml                    # DI config + Hamburger styles (US-8.5)
 │   ├── App.xaml.cs                 # Registers NavigationService + tools (US-5.1)
 │   └── MainWindow.xaml.cs          # Handles ToolNavigated → swap views (US-5.1)
 │
@@ -212,10 +225,16 @@ src/
 **User Stories**: US-7.1
 **Documentation**: [fea-document-management-structure.md](./fea-document-management-structure.md)
 
+### 7. Annual & Monthly Calendar
+**Status**: ✅ Completed
+**User Stories**: US-8.4, US-8.5
+**Documentation**: [fea-calendar-structure.md](./fea-calendar-structure.md)
+
 **Key Components**:
-- `DocumentManagementView.xaml`: Custom ItemsControl Grid, SharedSizeGroup
-- `DocumentManagementViewModel`
-- `DocumentModel` & `MockDocumentService`
+- `AnnualCalendarViewModel` & `MonthlyCalendarViewModel`
+- `CalendarEventModel` with `Phases` (Multi-phase tracking)
+- Gantt-style timeline rendering in XAML
+- Hamburger Navigation integration
 
 **Key Components Overview**:
 
@@ -601,6 +620,6 @@ reportgenerator -reports:**/coverage.cobertura.xml -targetdir:coverage-report -r
 
 ---
 
-**Document Version**: 1.3.0  
-**Last Updated**: 2026-04-07  
-**Status**: ✅ Active (70% Complete - US-1.1, US-1.2, US-1.2.1, US-1.3, US-2.1, US-5.1 Done)
+**Document Version**: 1.4.0  
+**Last Updated**: 2026-04-16  
+**Status**: ✅ Active (75% Complete - US-1.1, US-1.2, US-1.2.1, US-1.3, US-2.1, US-5.1, US-7.1, US-8.4, US-8.5 Done)

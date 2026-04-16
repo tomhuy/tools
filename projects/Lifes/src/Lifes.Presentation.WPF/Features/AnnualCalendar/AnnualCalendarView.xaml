@@ -1,0 +1,280 @@
+<UserControl x:Class="Lifes.Presentation.WPF.Features.AnnualCalendar.AnnualCalendarView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             Background="#FBFBFB"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="1400">
+
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        
+        <Style x:Key="LegendBorderStyle" TargetType="Border">
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="8,2"/>
+            <Setter Property="Margin" Value="4,0"/>
+        </Style>
+
+        <Style x:Key="TaskBorderStyle" TargetType="Border">
+            <Setter Property="CornerRadius" Value="2"/>
+            <Setter Property="Height" Value="16"/>
+            <Setter Property="Margin" Value="1,1"/>
+        </Style>
+
+        <Style x:Key="HamburgerButtonStyle" TargetType="ToggleButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border x:Name="Border" CornerRadius="6" Background="Transparent" Padding="{TemplateBinding Padding}">
+                            <Path x:Name="Icon" Data="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" 
+                                  Fill="#4A5568" Stretch="Uniform" Width="20" Height="20"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#EDF2F7"/>
+                                <Setter TargetName="Icon" Property="Fill" Value="#2D3748"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#E2E8F0"/>
+                                <Setter TargetName="Icon" Property="Fill" Value="#3182CE"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ToolMenuButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="15,10"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="#4A5568"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Border" Background="{TemplateBinding Background}" CornerRadius="4">
+                            <ContentPresenter x:Name="Content" Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#F7FAFC"/>
+                                <Setter Property="Foreground" Value="#2D3748"/>
+                            </Trigger>
+                            <DataTrigger Binding="{Binding IsActive}" Value="True">
+                                <Setter Property="Foreground" Value="#3182CE"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                <Setter TargetName="Border" Property="Background" Value="#EBF8FF"/>
+                            </DataTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </UserControl.Resources>
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- HEADER -->
+        <Grid Margin="20,10,20,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Hamburger Menu -->
+            <ToggleButton x:Name="HamburgerButton" Style="{StaticResource HamburgerButtonStyle}" Margin="0,0,10,0"/>
+
+            <Popup IsOpen="{Binding IsChecked, ElementName=HamburgerButton}" 
+                   PlacementTarget="{Binding ElementName=HamburgerButton}" 
+                   StaysOpen="False" AllowsTransparency="True" PopupAnimation="Fade">
+                <Border Background="White" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="8" Margin="0,5,0,0">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="15" ShadowDepth="2" Opacity="0.1"/>
+                    </Border.Effect>
+                    <StackPanel Margin="5" Width="200">
+                        <TextBlock Text="CÔNG CỤ HỆ THỐNG" FontSize="11" FontWeight="Bold" Foreground="#A0AEC0" Margin="15,10,15,5"/>
+                        <ItemsControl ItemsSource="{Binding NavigationMenuItems}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Button Content="{Binding Name}" Command="{Binding NavigateCommand}" Style="{StaticResource ToolMenuButtonStyle}"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
+            </Popup>
+
+            <TextBlock Grid.Column="1" Text="Annual Calendar" FontSize="20" FontWeight="Bold" Foreground="#2C3E50" VerticalAlignment="Center" Margin="0,0,30,0"/>
+
+            <StackPanel Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                <TextBlock Text="Life is bigger than a week." FontSize="14" FontStyle="Italic" Foreground="#95A5A6" VerticalAlignment="Center" Margin="0,0,20,0"/>
+
+                <ItemsControl ItemsSource="{Binding Legends}" VerticalAlignment="Center">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Style="{StaticResource LegendBorderStyle}" Background="{Binding BgColor}">
+                                <TextBlock Text="{Binding Category}" Foreground="{Binding FgColor}" FontSize="10" FontWeight="SemiBold"/>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </Grid>
+
+        <!-- CALENDAR BODY -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <Grid MinWidth="1300" Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="60"/> <!-- Jan -->
+                    <ColumnDefinition Width="*"/>  <!-- The 37 cols -->
+                    <ColumnDefinition Width="60"/> <!-- Jan end -->
+                </Grid.ColumnDefinitions>
+
+                <!-- Shared 37 Columns definitions using a resource, wait we just type 37 Columns via UniformGrid for top header -->
+                <ItemsControl Grid.Column="1" ItemsSource="{Binding TopDaysOfWeek}" Margin="0,0,0,10">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="37"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" HorizontalAlignment="Center" Foreground="#BDC3C7" FontSize="10"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!-- Main Content: Months -->
+                <ItemsControl Grid.Column="0" Grid.ColumnSpan="3" ItemsSource="{Binding Months}" Margin="0,30,0,0">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="60"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Left Month -->
+                                <TextBlock Grid.Column="0" Text="{Binding MonthName}" FontWeight="Bold" FontSize="12" Foreground="#34495E" VerticalAlignment="Top" Margin="0,15,0,0"/>
+
+                                <!-- Right Month -->
+                                <TextBlock Grid.Column="2" Text="{Binding MonthName}" FontWeight="Bold" FontSize="12" Foreground="#34495E" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,15,0,0"/>
+
+                                <!-- Center 37 Col Grid -->
+                                <Grid Grid.Column="1">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/> <!-- Background bands & Days -->
+                                        <RowDefinition Height="Auto"/> <!-- Tasks -->
+                                    </Grid.RowDefinitions>
+
+                                    <!-- 37 Columns for layout -->
+                                    <!-- Manually writing 37 column definitions inside the Grid so child elements can attach via Grid.Column -->
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Alternating Background Bands (Optional but adds aesthetic) -->
+                                    <!-- A background ItemsControl for the Days row -->
+                                    <ItemsControl Grid.Row="0" Grid.ColumnSpan="37" ItemsSource="{Binding Days}">
+                                        <!-- Note: ItemsControl here does NOT use the parent Grid's columns for layout automatically unless we change ItemsPanel to Grid, but since we just need simple layout we use UniformGrid -->
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <UniformGrid Columns="37"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <!-- The day square -->
+                                                <Border Background="#F4F6F7" Margin="1,0" Height="25">
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <!-- Make blank cells slightly lighter or transparent if empty, but in mockup all 37 slots have grey background EXCEPT edges? Wait, the UI has faint grey rects. Let's just use F4F6F7 -->
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsToday}" Value="True">
+                                                                    <Setter Property="BorderBrush" Value="#E74C3C"/>
+                                                                    <Setter Property="BorderThickness" Value="1"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding DayText}" Value="">
+                                                                    <Setter Property="Background" Value="Transparent"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Border.Style>
+                                                    <TextBlock Text="{Binding DayText}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="10" Foreground="#7F8C8D">
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="TextBlock">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsToday}" Value="True">
+                                                                        <Setter Property="Foreground" Value="#E74C3C"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+
+                                    <!-- Tasks Rows Area -->
+                                    <ItemsControl Grid.Row="1" Grid.ColumnSpan="37" ItemsSource="{Binding TaskRows}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <ItemsControl ItemsSource="{Binding Tasks}">
+                                                    <ItemsControl.ItemsPanel>
+                                                        <ItemsPanelTemplate>
+                                                            <Grid>
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/>
+                                                                </Grid.ColumnDefinitions>
+                                                            </Grid>
+                                                        </ItemsPanelTemplate>
+                                                    </ItemsControl.ItemsPanel>
+                                                    <ItemsControl.ItemContainerStyle>
+                                                        <Style TargetType="ContentPresenter">
+                                                            <Setter Property="Grid.Column" Value="{Binding StartColumn}"/>
+                                                            <Setter Property="Grid.ColumnSpan" Value="{Binding Duration}"/>
+                                                        </Style>
+                                                    </ItemsControl.ItemContainerStyle>
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Border Style="{StaticResource TaskBorderStyle}" Background="{Binding BgColor}">
+                                                                <TextBlock Text="{Binding Title}" Foreground="{Binding FgColor}" FontSize="9" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                                                            </Border>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+
+                                </Grid>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

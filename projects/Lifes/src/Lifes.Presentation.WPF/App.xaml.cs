@@ -12,8 +12,9 @@ using Lifes.Presentation.WPF.Features.VersionIncrease;
 using Lifes.Application.Features.DashboardChart.Interfaces;
 using Lifes.Presentation.WPF.Features.DashboardChart;
 using Lifes.Presentation.WPF.Features.DocumentManagement;
-using Lifes.Core.Interfaces;
 using Lifes.Infrastructure.Features.DocumentManagement.Services;
+using Lifes.Presentation.WPF.Features.AnnualCalendar;
+using Lifes.Infrastructure.Features.AnnualCalendar.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
@@ -88,10 +89,13 @@ public partial class App : System.Windows.Application
         services.AddTransient<VersionIncreaseViewModel>();
         services.AddTransient<DashboardChartViewModel>();
         services.AddTransient<DocumentManagementViewModel>();
+        services.AddTransient<AnnualCalendarViewModel>();
+        services.AddTransient<MonthlyCalendarViewModel>();
 
         // Dashboard Services
         services.AddSingleton<IDashboardDataService, MockDashboardDataService>();
         services.AddSingleton<IDocumentService, MockDocumentService>();
+        services.AddSingleton<ICalendarService, MockCalendarService>();
 
         // Presentation Layer - Views & Windows
         services.AddSingleton<MainWindow>();
@@ -124,6 +128,20 @@ public partial class App : System.Windows.Application
             Id = ToolIds.DocumentManagement,
             Name = "Document Management",
             Description = "Tracker Grid for Document Management"
+        });
+
+        nav.RegisterTool(new ToolDefinition
+        {
+            Id = ToolIds.AnnualCalendar,
+            Name = "Annual Linear Calendar",
+            Description = "View yearly events on a beautiful dynamic gantt chart"
+        });
+
+        nav.RegisterTool(new ToolDefinition
+        {
+            Id = ToolIds.MonthlyCalendar,
+            Name = "Monthly Calendar",
+            Description = "Traditional grid view with colorful event bars"
         });
     }
 

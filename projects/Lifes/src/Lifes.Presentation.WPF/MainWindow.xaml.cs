@@ -4,6 +4,7 @@ using Lifes.Core.Models;
 using Lifes.Presentation.WPF.Features.VersionIncrease;
 using Lifes.Presentation.WPF.Features.DashboardChart;
 using Lifes.Presentation.WPF.Features.DocumentManagement;
+using Lifes.Presentation.WPF.Features.AnnualCalendar;
 using Microsoft.Extensions.Logging;
 
 namespace Lifes.Presentation.WPF;
@@ -16,6 +17,8 @@ public partial class MainWindow : Window
     private readonly VersionIncreaseViewModel _versionIncreaseViewModel;
     private readonly DashboardChartViewModel _dashboardChartViewModel;
     private readonly DocumentManagementViewModel _documentManagementViewModel;
+    private readonly AnnualCalendarViewModel _annualCalendarViewModel;
+    private readonly MonthlyCalendarViewModel _monthlyCalendarViewModel;
     private readonly INavigationService _navigationService;
     private readonly ILogger<MainWindow> _logger;
 
@@ -23,6 +26,8 @@ public partial class MainWindow : Window
         VersionIncreaseViewModel versionIncreaseViewModel,
         DashboardChartViewModel dashboardChartViewModel,
         DocumentManagementViewModel documentManagementViewModel,
+        AnnualCalendarViewModel annualCalendarViewModel,
+        MonthlyCalendarViewModel monthlyCalendarViewModel,
         INavigationService navigationService,
         ILogger<MainWindow> logger)
     {
@@ -31,6 +36,8 @@ public partial class MainWindow : Window
         _versionIncreaseViewModel = versionIncreaseViewModel;
         _dashboardChartViewModel = dashboardChartViewModel;
         _documentManagementViewModel = documentManagementViewModel;
+        _annualCalendarViewModel = annualCalendarViewModel;
+        _monthlyCalendarViewModel = monthlyCalendarViewModel;
         _navigationService = navigationService;
         _logger = logger;
 
@@ -70,6 +77,24 @@ public partial class MainWindow : Window
         MainContentControl.Content = view;
     }
 
+    private void ShowMonthlyCalendarView()
+    {
+        var view = new MonthlyCalendarView
+        {
+            DataContext = _monthlyCalendarViewModel
+        };
+        MainContentControl.Content = view;
+    }
+
+    private void ShowAnnualCalendarView()
+    {
+        var view = new AnnualCalendarView
+        {
+            DataContext = _annualCalendarViewModel
+        };
+        MainContentControl.Content = view;
+    }
+
     /// <summary>
     /// Swaps the main content area when the user navigates to a different tool.
     /// </summary>
@@ -91,6 +116,14 @@ public partial class MainWindow : Window
 
                 case Constants.ToolIds.DocumentManagement:
                     ShowDocumentManagementView();
+                    break;
+
+                case Constants.ToolIds.AnnualCalendar:
+                    ShowAnnualCalendarView();
+                    break;
+
+                case Constants.ToolIds.MonthlyCalendar:
+                    ShowMonthlyCalendarView();
                     break;
 
                 default:

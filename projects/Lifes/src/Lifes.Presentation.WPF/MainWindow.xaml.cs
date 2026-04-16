@@ -3,6 +3,7 @@ using Lifes.Core.Interfaces;
 using Lifes.Core.Models;
 using Lifes.Presentation.WPF.Features.VersionIncrease;
 using Lifes.Presentation.WPF.Features.DashboardChart;
+using Lifes.Presentation.WPF.Features.DocumentManagement;
 using Microsoft.Extensions.Logging;
 
 namespace Lifes.Presentation.WPF;
@@ -14,12 +15,14 @@ public partial class MainWindow : Window
 {
     private readonly VersionIncreaseViewModel _versionIncreaseViewModel;
     private readonly DashboardChartViewModel _dashboardChartViewModel;
+    private readonly DocumentManagementViewModel _documentManagementViewModel;
     private readonly INavigationService _navigationService;
     private readonly ILogger<MainWindow> _logger;
 
     public MainWindow(
         VersionIncreaseViewModel versionIncreaseViewModel,
         DashboardChartViewModel dashboardChartViewModel,
+        DocumentManagementViewModel documentManagementViewModel,
         INavigationService navigationService,
         ILogger<MainWindow> logger)
     {
@@ -27,6 +30,7 @@ public partial class MainWindow : Window
 
         _versionIncreaseViewModel = versionIncreaseViewModel;
         _dashboardChartViewModel = dashboardChartViewModel;
+        _documentManagementViewModel = documentManagementViewModel;
         _navigationService = navigationService;
         _logger = logger;
 
@@ -57,6 +61,15 @@ public partial class MainWindow : Window
         MainContentControl.Content = view;
     }
 
+    private void ShowDocumentManagementView()
+    {
+        var view = new DocumentManagementView
+        {
+            DataContext = _documentManagementViewModel
+        };
+        MainContentControl.Content = view;
+    }
+
     /// <summary>
     /// Swaps the main content area when the user navigates to a different tool.
     /// </summary>
@@ -74,6 +87,10 @@ public partial class MainWindow : Window
 
                 case Constants.ToolIds.DashboardChart:
                     ShowDashboardChartView();
+                    break;
+
+                case Constants.ToolIds.DocumentManagement:
+                    ShowDocumentManagementView();
                     break;
 
                 default:

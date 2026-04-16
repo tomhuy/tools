@@ -11,6 +11,9 @@ using Lifes.Presentation.WPF.Constants;
 using Lifes.Presentation.WPF.Features.VersionIncrease;
 using Lifes.Application.Features.DashboardChart.Interfaces;
 using Lifes.Presentation.WPF.Features.DashboardChart;
+using Lifes.Presentation.WPF.Features.DocumentManagement;
+using Lifes.Core.Interfaces;
+using Lifes.Infrastructure.Features.DocumentManagement.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
@@ -84,9 +87,11 @@ public partial class App : System.Windows.Application
         // Presentation Layer - ViewModels
         services.AddTransient<VersionIncreaseViewModel>();
         services.AddTransient<DashboardChartViewModel>();
+        services.AddTransient<DocumentManagementViewModel>();
 
         // Dashboard Services
         services.AddSingleton<IDashboardDataService, MockDashboardDataService>();
+        services.AddSingleton<IDocumentService, MockDocumentService>();
 
         // Presentation Layer - Views & Windows
         services.AddSingleton<MainWindow>();
@@ -112,6 +117,13 @@ public partial class App : System.Windows.Application
             Id = ToolIds.DashboardChart,
             Name = "Dashboard Chart",
             Description = "View dynamic dashboard chart layout"
+        });
+
+        nav.RegisterTool(new ToolDefinition
+        {
+            Id = ToolIds.DocumentManagement,
+            Name = "Document Management",
+            Description = "Tracker Grid for Document Management"
         });
     }
 

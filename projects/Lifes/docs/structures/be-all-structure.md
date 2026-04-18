@@ -229,7 +229,7 @@ src/
 
 ### 7. Annual & Monthly Calendar
 **Status**: ✅ Completed
-**User Stories**: US-8.4, US-8.5, US-8.6
+**User Stories**: US-8.4, US-8.5, US-8.6, US-8.7
 **Documentation**: [fea-calendar-structure.md](./fea-calendar-structure.md)
 
 **Key Components**:

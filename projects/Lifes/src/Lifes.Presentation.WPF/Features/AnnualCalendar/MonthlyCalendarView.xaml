@@ -23,6 +23,14 @@
             <Setter Property="Margin" Value="0,2"/>
         </Style>
 
+        <Style x:Key="DotStyle" TargetType="Border">
+            <Setter Property="Width" Value="10"/>
+            <Setter Property="Height" Value="10"/>
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+
         <!-- Tooltip for months in popup -->
         <Style x:Key="MonthCheckBoxStyle" TargetType="CheckBox">
             <Setter Property="Margin" Value="10,5"/>
@@ -163,6 +171,22 @@
                         </StackPanel>
                     </Border>
                 </Popup>
+
+                <!-- Display Mode Splitter -->
+                <Border Width="1" Height="24" Background="#E2E8F0" Margin="15,0"/>
+
+                <!-- Mode Selection -->
+                <ComboBox ItemsSource="{Binding AvailableDisplayModes}" 
+                          SelectedItem="{Binding DisplayMode}"
+                          Width="100" Height="34"
+                          VerticalContentAlignment="Center"
+                          Background="White" BorderBrush="#D1D5DB">
+                    <ComboBox.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="6"/>
+                        </Style>
+                    </ComboBox.Resources>
+                </ComboBox>
             </StackPanel>
         </Grid>
 
@@ -322,19 +346,61 @@
                                                                 </ItemsControl.ItemContainerStyle>
                                                                 <ItemsControl.ItemTemplate>
                                                                     <DataTemplate>
-                                                                        <Border Background="{Binding BgColor}" 
+                                                                        <Border x:Name="BarBorder" 
                                                                                 Style="{StaticResource TaskBorderStyle}"
                                                                                 Margin="1,0"
                                                                                 ToolTip="{Binding Title}">
-                                                                            <TextBlock Text="{Binding Title}" 
-                                                                                       Foreground="{Binding FgColor}" 
-                                                                                       FontSize="9" 
-                                                                                       FontWeight="SemiBold" 
-                                                                                       VerticalAlignment="Center" 
-                                                                                       HorizontalAlignment="Center" 
-                                                                                       TextTrimming="CharacterEllipsis"
-                                                                                       Margin="5,0"/>
+                                                                            <Grid>
+                                                                                <!-- Gantt Mode Content -->
+                                                                                <TextBlock x:Name="GanttText" 
+                                                                                           Text="{Binding Title}" 
+                                                                                           Foreground="{Binding FgColor}" 
+                                                                                           FontSize="9" 
+                                                                                           FontWeight="SemiBold" 
+                                                                                           VerticalAlignment="Center" 
+                                                                                           HorizontalAlignment="Center" 
+                                                                                           TextTrimming="CharacterEllipsis"
+                                                                                           Margin="5,0"/>
+
+                                                                                <!-- Dot Mode Content -->
+                                                                                <ItemsControl x:Name="DotsRepeater" ItemsSource="{Binding DayIndices}" Visibility="Collapsed">
+                                                                                    <ItemsControl.ItemsPanel>
+                                                                                        <ItemsPanelTemplate>
+                                                                                            <StackPanel Orientation="Horizontal"/>
+                                                                                        </ItemsPanelTemplate>
+                                                                                    </ItemsControl.ItemsPanel>
+                                                                                    <ItemsControl.ItemTemplate>
+                                                                                        <DataTemplate>
+                                                                                            <Border Width="30" Style="{StaticResource DotStyle}">
+                                                                                                <Ellipse Fill="{Binding DataContext.BgColor, RelativeSource={RelativeSource AncestorType=ItemsControl}}" 
+                                                                                                         Width="10" Height="10"/>
+                                                                                            </Border>
+                                                                                        </DataTemplate>
+                                                                                    </ItemsControl.ItemTemplate>
+                                                                                </ItemsControl>
+                                                                            </Grid>
                                                                         </Border>
+
+                                                                        <DataTemplate.Triggers>
+                                                                            <DataTrigger Binding="{Binding DataContext.DisplayMode, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="Gantt">
+                                                                                <Setter TargetName="BarBorder" Property="Background" Value="{Binding BgColor}"/>
+                                                                                <Setter TargetName="GanttText" Property="Visibility" Value="Visible"/>
+                                                                                <Setter TargetName="DotsRepeater" Property="Visibility" Value="Collapsed"/>
+                                                                            </DataTrigger>
+                                                                            <DataTrigger Binding="{Binding DataContext.DisplayMode, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="Dot">
+                                                                                <Setter TargetName="BarBorder" Property="Background" Value="#10000000"/> <!-- Faint background -->
+                                                                                <Setter TargetName="BarBorder" Property="BorderBrush" Value="{Binding BgColor}"/>
+                                                                                <Setter TargetName="BarBorder" Property="BorderThickness" Value="1"/>
+                                                                                <Setter TargetName="GanttText" Property="Visibility" Value="Collapsed"/>
+                                                                                <Setter TargetName="DotsRepeater" Property="Visibility" Value="Visible"/>
+                                                                            </DataTrigger>
+                                                                            <DataTrigger Binding="{Binding DataContext.DisplayMode, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="PureDot">
+                                                                                <Setter TargetName="BarBorder" Property="Background" Value="Transparent"/>
+                                                                                <Setter TargetName="BarBorder" Property="BorderThickness" Value="0"/>
+                                                                                <Setter TargetName="GanttText" Property="Visibility" Value="Collapsed"/>
+                                                                                <Setter TargetName="DotsRepeater" Property="Visibility" Value="Visible"/>
+                                                                            </DataTrigger>
+                                                                        </DataTemplate.Triggers>
                                                                     </DataTemplate>
                                                                 </ItemsControl.ItemTemplate>
                                                             </ItemsControl>

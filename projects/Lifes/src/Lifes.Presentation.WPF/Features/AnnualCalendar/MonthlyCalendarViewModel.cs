@@ -13,10 +13,22 @@ using System.Threading.Tasks;
 
 namespace Lifes.Presentation.WPF.Features.AnnualCalendar;
 
+public enum CalendarDisplayMode
+{
+    Gantt,
+    Dot,
+    PureDot
+}
+
 public partial class MonthlyCalendarViewModel : ObservableObject
 {
     private readonly ICalendarService _calendarService;
     private readonly INavigationService _navigationService;
+
+    [ObservableProperty]
+    private CalendarDisplayMode _displayMode = CalendarDisplayMode.Gantt;
+
+    public CalendarDisplayMode[] AvailableDisplayModes { get; } = (CalendarDisplayMode[])Enum.GetValues(typeof(CalendarDisplayMode));
 
     [ObservableProperty]
     private int _currentYear;
@@ -266,6 +278,8 @@ public partial class MonthlyGanttBarViewModel : ObservableObject
     [ObservableProperty] private int _duration;
     [ObservableProperty] private string _bgColor = string.Empty;
     [ObservableProperty] private string _fgColor = string.Empty;
+
+    public IEnumerable<int> DayIndices => Enumerable.Range(0, Duration);
 }
 
 public class MonthDisplayViewModel

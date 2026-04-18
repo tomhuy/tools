@@ -41,3 +41,4 @@ Công cụ Calendar cung cấp hai chế độ hiển thị: **Annual View** (nh
 - **Gantt Visualization**: Thay vì sử dụng DataGrid phức tạp, chúng dùng `Grid` với các cột định nghĩa theo ngày (1 cột = 1 ngày) để đạt được hiệu năng và độ linh hoạt cao nhất trong styling.
 - **Hamburger Navigation**: Thay thế Tab navigation để tối ưu diện tích hiển thị cho các biểu đồ Gantt vốn cần nhiều không gian ngang.
 - **Event-Centric Activity Tracking**: Chuyển đổi từ hiển thị theo tháng sang hiển thị theo đầu mục hành động (Event). Điều này giúp tập trung vào thói quen và tần suất thực hiện một hành động cụ thể xuyên suốt cả năm thay vì chỉ nhìn vào một mốc thời gian cố định.
+- **Hybrid Display Modes**: Monthly Calendar cho phép chuyển đổi linh hoạt giữa 3 chế độ: **Gantt** (thanh đặc), **Dot** (chấm có viền mờ), và **Pure Dot** (chỉ có chấm). Hệ thống sử dụng `DataTriggers` trong XAML để thay đổi hiển thị ngay lập tức mà không cần tính toán lại dữ liệu ở ViewModel.

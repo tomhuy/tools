@@ -91,6 +91,7 @@ public partial class App : System.Windows.Application
         services.AddTransient<DocumentManagementViewModel>();
         services.AddTransient<AnnualCalendarViewModel>();
         services.AddTransient<MonthlyCalendarViewModel>();
+        services.AddTransient<ActivityHeatmapViewModel>();
 
         // Dashboard Services
         services.AddSingleton<IDashboardDataService, MockDashboardDataService>();
@@ -142,6 +143,13 @@ public partial class App : System.Windows.Application
             Id = ToolIds.MonthlyCalendar,
             Name = "Monthly Calendar",
             Description = "Traditional grid view with colorful event bars"
+        });
+        
+        nav.RegisterTool(new ToolDefinition
+        {
+            Id = ToolIds.ActivityHeatmap,
+            Name = "Activity Heatmap",
+            Description = "Dense grid view of all activities by month/day"
         });
     }
 

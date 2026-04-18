@@ -98,11 +98,13 @@ src/
 │   │   │   │   └── DefaultDashboardBlockView.xaml
 │   │   │   ├── DashboardChartView.xaml
 │   │   │   └── DashboardChartViewModel.cs
-│   │   ├── AnnualCalendar/             # US-8.4, US-8.5
+│   │   ├── AnnualCalendar/             # US-8.4, US-8.5, US-8.6
 │   │   │   ├── AnnualCalendarView.xaml
 │   │   │   ├── AnnualCalendarViewModel.cs
 │   │   │   ├── MonthlyCalendarView.xaml
-│   │   │   └── MonthlyCalendarViewModel.cs
+│   │   │   ├── MonthlyCalendarViewModel.cs
+│   │   │   ├── ActivityHeatmapView.xaml    # US-8.6
+│   │   │   └── ActivityHeatmapViewModel.cs # US-8.6
 │   │   ├── DocumentManagement/         # US-7.1
 │   │   │   ├── DocumentManagementView.xaml
 │   │   │   └── DocumentManagementViewModel.cs
@@ -227,11 +229,12 @@ src/
 
 ### 7. Annual & Monthly Calendar
 **Status**: ✅ Completed
-**User Stories**: US-8.4, US-8.5
+**User Stories**: US-8.4, US-8.5, US-8.6
 **Documentation**: [fea-calendar-structure.md](./fea-calendar-structure.md)
 
 **Key Components**:
 - `AnnualCalendarViewModel` & `MonthlyCalendarViewModel`
+- `ActivityHeatmapViewModel` (Event-centric dot grid)
 - `CalendarEventModel` with `Phases` (Multi-phase tracking)
 - Gantt-style timeline rendering in XAML
 - Hamburger Navigation integration

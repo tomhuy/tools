@@ -68,7 +68,47 @@ public class MockCalendarService : ICalendarService
             new CalendarEventModel { Title = "Personal Reflection", StartDate = new DateTime(year, 12, 22), EndDate = new DateTime(year, 12, 29), Category = "Personal" },
         };
 
+        events.AddRange(GetPsychologyEvents(year));
+
         return Task.FromResult(events.AsEnumerable());
+    }
+
+    private IEnumerable<CalendarEventModel> GetPsychologyEvents(int year)
+    {
+        // Psychology study spans from 2025 to 2026
+        if (year != 2025 && year != 2026) return Enumerable.Empty<CalendarEventModel>();
+
+        var allPsychologyDates = new List<(int Year, int Month, int Day)>
+        {
+            // 2025
+            (2025, 9, 11), (2025, 9, 12), (2025, 9, 13), (2025, 9, 14), (2025, 9, 16), (2025, 9, 20), (2025, 9, 22), (2025, 9, 24), (2025, 9, 29),
+            (2025, 10, 1), (2025, 10, 2), (2025, 10, 6), (2025, 10, 8), (2025, 10, 10), (2025, 10, 13), (2025, 10, 15), (2025, 10, 17), (2025, 10, 20), (2025, 10, 22), (2025, 10, 24), (2025, 10, 27), (2025, 10, 29),
+            (2025, 11, 1), (2025, 11, 3), (2025, 11, 8), (2025, 11, 13), (2025, 11, 14), (2025, 11, 17), (2025, 11, 19),
+            (2025, 12, 1), (2025, 12, 4), (2025, 12, 5), (2025, 12, 9), (2025, 12, 17), (2025, 12, 24),
+            // 2026
+            (2026, 1, 5), (2026, 1, 7), (2026, 1, 9), (2026, 1, 12), (2026, 1, 14), (2026, 1, 16), (2026, 1, 19), (2026, 1, 23), (2026, 1, 26), (2026, 1, 29),
+            (2026, 2, 4), (2026, 2, 10), (2026, 2, 12), (2026, 2, 17), (2026, 2, 19), (2026, 2, 22), (2026, 2, 24), (2026, 2, 26),
+            (2026, 3, 2), (2026, 3, 4), (2026, 3, 6), (2026, 3, 9), (2026, 3, 11), (2026, 3, 13), (2026, 3, 16), (2026, 3, 20), (2026, 3, 30),
+            (2026, 4, 1), (2026, 4, 3), (2026, 4, 6), (2026, 4, 8), (2026, 4, 13)
+        };
+
+        var parentEvent = new CalendarEventModel
+        {
+            Id = "psychology-study",
+            Title = "Học tâm lý học",
+            StartDate = new DateTime(2025, 9, 11),
+            EndDate = new DateTime(2026, 4, 13),
+            Category = "Psychology",
+            Phases = allPsychologyDates.Select(d => new CalendarEventPhaseModel
+            {
+                Title = "Học", // Single session
+                StartDate = new DateTime(d.Year, d.Month, d.Day),
+                EndDate = new DateTime(d.Year, d.Month, d.Day),
+                Category = "Psychology"
+            }).ToList()
+        };
+
+        return new[] { parentEvent };
     }
 
     public async Task<IEnumerable<CalendarEventModel>> GetMonthlyEventsAsync(int year, int month)

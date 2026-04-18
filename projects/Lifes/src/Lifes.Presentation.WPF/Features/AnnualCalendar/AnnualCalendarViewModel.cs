@@ -78,6 +78,7 @@ public partial class AnnualCalendarViewModel : ObservableObject
         Legends.Add(new LegendItemViewModel { Category = "Conference", BgColor = "#ECEFF1", FgColor = "#455A64" });
         Legends.Add(new LegendItemViewModel { Category = "Competition", BgColor = "#E0F7FA", FgColor = "#00838F" });
         Legends.Add(new LegendItemViewModel { Category = "Release", BgColor = "#FCE4EC", FgColor = "#AD1457" });
+        Legends.Add(new LegendItemViewModel { Category = "Học tâm lý học", BgColor = "#FFEBEE", FgColor = "#C62828" });
     }
 
     [RelayCommand]
@@ -225,6 +226,7 @@ public partial class AnnualCalendarViewModel : ObservableObject
             "Conference" => "#607D8B",
             "Competition" => "#00BCD4",
             "Release" => "#E91E63",
+            "Psychology" => "#F44336",
             _ => "#9E9E9E"
         };
     }

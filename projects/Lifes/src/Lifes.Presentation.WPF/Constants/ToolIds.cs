@@ -10,4 +10,5 @@ public static class ToolIds
     public const string DocumentManagement = "document-management";
     public const string AnnualCalendar = "AnnualCalendar";
     public const string MonthlyCalendar = "MonthlyCalendar";
+    public const string ActivityHeatmap = "ActivityHeatmap";
 }

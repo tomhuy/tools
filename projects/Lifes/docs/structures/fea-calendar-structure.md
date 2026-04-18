@@ -10,6 +10,8 @@ Công cụ Calendar cung cấp hai chế độ hiển thị: **Annual View** (nh
 - `AnnualCalendarViewModel.cs` - Quản lý dữ liệu sự kiện năm, xử lý điều hướng thông qua `INavigationService`.
 - `MonthlyCalendarView.xaml` - Hiển thị chi tiết theo hàng dọc cho một hoặc nhiều tháng được chọn.
 - `MonthlyCalendarViewModel.cs` - Quản lý danh sách tháng được chọn (`AvailableMonths`), logic multi-select và render event phases.
+- `ActivityHeatmapView.xaml` - Hiển thị "Activity Tracker" dạng lưới ô vuông (Dot Grid), gom nhóm dữ liệu theo sự kiện (Event-centric).
+- `ActivityHeatmapViewModel.cs` - Phân loại dữ liệu heatmap theo đầu mục hành động, quản lý hiển thị 31 ngày đồng bộ cho nhiều tháng.
 
 ### Domain Layer (Core)
 - `CalendarEventModel.cs` - Entity chính của sự kiện, chứa list các `Phases`.
@@ -38,3 +40,4 @@ Công cụ Calendar cung cấp hai chế độ hiển thị: **Annual View** (nh
 - **Row Synchronizing**: Các sự kiện được hiển thị trong các hàng có độ rộng header cố định và được render lại khi kéo dãn để đảm bảo giao diện đồng bộ.
 - **Gantt Visualization**: Thay vì sử dụng DataGrid phức tạp, chúng dùng `Grid` với các cột định nghĩa theo ngày (1 cột = 1 ngày) để đạt được hiệu năng và độ linh hoạt cao nhất trong styling.
 - **Hamburger Navigation**: Thay thế Tab navigation để tối ưu diện tích hiển thị cho các biểu đồ Gantt vốn cần nhiều không gian ngang.
+- **Event-Centric Activity Tracking**: Chuyển đổi từ hiển thị theo tháng sang hiển thị theo đầu mục hành động (Event). Điều này giúp tập trung vào thói quen và tần suất thực hiện một hành động cụ thể xuyên suốt cả năm thay vì chỉ nhìn vào một mốc thời gian cố định.

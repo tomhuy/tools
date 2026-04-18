@@ -19,6 +19,7 @@ public partial class MainWindow : Window
     private readonly DocumentManagementViewModel _documentManagementViewModel;
     private readonly AnnualCalendarViewModel _annualCalendarViewModel;
     private readonly MonthlyCalendarViewModel _monthlyCalendarViewModel;
+    private readonly ActivityHeatmapViewModel _activityHeatmapViewModel;
     private readonly INavigationService _navigationService;
     private readonly ILogger<MainWindow> _logger;
 
@@ -28,6 +29,7 @@ public partial class MainWindow : Window
         DocumentManagementViewModel documentManagementViewModel,
         AnnualCalendarViewModel annualCalendarViewModel,
         MonthlyCalendarViewModel monthlyCalendarViewModel,
+        ActivityHeatmapViewModel activityHeatmapViewModel,
         INavigationService navigationService,
         ILogger<MainWindow> logger)
     {
@@ -38,6 +40,7 @@ public partial class MainWindow : Window
         _documentManagementViewModel = documentManagementViewModel;
         _annualCalendarViewModel = annualCalendarViewModel;
         _monthlyCalendarViewModel = monthlyCalendarViewModel;
+        _activityHeatmapViewModel = activityHeatmapViewModel;
         _navigationService = navigationService;
         _logger = logger;
 
@@ -95,6 +98,15 @@ public partial class MainWindow : Window
         MainContentControl.Content = view;
     }
 
+    private void ShowActivityHeatmapView()
+    {
+        var view = new ActivityHeatmapView
+        {
+            DataContext = _activityHeatmapViewModel
+        };
+        MainContentControl.Content = view;
+    }
+
     /// <summary>
     /// Swaps the main content area when the user navigates to a different tool.
     /// </summary>
@@ -124,6 +136,10 @@ public partial class MainWindow : Window
 
                 case Constants.ToolIds.MonthlyCalendar:
                     ShowMonthlyCalendarView();
+                    break;
+
+                case Constants.ToolIds.ActivityHeatmap:
+                    ShowActivityHeatmapView();
                     break;
 
                 default:

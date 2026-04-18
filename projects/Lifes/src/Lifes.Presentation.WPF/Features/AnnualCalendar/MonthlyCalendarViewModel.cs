@@ -210,6 +210,7 @@ public partial class MonthlyCalendarViewModel : ObservableObject
             "Conference" => "#607D8B",
             "Competition" => "#00BCD4",
             "Release" => "#E91E63",
+            "Psychology" => "#F44336",
             _ => "#9E9E9E"
         };
     }

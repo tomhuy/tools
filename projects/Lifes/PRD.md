@@ -1426,6 +1426,7 @@ private string GetLevelColor(string level)
 - ✅ **Hierarchical (Cascade) Filtering**: Automatically include all child notes if the parent topic matches the selected tag.
 - ✅ **Advanced Search**: Filter calendar views (Monthly, Annual, Heatmap) by tags.
 - ✅ **Repository Pattern Migration**: Decoupled data access from business logic.
+- ✅ **Monthly Calendar CRUD**: Add, edit, delete, and color-pick mementos directly on the monthly grid (US-9.3).
 
 **Tool 5: Dependency Updater**
 - 📋 Scan NuGet package versions
@@ -1515,6 +1516,6 @@ private string GetLevelColor(string level)
 **Document Version:** 1.5.1
 **Last Updated:** 2026-04-12
 **Status:** ✅ Active (85% Complete - US-1.1, US-1.2, US-1.2.1, US-1.3, US-2.1, US-5.1, US-6.1 Done)
-**Document Version:** 2.1.0
+**Document Version:** 1.5.2
 **Last Updated:** 2026-04-18
-**Status:** ✅ Active (Unified Memento Architecture & Tagging implemented - US-9.1, US-9.2)
+**Status:** ✅ Active (Unified Memento Architecture, Tagging & Monthly CRUD implemented - US-9.1, US-9.2, US-9.3)

@@ -21,7 +21,8 @@ Công cụ Calendar cung cấp hai chế độ hiển thị: **Annual View** (nh
 - `IMementoRepository.cs`, `ITagRepository.cs` - Interface cho việc truy xuất dữ liệu thô.
 
 ### Infrastructure Layer
-- `MockMementoRepository.cs`, `MockTagRepository.cs` - Implementations cung cấp dữ liệu mẫu.
+- `JsonMementoRepository.cs`, `JsonTagRepository.cs` - Implementations lưu trữ dữ liệu bền vững dưới dạng file JSON tại thư mục `database/`.
+- `MockMementoRepository.cs`, `MockTagRepository.cs` - (Deprecated) Các lớp mẫu chỉ dùng cho mục đích unit test hoặc dev-mode nhanh.
 - `CalendarService.cs` - Lớp Service điều phối, thực hiện logic lọc đệ quy (recursive filtering) và chuẩn bị dữ liệu cho View.
 
 ## Key Classes
@@ -47,4 +48,5 @@ Công cụ Calendar cung cấp hai chế độ hiển thị: **Annual View** (nh
 - **Event-Centric Activity Tracking**: Chuyển đổi từ hiển thị theo tháng sang hiển thị theo đầu mục hành động (Event). Điều này giúp tập trung vào thói quen và tần suất thực hiện một hành động cụ thể xuyên suốt cả năm thay vì chỉ nhìn vào một mốc thời gian cố định.
 - **Hybrid Display Modes**: Monthly Calendar cho phép chuyển đổi linh hoạt giữa 3 chế độ: **Gantt** (thanh đặc), **Dot** (chấm có viền mờ), và **Pure Dot** (chỉ có chấm). Hệ thống sử dụng `DataTriggers` trong XAML để thay đổi hiển thị ngay lập tức mà không cần tính toán lại dữ liệu ở ViewModel.
 - **Unified Memento Model**: Thay thế mô hình Event/Phase bằng cấu trúc `MementoModel` phân cấp (recursive). Một Memento có `ParentId == null` được coi là một "Topic Note" (Ghi chú chủ đề) với Id là kiểu `int`, trong khi memento có `ParentId` trỏ về Topic được coi là "Supplemental Concept Note" (Ghi chú khái niệm bổ sung).
-- **Tagging & Repository Pattern**: Áp dụng mô hình Repository + Service để tách biệt việc truy vấn dữ liệu thô và logic nghiệp vụ. Hỗ trợ nhiều Tags cho mỗi Memento và cung cấp tính năng **Cascade Filtering** (Nếu lọc theo Tag khớp với Parent, tất cả Children của nó sẽ được tự động bao gồm nếu người dùng bật tùy chọn tương ứng).
+- **Tagging & Repository Pattern**: Áp dụng mô hình Repository + Service để tách biệt việc truy vấn dữ liệu thô và logic nghiệp vụ. Hỗ trợ nhiều Tags cho mỗi Memento và cung cấp tính năng **Cascade Filtering**.
+- **JSON File Persistence**: Toàn bộ dữ liệu Mementos và Tags được lưu trữ tại `[AppPath]/database/mementos.json` và `tags.json`. Hệ thống tự động khởi tạo dữ liệu mẫu (seed data) nếu file chưa tồn tại, đảm bảo trải nghiệm người dùng liền mạch từ trạng thái mock sang trạng thái lưu trữ thật.

@@ -99,8 +99,8 @@ public partial class App : System.Windows.Application
         services.AddSingleton<IDocumentService, MockDocumentService>();
         
         // Memento & Calendar Services
-        services.AddSingleton<ITagRepository, MockTagRepository>();
-        services.AddSingleton<IMementoRepository, MockMementoRepository>();
+        services.AddSingleton<ITagRepository, JsonTagRepository>();
+        services.AddSingleton<IMementoRepository, JsonMementoRepository>();
         services.AddSingleton<ICalendarService, CalendarService>();
 
         // Presentation Layer - Views & Windows

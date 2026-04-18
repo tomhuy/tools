@@ -66,6 +66,16 @@ public class CalendarService : ICalendarService
         return mementos;
     }
 
+    public async Task SaveMementoAsync(MementoModel memento)
+    {
+        await _mementoRepository.SaveAsync(memento);
+    }
+
+    public async Task DeleteMementoAsync(int id)
+    {
+        await _mementoRepository.DeleteAsync(id);
+    }
+
     private async Task FetchChildrenRecursiveAsync(List<MementoModel> mementos)
     {
         var currentLevelIds = mementos.Select(m => m.Id).Distinct().ToList();

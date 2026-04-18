@@ -61,8 +61,10 @@ src/
 │           ├── Services/
 │           │   └── CalendarService.cs     # US-9.2 — logical orchestration
 │           └── Repositories/
-│               ├── MockMementoRepository.cs # US-9.2
-│               └── MockTagRepository.cs     # US-9.2
+│               ├── MockMementoRepository.cs # US-9.2 (Deprecated)
+│               ├── MockTagRepository.cs     # US-9.2 (Deprecated)
+│               ├── JsonMementoRepository.cs # US-9.3
+│               └── JsonTagRepository.cs     # US-9.3
 │
 ├── Lifes.Application/           # Use cases and commands
 │   ├── Common/                     # US-1.2.1
@@ -248,6 +250,7 @@ src/
 - `ActivityHeatmapViewModel` (Event-centric dot grid)
 - `CalendarEventModel` with `Phases` (Multi-phase tracking)
 - **Tagging & Hierarchical Filtering** (US-9.2)
+- **Monthly Calendar CRUD & Color Picker** (US-9.3)
 - Gantt-style timeline rendering in XAML
 - Hamburger Navigation integration
 
@@ -644,5 +647,5 @@ reportgenerator -reports:**/coverage.cobertura.xml -targetdir:coverage-report -r
 ---
 
 **Document Version**: 1.4.0  
-**Last Updated**: 2026-04-16  
-**Status**: ✅ Active (80% Complete - US-1.1, US-1.2, US-1.2.1, US-1.3, US-2.1, US-5.1, US-7.1, US-8.4, US-8.5, US-9.1, US-9.2 Done)
+**Last Updated**: 2026-04-18  
+**Status**: ✅ Active (85% Complete - US-1.1, US-1.2, US-1.2.1, US-1.3, US-2.1, US-5.1, US-7.1, US-8.4, US-8.5, US-9.1, US-9.2, US-9.3 Done)

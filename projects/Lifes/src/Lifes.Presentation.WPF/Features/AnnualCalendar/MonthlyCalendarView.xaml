@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Lifes.Presentation.WPF.Features.AnnualCalendar"
+             xmlns:cv="clr-namespace:Lifes.Presentation.WPF.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="1200"
              d:DataContext="{d:DesignInstance Type=local:MonthlyCalendarViewModel, IsDesignTimeCreatable=False}"
@@ -11,6 +12,7 @@
     
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <cv:EditCellArgsConverter x:Key="EditCellArgsConverter"/>
         
         <Style x:Key="BorderStyle" TargetType="Border">
             <Setter Property="BorderBrush" Value="#E0E0E0"/>
@@ -89,6 +91,23 @@
                                 <Setter TargetName="Border" Property="Background" Value="#EBF8FF"/>
                             </DataTrigger>
                         </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="GhostButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -381,7 +400,45 @@
                                                             </ItemsControl.ItemsPanel>
                                                             <ItemsControl.ItemTemplate>
                                                                 <DataTemplate>
-                                                                    <Border Width="30" Style="{StaticResource BorderStyle}"/>
+                                                                    <Border x:Name="Cell" Width="30" Style="{StaticResource BorderStyle}" Background="Transparent">
+                                                                        <Grid>
+                                                                            <Button Style="{StaticResource GhostButtonStyle}"
+                                                                                    Command="{Binding DataContext.OpenEditPopupCommand, RelativeSource={RelativeSource AncestorType=UserControl}}">
+                                                                                <Button.CommandParameter>
+                                                                                    <MultiBinding Converter="{StaticResource EditCellArgsConverter}">
+                                                                                        <Binding Path="DataContext" RelativeSource="{RelativeSource AncestorType=Grid, AncestorLevel=2}" />
+                                                                                        <Binding Path="DataContext.MonthValue" ElementName="MonthRoot" />
+                                                                                        <Binding Path="DayNumber" />
+                                                                                    </MultiBinding>
+                                                                                </Button.CommandParameter>
+                                                                            </Button>
+                                                                            
+                                                                            <Button x:Name="ColorPickerButton" 
+                                                                                    Visibility="Collapsed"
+                                                                                    HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                                                                                    Margin="0,0,2,2" Cursor="Hand"
+                                                                                    Command="{Binding DataContext.OpenColorPickerCommand, RelativeSource={RelativeSource AncestorType=UserControl}}">
+                                                                                <Button.Template>
+                                                                                    <ControlTemplate TargetType="Button">
+                                                                                        <Path Data="M7,10L12,15L17,10H7Z" Fill="#A0AEC0" Width="12" Height="12" Stretch="Uniform"/>
+                                                                                    </ControlTemplate>
+                                                                                </Button.Template>
+                                                                                <Button.CommandParameter>
+                                                                                    <MultiBinding Converter="{StaticResource EditCellArgsConverter}">
+                                                                                        <Binding Path="DataContext" RelativeSource="{RelativeSource AncestorType=Grid, AncestorLevel=2}" />
+                                                                                        <Binding Path="DataContext.MonthValue" ElementName="MonthRoot" />
+                                                                                        <Binding Path="DayNumber" />
+                                                                                    </MultiBinding>
+                                                                                </Button.CommandParameter>
+                                                                            </Button>
+                                                                        </Grid>
+                                                                    </Border>
+                                                                    <DataTemplate.Triggers>
+                                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                                            <Setter TargetName="Cell" Property="Background" Value="#F7FAFC"/>
+                                                                            <Setter TargetName="ColorPickerButton" Property="Visibility" Value="Visible"/>
+                                                                        </Trigger>
+                                                                    </DataTemplate.Triggers>
                                                                 </DataTemplate>
                                                             </ItemsControl.ItemTemplate>
                                                         </ItemsControl>
@@ -411,6 +468,37 @@
                                                                                 Margin="1,0"
                                                                                 ToolTip="{Binding Title}">
                                                                             <Grid>
+                                                                                <Button Style="{StaticResource GhostButtonStyle}"
+                                                                                        Command="{Binding DataContext.OpenEditPopupCommand, RelativeSource={RelativeSource AncestorType=UserControl}}">
+                                                                                    <Button.CommandParameter>
+                                                                                        <MultiBinding Converter="{StaticResource EditCellArgsConverter}">
+                                                                                            <Binding Path="DataContext" RelativeSource="{RelativeSource AncestorType=Grid, AncestorLevel=2}" />
+                                                                                            <Binding Path="DataContext.MonthValue" ElementName="MonthRoot" />
+                                                                                            <Binding Path="StartColumn" />
+                                                                                            <Binding Path="MementoId" />
+                                                                                        </MultiBinding>
+                                                                                    </Button.CommandParameter>
+                                                                                </Button>
+
+                                                                                <Button x:Name="BarColorPickerButton" 
+                                                                                        Visibility="Collapsed"
+                                                                                        HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                                                                                        Margin="0,0,2,2" Cursor="Hand"
+                                                                                        Command="{Binding DataContext.OpenColorPickerCommand, RelativeSource={RelativeSource AncestorType=UserControl}}">
+                                                                                    <Button.Template>
+                                                                                        <ControlTemplate TargetType="Button">
+                                                                                            <Path Data="M7,10L12,15L17,10H7Z" Fill="#FFFFFF" Width="10" Height="10" Stretch="Uniform" Opacity="0.8"/>
+                                                                                        </ControlTemplate>
+                                                                                    </Button.Template>
+                                                                                    <Button.CommandParameter>
+                                                                                        <MultiBinding Converter="{StaticResource EditCellArgsConverter}">
+                                                                                            <Binding Path="DataContext" RelativeSource="{RelativeSource AncestorType=Grid, AncestorLevel=2}" />
+                                                                                            <Binding Path="DataContext.MonthValue" ElementName="MonthRoot" />
+                                                                                            <Binding Path="StartColumn" />
+                                                                                            <Binding Path="MementoId" />
+                                                                                        </MultiBinding>
+                                                                                    </Button.CommandParameter>
+                                                                                </Button>
                                                                                 <!-- Gantt Mode Content -->
                                                                                 <TextBlock x:Name="GanttText" 
                                                                                            Text="{Binding Title}" 
@@ -442,6 +530,9 @@
                                                                         </Border>
 
                                                                         <DataTemplate.Triggers>
+                                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                                <Setter TargetName="BarColorPickerButton" Property="Visibility" Value="Visible"/>
+                                                                            </Trigger>
                                                                             <DataTrigger Binding="{Binding DataContext.DisplayMode, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="Gantt">
                                                                                 <Setter TargetName="BarBorder" Property="Background" Value="{Binding BgColor}"/>
                                                                                 <Setter TargetName="GanttText" Property="Visibility" Value="Visible"/>
@@ -477,5 +568,92 @@
                 </ItemsControl>
             </Grid>
         </ScrollViewer>
+
+        <!-- Edit Popup -->
+        <Popup IsOpen="{Binding IsEditPopupOpen}" StaysOpen="False" Placement="MousePoint" AllowsTransparency="True" PopupAnimation="Fade">
+            <Border Background="White" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="12" Width="300">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="20" ShadowDepth="5" Opacity="0.15"/>
+                </Border.Effect>
+                <Grid Margin="20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,-10,-10">
+                        <Button Command="{Binding DeleteMementoCommand}" Cursor="Hand" Background="Transparent" BorderThickness="0">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Path Data="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19V4M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" Fill="#FC8181" Width="18" Height="18" Stretch="Uniform" Margin="10"/>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </StackPanel>
+
+                    <TextBlock Text="Cập nhật thông tin" FontSize="14" FontWeight="Bold" Foreground="#2D3748" Margin="0,0,0,15"/>
+                    
+                    <TextBox Grid.Row="1" Text="{Binding EditingTitle, UpdateSourceTrigger=PropertyChanged}" 
+                             FontSize="13" Padding="12,10" Margin="0,0,0,20"
+                             BorderBrush="#E2E8F0" BorderThickness="1">
+                        <TextBox.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="6"/>
+                            </Style>
+                        </TextBox.Resources>
+                    </TextBox>
+
+                    <Button Grid.Row="2" Content="Lưu thông tin" Command="{Binding SaveEditCommand}" 
+                            Background="#3182CE" Foreground="White" FontWeight="Bold" FontSize="13" Height="40">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="8"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+                </Grid>
+            </Border>
+        </Popup>
+
+        <!-- Color Picker Popup -->
+        <Popup IsOpen="{Binding IsColorPopupOpen}" StaysOpen="False" Placement="MousePoint" AllowsTransparency="True" PopupAnimation="Fade">
+            <Border Background="White" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="12" Padding="15">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="20" ShadowDepth="5" Opacity="0.15"/>
+                </Border.Effect>
+                <StackPanel>
+                    <TextBlock Text="CHỌN MÀU SẮC" FontSize="11" FontWeight="Bold" Foreground="#A0AEC0" Margin="5,0,0,12"/>
+                    <ItemsControl ItemsSource="{Binding ColorPalette}" Width="180">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="6"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button Command="{Binding DataContext.SetColorCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                        CommandParameter="{Binding}"
+                                        Margin="4" Cursor="Hand" Width="24" Height="24">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Grid>
+                                                <Ellipse Fill="{Binding}" Width="20" Height="20"/>
+                                                <Ellipse x:Name="Highlight" Stroke="#3182CE" StrokeThickness="2" Width="24" Height="24" Visibility="Collapsed"/>
+                                            </Grid>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="Highlight" Property="Visibility" Value="Visible"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+        </Popup>
     </Grid>
 </UserControl>

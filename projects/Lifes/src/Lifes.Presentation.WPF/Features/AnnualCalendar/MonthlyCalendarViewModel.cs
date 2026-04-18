@@ -24,6 +24,7 @@ public partial class MonthlyCalendarViewModel : ObservableObject
 {
     private readonly ICalendarService _calendarService;
     private readonly INavigationService _navigationService;
+    private List<MementoModel> _allMementos = new();
 
     [ObservableProperty]
     private CalendarDisplayMode _displayMode = CalendarDisplayMode.Gantt;
@@ -43,6 +44,22 @@ public partial class MonthlyCalendarViewModel : ObservableObject
 
     [ObservableProperty]
     private bool _includeChildrenOfTaggedParents = true;
+
+    [ObservableProperty] private bool _isEditPopupOpen;
+    [ObservableProperty] private bool _isColorPopupOpen;
+    [ObservableProperty] private string _editingTitle = string.Empty;
+    [ObservableProperty] private MementoModel? _currentEditingMemento;
+    [ObservableProperty] private MonthlyEventRowViewModel? _editingRow;
+    [ObservableProperty] private int _editingDay;
+    [ObservableProperty] private int _editingMonth;
+
+    public string[] ColorPalette { get; } = new[]
+    {
+        "#FFFFFF", "#F2F2F2", "#D9D9D9", "#D9E1F2", "#FCE4D6", "#FDE9D9",
+        "#FFF2CC", "#D9EAD3", "#E2EFDA", "#D9EBF7", "#DAE8FC", "#E1D5E7",
+        "#BFBFBF", "#A5A5A5", "#7B7B7B", "#4472C4", "#ED7D31", "#FF0000",
+        "#FFC000", "#70AD47", "#5B9BD5", "#255E91", "#44546A", "#262626"
+    };
 
     public MonthlyCalendarViewModel(ICalendarService calendarService, INavigationService navigationService)
     {
@@ -115,6 +132,7 @@ public partial class MonthlyCalendarViewModel : ObservableObject
     [RelayCommand]
     private async Task LoadDataAsync()
     {
+        _allMementos.Clear();
         var selectedMonths = AvailableMonths.Where(m => m.IsSelected).ToList();
         var selectedTagIds = AvailableTags.Where(t => t.IsSelected).Select(t => t.Id).ToList();
         
@@ -128,6 +146,9 @@ public partial class MonthlyCalendarViewModel : ObservableObject
                 selectedTagIds.Any() ? selectedTagIds : null, 
                 IncludeChildrenOfTaggedParents);
                 
+            // Collect all mementos for lookup
+            _allMementos.AddRange(mementos);
+                 
             var monthDisplay = BuildMonthDisplay(monthInfo.Value, mementos);
             newDisplayMonths.Add(monthDisplay);
         }
@@ -146,6 +167,7 @@ public partial class MonthlyCalendarViewModel : ObservableObject
     {
         var display = new MonthDisplayViewModel
         {
+            MonthValue = month,
             MonthName = $"{DateTimeFormatInfo.CurrentInfo.GetMonthName(month)} {CurrentYear}"
         };
 
@@ -177,6 +199,8 @@ public partial class MonthlyCalendarViewModel : ObservableObject
         {
             var row = new MonthlyEventRowViewModel
             {
+                MementoId = topic.Id,
+                Month = month,
                 Title = topic.Title,
                 Category = topic.Color,
                 BgColor = GetSolidBgColor(topic.Color),
@@ -192,7 +216,7 @@ public partial class MonthlyCalendarViewModel : ObservableObject
                 {
                     if (child.StartDate <= monthEnd && child.EndDate >= monthStart)
                     {
-                        var bar = CreateBar(child.Title, child.StartDate, child.EndDate, child.Color, monthStart, monthEnd);
+                        var bar = CreateBar(child.Id, child.Title, child.StartDate, child.EndDate, child.Color, monthStart, monthEnd);
                         row.Bars.Add(bar);
                     }
                 }
@@ -202,7 +226,7 @@ public partial class MonthlyCalendarViewModel : ObservableObject
                 // If no children, treat topic itself as a bar if it overlaps this month
                 if (topic.StartDate <= monthEnd && topic.EndDate >= monthStart)
                 {
-                    var bar = CreateBar(topic.Title, topic.StartDate, topic.EndDate, topic.Color, monthStart, monthEnd);
+                    var bar = CreateBar(topic.Id, topic.Title, topic.StartDate, topic.EndDate, topic.Color, monthStart, monthEnd);
                     row.Bars.Add(bar);
                 }
             }
@@ -216,13 +240,14 @@ public partial class MonthlyCalendarViewModel : ObservableObject
         return display;
     }
 
-    private MonthlyGanttBarViewModel CreateBar(string title, DateTime start, DateTime end, string color, DateTime monthStart, DateTime monthEnd)
+    private MonthlyGanttBarViewModel CreateBar(int id, string title, DateTime start, DateTime end, string color, DateTime monthStart, DateTime monthEnd)
     {
         DateTime effectiveStart = start < monthStart ? monthStart : start;
         DateTime effectiveEnd = end > monthEnd ? monthEnd : end;
 
         return new MonthlyGanttBarViewModel
         {
+            MementoId = id,
             Title = title,
             Category = color,
             StartColumn = effectiveStart.Day - 1,
@@ -249,6 +274,11 @@ public partial class MonthlyCalendarViewModel : ObservableObject
 
     private string GetSolidBgColor(string category)
     {
+        if (string.IsNullOrEmpty(category)) return "#9E9E9E";
+        
+        // If it's a hex color from our palette, return it directly
+        if (category.StartsWith("#")) return category;
+
         return category switch
         {
             "Work" => "#4CAF50",
@@ -269,8 +299,125 @@ public partial class MonthlyCalendarViewModel : ObservableObject
 
     private string GetSolidFgColor(string color)
     {
+        if (string.IsNullOrEmpty(color)) return "#FFFFFF";
+
+        if (color.StartsWith("#"))
+        {
+            return GetContrastColor(color);
+        }
+
         return color == "Review" ? "#000000" : "#FFFFFF";
     }
+
+    private string GetContrastColor(string hexColor)
+    {
+        // Simple logic: if it's one of our light colors, use dark text
+        var lightColors = new HashSet<string> { "#FFFFFF", "#F2F2F2", "#D9D9D9", "#D9E1F2", "#FCE4D6", "#FDE9D9", "#FFF2CC", "#D9EAD3", "#E2EFDA", "#D9EBF7", "#DAE8FC", "#E1D5E7" };
+        return lightColors.Contains(hexColor.ToUpper()) ? "#2D3748" : "#FFFFFF";
+    }
+
+    [RelayCommand]
+    private void OpenEditPopup(EditCellArgs args)
+    {
+        EditingRow = args.Row;
+        EditingDay = args.Day;
+        EditingMonth = args.Month;
+
+        if (args.ExistingMementoId.HasValue)
+        {
+            CurrentEditingMemento = _allMementos.FirstOrDefault(m => m.Id == args.ExistingMementoId.Value);
+        }
+        else
+        {
+            var targetDate = new DateTime(CurrentYear, EditingMonth, EditingDay);
+            // Find if there's an existing child memento for this topic on this day
+            CurrentEditingMemento = _allMementos.FirstOrDefault(m =>
+                m.ParentId == args.Row.MementoId &&
+                m.StartDate.Date == targetDate.Date);
+        }
+
+        EditingTitle = CurrentEditingMemento?.Title ?? "X";
+        IsEditPopupOpen = true;
+    }
+
+    [RelayCommand]
+    private async Task SaveEdit()
+    {
+        if (EditingRow == null) return;
+
+        var targetDate = new DateTime(CurrentYear, EditingMonth, EditingDay);
+        
+        var memento = CurrentEditingMemento ?? new MementoModel
+        {
+            ParentId = EditingRow.MementoId,
+            StartDate = targetDate,
+            EndDate = targetDate,
+            Color = EditingRow.Category, // Inherit from parent
+            TagIds = new List<int>()
+        };
+
+        memento.Title = EditingTitle;
+
+        await _calendarService.SaveMementoAsync(memento);
+        IsEditPopupOpen = false;
+        await LoadDataAsync();
+    }
+
+    [RelayCommand]
+    private async Task DeleteMemento()
+    {
+        if (CurrentEditingMemento == null) return;
+
+        // In a real app, we might ask for confirmation here
+        // For now, satisfy requirement: Trash icon deletes it.
+        await _calendarService.DeleteMementoAsync(CurrentEditingMemento.Id);
+        IsEditPopupOpen = false;
+        await LoadDataAsync();
+    }
+
+    [RelayCommand]
+    private void OpenColorPicker(EditCellArgs args)
+    {
+        EditingRow = args.Row;
+        EditingDay = args.Day;
+        EditingMonth = args.Month;
+
+        if (args.ExistingMementoId.HasValue)
+        {
+            CurrentEditingMemento = _allMementos.FirstOrDefault(m => m.Id == args.ExistingMementoId.Value);
+        }
+        else
+        {
+            var targetDate = new DateTime(CurrentYear, EditingMonth, EditingDay);
+            CurrentEditingMemento = _allMementos.FirstOrDefault(m =>
+                m.ParentId == args.Row.MementoId &&
+                m.StartDate.Date == targetDate.Date);
+        }
+
+        if (CurrentEditingMemento != null)
+        {
+            IsColorPopupOpen = true;
+        }
+    }
+
+    [RelayCommand]
+    private async Task SetColor(string color)
+    {
+        if (CurrentEditingMemento == null) return;
+
+        CurrentEditingMemento.Color = color;
+        await _calendarService.SaveMementoAsync(CurrentEditingMemento);
+        IsColorPopupOpen = false;
+        await LoadDataAsync();
+    }
+}
+
+public class EditCellArgs
+{
+    public int? ExistingMementoId { get; set; }
+    public MonthlyEventRowViewModel Row { get; set; } = null!;
+    public int Month { get; set; }
+    public int Day { get; set; }
 }
 
 public partial class SelectableMonthViewModel : ObservableObject
@@ -303,6 +450,8 @@ public partial class DayHeaderViewModel : ObservableObject
 
 public partial class MonthlyEventRowViewModel : ObservableObject
 {
+    [ObservableProperty] private int _mementoId; // Topic ID
+    [ObservableProperty] private int _month;
     [ObservableProperty] private string _title = string.Empty;
     [ObservableProperty] private string _category = string.Empty;
     [ObservableProperty] private string _bgColor = string.Empty;
@@ -312,6 +461,7 @@ public partial class MonthlyEventRowViewModel : ObservableObject
 
 public partial class MonthlyGanttBarViewModel : ObservableObject
 {
+    [ObservableProperty] private int _mementoId;
     [ObservableProperty] private string _title = string.Empty;
     [ObservableProperty] private string _category = string.Empty;
     [ObservableProperty] private int _startColumn;
@@ -324,6 +474,7 @@ public partial class MonthlyGanttBarViewModel : ObservableObject
 
 public class MonthDisplayViewModel
 {
+    public int MonthValue { get; set; }
     public string MonthName { get; set; } = string.Empty;
     public ObservableCollection<DayHeaderViewModel> DayHeaders { get; } = new();
     public ObservableCollection<MonthlyEventRowViewModel> EventRows { get; } = new();

@@ -12,13 +12,17 @@ Công cụ Calendar cung cấp hai chế độ hiển thị: **Annual View** (nh
 - `MonthlyCalendarViewModel.cs` - Quản lý danh sách tháng được chọn (`AvailableMonths`), logic multi-select và render event phases.
 - `ActivityHeatmapView.xaml` - Hiển thị "Activity Tracker" dạng lưới ô vuông (Dot Grid), gom nhóm dữ liệu theo sự kiện (Event-centric).
 - `ActivityHeatmapViewModel.cs` - Phân loại dữ liệu heatmap theo đầu mục hành động, quản lý hiển thị 31 ngày đồng bộ cho nhiều tháng.
+- `SelectableTagViewModel.cs` - View model phụ trợ cho việc chọn tag trong bộ lọc UI.
 
 ### Domain Layer (Core)
-- `CalendarEventModel.cs` - Entity chính của sự kiện, chứa list các `Phases`.
-- `CalendarEventPhaseModel` - Đại diện cho một giai đoạn trong sự kiện.
+- `MementoModel.cs` - Entity chính hỗ trợ phân cấp (Topic/Concept) và mã hóa Tags.
+- `TagModel.cs` - Entity đại diện cho nhãn phân loại.
+- `MementoQueryModel.cs` - Query object để lọc dữ liệu linh hoạt (Tags, Date Range).
+- `IMementoRepository.cs`, `ITagRepository.cs` - Interface cho việc truy xuất dữ liệu thô.
 
 ### Infrastructure Layer
-- `MockCalendarService.cs` - Cung cấp dữ liệu mẫu phong phú với các sự kiện có nhiều giai đoạn chồng chéo và kéo dài qua nhiều tháng.
+- `MockMementoRepository.cs`, `MockTagRepository.cs` - Implementations cung cấp dữ liệu mẫu.
+- `CalendarService.cs` - Lớp Service điều phối, thực hiện logic lọc đệ quy (recursive filtering) và chuẩn bị dữ liệu cho View.
 
 ## Key Classes
 
@@ -43,3 +47,4 @@ Công cụ Calendar cung cấp hai chế độ hiển thị: **Annual View** (nh
 - **Event-Centric Activity Tracking**: Chuyển đổi từ hiển thị theo tháng sang hiển thị theo đầu mục hành động (Event). Điều này giúp tập trung vào thói quen và tần suất thực hiện một hành động cụ thể xuyên suốt cả năm thay vì chỉ nhìn vào một mốc thời gian cố định.
 - **Hybrid Display Modes**: Monthly Calendar cho phép chuyển đổi linh hoạt giữa 3 chế độ: **Gantt** (thanh đặc), **Dot** (chấm có viền mờ), và **Pure Dot** (chỉ có chấm). Hệ thống sử dụng `DataTriggers` trong XAML để thay đổi hiển thị ngay lập tức mà không cần tính toán lại dữ liệu ở ViewModel.
 - **Unified Memento Model**: Thay thế mô hình Event/Phase bằng cấu trúc `MementoModel` phân cấp (recursive). Một Memento có `ParentId == null` được coi là một "Topic Note" (Ghi chú chủ đề) với Id là kiểu `int`, trong khi memento có `ParentId` trỏ về Topic được coi là "Supplemental Concept Note" (Ghi chú khái niệm bổ sung).
+- **Tagging & Repository Pattern**: Áp dụng mô hình Repository + Service để tách biệt việc truy vấn dữ liệu thô và logic nghiệp vụ. Hỗ trợ nhiều Tags cho mỗi Memento và cung cấp tính năng **Cascade Filtering** (Nếu lọc theo Tag khớp với Parent, tất cả Children của nó sẽ được tự động bao gồm nếu người dùng bật tùy chọn tương ứng).

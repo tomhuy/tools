@@ -28,6 +28,11 @@ public partial class AnnualCalendarViewModel : ObservableObject
     [ObservableProperty]
     private ObservableCollection<ToolMenuItem> _navigationMenuItems = new();
 
+    public ObservableCollection<SelectableTagViewModel> AvailableTags { get; } = new();
+
+    [ObservableProperty]
+    private bool _includeChildrenOfTaggedParents = true;
+
     public AnnualCalendarViewModel(ICalendarService calendarService, INavigationService navigationService)
     {
         _calendarService = calendarService;
@@ -36,7 +41,28 @@ public partial class AnnualCalendarViewModel : ObservableObject
 
         InitializeTopHeader();
         InitializeLegends();
+        _ = InitializeAvailableTagsAsync();
         InitializeNavigationMenu();
+    }
+
+    private async Task InitializeAvailableTagsAsync()
+    {
+        var tags = await _calendarService.GetTagsAsync();
+        foreach (var tag in tags)
+        {
+            var selectableTag = new SelectableTagViewModel
+            {
+                Id = tag.Id,
+                Name = tag.Name,
+                Color = tag.Color,
+                IsSelected = false
+            };
+            selectableTag.SelectedChanged += (s, e) => _ = LoadDataAsync();
+            AvailableTags.Add(selectableTag);
+        }
+
+        // Trigger initial data load after tags are loaded
+        await LoadDataAsync();
     }
 
     private void InitializeNavigationMenu()
@@ -84,7 +110,12 @@ public partial class AnnualCalendarViewModel : ObservableObject
     [RelayCommand]
     private async Task LoadDataAsync()
     {
-        var mementos = (await _calendarService.GetAnnualEventsAsync(CurrentYear)).ToList();
+        var selectedTagIds = AvailableTags.Where(t => t.IsSelected).Select(t => t.Id).ToList();
+        
+        var mementos = (await _calendarService.GetAnnualEventsAsync(
+            CurrentYear, 
+            selectedTagIds.Any() ? selectedTagIds : null, 
+            IncludeChildrenOfTaggedParents)).ToList();
 
         Months.Clear();
 
@@ -228,7 +259,7 @@ public partial class AnnualCalendarViewModel : ObservableObject
             "Conference" => "#607D8B",
             "Competition" => "#00BCD4",
             "Release" => "#E91E63",
-            "Psychology" => "#F44336",
+            "Psychology" => "#4CAF50",
             _ => "#9E9E9E"
         };
     }

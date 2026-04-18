@@ -39,6 +39,11 @@ public partial class MonthlyCalendarViewModel : ObservableObject
     [ObservableProperty]
     private ObservableCollection<ToolMenuItem> _navigationMenuItems = new();
 
+    public ObservableCollection<SelectableTagViewModel> AvailableTags { get; } = new();
+
+    [ObservableProperty]
+    private bool _includeChildrenOfTaggedParents = true;
+
     public MonthlyCalendarViewModel(ICalendarService calendarService, INavigationService navigationService)
     {
         _calendarService = calendarService;
@@ -47,7 +52,25 @@ public partial class MonthlyCalendarViewModel : ObservableObject
         CurrentYear = 2026; // Match mockup year for consistency
         
         InitializeAvailableMonths();
+        _ = InitializeAvailableTagsAsync();
         InitializeNavigationMenu();
+    }
+
+    private async Task InitializeAvailableTagsAsync()
+    {
+        var tags = await _calendarService.GetTagsAsync();
+        foreach (var tag in tags)
+        {
+            var selectableTag = new SelectableTagViewModel
+            {
+                Id = tag.Id,
+                Name = tag.Name,
+                Color = tag.Color,
+                IsSelected = false
+            };
+            selectableTag.SelectedChanged += (s, e) => _ = LoadDataAsync();
+            AvailableTags.Add(selectableTag);
+        }
     }
 
     private void InitializeAvailableMonths()
@@ -93,12 +116,18 @@ public partial class MonthlyCalendarViewModel : ObservableObject
     private async Task LoadDataAsync()
     {
         var selectedMonths = AvailableMonths.Where(m => m.IsSelected).ToList();
+        var selectedTagIds = AvailableTags.Where(t => t.IsSelected).Select(t => t.Id).ToList();
         
         var newDisplayMonths = new List<MonthDisplayViewModel>();
 
         foreach (var monthInfo in selectedMonths)
         {
-            var mementos = await _calendarService.GetMonthlyEventsAsync(CurrentYear, monthInfo.Value);
+            var mementos = await _calendarService.GetMonthlyEventsAsync(
+                CurrentYear, 
+                monthInfo.Value, 
+                selectedTagIds.Any() ? selectedTagIds : null, 
+                IncludeChildrenOfTaggedParents);
+                
             var monthDisplay = BuildMonthDisplay(monthInfo.Value, mementos);
             newDisplayMonths.Add(monthDisplay);
         }
@@ -233,7 +262,7 @@ public partial class MonthlyCalendarViewModel : ObservableObject
             "Conference" => "#607D8B",
             "Competition" => "#00BCD4",
             "Release" => "#E91E63",
-            "Psychology" => "#F44336",
+            "Psychology" => "#4CAF50",
             _ => "#9E9E9E"
         };
     }

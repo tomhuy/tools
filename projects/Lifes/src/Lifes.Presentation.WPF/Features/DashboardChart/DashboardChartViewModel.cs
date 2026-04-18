@@ -52,7 +52,7 @@ public partial class DashboardChartViewModel : ObservableObject
         var blocksResult = await _dataService.GetBlocksAsync();
         if (blocksResult.IsSuccess)
         {
-            Blocks = new ObservableCollection<DashboardBlock>(blocksResult.Value);
+            Blocks = new ObservableCollection<DashboardBlock>(blocksResult.Value ?? Enumerable.Empty<DashboardBlock>());
         }
 
         var centerResult = await _dataService.GetCenterInfoAsync();

@@ -175,7 +175,67 @@
                 <!-- Display Mode Splitter -->
                 <Border Width="1" Height="24" Background="#E2E8F0" Margin="15,0"/>
 
-                <!-- Mode Selection -->
+                <!-- Tag Selection -->
+                <ToggleButton x:Name="TagPickerButton" Content="Tags ▼" Padding="15,5" 
+                              Background="White" BorderBrush="#D1D5DB" BorderThickness="1"
+                              FontSize="13" FontWeight="SemiBold" Cursor="Hand" Margin="0,0,10,0">
+                    <ToggleButton.Template>
+                        <ControlTemplate TargetType="ToggleButton">
+                            <Border Background="{TemplateBinding Background}" 
+                                    BorderBrush="{TemplateBinding BorderBrush}" 
+                                    BorderThickness="{TemplateBinding BorderThickness}" 
+                                    CornerRadius="6">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </ToggleButton.Template>
+                </ToggleButton>
+
+                <Popup IsOpen="{Binding IsChecked, ElementName=TagPickerButton}" 
+                       PlacementTarget="{Binding ElementName=TagPickerButton}" 
+                       StaysOpen="False" AllowsTransparency="True" PopupAnimation="Fade">
+                    <Border Background="White" BorderBrush="#E5E7EB" BorderThickness="1" CornerRadius="8" Margin="0,5,0,0">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="15" ShadowDepth="2" Opacity="0.1"/>
+                        </Border.Effect>
+                        <StackPanel Margin="10" Width="180">
+                            <TextBlock Text="Chọn Tag để lọc" FontSize="11" FontWeight="Bold" Foreground="#6B7280" Margin="10,5,10,10"/>
+                            <ItemsControl ItemsSource="{Binding AvailableTags}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected}" Margin="10,5" FontSize="13">
+                                            <CheckBox.Template>
+                                                <ControlTemplate TargetType="CheckBox">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Grid x:Name="MarkGrid" Width="16" Height="16" Margin="0,0,8,0">
+                                                            <Border BorderBrush="#D1D5DB" BorderThickness="1" CornerRadius="3" Background="White"/>
+                                                            <Path x:Name="CheckMark" Data="M3,8L7,12L13,4" Stroke="{Binding Color}" StrokeThickness="2" Visibility="Collapsed"/>
+                                                        </Grid>
+                                                        <ContentPresenter VerticalAlignment="Center"/>
+                                                    </StackPanel>
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsChecked" Value="True">
+                                                            <Setter TargetName="CheckMark" Property="Visibility" Value="Visible"/>
+                                                            <Setter TargetName="MarkGrid" Property="ToolTip" Value="Selected"/>
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </CheckBox.Template>
+                                        </CheckBox>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            
+                            <Border Height="1" Background="#F3F4F6" Margin="0,10"/>
+                            
+                            <CheckBox Content="Bao gồm ghi chú con" 
+                                      IsChecked="{Binding IncludeChildrenOfTaggedParents}" 
+                                      Margin="10,5" FontSize="12" FontWeight="SemiBold"
+                                      Command="{Binding LoadDataCommand}"/>
+                        </StackPanel>
+                    </Border>
+                </Popup>
+
                 <ComboBox ItemsSource="{Binding AvailableDisplayModes}" 
                           SelectedItem="{Binding DisplayMode}"
                           Width="100" Height="34"

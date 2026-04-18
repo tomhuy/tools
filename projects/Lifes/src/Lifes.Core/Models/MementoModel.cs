@@ -21,4 +21,6 @@ public class MementoModel
     public string Color { get; set; } = string.Empty;
     
     public string Description { get; set; } = string.Empty;
+    
+    public List<int> TagIds { get; set; } = new();
 }

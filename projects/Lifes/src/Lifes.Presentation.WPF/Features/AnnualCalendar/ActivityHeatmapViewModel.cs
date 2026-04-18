@@ -24,6 +24,11 @@ public partial class ActivityHeatmapViewModel : ObservableObject
     [ObservableProperty]
     private ObservableCollection<ToolMenuItem> _navigationMenuItems = new();
 
+    public ObservableCollection<SelectableTagViewModel> AvailableTags { get; } = new();
+
+    [ObservableProperty]
+    private bool _includeChildrenOfTaggedParents = true;
+
     public ActivityHeatmapViewModel(ICalendarService calendarService, INavigationService navigationService)
     {
         _calendarService = calendarService;
@@ -31,7 +36,26 @@ public partial class ActivityHeatmapViewModel : ObservableObject
 
         InitializeLegends();
         InitializeNavigationMenu();
-        _ = LoadDataAsync();
+        _ = InitializeAvailableTagsAsync();
+    }
+
+    private async Task InitializeAvailableTagsAsync()
+    {
+        var tags = await _calendarService.GetTagsAsync();
+        foreach (var tag in tags)
+        {
+            var selectableTag = new SelectableTagViewModel
+            {
+                Id = tag.Id,
+                Name = tag.Name,
+                Color = tag.Color,
+                IsSelected = false
+            };
+            selectableTag.SelectedChanged += (s, e) => _ = LoadDataAsync();
+            AvailableTags.Add(selectableTag);
+        }
+
+        await LoadDataAsync();
     }
 
     private void InitializeNavigationMenu()
@@ -60,12 +84,19 @@ public partial class ActivityHeatmapViewModel : ObservableObject
         Legends.Add(new LegendItemViewModel { Category = "Event", BgColor = "#009688", FgColor = "#FFFFFF" });
     }
 
+    [RelayCommand]
     private async Task LoadDataAsync()
     {
+        var selectedTagIds = AvailableTags.Where(t => t.IsSelected).Select(t => t.Id).ToList();
+        
         var allMementos = new List<MementoModel>();
         for (int y = 2025; y <= 2026; y++)
         {
-            var yearMementos = await _calendarService.GetAnnualEventsAsync(y);
+            var yearMementos = await _calendarService.GetAnnualEventsAsync(
+                y, 
+                selectedTagIds.Any() ? selectedTagIds : null, 
+                IncludeChildrenOfTaggedParents);
+                
             allMementos.AddRange(yearMementos);
         }
 

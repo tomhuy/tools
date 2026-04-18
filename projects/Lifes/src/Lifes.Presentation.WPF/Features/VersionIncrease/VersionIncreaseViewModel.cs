@@ -497,7 +497,7 @@ public partial class VersionIncreaseViewModel : ObservableObject
                 return;
             }
 
-            var modifiedFiles = modifiedFilesResult.Value.ToList();
+            var modifiedFiles = (modifiedFilesResult.Value ?? Enumerable.Empty<string>()).ToList();
             if (!modifiedFiles.Any())
             {
                 System.Windows.MessageBox.Show(

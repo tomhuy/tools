@@ -15,6 +15,7 @@ using Lifes.Presentation.WPF.Features.DocumentManagement;
 using Lifes.Infrastructure.Features.DocumentManagement.Services;
 using Lifes.Presentation.WPF.Features.AnnualCalendar;
 using Lifes.Infrastructure.Features.AnnualCalendar.Services;
+using Lifes.Infrastructure.Features.AnnualCalendar.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
@@ -96,7 +97,11 @@ public partial class App : System.Windows.Application
         // Dashboard Services
         services.AddSingleton<IDashboardDataService, MockDashboardDataService>();
         services.AddSingleton<IDocumentService, MockDocumentService>();
-        services.AddSingleton<ICalendarService, MockCalendarService>();
+        
+        // Memento & Calendar Services
+        services.AddSingleton<ITagRepository, MockTagRepository>();
+        services.AddSingleton<IMementoRepository, MockMementoRepository>();
+        services.AddSingleton<ICalendarService, CalendarService>();
 
         // Presentation Layer - Views & Windows
         services.AddSingleton<MainWindow>();

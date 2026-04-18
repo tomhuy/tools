@@ -17,13 +17,19 @@ src/
 │   │   ├── IVersionService.cs
 │   │   ├── ISettingsService.cs     # US-1.2.1
 │   │   ├── IGitService.cs          # US-1.3
-│   │   └── INavigationService.cs   # US-5.1
+│   │   ├── INavigationService.cs   # US-5.1
+│   │   ├── ICalendarService.cs     # US-9.1
+│   │   ├── IMementoRepository.cs   # US-9.2
+│   │   └── ITagRepository.cs       # US-9.2
 │   └── Models/
 │       ├── Result.cs               # Result<T> pattern
 │       ├── ToolDefinition.cs       # US-5.1 — tool metadata
 │       ├── ToolNavigatedEventArgs.cs # US-5.1 — navigation event args
 │       ├── CalendarEventModel.cs   # US-8.4 — Multi-phase event entity
-│       └── CalendarEventPhaseModel.cs # US-8.4 — event phase detail
+│       ├── CalendarEventPhaseModel.cs # US-8.4 — event phase detail
+│       ├── MementoModel.cs         # US-9.1 — Recursive hierarchy
+│       ├── TagModel.cs             # US-9.2 — Tagging system
+│       └── MementoQueryModel.cs    # US-9.2 — Filtering model
 │
 ├── Lifes.Domain/                # Business logic and entities
 │   ├── Common/                     # US-1.2.1
@@ -52,8 +58,11 @@ src/
 │       │   └── Git/                # US-1.3
 │       │       └── GitService.cs   # LibGit2Sharp implementation
 │       └── AnnualCalendar/
-│           └── Services/
-│               └── MockCalendarService.cs # US-8.4 — Multi-phase mock data
+│           ├── Services/
+│           │   └── CalendarService.cs     # US-9.2 — logical orchestration
+│           └── Repositories/
+│               ├── MockMementoRepository.cs # US-9.2
+│               └── MockTagRepository.cs     # US-9.2
 │
 ├── Lifes.Application/           # Use cases and commands
 │   ├── Common/                     # US-1.2.1
@@ -104,7 +113,9 @@ src/
 │   │   │   ├── MonthlyCalendarView.xaml
 │   │   │   ├── MonthlyCalendarViewModel.cs
 │   │   │   ├── ActivityHeatmapView.xaml    # US-8.6
-│   │   │   └── ActivityHeatmapViewModel.cs # US-8.6
+│   │   │   ├── ActivityHeatmapViewModel.cs # US-8.6
+│   │   │   └── Models/
+│   │   │       └── SelectableTagViewModel.cs # US-9.2
 │   │   ├── DocumentManagement/         # US-7.1
 │   │   │   ├── DocumentManagementView.xaml
 │   │   │   └── DocumentManagementViewModel.cs
@@ -236,6 +247,7 @@ src/
 - `AnnualCalendarViewModel` & `MonthlyCalendarViewModel`
 - `ActivityHeatmapViewModel` (Event-centric dot grid)
 - `CalendarEventModel` with `Phases` (Multi-phase tracking)
+- **Tagging & Hierarchical Filtering** (US-9.2)
 - Gantt-style timeline rendering in XAML
 - Hamburger Navigation integration
 
@@ -248,6 +260,7 @@ src/
 **Key Components**:
 - MementoModel (Recursive Hierarchy)
 - ICalendarService (Refactored)
+- **Tagging System** (TagModel, Repositories)
 
 ## Shared Components
 
@@ -632,4 +645,4 @@ reportgenerator -reports:**/coverage.cobertura.xml -targetdir:coverage-report -r
 
 **Document Version**: 1.4.0  
 **Last Updated**: 2026-04-16  
-**Status**: ✅ Active (75% Complete - US-1.1, US-1.2, US-1.2.1, US-1.3, US-2.1, US-5.1, US-7.1, US-8.4, US-8.5 Done)
+**Status**: ✅ Active (80% Complete - US-1.1, US-1.2, US-1.2.1, US-1.3, US-2.1, US-5.1, US-7.1, US-8.4, US-8.5, US-9.1, US-9.2 Done)

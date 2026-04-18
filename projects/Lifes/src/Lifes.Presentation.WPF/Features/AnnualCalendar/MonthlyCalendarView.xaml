@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Lifes.Presentation.WPF.Features.AnnualCalendar"
              xmlns:cv="clr-namespace:Lifes.Presentation.WPF.Converters"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="1200"
              d:DataContext="{d:DesignInstance Type=local:MonthlyCalendarViewModel, IsDesignTimeCreatable=False}"
@@ -377,16 +378,31 @@
 
                                                     <!-- Title column -->
                                                     <Border Style="{StaticResource BorderStyle}">
-                                                        <StackPanel Orientation="Horizontal" Margin="10,0">
-                                                            <Rectangle Width="4" Height="16" Fill="{Binding BgColor}" RadiusX="2" RadiusY="2" Margin="0,0,8,0"/>
-                                                            <TextBlock Text="{Binding Title}" 
-                                                                       VerticalAlignment="Center" 
-                                                                       TextTrimming="CharacterEllipsis"
-                                                                       ToolTip="{Binding Title}"
-                                                                       Foreground="#2C3E50" 
-                                                                       FontSize="11"
-                                                                       FontWeight="SemiBold"/>
-                                                        </StackPanel>
+                                                        <Button Style="{StaticResource GhostButtonStyle}"
+                                                                Command="{Binding DataContext.OpenEditPopupCommand, RelativeSource={RelativeSource AncestorType=UserControl}}">
+                                                            <Button.CommandParameter>
+                                                                <MultiBinding Converter="{StaticResource EditCellArgsConverter}">
+                                                                    <Binding /> <!-- Direct reference to MonthlyEventRowViewModel -->
+                                                                    <Binding Path="DataContext.MonthValue" ElementName="MonthRoot" />
+                                                                    <Binding>
+                                                                        <Binding.Source>
+                                                                            <sys:Int32>-1</sys:Int32>
+                                                                        </Binding.Source>
+                                                                    </Binding>
+                                                                    <Binding Path="MementoId" />
+                                                                </MultiBinding>
+                                                            </Button.CommandParameter>
+                                                            <StackPanel Orientation="Horizontal" Margin="10,0">
+                                                                <Rectangle Width="4" Height="16" Fill="{Binding BgColor}" RadiusX="2" RadiusY="2" Margin="0,0,8,0"/>
+                                                                <TextBlock Text="{Binding Title}" 
+                                                                           VerticalAlignment="Center" 
+                                                                           TextTrimming="CharacterEllipsis"
+                                                                           ToolTip="{Binding Title}"
+                                                                           Foreground="#2C3E50" 
+                                                                           FontSize="11"
+                                                                           FontWeight="SemiBold"/>
+                                                            </StackPanel>
+                                                        </Button>
                                                     </Border>
 
                                                     <!-- Days columns background grid -->
@@ -595,7 +611,7 @@
                     <TextBlock Text="Cập nhật thông tin" FontSize="14" FontWeight="Bold" Foreground="#2D3748" Margin="0,0,0,15"/>
                     
                     <TextBox Grid.Row="1" Text="{Binding EditingTitle, UpdateSourceTrigger=PropertyChanged}" 
-                             FontSize="13" Padding="12,10" Margin="0,0,0,20"
+                             FontSize="13" Padding="12,10" Margin="0,0,0,15"
                              BorderBrush="#E2E8F0" BorderThickness="1">
                         <TextBox.Resources>
                             <Style TargetType="Border">
@@ -603,6 +619,47 @@
                             </Style>
                         </TextBox.Resources>
                     </TextBox>
+
+                    <!-- Tag Selection Section -->
+                    <StackPanel Grid.Row="1" Visibility="{Binding IsShowEditingTag, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="0,0,0,15">
+                        <TextBlock Text="PHÂN LOẠI (TAGS)" FontSize="11" FontWeight="Bold" Foreground="#A0AEC0" Margin="0,0,0,8"/>
+                        <ItemsControl ItemsSource="{Binding EditingMementoTags}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsSelected}" Margin="0,0,10,6">
+                                        <CheckBox.Template>
+                                            <ControlTemplate TargetType="CheckBox">
+                                                <Border x:Name="TagBorder" Padding="8,4" CornerRadius="4" BorderThickness="1" BorderBrush="#E2E8F0" Background="White">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Ellipse Fill="{Binding Color}" Width="8" Height="8" Margin="0,0,6,0"/>
+                                                        <ContentPresenter VerticalAlignment="Center">
+                                                            <ContentPresenter.Content>
+                                                                <TextBlock Text="{Binding Name}" FontSize="11" Foreground="#4A5568"/>
+                                                            </ContentPresenter.Content>
+                                                        </ContentPresenter>
+                                                    </StackPanel>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsChecked" Value="True">
+                                                        <Setter TargetName="TagBorder" Property="Background" Value="#F0F9FF"/>
+                                                        <Setter TargetName="TagBorder" Property="BorderBrush" Value="#3182CE"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="TagBorder" Property="BorderBrush" Value="#CBD5E0"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </CheckBox.Template>
+                                    </CheckBox>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
 
                     <Button Grid.Row="2" Content="Lưu thông tin" Command="{Binding SaveEditCommand}" 
                             Background="#3182CE" Foreground="White" FontWeight="Bold" FontSize="13" Height="40">

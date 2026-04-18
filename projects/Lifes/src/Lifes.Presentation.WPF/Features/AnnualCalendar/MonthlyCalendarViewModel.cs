@@ -52,6 +52,8 @@ public partial class MonthlyCalendarViewModel : ObservableObject
     [ObservableProperty] private MonthlyEventRowViewModel? _editingRow;
     [ObservableProperty] private int _editingDay;
     [ObservableProperty] private int _editingMonth;
+    [ObservableProperty] private bool _isShowEditingTag;
+    public ObservableCollection<SelectableTagViewModel> EditingMementoTags { get; } = new();
 
     public string[] ColorPalette { get; } = new[]
     {
@@ -327,7 +329,7 @@ public partial class MonthlyCalendarViewModel : ObservableObject
         {
             CurrentEditingMemento = _allMementos.FirstOrDefault(m => m.Id == args.ExistingMementoId.Value);
         }
-        else
+        else if (EditingDay >= 1)
         {
             var targetDate = new DateTime(CurrentYear, EditingMonth, EditingDay);
             // Find if there's an existing child memento for this topic on this day
@@ -335,8 +337,27 @@ public partial class MonthlyCalendarViewModel : ObservableObject
                 m.ParentId == args.Row.MementoId &&
                 m.StartDate.Date == targetDate.Date);
         }
+        else
+        {
+            CurrentEditingMemento = null;
+        }
 
         EditingTitle = CurrentEditingMemento?.Title ?? "X";
+        
+        // Tag Selection logic
+        IsShowEditingTag = args.Day == -1;
+        EditingMementoTags.Clear();
+        foreach (var tag in AvailableTags)
+        {
+            EditingMementoTags.Add(new SelectableTagViewModel
+            {
+                Id = tag.Id,
+                Name = tag.Name,
+                Color = tag.Color,
+                IsSelected = CurrentEditingMemento?.TagIds?.Contains(tag.Id) ?? false
+            });
+        }
+
         IsEditPopupOpen = true;
     }
 
@@ -345,18 +366,26 @@ public partial class MonthlyCalendarViewModel : ObservableObject
     {
         if (EditingRow == null) return;
 
-        var targetDate = new DateTime(CurrentYear, EditingMonth, EditingDay);
-        
-        var memento = CurrentEditingMemento ?? new MementoModel
+        var memento = CurrentEditingMemento;
+        if (memento == null)
         {
-            ParentId = EditingRow.MementoId,
-            StartDate = targetDate,
-            EndDate = targetDate,
-            Color = EditingRow.Category, // Inherit from parent
-            TagIds = new List<int>()
-        };
+            var targetDate = new DateTime(CurrentYear, EditingMonth, EditingDay);
+            memento = new MementoModel
+            {
+                ParentId = EditingRow.MementoId,
+                StartDate = targetDate,
+                EndDate = targetDate,
+                Color = EditingRow.Category, // Inherit from parent
+                TagIds = new List<int>()
+            };
+        }
 
         memento.Title = EditingTitle;
+
+        if (IsShowEditingTag)
+        {
+            memento.TagIds = EditingMementoTags.Where(t => t.IsSelected).Select(t => t.Id).ToList();
+        }
 
         await _calendarService.SaveMementoAsync(memento);
         IsEditPopupOpen = false;

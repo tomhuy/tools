@@ -240,14 +240,21 @@ src/
 - Hamburger Navigation integration
 
 **Key Components Overview**:
+### 9. Core Architecture Refactor (Memento)
+**Status**: ✅ Completed
+**User Stories**: US-9.1
+**Documentation**: [fea-calendar-structure.md](./fea-calendar-structure.md)
 
-#### Core Layer
-- `IProjectScanner` - Interface for scanning .csproj files
-- `IProjectFileService` - Interface for reading/updating .csproj files
-- `IVersionService` - Interface for version operations
-- `ISettingsService` - Interface for settings persistence (US-1.2.1)
-- `IGitService` - Interface for Git operations (US-1.3)
-- `Result<T>` - Result pattern for error handling
+**Key Components**:
+- MementoModel (Recursive Hierarchy)
+- ICalendarService (Refactored)
+
+## Shared Components
+
+### Core Layer
+- `MementoModel` - Unified hierarchical note/event model.
+- `Result<T>` - Result pattern for error handling.
+- `ICalendarService` - Central service for time-based data.
 
 #### Domain Layer
 - `ProjectFile` - Entity with filtering business rules

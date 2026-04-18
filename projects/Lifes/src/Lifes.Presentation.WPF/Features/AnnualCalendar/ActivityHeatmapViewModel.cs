@@ -62,32 +62,40 @@ public partial class ActivityHeatmapViewModel : ObservableObject
 
     private async Task LoadDataAsync()
     {
-        var allEvents = new List<CalendarEventModel>();
+        var allMementos = new List<MementoModel>();
         for (int y = 2025; y <= 2026; y++)
         {
-            var yearEvents = await _calendarService.GetAnnualEventsAsync(y);
-            allEvents.AddRange(yearEvents);
+            var yearMementos = await _calendarService.GetAnnualEventsAsync(y);
+            allMementos.AddRange(yearMementos);
         }
 
-        if (!allEvents.Any()) return;
+        if (!allMementos.Any()) return;
 
-        // Group by Event Title
-        var groups = allEvents.GroupBy(e => e.Title).OrderBy(g => g.Key);
+        // Group by Topic (ParentId is null)
+        var topics = allMementos.Where(m => m.ParentId == null).OrderBy(m => m.Title).ToList();
+        var children = allMementos.Where(m => m.ParentId != null).ToList();
+
         var newEventGroups = new List<EventGroupViewModel>();
 
-        foreach (var group in groups)
+        foreach (var topic in topics)
         {
             var eventGroupVM = new EventGroupViewModel
             {
-                EventTitle = $"hành động: {group.Key.ToLower()}"
+                EventTitle = $"hành động: {topic.Title.ToLower()}"
             };
 
             // Numeric Header (1-31)
             for (int i = 1; i <= 31; i++) eventGroupVM.DayNumbers.Add(i);
 
-            // Find all active months for this event title
-            var minDate = group.Min(e => e.StartDate);
-            var maxDate = group.Max(e => e.EndDate);
+            // Find child mementos for this topic
+            var topicChildren = children.Where(c => c.ParentId == topic.Id).ToList();
+            
+            // All mementos that represent activity for this topic
+            var activities = topicChildren.Any() ? topicChildren : new List<MementoModel> { topic };
+
+            // Find all active months for this topic
+            var minDate = topic.StartDate;
+            var maxDate = topic.EndDate;
             var startMonth = new DateTime(minDate.Year, minDate.Month, 1);
             var endMonth = new DateTime(maxDate.Year, maxDate.Month, 1);
 
@@ -110,13 +118,13 @@ public partial class ActivityHeatmapViewModel : ObservableObject
                     else
                     {
                         var date = new DateTime(mStart.Year, mStart.Month, d);
-                        var activeEvent = group.FirstOrDefault(e => IsActiveOnDay(e, date));
-                        if (activeEvent != null)
+                        var activeChild = activities.FirstOrDefault(a => a.StartDate.Date <= date && a.EndDate.Date >= date);
+                        if (activeChild != null)
                         {
                             cell.IsActive = true;
-                            cell.BgColor = GetSolidBgColor(activeEvent.Category);
-                            cell.Text = GetPhaseTitleAt(activeEvent, date);
-                            cell.Tooltip = activeEvent.Title;
+                            cell.BgColor = GetSolidBgColor(activeChild.Color);
+                            cell.Text = activeChild.Title;
+                            cell.Tooltip = topic.Title;
                         }
                     }
                     rowVM.Cells.Add(cell);
@@ -132,25 +140,6 @@ public partial class ActivityHeatmapViewModel : ObservableObject
             EventGroups.Clear();
             foreach (var eg in newEventGroups) EventGroups.Add(eg);
         });
-    }
-
-    private bool IsActiveOnDay(CalendarEventModel evt, DateTime date)
-    {
-        if (evt.Phases != null && evt.Phases.Any())
-        {
-            return evt.Phases.Any(p => p.StartDate.Date <= date && p.EndDate.Date >= date);
-        }
-        return evt.StartDate.Date <= date && evt.EndDate.Date >= date;
-    }
-
-    private string GetPhaseTitleAt(CalendarEventModel evt, DateTime date)
-    {
-        if (evt.Phases != null && evt.Phases.Any())
-        {
-            var phase = evt.Phases.FirstOrDefault(p => p.StartDate.Date <= date && p.EndDate.Date >= date);
-            return phase?.Title ?? "";
-        }
-        return evt.Title;
     }
 
     private string GetSolidBgColor(string category)

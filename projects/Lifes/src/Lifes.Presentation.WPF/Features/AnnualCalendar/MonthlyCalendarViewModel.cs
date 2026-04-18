@@ -98,8 +98,8 @@ public partial class MonthlyCalendarViewModel : ObservableObject
 
         foreach (var monthInfo in selectedMonths)
         {
-            var events = await _calendarService.GetMonthlyEventsAsync(CurrentYear, monthInfo.Value);
-            var monthDisplay = BuildMonthDisplay(monthInfo.Value, events);
+            var mementos = await _calendarService.GetMonthlyEventsAsync(CurrentYear, monthInfo.Value);
+            var monthDisplay = BuildMonthDisplay(monthInfo.Value, mementos);
             newDisplayMonths.Add(monthDisplay);
         }
 
@@ -113,7 +113,7 @@ public partial class MonthlyCalendarViewModel : ObservableObject
         });
     }
 
-    private MonthDisplayViewModel BuildMonthDisplay(int month, IEnumerable<CalendarEventModel> events)
+    private MonthDisplayViewModel BuildMonthDisplay(int month, IEnumerable<MementoModel> mementos)
     {
         var display = new MonthDisplayViewModel
         {
@@ -139,32 +139,43 @@ public partial class MonthlyCalendarViewModel : ObservableObject
         var monthStart = new DateTime(CurrentYear, month, 1);
         var monthEnd = new DateTime(CurrentYear, month, daysInMonth);
 
-        foreach (var evt in events)
+        // Separate Topics and Supplemental Concepts
+        var flatList = mementos.ToList();
+        var topics = flatList.Where(m => m.ParentId == null).OrderBy(m => m.Order).ThenBy(m => m.StartDate).ToList();
+        var supplemental = flatList.Where(m => m.ParentId != null).ToList();
+
+        foreach (var topic in topics)
         {
             var row = new MonthlyEventRowViewModel
             {
-                Title = evt.Title,
-                Category = evt.Category,
-                BgColor = GetSolidBgColor(evt.Category),
-                FgColor = GetSolidFgColor(evt.Category)
+                Title = topic.Title,
+                Category = topic.Color,
+                BgColor = GetSolidBgColor(topic.Color),
+                FgColor = GetSolidFgColor(topic.Color)
             };
 
-            // If event has phases, process each phase. Otherwise, process the main event as a single phase.
-            if (evt.Phases != null && evt.Phases.Any())
+            // Find supplemental notes for this topic
+            var children = supplemental.Where(s => s.ParentId == topic.Id).OrderBy(s => s.Order).ThenBy(s => s.StartDate).ToList();
+
+            if (children.Any())
             {
-                foreach (var phase in evt.Phases)
+                foreach (var child in children)
                 {
-                    if (phase.StartDate <= monthEnd && phase.EndDate >= monthStart)
+                    if (child.StartDate <= monthEnd && child.EndDate >= monthStart)
                     {
-                        var bar = CreateBar(phase.Title, phase.StartDate, phase.EndDate, phase.Category ?? evt.Category, monthStart, monthEnd);
+                        var bar = CreateBar(child.Title, child.StartDate, child.EndDate, child.Color, monthStart, monthEnd);
                         row.Bars.Add(bar);
                     }
                 }
             }
             else
             {
-                var bar = CreateBar(evt.Title, evt.StartDate, evt.EndDate, evt.Category, monthStart, monthEnd);
-                row.Bars.Add(bar);
+                // If no children, treat topic itself as a bar if it overlaps this month
+                if (topic.StartDate <= monthEnd && topic.EndDate >= monthStart)
+                {
+                    var bar = CreateBar(topic.Title, topic.StartDate, topic.EndDate, topic.Color, monthStart, monthEnd);
+                    row.Bars.Add(bar);
+                }
             }
 
             if (row.Bars.Any())
@@ -176,7 +187,7 @@ public partial class MonthlyCalendarViewModel : ObservableObject
         return display;
     }
 
-    private MonthlyGanttBarViewModel CreateBar(string title, DateTime start, DateTime end, string category, DateTime monthStart, DateTime monthEnd)
+    private MonthlyGanttBarViewModel CreateBar(string title, DateTime start, DateTime end, string color, DateTime monthStart, DateTime monthEnd)
     {
         DateTime effectiveStart = start < monthStart ? monthStart : start;
         DateTime effectiveEnd = end > monthEnd ? monthEnd : end;
@@ -184,11 +195,11 @@ public partial class MonthlyCalendarViewModel : ObservableObject
         return new MonthlyGanttBarViewModel
         {
             Title = title,
-            Category = category,
+            Category = color,
             StartColumn = effectiveStart.Day - 1,
             Duration = (int)(effectiveEnd.Date - effectiveStart.Date).TotalDays + 1,
-            BgColor = GetSolidBgColor(category),
-            FgColor = GetSolidFgColor(category)
+            BgColor = GetSolidBgColor(color),
+            FgColor = GetSolidFgColor(color)
         };
     }
 
@@ -227,9 +238,9 @@ public partial class MonthlyCalendarViewModel : ObservableObject
         };
     }
 
-    private string GetSolidFgColor(string category)
+    private string GetSolidFgColor(string color)
     {
-        return category == "Review" ? "#000000" : "#FFFFFF";
+        return color == "Review" ? "#000000" : "#FFFFFF";
     }
 }
 

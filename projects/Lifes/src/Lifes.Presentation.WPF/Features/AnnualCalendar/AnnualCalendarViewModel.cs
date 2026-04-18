@@ -84,8 +84,7 @@ public partial class AnnualCalendarViewModel : ObservableObject
     [RelayCommand]
     private async Task LoadDataAsync()
     {
-        var rawEvents = await _calendarService.GetAnnualEventsAsync(CurrentYear);
-        var events = rawEvents.ToList();
+        var mementos = (await _calendarService.GetAnnualEventsAsync(CurrentYear)).ToList();
 
         Months.Clear();
 
@@ -123,48 +122,51 @@ public partial class AnnualCalendarViewModel : ObservableObject
 
             // Find overlapping tasks for THIS month
             var monthTasks = new List<AnnualTaskViewModel>();
-            foreach (var evt in events)
+            
+            // Separate Topics and Supplemental Concepts
+            var topics = mementos.Where(m => m.ParentId == null).ToList();
+            var children = mementos.Where(m => m.ParentId != null).ToList();
+
+            foreach (var topic in topics)
             {
-                if (evt.StartDate.Date <= monthEnd && evt.EndDate.Date >= monthStart)
+                var topicChildren = children.Where(c => c.ParentId == topic.Id).ToList();
+
+                if (topicChildren.Any())
                 {
-                    // Bound task to this month
-                    DateTime effectiveStart = evt.StartDate < monthStart ? monthStart : evt.StartDate;
-                    DateTime effectiveEnd = evt.EndDate > monthEnd ? monthEnd : evt.EndDate;
-
-                    if (evt.Phases != null && evt.Phases.Any())
+                    foreach (var child in topicChildren)
                     {
-                        foreach (var phase in evt.Phases)
+                        if (child.StartDate <= monthEnd && child.EndDate >= monthStart)
                         {
-                            if (phase.StartDate <= monthEnd && phase.EndDate >= monthStart)
-                            {
-                                DateTime phaseStart = phase.StartDate < monthStart ? monthStart : phase.StartDate;
-                                DateTime phaseEnd = phase.EndDate > monthEnd ? monthEnd : phase.EndDate;
+                            DateTime effectiveStart = child.StartDate < monthStart ? monthStart : child.StartDate;
+                            DateTime effectiveEnd = child.EndDate > monthEnd ? monthEnd : child.EndDate;
 
-                                monthTasks.Add(new AnnualTaskViewModel
-                                {
-                                    Title = phase.Title,
-                                    Category = phase.Category ?? evt.Category,
-                                    StartColumn = startColumn + (phaseStart.Day - 1),
-                                    Duration = (int)(phaseEnd.Date - phaseStart.Date).TotalDays + 1,
-                                    BgColor = GetSolidBgColor(phase.Category ?? evt.Category),
-                                    FgColor = GetSolidFgColor(phase.Category ?? evt.Category)
-                                });
-                            }
+                            monthTasks.Add(new AnnualTaskViewModel
+                            {
+                                Title = child.Title,
+                                Category = child.Color,
+                                StartColumn = startColumn + (effectiveStart.Day - 1),
+                                Duration = (int)(effectiveEnd.Date - effectiveStart.Date).TotalDays + 1,
+                                BgColor = GetSolidBgColor(child.Color),
+                                FgColor = GetSolidFgColor(child.Color)
+                            });
                         }
                     }
-                    else
+                }
+                else
+                {
+                    if (topic.StartDate <= monthEnd && topic.EndDate >= monthStart)
                     {
-                        int taskStartCol = startColumn + (effectiveStart.Day - 1);
-                        int span = (int)(effectiveEnd.Date - effectiveStart.Date).TotalDays + 1;
+                        DateTime effectiveStart = topic.StartDate < monthStart ? monthStart : topic.StartDate;
+                        DateTime effectiveEnd = topic.EndDate > monthEnd ? monthEnd : topic.EndDate;
 
                         monthTasks.Add(new AnnualTaskViewModel
                         {
-                            Title = evt.Title,
-                            Category = evt.Category,
-                            StartColumn = taskStartCol,
-                            Duration = span,
-                            BgColor = GetSolidBgColor(evt.Category),
-                            FgColor = GetSolidFgColor(evt.Category)
+                            Title = topic.Title,
+                            Category = topic.Color,
+                            StartColumn = startColumn + (effectiveStart.Day - 1),
+                            Duration = (int)(effectiveEnd.Date - effectiveStart.Date).TotalDays + 1,
+                            BgColor = GetSolidBgColor(topic.Color),
+                            FgColor = GetSolidFgColor(topic.Color)
                         });
                     }
                 }

@@ -6,6 +6,6 @@ namespace Lifes.Core.Interfaces;
 
 public interface ICalendarService
 {
-    Task<IEnumerable<CalendarEventModel>> GetAnnualEventsAsync(int year);
-    Task<IEnumerable<CalendarEventModel>> GetMonthlyEventsAsync(int year, int month);
+    Task<IEnumerable<MementoModel>> GetAnnualEventsAsync(int year);
+    Task<IEnumerable<MementoModel>> GetMonthlyEventsAsync(int year, int month);
 }

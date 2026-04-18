@@ -9,74 +9,69 @@ namespace Lifes.Infrastructure.Features.AnnualCalendar.Services;
 
 public class MockCalendarService : ICalendarService
 {
-    public Task<IEnumerable<CalendarEventModel>> GetAnnualEventsAsync(int year)
-    {
-        var events = new List<CalendarEventModel>
-        {
-            // Note: Colors/Tags based on the user's explicit mockup labels
-            new CalendarEventModel { Title = "Annual Plan", StartDate = new DateTime(year, 2, 16), EndDate = new DateTime(year, 2, 17), Category = "Planning" },
-            
-            new CalendarEventModel { Title = "ST1-T...", StartDate = new DateTime(year, 3, 2), EndDate = new DateTime(year, 3, 3), Category = "Learning" },
-            new CalendarEventModel { Title = "CVS-...", StartDate = new DateTime(year, 3, 4), EndDate = new DateTime(year, 3, 5), Category = "Learning" },
-            new CalendarEventModel { Title = "ST1-T...", StartDate = new DateTime(year, 3, 6), EndDate = new DateTime(year, 3, 7), Category = "Learning" },
-            new CalendarEventModel { Title = "RC-12345", StartDate = new DateTime(year, 3, 9), EndDate = new DateTime(year, 3, 11), Category = "Release" },
-            new CalendarEventModel { Title = "di au...", StartDate = new DateTime(year, 3, 9), EndDate = new DateTime(year, 3, 10), Category = "Competition" },
-            new CalendarEventModel { Title = "ST1-T...", StartDate = new DateTime(year, 3, 11), EndDate = new DateTime(year, 3, 12), Category = "Learning" },
+    private int _idCounter = 1;
 
-            new CalendarEventModel { Title = "RC-6", StartDate = new DateTime(year, 3, 9), EndDate = new DateTime(year, 3, 9), Category = "Release" },
-            new CalendarEventModel { Title = "RC-7", StartDate = new DateTime(year, 3, 10), EndDate = new DateTime(year, 3, 11), Category = "Release" },
-            new CalendarEventModel { Title = "Suy ngẫm sau Q1", StartDate = new DateTime(year, 3, 20), EndDate = new DateTime(year, 3, 28), Category = "Review" },
-            new CalendarEventModel { Title = "Hàn cướp", StartDate = new DateTime(year, 3, 24), EndDate = new DateTime(year, 3, 29), Category = "Travel" },
+    public Task<IEnumerable<MementoModel>> GetAnnualEventsAsync(int year)
+    {
+        var mementos = new List<MementoModel>
+        {
+            new MementoModel { Id = _idCounter++, Title = "Annual Plan", StartDate = new DateTime(year, 2, 16), EndDate = new DateTime(year, 2, 17), Color = "Planning" },
             
-            new CalendarEventModel { Title = "Health Check", StartDate = new DateTime(year, 4, 3), EndDate = new DateTime(year, 4, 4), Category = "Health" },
-            new CalendarEventModel { Title = "Project Alpha Review", StartDate = new DateTime(year, 4, 6), EndDate = new DateTime(year, 4, 8), Category = "Work" },
-            new CalendarEventModel 
-            { 
-                Title = "Product Launch Cycle", 
-                StartDate = new DateTime(year, 4, 10), 
-                EndDate = new DateTime(year, 4, 28), 
-                Category = "Work",
-                Phases = new List<CalendarEventPhaseModel>
-                {
-                    new CalendarEventPhaseModel { Title = "Preparation", StartDate = new DateTime(year, 4, 10), EndDate = new DateTime(year, 4, 14), Category = "Work" },
-                    new CalendarEventPhaseModel { Title = "Main Event", StartDate = new DateTime(year, 4, 18), EndDate = new DateTime(year, 4, 22), Category = "Work" },
-                    new CalendarEventPhaseModel { Title = "Wrap-up", StartDate = new DateTime(year, 4, 25), EndDate = new DateTime(year, 4, 28), Category = "Work" }
-                }
-            },
-            new CalendarEventModel { Title = "Spring Conference", StartDate = new DateTime(year, 4, 13), EndDate = new DateTime(year, 4, 17), Category = "Conference" },
-            new CalendarEventModel { Title = "Family Weekend", StartDate = new DateTime(year, 4, 18), EndDate = new DateTime(year, 4, 19), Category = "Personal" },
-            new CalendarEventModel { Title = "Security Audit", StartDate = new DateTime(year, 4, 21), EndDate = new DateTime(year, 4, 23), Category = "Work" },
-            new CalendarEventModel { Title = "New Tech Research", StartDate = new DateTime(year, 4, 25), EndDate = new DateTime(year, 4, 30), Category = "Learning" },
+            new MementoModel { Id = _idCounter++, Title = "ST1-T...", StartDate = new DateTime(year, 3, 2), EndDate = new DateTime(year, 3, 3), Color = "Learning" },
+            new MementoModel { Id = _idCounter++, Title = "CVS-...", StartDate = new DateTime(year, 3, 4), EndDate = new DateTime(year, 3, 5), Color = "Learning" },
+            new MementoModel { Id = _idCounter++, Title = "ST1-T...", StartDate = new DateTime(year, 3, 6), EndDate = new DateTime(year, 3, 7), Color = "Learning" },
+            new MementoModel { Id = _idCounter++, Title = "RC-12345", StartDate = new DateTime(year, 3, 9), EndDate = new DateTime(year, 3, 11), Color = "Release" },
+            new MementoModel { Id = _idCounter++, Title = "di au...", StartDate = new DateTime(year, 3, 9), EndDate = new DateTime(year, 3, 10), Color = "Competition" },
+            new MementoModel { Id = _idCounter++, Title = "ST1-T...", StartDate = new DateTime(year, 3, 11), EndDate = new DateTime(year, 3, 12), Color = "Learning" },
+
+            new MementoModel { Id = _idCounter++, Title = "RC-6", StartDate = new DateTime(year, 3, 9), EndDate = new DateTime(year, 3, 9), Color = "Release" },
+            new MementoModel { Id = _idCounter++, Title = "RC-7", StartDate = new DateTime(year, 3, 10), EndDate = new DateTime(year, 3, 11), Color = "Release" },
+            new MementoModel { Id = _idCounter++, Title = "Suy ngẫm sau Q1", StartDate = new DateTime(year, 3, 20), EndDate = new DateTime(year, 3, 28), Color = "Review" },
+            new MementoModel { Id = _idCounter++, Title = "Hàn cướp", StartDate = new DateTime(year, 3, 24), EndDate = new DateTime(year, 3, 29), Color = "Travel" },
             
-            new CalendarEventModel { Title = "Hackathon", StartDate = new DateTime(year, 5, 8), EndDate = new DateTime(year, 5, 14), Category = "Work" },
+            new MementoModel { Id = _idCounter++, Title = "Health Check", StartDate = new DateTime(year, 4, 3), EndDate = new DateTime(year, 4, 4), Color = "Health" },
+            new MementoModel { Id = _idCounter++, Title = "Project Alpha Review", StartDate = new DateTime(year, 4, 6), EndDate = new DateTime(year, 4, 8), Color = "Work" },
             
-            new CalendarEventModel { Title = "Data Release", StartDate = new DateTime(year, 6, 1), EndDate = new DateTime(year, 6, 2), Category = "Release" },
+            new MementoModel { Id = _idCounter++, Title = "Spring Conference", StartDate = new DateTime(year, 4, 13), EndDate = new DateTime(year, 4, 17), Color = "Conference" },
+            new MementoModel { Id = _idCounter++, Title = "Family Weekend", StartDate = new DateTime(year, 4, 18), EndDate = new DateTime(year, 4, 19), Color = "Personal" },
+            new MementoModel { Id = _idCounter++, Title = "Security Audit", StartDate = new DateTime(year, 4, 21), EndDate = new DateTime(year, 4, 23), Color = "Work" },
+            new MementoModel { Id = _idCounter++, Title = "New Tech Research", StartDate = new DateTime(year, 4, 25), EndDate = new DateTime(year, 4, 30), Color = "Learning" },
             
-            new CalendarEventModel { Title = "Mid-Year Review", StartDate = new DateTime(year, 7, 1), EndDate = new DateTime(year, 7, 4), Category = "Review" },
+            new MementoModel { Id = _idCounter++, Title = "Hackathon", StartDate = new DateTime(year, 5, 8), EndDate = new DateTime(year, 5, 14), Color = "Work" },
             
-            new CalendarEventModel { Title = "Summer Vacation", StartDate = new DateTime(year, 8, 8), EndDate = new DateTime(year, 8, 28), Category = "Travel" },
+            new MementoModel { Id = _idCounter++, Title = "Data Release", StartDate = new DateTime(year, 6, 1), EndDate = new DateTime(year, 6, 2), Color = "Release" },
             
-            new CalendarEventModel { Title = "Product Launch Prep", StartDate = new DateTime(year, 9, 1), EndDate = new DateTime(year, 9, 5), Category = "Work" },
-            new CalendarEventModel { Title = "Award Ceremony", StartDate = new DateTime(year, 9, 19), EndDate = new DateTime(year, 9, 21), Category = "Event" },
+            new MementoModel { Id = _idCounter++, Title = "Mid-Year Review", StartDate = new DateTime(year, 7, 1), EndDate = new DateTime(year, 7, 4), Color = "Review" },
             
-            new CalendarEventModel { Title = "Skill Development Program", StartDate = new DateTime(year, 10, 1), EndDate = new DateTime(year, 11, 14), Category = "Learning" },
+            new MementoModel { Id = _idCounter++, Title = "Summer Vacation", StartDate = new DateTime(year, 8, 8), EndDate = new DateTime(year, 8, 28), Color = "Travel" },
             
-            new CalendarEventModel { Title = "Product Launch", StartDate = new DateTime(year, 11, 18), EndDate = new DateTime(year, 11, 20), Category = "Release" },
-            new CalendarEventModel { Title = "Holiday Travel", StartDate = new DateTime(year, 11, 19), EndDate = new DateTime(year, 11, 28), Category = "Travel" },
+            new MementoModel { Id = _idCounter++, Title = "Product Launch Prep", StartDate = new DateTime(year, 9, 1), EndDate = new DateTime(year, 9, 5), Color = "Work" },
+            new MementoModel { Id = _idCounter++, Title = "Award Ceremony", StartDate = new DateTime(year, 9, 19), EndDate = new DateTime(year, 9, 21), Color = "Event" },
             
-            new CalendarEventModel { Title = "Year End Review", StartDate = new DateTime(year, 12, 5), EndDate = new DateTime(year, 12, 17), Category = "Review" },
-            new CalendarEventModel { Title = "Personal Reflection", StartDate = new DateTime(year, 12, 22), EndDate = new DateTime(year, 12, 29), Category = "Personal" },
+            new MementoModel { Id = _idCounter++, Title = "Skill Development Program", StartDate = new DateTime(year, 10, 1), EndDate = new DateTime(year, 11, 14), Color = "Learning" },
+            
+            new MementoModel { Id = _idCounter++, Title = "Product Launch", StartDate = new DateTime(year, 11, 18), EndDate = new DateTime(year, 11, 20), Color = "Release" },
+            new MementoModel { Id = _idCounter++, Title = "Holiday Travel", StartDate = new DateTime(year, 11, 19), EndDate = new DateTime(year, 11, 28), Color = "Travel" },
+            
+            new MementoModel { Id = _idCounter++, Title = "Year End Review", StartDate = new DateTime(year, 12, 5), EndDate = new DateTime(year, 12, 17), Color = "Review" },
+            new MementoModel { Id = _idCounter++, Title = "Personal Reflection", StartDate = new DateTime(year, 12, 22), EndDate = new DateTime(year, 12, 29), Color = "Personal" },
         };
 
-        events.AddRange(GetPsychologyEvents(year));
+        // Add Product Launch Cycle with children
+        int launchCycleId = _idCounter++;
+        mementos.Add(new MementoModel { Id = launchCycleId, Title = "Product Launch Cycle", StartDate = new DateTime(year, 4, 10), EndDate = new DateTime(year, 4, 28), Color = "Work" });
+        mementos.Add(new MementoModel { Id = _idCounter++, Title = "Preparation", StartDate = new DateTime(year, 4, 10), EndDate = new DateTime(year, 4, 14), Color = "Work", ParentId = launchCycleId });
+        mementos.Add(new MementoModel { Id = _idCounter++, Title = "Main Event", StartDate = new DateTime(year, 4, 18), EndDate = new DateTime(year, 4, 22), Color = "Work", ParentId = launchCycleId });
+        mementos.Add(new MementoModel { Id = _idCounter++, Title = "Wrap-up", StartDate = new DateTime(year, 4, 25), EndDate = new DateTime(year, 4, 28), Color = "Work", ParentId = launchCycleId });
 
-        return Task.FromResult(events.AsEnumerable());
+        mementos.AddRange(GetPsychologyEvents(year));
+
+        return Task.FromResult(mementos.AsEnumerable());
     }
 
-    private IEnumerable<CalendarEventModel> GetPsychologyEvents(int year)
+    private IEnumerable<MementoModel> GetPsychologyEvents(int year)
     {
-        // Psychology study spans from 2025 to 2026
-        if (year != 2025 && year != 2026) return Enumerable.Empty<CalendarEventModel>();
+        if (year != 2025 && year != 2026) return Enumerable.Empty<MementoModel>();
 
         var allPsychologyDates = new List<(int Year, int Month, int Day)>
         {
@@ -92,32 +87,42 @@ public class MockCalendarService : ICalendarService
             (2026, 4, 1), (2026, 4, 3), (2026, 4, 6), (2026, 4, 8), (2026, 4, 13)
         };
 
-        var parentEvent = new CalendarEventModel
+        int psychologyTopicId = 1000;
+        var results = new List<MementoModel>
         {
-            Id = "psychology-study",
-            Title = "Học tâm lý học",
-            StartDate = new DateTime(2025, 9, 11),
-            EndDate = new DateTime(2026, 4, 13),
-            Category = "Psychology",
-            Phases = allPsychologyDates.Select(d => new CalendarEventPhaseModel
+            new MementoModel
             {
-                Title = "Học", // Single session
-                StartDate = new DateTime(d.Year, d.Month, d.Day),
-                EndDate = new DateTime(d.Year, d.Month, d.Day),
-                Category = "Psychology"
-            }).ToList()
+                Id = psychologyTopicId,
+                Title = "Học tâm lý học",
+                StartDate = new DateTime(2025, 9, 11),
+                EndDate = new DateTime(2026, 4, 13),
+                Color = "Psychology"
+            }
         };
 
-        return new[] { parentEvent };
+        foreach (var d in allPsychologyDates)
+        {
+            results.Add(new MementoModel
+            {
+                Id = _idCounter++,
+                Title = "Học",
+                StartDate = new DateTime(d.Year, d.Month, d.Day),
+                EndDate = new DateTime(d.Year, d.Month, d.Day),
+                Color = "Psychology",
+                ParentId = psychologyTopicId
+            });
+        }
+
+        return results;
     }
 
-    public async Task<IEnumerable<CalendarEventModel>> GetMonthlyEventsAsync(int year, int month)
+    public async Task<IEnumerable<MementoModel>> GetMonthlyEventsAsync(int year, int month)
     {
-        var allEvents = await GetAnnualEventsAsync(year);
+        var allMementos = await GetAnnualEventsAsync(year);
         var monthStart = new DateTime(year, month, 1);
         int daysInMonth = DateTime.DaysInMonth(year, month);
         var monthEnd = new DateTime(year, month, daysInMonth);
 
-        return allEvents.Where(e => e.StartDate.Date <= monthEnd && e.EndDate.Date >= monthStart);
+        return allMementos.Where(m => m.StartDate.Date <= monthEnd && m.EndDate.Date >= monthStart);
     }
 }

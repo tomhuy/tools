@@ -55,6 +55,9 @@ public partial class MonthlyCalendarViewModel : ObservableObject
     [ObservableProperty] private bool _isShowEditingTag;
     public ObservableCollection<SelectableTagViewModel> EditingMementoTags { get; } = new();
 
+    [ObservableProperty] private bool _isTagManagerOpen;
+    public TagManagementViewModel TagManager { get; }
+
     public string[] ColorPalette { get; } = new[]
     {
         "#FFFFFF", "#F2F2F2", "#D9D9D9", "#D9E1F2", "#FCE4D6", "#FDE9D9",
@@ -68,6 +71,9 @@ public partial class MonthlyCalendarViewModel : ObservableObject
         _calendarService = calendarService;
         _navigationService = navigationService;
         
+        TagManager = new TagManagementViewModel(calendarService);
+        TagManager.TagsUpdated += async () => await RefreshAvailableTagsAsync();
+
         CurrentYear = 2026; // Match mockup year for consistency
         
         InitializeAvailableMonths();
@@ -437,6 +443,45 @@ public partial class MonthlyCalendarViewModel : ObservableObject
         CurrentEditingMemento.Color = color;
         await _calendarService.SaveMementoAsync(CurrentEditingMemento);
         IsColorPopupOpen = false;
+        await LoadDataAsync();
+    }
+
+    [RelayCommand]
+    private async Task OpenTagManager()
+    {
+        await TagManager.InitializeAsync();
+        IsTagManagerOpen = true;
+    }
+
+    [RelayCommand]
+    private void CloseTagManager()
+    {
+        IsTagManagerOpen = false;
+    }
+
+    private async Task RefreshAvailableTagsAsync()
+    {
+        var selectedIds = AvailableTags.Where(t => t.IsSelected).Select(t => t.Id).ToHashSet();
+        
+        var tags = await _calendarService.GetTagsAsync();
+        
+        System.Windows.Application.Current.Dispatcher.Invoke(() =>
+        {
+            AvailableTags.Clear();
+            foreach (var tag in tags)
+            {
+                var selectableTag = new SelectableTagViewModel
+                {
+                    Id = tag.Id,
+                    Name = tag.Name,
+                    Color = tag.Color,
+                    IsSelected = selectedIds.Contains(tag.Id)
+                };
+                selectableTag.SelectedChanged += (s, e) => _ = LoadDataAsync();
+                AvailableTags.Add(selectableTag);
+            }
+        });
+        
         await LoadDataAsync();
     }
 }

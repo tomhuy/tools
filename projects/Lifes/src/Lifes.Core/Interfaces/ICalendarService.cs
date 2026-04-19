@@ -11,4 +11,6 @@ public interface ICalendarService
     Task<IEnumerable<TagModel>> GetTagsAsync();
     Task SaveMementoAsync(MementoModel memento);
     Task DeleteMementoAsync(int id);
+    Task SaveTagAsync(TagModel tag);
+    Task DeleteTagAsync(int id);
 }

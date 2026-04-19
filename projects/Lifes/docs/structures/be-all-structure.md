@@ -114,6 +114,9 @@ src/
 │   │   │   ├── AnnualCalendarViewModel.cs
 │   │   │   ├── MonthlyCalendarView.xaml
 │   │   │   ├── MonthlyCalendarViewModel.cs
+│   │   │   ├── TagManagementView.xaml      # US-9.5 (Refactored)
+│   │   │   ├── TagManagementView.xaml.cs   # US-9.5
+│   │   │   ├── TagManagementViewModel.cs   # US-9.5
 │   │   │   ├── ActivityHeatmapView.xaml    # US-8.6
 │   │   │   ├── ActivityHeatmapViewModel.cs # US-8.6
 │   │   │   └── Models/
@@ -247,11 +250,14 @@ src/
 
 **Key Components**:
 - `AnnualCalendarViewModel` & `MonthlyCalendarViewModel`
+- `TagManagementViewModel` (Reusable CRUD logic component)
+- `TagManagementView.xaml` (Shared UI component)
 - `ActivityHeatmapViewModel` (Event-centric dot grid)
 - `CalendarEventModel` with `Phases` (Multi-phase tracking)
 - **Tagging & Hierarchical Filtering** (US-9.2)
 - **Monthly Calendar CRUD & Color Picker** (US-9.3)
 - **Edit Parent Mementos & Tags** (US-9.4)
+- **Tag Manager Refactor (US-9.5)**: Decoupled UI and logic into a dedicated component.
 - Gantt-style timeline rendering in XAML
 - Hamburger Navigation integration
 
@@ -647,6 +653,6 @@ reportgenerator -reports:**/coverage.cobertura.xml -targetdir:coverage-report -r
 
 ---
 
-**Document Version**: 1.4.0  
+**Document Version**: 1.5.0  
 **Last Updated**: 2026-04-18  
-**Status**: ✅ Active (86% Complete - US-1.1, US-1.2, US-1.2.1, US-1.3, US-2.1, US-5.1, US-7.1, US-8.4, US-8.5, US-9.1, US-9.2, US-9.3, US-9.4 Done)
+**Status**: ✅ Active (88% Complete - US-1.1, US-1.2, US-1.2.1, US-1.3, US-2.1, US-5.1, US-7.1, US-8.4, US-8.5, US-9.1, US-9.2, US-9.3, US-9.4, US-9.5 Done)

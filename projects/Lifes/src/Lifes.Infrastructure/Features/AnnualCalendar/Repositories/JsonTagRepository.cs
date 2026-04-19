@@ -77,6 +77,38 @@ public class JsonTagRepository : ITagRepository
     {
         return Task.FromResult<IEnumerable<TagModel>>(_tags);
     }
+    
+    public Task SaveAsync(TagModel tag)
+    {
+        if (tag.Id == 0)
+        {
+            tag.Id = _tags.Any() ? _tags.Max(t => t.Id) + 1 : 1;
+            _tags.Add(tag);
+        }
+        else
+        {
+            var existing = _tags.FirstOrDefault(t => t.Id == tag.Id);
+            if (existing != null)
+            {
+                existing.Name = tag.Name;
+                existing.Color = tag.Color;
+            }
+        }
+        
+        SaveData(_tags);
+        return Task.CompletedTask;
+    }
+    
+    public Task DeleteAsync(int id)
+    {
+        var tag = _tags.FirstOrDefault(t => t.Id == id);
+        if (tag != null)
+        {
+            _tags.Remove(tag);
+            SaveData(_tags);
+        }
+        return Task.CompletedTask;
+    }
 
     private List<TagModel> GenerateSeedData()
     {

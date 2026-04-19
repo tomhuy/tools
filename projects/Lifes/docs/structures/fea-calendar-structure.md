@@ -9,7 +9,9 @@ Công cụ Calendar cung cấp hai chế độ hiển thị: **Annual View** (nh
 - `AnnualCalendarView.xaml` - Hiển thị biểu đồ Gantt cho toàn bộ năm (12 tháng). Sử dụng ItemsControl để render các dải màu sự kiện.
 - `AnnualCalendarViewModel.cs` - Quản lý dữ liệu sự kiện năm, xử lý điều hướng thông qua `INavigationService`.
 - `MonthlyCalendarView.xaml` - Hiển thị chi tiết theo hàng dọc cho một hoặc nhiều tháng được chọn.
-- `MonthlyCalendarViewModel.cs` - Quản lý danh sách tháng được chọn (`AvailableMonths`), logic multi-select và render event phases.
+- `MonthlyCalendarViewModel.cs` - Quản lý danh sách tháng được chọn (`AvailableMonths`), logic multi-select và render event phases. Điều phối hiển thị TagManager.
+- `TagManagementView.xaml` - Giao diện UserControl quản lý Tag, bao gồm danh sách tag, form chỉnh sửa và bảng màu palette.
+- `TagManagementViewModel.cs` - Đóng gói toàn bộ logic CRUD cho Tag, bảng màu và thông báo cập nhật qua sự kiện.
 - `ActivityHeatmapView.xaml` - Hiển thị "Activity Tracker" dạng lưới ô vuông (Dot Grid), gom nhóm dữ liệu theo sự kiện (Event-centric).
 - `ActivityHeatmapViewModel.cs` - Phân loại dữ liệu heatmap theo đầu mục hành động, quản lý hiển thị 31 ngày đồng bộ cho nhiều tháng.
 - `SelectableTagViewModel.cs` - View model phụ trợ cho việc chọn tag trong bộ lọc UI.
@@ -35,6 +37,10 @@ Công cụ Calendar cung cấp hai chế độ hiển thị: **Annual View** (nh
 ### CalendarEventModel
 - **Location**: `src/Lifes.Core/Models/CalendarEventModel.cs`
 - **Purpose**: Chứa logic dữ liệu cơ bản. Thuộc tính `Phases` cho phép một sự kiện không chỉ là một khối duy nhất mà là một tập hợp các công việc con.
+
+### TagManagementViewModel
+- **Location**: `src/Lifes.Presentation.WPF/Features/AnnualCalendar/TagManagementViewModel.cs`
+- **Purpose**: Đóng gói logic CRUD Tag. Nó phát ra sự kiện `TagsUpdated` để thông báo cho các View cha (như Monthly Calendar) thực hiện làm mới bộ lọc UI khi dữ liệu Tag thay đổi.
 
 ## Data Flow
 1. `MockCalendarService` trả về danh sách `CalendarEventModel`.

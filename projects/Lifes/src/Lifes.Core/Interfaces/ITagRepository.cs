@@ -7,4 +7,6 @@ namespace Lifes.Core.Interfaces;
 public interface ITagRepository
 {
     Task<IEnumerable<TagModel>> GetAllAsync();
+    Task SaveAsync(TagModel tag);
+    Task DeleteAsync(int id);
 }

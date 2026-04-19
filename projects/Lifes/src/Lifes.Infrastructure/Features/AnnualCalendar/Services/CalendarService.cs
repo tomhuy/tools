@@ -66,14 +66,24 @@ public class CalendarService : ICalendarService
         return mementos;
     }
 
-    public async Task SaveMementoAsync(MementoModel memento)
+    public Task SaveMementoAsync(MementoModel memento)
     {
-        await _mementoRepository.SaveAsync(memento);
+        return _mementoRepository.SaveAsync(memento);
     }
 
-    public async Task DeleteMementoAsync(int id)
+    public Task DeleteMementoAsync(int id)
     {
-        await _mementoRepository.DeleteAsync(id);
+        return _mementoRepository.DeleteAsync(id);
+    }
+
+    public Task SaveTagAsync(TagModel tag)
+    {
+        return _tagRepository.SaveAsync(tag);
+    }
+
+    public Task DeleteTagAsync(int id)
+    {
+        return _tagRepository.DeleteAsync(id);
     }
 
     private async Task FetchChildrenRecursiveAsync(List<MementoModel> mementos)

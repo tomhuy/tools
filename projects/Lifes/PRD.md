@@ -1344,56 +1344,31 @@ private string GetLevelColor(string level)
 
 ## 🗺️ Roadmap
 
-### Phase 1: Version Increase Tool - v1.0.0 (Current Sprint)
-
-**Tool 1: Version Increase Tool**
-- ✅ Project scanning và filtering (US-1.1) - Completed 2026-02-04
-- ✅ Version parsing và increment logic (yyyy.M.d.{number}) (US-1.2) - Completed 2026-02-04
-- ✅ Batch update multiple .csproj files (US-1.2) - Completed 2026-02-04
-- ✅ Search/Filter projects (US-1.2.1) - Completed 2026-02-04
-- ✅ Save last directory (US-1.2.1) - Completed 2026-02-04
-- ✅ Git integration (commit & push) (US-1.3) - Completed 2026-02-08
+### Phase 1: Version Increase Tool - v1.0.0 (Completed)
+- ✅ Project scanning và filtering (US-1.1)
+- ✅ Version parsing và increment logic (yyyy.M.d.{number}) (US-1.2)
+- ✅ Batch update multiple .csproj files (US-1.2)
+- ✅ Search/Filter projects (US-1.2.1)
+- ✅ Save last directory (US-1.2.1)
+- ✅ Git integration (commit & push) (US-1.3)
+- ✅ MVVM architecture with WPF
+- ✅ Modern dark theme UI (Supabase-inspired)
 - 📋 Real-time logging with color-coded levels (US-1.4) - Planned
-- ✅ MVVM architecture with WPF - Completed 2026-02-04
-- ✅ Modern dark theme UI (Supabase-inspired) - Completed 2026-02-04
 - 📋 Export logs to file (US-1.4) - Planned
 - ⏳ Settings persistence (US-1.5) - Future Enhancement
 
-**Status:** 🚧 In Development (65% Complete - US-1.1, US-1.2, US-1.2.1 Done)
+### Phase 2: Testing & Infrastructure - v1.1.0 (Completed)
+- ✅ Add Testing Layer Infrastructure (US-2.1)
+- ✅ Unit & Integration Tests setup
+- ✅ Code Coverage reporting configuration
+- ✅ Documentation & Testing Guidelines
 
----
-
-### Phase 2: Testing & Infrastructure - v1.1.0 (Current Sprint)
-
-- ✅ Add Testing Layer Infrastructure (US-2.1) - Completed 2026-02-06
-- ✅ Unit & Integration Tests setup - Completed 2026-02-06
-- ✅ Code Coverage reporting configuration - Completed 2026-02-06
-- ✅ Documentation & Testing Guidelines - Completed 2026-02-06
-
-**Status:** ✅ Completed (100% Complete)
-
----
-
-### Phase 5 (Sprint 5): UI/UX & Calendar Enhancements - v1.1.0
-
-- ✅ Tool Navigation Menu with hover dropdown (US-5.1) - Completed 2026-04-07
-- ✅ Dashboard Chart Layout with Polymorphism (US-6.1) - Completed 2026-04-12
-- ✅ Document Management Tracker (US-7.1) - Completed 2026-04-14
-- ✅ Advanced Calendar Selection & Event Phases (US-8.4) - Completed 2026-04-16
-- ✅ Hamburger Navigation Menu (US-8.5) - Completed 2026-04-16
-
-**Status:** ✅ Completed (100% Complete)
-
----
-
-### Phase 3: Additional Tools - v1.2.0 (Next Sprint)
-
+### Phase 3: Additional Tools - v1.2.0 (Planning)
 **Tool 2: Build & Deploy Tool**
 - 📋 Build multiple projects in parallel
 - 📋 Deploy to multiple environments
 - 📋 Health check after deployment
 - 📋 Rollback capability
-- 📋 Build logs và deployment history
 
 **Tool 3: Database Migration Tool**
 - 📋 Run EF migrations across multiple databases
@@ -1401,119 +1376,52 @@ private string GetLevelColor(string level)
 - 📋 Database backup before migration
 - 📋 Migration history tracking
 
-**Status:** 📝 Planning
-
----
 
 ### Phase 4: Enhanced Features - v1.3.0 (Future)
-
 **Version Tool Enhancements:**
 - 📋 Preview changes before applying
 - 📋 Dry-run mode
 - 📋 Version history per project
 - 📋 Undo last version update
 - 📋 Custom version format support
-- 📋 Batch operations history
 
 **Tool 4: Configuration Manager**
 - 📋 Update appsettings.json across projects
 - 📋 Environment-specific configs
 - 📋 Connection string management
-- 📋 Secret management integration
 
-### Phase 6: Memento Tagging & Hierarchical Filtering - v2.1.0 (Current)
-- ✅ **Tagging System**: Categorize mementos with multiple tags (Work, Health, Personal, etc.)
-- ✅ **Hierarchical (Cascade) Filtering**: Automatically include all child notes if the parent topic matches the selected tag.
-- ✅ **Advanced Search**: Filter calendar views (Monthly, Annual, Heatmap) by tags.
-- ✅ **Repository Pattern Migration**: Decoupled data access from business logic.
+### Phase 5: UI/UX & Calendar Enhancements - v1.1.0 (Completed)
+- ✅ Tool Navigation Menu with hover dropdown (US-5.1)
+- ✅ Dashboard Chart Layout with Polymorphism (US-6.1)
+- ✅ Document Management Tracker (US-7.1)
+- ✅ Advanced Calendar Selection & Event Phases (US-8.4)
+- ✅ Hamburger Navigation Menu (US-8.5)
+
+### Phase 6: Memento Tagging & Hierarchical Filtering - v2.1.0 (In Development)
+- ✅ **Tagging System**: Categorize mementos with multiple tags (Work, Health, Personal, etc. US-9.2)
+- ✅ **Hierarchical Filtering**: Automatically include all child notes if the parent topic matches the selected tag.
 - ✅ **Monthly Calendar CRUD**: Add, edit, delete, and color-pick mementos directly on the monthly grid (US-9.3).
 - ✅ **Edit Parent Mementos & Tags**: Full editing of topics and tag management (US-9.4).
-
-**Tool 5: Dependency Updater**
-- 📋 Scan NuGet package versions
-- 📋 Bulk update packages
-- 📋 Check for vulnerabilities
-- 📋 Generate dependency report
-
-**Status:** 💡 Ideas
+- ✅ **Tag Manager Component**: Comprehensive UI for managing tags, **refactored into a reusable component** (US-9.5).
 
 ---
 
-### Phase 5: Automation & CI/CD - v2.0.0 (Future)
-
-**CLI Version:**
-- 📋 Command-line interface for all tools
-- 📋 Support for CI/CD pipelines
-- 📋 Azure DevOps / GitHub Actions integration
-- 📋 Automated deployment workflows
-
-**Reporting & Analytics:**
-- 📋 Deployment dashboard
-- 📋 Version history analytics
-- 📋 Build success rate tracking
-- 📋 Performance metrics
-
-**Status:** 🔮 Vision
+## 🧪 Testing Strategy (Optimized)
+- ✅ Unit & Integration test coverage for core services.
+- ✅ Manual UI/UX verification for new Calendar components.
+- ✅ Validation of JSON persistence for Tags and Mementos.
 
 ---
 
 ## 📝 Appendix
 
 ### Glossary
-
 | Term | Definition |
 |------|------------|
-| **ETL** | Extract, Transform, Load - quy trình xử lý data |
-| **.csproj** | C# project file chứa metadata và configuration |
-| **AssemblyVersion** | Version number của assembly (DLL/EXE) |
-| **FileVersion** | File version hiển thị trong Windows properties |
 | **MVVM** | Model-View-ViewModel - UI design pattern cho WPF |
-| **ObservableProperty** | Attribute tạo property với change notification tự động |
-| **RelayCommand** | Command pattern implementation cho MVVM |
-| **LibGit2Sharp** | .NET library để tương tác với Git repositories |
-| **Semantic Versioning** | Version format: Major.Minor.Patch.Build |
-| **Build Number** | Số thứ tự build trong ngày (yyyy.M.d.{number}) |
+| **Memento** | Unified hierarchical note/event model. |
+| **Tagging** | Phân loại memento bằng các từ khóa có màu sắc. |
 
-### Version Format Explained
-
-**Format:** `yyyy.M.d.{number}`
-
-| Component | Description | Example |
-|-----------|-------------|---------|
-| `yyyy` | 4-digit year | 2026 |
-| `M` | Month without leading zero | 2 (February), 12 (December) |
-| `d` | Day without leading zero | 3, 15, 28 |
-| `{number}` | Build number (increments daily) | 1, 2, 3... |
-
-**Examples:**
-- `2026.2.3.1` - First build on Feb 3, 2026
-- `2026.2.3.5` - Fifth build on Feb 3, 2026
-- `2026.12.25.1` - First build on Dec 25, 2026
-
-### References
-
-**Technical Documentation:**
-- [MVVM Pattern](https://docs.microsoft.com/en-us/dotnet/desktop/wpf/data/data-binding-overview)
-- [CommunityToolkit.Mvvm](https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/)
-- [LibGit2Sharp Documentation](https://github.com/libgit2/libgit2sharp)
-- [Serilog Documentation](https://serilog.net/)
-- [SOLID Principles](https://en.wikipedia.org/wiki/SOLID)
-
-**.NET Documentation:**
-- [WPF Documentation](https://docs.microsoft.com/en-us/dotnet/desktop/wpf/)
-- [System.Xml.Linq (XDocument)](https://docs.microsoft.com/en-us/dotnet/api/system.xml.linq.xdocument)
-- [Dependency Injection in .NET](https://docs.microsoft.com/en-us/dotnet/core/extensions/dependency-injection)
-
-### Contact
-
-| Role | Name | Email |
-|------|------|-------|
-| Product Owner | Development Team | - |
-| Tech Lead | TBD | - |
-| DevOps Lead | TBD | - |
-
----
-
-**Document Version:** 1.5.3
-**Last Updated:** 2026-04-18
-**Status:** ✅ Active (86% Complete - US-9.1 to US-9.4 Done)
+**Document Version:** 1.6.0
+**Last Updated:** 2026-04-19
+**Status:** ✅ Active (92% Complete - Tag Management Refactored & US-9.5 Finalized)

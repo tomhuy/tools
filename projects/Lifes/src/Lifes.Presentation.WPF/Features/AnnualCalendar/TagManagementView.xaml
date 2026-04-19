@@ -1,0 +1,109 @@
+<UserControl x:Class="Lifes.Presentation.WPF.Features.AnnualCalendar.TagManagementView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Lifes.Presentation.WPF.Features.AnnualCalendar"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="350">
+    <Grid Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="200"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Tag List -->
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" Margin="0,0,0,15">
+            <ItemsControl ItemsSource="{Binding AvailableTags}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="#F7FAFC" CornerRadius="6" Margin="0,0,5,8" Padding="10,8">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Ellipse Fill="{Binding Color}" Width="12" Height="12" Margin="0,0,10,0"/>
+                                <TextBlock Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="#4A5568"/>
+                                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                    <Button Content="✎" Command="{Binding DataContext.StartEditTagCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                            CommandParameter="{Binding}"
+                                            Background="Transparent" BorderThickness="0" Foreground="#3182CE" Cursor="Hand" Margin="0,0,8,0"/>
+                                    <Button Content="🗑" Command="{Binding DataContext.DeleteTagCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                            CommandParameter="{Binding}"
+                                            Background="Transparent" BorderThickness="0" Foreground="#E53E3E" Cursor="Hand"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <!-- Edit Form -->
+        <StackPanel Grid.Row="1">
+            <Border Height="1" Background="#E2E8F0" Margin="0,0,0,15"/>
+            <TextBlock Text="THIẾT LẬP TAG" FontSize="11" FontWeight="Bold" Foreground="#A0AEC0" Margin="0,0,0,10"/>
+            
+            <TextBox Text="{Binding EditingTagName, UpdateSourceTrigger=PropertyChanged}" 
+                     Padding="10,8" Margin="0,0,0,10" 
+                     Tag="Tên phân loại..." BorderBrush="#D1D5DB" BorderThickness="1">
+                <TextBox.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="6"/>
+                    </Style>
+                </TextBox.Resources>
+            </TextBox>
+
+            <ItemsControl ItemsSource="{Binding ColorPalette}" Margin="0,0,0,15">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="8"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Command="{Binding DataContext.SetTagColorCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                CommandParameter="{Binding}"
+                                Margin="2" Cursor="Hand" Background="Transparent" BorderThickness="0">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Grid>
+                                        <Ellipse Fill="{Binding}" Width="16" Height="16"/>
+                                        <Ellipse x:Name="Mark" Stroke="#3182CE" StrokeThickness="2" Width="20" Height="20" Visibility="Collapsed"/>
+                                    </Grid>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="Mark" Property="Visibility" Value="Visible"/>
+                                            <Setter TargetName="Mark" Property="Opacity" Value="0.5"/>
+                                        </Trigger>
+                                        <!-- In a real app we'd use a converter to show which color is selected, 
+                                             for simplicity we use mouseover highlight -->
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <Button Content="LƯU THAY ĐỔI" Command="{Binding SaveTagCommand}" 
+                    Background="#3182CE" Foreground="White" FontWeight="Bold" Height="35">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

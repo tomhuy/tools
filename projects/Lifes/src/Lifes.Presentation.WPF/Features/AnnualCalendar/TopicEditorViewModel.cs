@@ -12,24 +12,26 @@ using Lifes.Presentation.WPF.Models;
 
 namespace Lifes.Presentation.WPF.Features.AnnualCalendar;
 
-public partial class AddTopicViewModel : ObservableObject
+public partial class TopicEditorViewModel : ObservableObject
 {
     private readonly ICalendarService _calendarService;
 
     public event Action? TopicAdded;
     public event Action? RequestClose;
 
+    [ObservableProperty] private string _headerTitle = "Thêm Chủ đề mới";
     [ObservableProperty] private string _title = string.Empty;
     [ObservableProperty] private DateTime _startDate = DateTime.Today;
     [ObservableProperty] private DateTime _endDate = DateTime.Today;
     [ObservableProperty] private string _selectedColor = "#4472C4"; // Default blue
     [ObservableProperty] private bool _isSaving;
+    [ObservableProperty] private int? _editingMementoId;
 
     public ObservableCollection<SelectableTagViewModel> AvailableTags { get; } = new();
 
     public string[] ColorPalette { get; } = UIConstants.StandardColorPalette;
 
-    public AddTopicViewModel(ICalendarService calendarService)
+    public TopicEditorViewModel(ICalendarService calendarService)
     {
         _calendarService = calendarService;
         _ = InitializeAsync();
@@ -51,6 +53,37 @@ public partial class AddTopicViewModel : ObservableObject
         }
     }
 
+    public void LoadMemento(MementoModel memento)
+    {
+        EditingMementoId = memento.Id;
+        Title = memento.Title;
+        StartDate = memento.StartDate;
+        EndDate = memento.EndDate;
+        SelectedColor = memento.Color ?? "#4472C4";
+        HeaderTitle = "Sửa Chủ đề";
+
+        // Mark selected tags
+        var tagIds = memento.TagIds?.ToHashSet() ?? new HashSet<int>();
+        foreach (var tag in AvailableTags)
+        {
+            tag.IsSelected = tagIds.Contains(tag.Id);
+        }
+    }
+
+    public void Reset()
+    {
+        EditingMementoId = null;
+        Title = string.Empty;
+        StartDate = DateTime.Today;
+        EndDate = DateTime.Today;
+        SelectedColor = "#4472C4";
+        HeaderTitle = "Thêm Chủ đề mới";
+        foreach (var tag in AvailableTags)
+        {
+            tag.IsSelected = false;
+        }
+    }
+
     [RelayCommand]
     private void SetColor(string color)
     {
@@ -65,8 +98,9 @@ public partial class AddTopicViewModel : ObservableObject
         IsSaving = true;
         try
         {
-            var newTopic = new MementoModel
+            var memento = new MementoModel
             {
+                Id = EditingMementoId ?? 0,
                 Title = Title,
                 StartDate = StartDate,
                 EndDate = EndDate,
@@ -77,7 +111,7 @@ public partial class AddTopicViewModel : ObservableObject
                 TagIds = AvailableTags.Where(t => t.IsSelected).Select(t => t.Id).ToList()
             };
 
-            await _calendarService.SaveMementoAsync(newTopic);
+            await _calendarService.SaveMementoAsync(memento);
             
             TopicAdded?.Invoke();
             RequestClose?.Invoke();

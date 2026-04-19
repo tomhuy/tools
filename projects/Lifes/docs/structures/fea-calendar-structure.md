@@ -12,8 +12,8 @@ Công cụ Calendar cung cấp hai chế độ hiển thị: **Annual View** (nh
 - `MonthlyCalendarViewModel.cs` - Quản lý danh sách tháng được chọn (`AvailableMonths`), logic multi-select và render event phases. Điều phối hiển thị TagManager.
 - `TagManagementView.xaml` - Giao diện UserControl quản lý Tag, bao gồm danh sách tag, form chỉnh sửa và bảng màu palette.
 - `TagManagementViewModel.cs` - Đóng gói toàn bộ logic CRUD cho Tag, bảng màu và thông báo cập nhật qua sự kiện.
-- `AddTopicView.xaml` - Form "Thêm Chủ đề mới" với giao diện Light Theme, cho phép nhập tiêu đề, chọn ngày và gán Tags (US-9.6).
-- `AddTopicViewModel.cs` - Quản lý logic nghiệp vụ cho việc tạo Topic, bao gồm validation ngày tháng và liên kết TagIds.
+- `TopicEditorView.xaml` - Form soạn thảo Topic (Thêm mới/Cập nhật) với giao diện Light Theme, cho phép nhập tiêu đề, chọn ngày và gán Tags.
+- `TopicEditorViewModel.cs` - Logic cho Topic Editor (Add/Update, Date validation) và liên kết TagIds.
 - `ActivityHeatmapView.xaml` - Hiển thị "Activity Tracker" dạng lưới ô vuông (Dot Grid), gom nhóm dữ liệu theo sự kiện (Event-centric).
 - `ActivityHeatmapViewModel.cs` - Phân loại dữ liệu heatmap theo đầu mục hành động, quản lý hiển thị 31 ngày đồng bộ cho nhiều tháng.
 - `SelectableTagViewModel.cs` - View model phụ trợ cho việc chọn tag trong bộ lọc UI.

@@ -1,4 +1,4 @@
-<UserControl x:Class="Lifes.Presentation.WPF.Features.AnnualCalendar.AddTopicView"
+<UserControl x:Class="Lifes.Presentation.WPF.Features.AnnualCalendar.TopicEditorView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -11,7 +11,7 @@
             <DropShadowEffect BlurRadius="30" ShadowDepth="10" Opacity="0.1"/>
         </Border.Effect>
         <StackPanel>
-            <TextBlock Text="Thêm Chủ đề mới" Foreground="#2D3748" FontSize="20" FontWeight="Bold" Margin="0,0,0,24"/>
+            <TextBlock Text="{Binding HeaderTitle}" Foreground="#2D3748" FontSize="20" FontWeight="Bold" Margin="0,0,0,24"/>
 
             <!-- Tiêu đề -->
             <StackPanel Margin="0,0,0,16">
@@ -145,7 +145,7 @@
                     </Button.Resources>
                 </Button>
                 
-                <Button Grid.Column="2" Content="Tạo Chủ đề" Command="{Binding SaveCommand}"
+                <Button Grid.Column="2" Content="Lưu thông tin" Command="{Binding SaveCommand}"
                         Width="120" Height="38" 
                         Background="#3ECF8E" Foreground="White" BorderThickness="0" FontWeight="Bold" Cursor="Hand">
                     <Button.Resources>

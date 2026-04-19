@@ -59,7 +59,7 @@ public partial class MonthlyCalendarViewModel : ObservableObject
     public TagManagementViewModel TagManager { get; }
 
     [ObservableProperty] private bool _isAddTopicOpen;
-    public AddTopicViewModel AddTopicManager { get; }
+    public TopicEditorViewModel TopicEditor { get; }
 
     public string[] ColorPalette { get; } = UIConstants.StandardColorPalette;
 
@@ -71,9 +71,9 @@ public partial class MonthlyCalendarViewModel : ObservableObject
         TagManager = new TagManagementViewModel(calendarService);
         TagManager.TagsUpdated += async () => await RefreshAvailableTagsAsync();
 
-        AddTopicManager = new AddTopicViewModel(calendarService);
-        AddTopicManager.TopicAdded += async () => await LoadDataAsync();
-        AddTopicManager.RequestClose += () => IsAddTopicOpen = false;
+        TopicEditor = new TopicEditorViewModel(calendarService);
+        TopicEditor.TopicAdded += async () => await LoadDataAsync();
+        TopicEditor.RequestClose += () => IsAddTopicOpen = false;
 
         CurrentYear = 2026; // Match mockup year for consistency
         
@@ -462,8 +462,23 @@ public partial class MonthlyCalendarViewModel : ObservableObject
     [RelayCommand]
     private void OpenAddTopic()
     {
-        AddTopicManager.Title = string.Empty;
+        TopicEditor.Reset();
         IsAddTopicOpen = true;
+    }
+
+    [RelayCommand]
+    private void EditTopicFull()
+    {
+        if (EditingRow == null) return;
+        
+        // Parent topic ID is in EditingRow.MementoId
+        var parentTopic = _allMementos.FirstOrDefault(m => m.Id == EditingRow.MementoId);
+        if (parentTopic != null)
+        {
+            TopicEditor.LoadMemento(parentTopic);
+            IsAddTopicOpen = true;
+            IsEditPopupOpen = false; // Close quick edit
+        }
     }
 
     private async Task RefreshAvailableTagsAsync()

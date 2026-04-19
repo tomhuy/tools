@@ -115,9 +115,9 @@ src/
 │   │   │   ├── AnnualCalendarViewModel.cs
 │   │   │   ├── MonthlyCalendarView.xaml
 │   │   │   ├── MonthlyCalendarViewModel.cs
-│   │   │   ├── AddTopicView.xaml           # US-9.6
-│   │   │   ├── AddTopicView.xaml.cs        # US-9.6
-│   │   │   ├── AddTopicViewModel.cs        # US-9.6
+│   │   │   ├── TopicEditorView.xaml        # US-9.6, US-9.7
+│   │   │   ├── TopicEditorView.xaml.cs     # US-9.6, US-9.7
+│   │   │   ├── TopicEditorViewModel.cs     # US-9.6, US-9.7
 │   │   │   ├── TagManagementView.xaml      # US-9.5 (Refactored)
 │   │   │   ├── TagManagementView.xaml.cs   # US-9.5
 │   │   │   ├── TagManagementViewModel.cs   # US-9.5

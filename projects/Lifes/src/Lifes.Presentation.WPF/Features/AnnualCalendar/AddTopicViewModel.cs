@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Lifes.Core.Interfaces;
 using Lifes.Core.Models;
+using Lifes.Presentation.WPF.Constants;
 using Lifes.Presentation.WPF.Models;
 
 namespace Lifes.Presentation.WPF.Features.AnnualCalendar;
@@ -26,13 +27,7 @@ public partial class AddTopicViewModel : ObservableObject
 
     public ObservableCollection<SelectableTagViewModel> AvailableTags { get; } = new();
 
-    public string[] ColorPalette { get; } = new[]
-    {
-        "#FFFFFF", "#F2F2F2", "#D9D9D9", "#D9E1F2", "#FCE4D6", "#FDE9D9",
-        "#FFF2CC", "#D9EAD3", "#E2EFDA", "#D9EBF7", "#DAE8FC", "#E1D5E7",
-        "#BFBFBF", "#A5A5A5", "#7B7B7B", "#4472C4", "#ED7D31", "#FF0000",
-        "#FFC000", "#70AD47", "#5B9BD5", "#255E91", "#44546A", "#262626"
-    };
+    public string[] ColorPalette { get; } = UIConstants.StandardColorPalette;
 
     public AddTopicViewModel(ICalendarService calendarService)
     {

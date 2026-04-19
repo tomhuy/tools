@@ -69,3 +69,9 @@
 - [x] Code reviewed
 - [x] Documentation updated
 - [x] User Story marked as complete
+
+---
+
+### 4. Ghi chú Tái cấu trúc (Refactoring)
+- **Centralized Palette**: Bảng màu của Form này đã được chuyển vào `Lifes.Presentation.WPF.Constants.UIConstants` để dùng chung với các Form khác (TagManager, MonthlyCalendar), đảm bảo tính nhất quán trên toàn ứng dụng.
+- **Visual Improvements**: Sử dụng `Ellipse` cho bảng màu để tạo các ô chọn màu hình tròn mềm mại và hiện đại hơn.

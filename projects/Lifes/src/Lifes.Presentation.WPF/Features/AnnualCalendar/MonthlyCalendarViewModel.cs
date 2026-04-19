@@ -61,13 +61,7 @@ public partial class MonthlyCalendarViewModel : ObservableObject
     [ObservableProperty] private bool _isAddTopicOpen;
     public AddTopicViewModel AddTopicManager { get; }
 
-    public string[] ColorPalette { get; } = new[]
-    {
-        "#FFFFFF", "#F2F2F2", "#D9D9D9", "#D9E1F2", "#FCE4D6", "#FDE9D9",
-        "#FFF2CC", "#D9EAD3", "#E2EFDA", "#D9EBF7", "#DAE8FC", "#E1D5E7",
-        "#BFBFBF", "#A5A5A5", "#7B7B7B", "#4472C4", "#ED7D31", "#FF0000",
-        "#FFC000", "#70AD47", "#5B9BD5", "#255E91", "#44546A", "#262626"
-    };
+    public string[] ColorPalette { get; } = UIConstants.StandardColorPalette;
 
     public MonthlyCalendarViewModel(ICalendarService calendarService, INavigationService navigationService)
     {
@@ -326,9 +320,8 @@ public partial class MonthlyCalendarViewModel : ObservableObject
 
     private string GetContrastColor(string hexColor)
     {
-        // Simple logic: if it's one of our light colors, use dark text
-        var lightColors = new HashSet<string> { "#FFFFFF", "#F2F2F2", "#D9D9D9", "#D9E1F2", "#FCE4D6", "#FDE9D9", "#FFF2CC", "#D9EAD3", "#E2EFDA", "#D9EBF7", "#DAE8FC", "#E1D5E7" };
-        return lightColors.Contains(hexColor.ToUpper()) ? "#2D3748" : "#FFFFFF";
+        // Use centralized light colors list
+        return UIConstants.LightColors.Contains(hexColor.ToUpper()) ? "#2D3748" : "#FFFFFF";
     }
 
     [RelayCommand]

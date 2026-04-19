@@ -93,7 +93,7 @@
                             Background="{Binding SelectedColor}" BorderBrush="#E2E8F0" BorderThickness="1"/>
                 </StackPanel>
                 
-                <ItemsControl ItemsSource="{Binding ColorPalette}">
+                <ItemsControl ItemsSource="{Binding ColorPalette}" HorizontalAlignment="Left">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <UniformGrid Columns="8"/>
@@ -103,12 +103,24 @@
                         <DataTemplate>
                             <Button Command="{Binding DataContext.SetColorCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                     CommandParameter="{Binding}"
-                                    Width="30" Height="30" Margin="2" Padding="0" BorderThickness="0" Background="Transparent" Cursor="Hand">
-                                <Border x:Name="ColorBox" Background="{Binding}" CornerRadius="4" BorderBrush="Transparent" BorderThickness="2">
-                                </Border>
-                                <Button.Triggers>
-                                    <!-- Simple hover effect -->
-                                </Button.Triggers>
+                                    Width="36" Height="36" Margin="2" Padding="0" BorderThickness="0" Background="Transparent" Cursor="Hand">
+                                <Grid>
+                                    <!-- Hover Ring -->
+                                    <Ellipse x:Name="HoverRing" Width="32" Height="32" Stroke="Transparent" StrokeThickness="2"/>
+                                    
+                                    <!-- Actual Color Circle -->
+                                    <Ellipse Width="24" Height="24" Fill="{Binding}" Stroke="#E2E8F0" StrokeThickness="1"
+                                             HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Grid>
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Opacity" Value="0.7"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
                             </Button>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

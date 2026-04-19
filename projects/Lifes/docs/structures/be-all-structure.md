@@ -90,7 +90,8 @@ src/
 │
 ├── Lifes.Presentation.WPF/     # WPF UI
 │   ├── Constants/                  # US-5.1
-│   │   └── ToolIds.cs              # Well-known tool ID constants
+│   │   ├── ToolIds.cs              # Well-known tool ID constants
+│   │   └── UIConstants.cs          # Centralized UI assets (Colors, Palette)
 │   ├── Controls/                   # US-5.1
 │   │   ├── NavigationMenuButton.xaml    # Hamburger button + hover dropdown
 │   │   └── NavigationMenuButton.xaml.cs

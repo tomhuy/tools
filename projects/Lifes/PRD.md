@@ -1424,11 +1424,6 @@ private string GetLevelColor(string level)
 | **Memento** | Unified hierarchical note/event model. |
 | **Tagging** | Phân loại memento bằng các từ khóa có màu sắc. |
 
-**Document Version:** 1.8.0
-**Last Updated:** 2026-04-19
-**Status:** ✅ Active (95% Complete - US-9.6 Finalized & UI Assets Centralized)
-
-
 ### References
 
 **Technical Documentation:**
@@ -1452,3 +1447,9 @@ private string GetLevelColor(string level)
 | DevOps Lead | TBD | - |
 
 ---
+
+**Document Version:** 1.8.0
+**Last Updated:** 2026-04-19
+**Status:** ✅ Active (95% Complete - US-9.6 Finalized & UI Assets Centralized)
+
+

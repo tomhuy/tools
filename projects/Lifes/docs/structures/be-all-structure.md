@@ -109,11 +109,14 @@ src/
 │   │   │   │   └── DefaultDashboardBlockView.xaml
 │   │   │   ├── DashboardChartView.xaml
 │   │   │   └── DashboardChartViewModel.cs
-│   │   ├── AnnualCalendar/             # US-8.4, US-8.5, US-8.6
+│   │   ├── AnnualCalendar/             # US-8.4, US-8.5, US-8.6, US-9.6
 │   │   │   ├── AnnualCalendarView.xaml
 │   │   │   ├── AnnualCalendarViewModel.cs
 │   │   │   ├── MonthlyCalendarView.xaml
 │   │   │   ├── MonthlyCalendarViewModel.cs
+│   │   │   ├── AddTopicView.xaml           # US-9.6
+│   │   │   ├── AddTopicView.xaml.cs        # US-9.6
+│   │   │   ├── AddTopicViewModel.cs        # US-9.6
 │   │   │   ├── TagManagementView.xaml      # US-9.5 (Refactored)
 │   │   │   ├── TagManagementView.xaml.cs   # US-9.5
 │   │   │   ├── TagManagementViewModel.cs   # US-9.5

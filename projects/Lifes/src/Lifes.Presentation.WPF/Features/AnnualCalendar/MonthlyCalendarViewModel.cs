@@ -58,6 +58,9 @@ public partial class MonthlyCalendarViewModel : ObservableObject
     [ObservableProperty] private bool _isTagManagerOpen;
     public TagManagementViewModel TagManager { get; }
 
+    [ObservableProperty] private bool _isAddTopicOpen;
+    public AddTopicViewModel AddTopicManager { get; }
+
     public string[] ColorPalette { get; } = new[]
     {
         "#FFFFFF", "#F2F2F2", "#D9D9D9", "#D9E1F2", "#FCE4D6", "#FDE9D9",
@@ -73,6 +76,10 @@ public partial class MonthlyCalendarViewModel : ObservableObject
         
         TagManager = new TagManagementViewModel(calendarService);
         TagManager.TagsUpdated += async () => await RefreshAvailableTagsAsync();
+
+        AddTopicManager = new AddTopicViewModel(calendarService);
+        AddTopicManager.TopicAdded += async () => await LoadDataAsync();
+        AddTopicManager.RequestClose += () => IsAddTopicOpen = false;
 
         CurrentYear = 2026; // Match mockup year for consistency
         
@@ -457,6 +464,13 @@ public partial class MonthlyCalendarViewModel : ObservableObject
     private void CloseTagManager()
     {
         IsTagManagerOpen = false;
+    }
+
+    [RelayCommand]
+    private void OpenAddTopic()
+    {
+        AddTopicManager.Title = string.Empty;
+        IsAddTopicOpen = true;
     }
 
     private async Task RefreshAvailableTagsAsync()

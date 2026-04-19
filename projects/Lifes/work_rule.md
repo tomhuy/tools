@@ -45,6 +45,7 @@ User cung cấp:
 - ✅ **Business context**: Mục đích, lợi ích của feature
 - ✅ **Technical constraints**: Công nghệ, kiến trúc, limitations
 - ✅ **Rule.md reference**: Reference đến coding rules và conventions
+- ✅ **design_rule.md reference**: Tham khảo các quy tắc thiết kế UI/UX và logic Presentation (Event-driven vs Delegate)
 
 ### 1.2 Analysis & User Story Creation
 
@@ -169,6 +170,7 @@ AI Agent thực hiện:
 
 2. **AI Agent đọc và understand**
    - Đọc file `rule.md` (coding rules và conventions)
+   - Đọc file `design_rule.md` (quy tắc thiết kế và xử lý logic UI)
    - Đọc file `PRD.md` (kiến trúc và design system)
    - Đọc User Story chi tiết
    - Identify all tasks cần làm
@@ -709,6 +711,8 @@ refactor(infrastructure): extract git service interface
 **Product Requirements**: `PRD.md`
 
 **Coding Rules**: `rule.md`
+
+**Design Rules**: `docs/guidelines/design_rule.md` (Quy tắc xử lý logic CRUD UI)
 
 #### 🔄 Workflow Documents
 

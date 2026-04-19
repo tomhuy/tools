@@ -10,7 +10,7 @@
 | **Product Name** | ETL Deployment Tools Suite |
 | **Version** | 1.0.0 |
 | **Document Status** | Draft - Initial Version |
-| **Last Updated** | 2026-02-06 |
+| **Last Updated** | 2026-04-19 |
 | **Author** | Development Team |
 | **Stakeholders** | DevOps Team, Developers, Release Managers |
 
@@ -1402,7 +1402,8 @@ private string GetLevelColor(string level)
 - ✅ **Hierarchical Filtering**: Automatically include all child notes if the parent topic matches the selected tag.
 - ✅ **Monthly Calendar CRUD**: Add, edit, delete, and color-pick mementos directly on the monthly grid (US-9.3).
 - ✅ **Edit Parent Mementos & Tags**: Full editing of topics and tag management (US-9.4).
-- ✅ **Tag Manager Component**: Comprehensive UI for managing tags, **refactored into a reusable component** (US-9.5).
+- ✅ **Tag Manager Refactor (US-9.5)**: Decoupled UI and logic into a dedicated component.
+- ✅ **Add Parent Memento (Topic)**: Create root-level topics with custom date ranges, color selection, and tag integration (US-9.6).
 
 ---
 
@@ -1422,6 +1423,6 @@ private string GetLevelColor(string level)
 | **Memento** | Unified hierarchical note/event model. |
 | **Tagging** | Phân loại memento bằng các từ khóa có màu sắc. |
 
-**Document Version:** 1.6.0
+**Document Version:** 1.7.0
 **Last Updated:** 2026-04-19
-**Status:** ✅ Active (92% Complete - Tag Management Refactored & US-9.5 Finalized)
+**Status:** ✅ Active (94% Complete - US-9.6 Finalized with Date Range & Tag Integration)

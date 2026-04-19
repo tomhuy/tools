@@ -211,6 +211,17 @@
                     </ToggleButton.Template>
                 </ToggleButton>
 
+                <Button Content="➕ Thêm Chủ đề" Command="{Binding OpenAddTopicCommand}"
+                        Padding="15,5" Margin="0,0,10,0"
+                        Background="#3ECF8E" Foreground="White" BorderThickness="0"
+                        FontSize="13" FontWeight="SemiBold" Cursor="Hand">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="6"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+
                 <Popup IsOpen="{Binding IsChecked, ElementName=TagPickerButton}" 
                        PlacementTarget="{Binding ElementName=TagPickerButton}" 
                        StaysOpen="False" AllowsTransparency="True" PopupAnimation="Fade">
@@ -741,6 +752,16 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </StackPanel>
+            </Border>
+        </Popup>
+
+        <!-- Add Topic Popup -->
+        <Popup IsOpen="{Binding IsAddTopicOpen}" StaysOpen="False" Placement="Center" AllowsTransparency="True" PopupAnimation="Fade">
+            <Border Background="Transparent">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="30" ShadowDepth="10" Opacity="0.3"/>
+                </Border.Effect>
+                <local:AddTopicView DataContext="{Binding AddTopicManager}" Width="400"/>
             </Border>
         </Popup>
     </Grid>

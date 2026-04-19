@@ -12,6 +12,8 @@ Công cụ Calendar cung cấp hai chế độ hiển thị: **Annual View** (nh
 - `MonthlyCalendarViewModel.cs` - Quản lý danh sách tháng được chọn (`AvailableMonths`), logic multi-select và render event phases. Điều phối hiển thị TagManager.
 - `TagManagementView.xaml` - Giao diện UserControl quản lý Tag, bao gồm danh sách tag, form chỉnh sửa và bảng màu palette.
 - `TagManagementViewModel.cs` - Đóng gói toàn bộ logic CRUD cho Tag, bảng màu và thông báo cập nhật qua sự kiện.
+- `AddTopicView.xaml` - Form "Thêm Chủ đề mới" với giao diện Light Theme, cho phép nhập tiêu đề, chọn ngày và gán Tags (US-9.6).
+- `AddTopicViewModel.cs` - Quản lý logic nghiệp vụ cho việc tạo Topic, bao gồm validation ngày tháng và liên kết TagIds.
 - `ActivityHeatmapView.xaml` - Hiển thị "Activity Tracker" dạng lưới ô vuông (Dot Grid), gom nhóm dữ liệu theo sự kiện (Event-centric).
 - `ActivityHeatmapViewModel.cs` - Phân loại dữ liệu heatmap theo đầu mục hành động, quản lý hiển thị 31 ngày đồng bộ cho nhiều tháng.
 - `SelectableTagViewModel.cs` - View model phụ trợ cho việc chọn tag trong bộ lọc UI.
@@ -56,3 +58,4 @@ Công cụ Calendar cung cấp hai chế độ hiển thị: **Annual View** (nh
 - **Unified Memento Model**: Thay thế mô hình Event/Phase bằng cấu trúc `MementoModel` phân cấp (recursive). Một Memento có `ParentId == null` được coi là một "Topic Note" (Ghi chú chủ đề) với Id là kiểu `int`, trong khi memento có `ParentId` trỏ về Topic được coi là "Supplemental Concept Note" (Ghi chú khái niệm bổ sung).
 - **Tagging & Repository Pattern**: Áp dụng mô hình Repository + Service để tách biệt việc truy vấn dữ liệu thô và logic nghiệp vụ. Hỗ trợ nhiều Tags cho mỗi Memento và cung cấp tính năng **Cascade Filtering**.
 - **JSON File Persistence**: Toàn bộ dữ liệu Mementos và Tags được lưu trữ tại `[AppPath]/database/mementos.json` và `tags.json`. Hệ thống tự động khởi tạo dữ liệu mẫu (seed data) nếu file chưa tồn tại, đảm bảo trải nghiệm người dùng liền mạch từ trạng thái mock sang trạng thái lưu trữ thật.
+- **Self-contained AddTopic Component**: Tính năng thêm Topic mới (US-9.6) được thiết kế như một thành phần độc lập (standalone), giao tiếp với View cha thông qua sự kiện `TopicAdded`. Điều này giúp giữ cho code-behind của Monthly Calendar sạch sẽ và dễ bảo trì.

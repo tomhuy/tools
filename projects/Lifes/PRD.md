@@ -1427,3 +1427,28 @@ private string GetLevelColor(string level)
 **Document Version:** 1.8.0
 **Last Updated:** 2026-04-19
 **Status:** ✅ Active (95% Complete - US-9.6 Finalized & UI Assets Centralized)
+
+
+### References
+
+**Technical Documentation:**
+- [MVVM Pattern](https://docs.microsoft.com/en-us/dotnet/desktop/wpf/data/data-binding-overview)
+- [CommunityToolkit.Mvvm](https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/)
+- [LibGit2Sharp Documentation](https://github.com/libgit2/libgit2sharp)
+- [Serilog Documentation](https://serilog.net/)
+- [SOLID Principles](https://en.wikipedia.org/wiki/SOLID)
+
+**.NET Documentation:**
+- [WPF Documentation](https://docs.microsoft.com/en-us/dotnet/desktop/wpf/)
+- [System.Xml.Linq (XDocument)](https://docs.microsoft.com/en-us/dotnet/api/system.xml.linq.xdocument)
+- [Dependency Injection in .NET](https://docs.microsoft.com/en-us/dotnet/core/extensions/dependency-injection)
+
+### Contact
+
+| Role | Name | Email |
+|------|------|-------|
+| Product Owner | Development Team | - |
+| Tech Lead | TBD | - |
+| DevOps Lead | TBD | - |
+
+---

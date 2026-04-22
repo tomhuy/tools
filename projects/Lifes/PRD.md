@@ -291,6 +291,18 @@ ETL Deployment Tools Suite cung cấp:
 
 ---
 
+### 6. Sprint Board Matrix (US-10.1)
+**Status**: ✅ Completed (US-10.1 Done)
+**User Stories**: US-10.1
+**Documentation**: [fea-sprint-board-structure.md](./docs/structures/fea-sprint-board-structure.md)
+
+**Purpose**: Giao diện ma trận Agile Sprint Board cho phép drag-and-drop task của team members.
+**Key Components**:
+- Cấu trúc XAML thẻ động co giãn bằng `UniformGrid`.
+- Cấu trúc Models Observables `ObservableObject`, Drag & Drop hỗ trợ trực tiếp từ code behind view qua MVVM ViewModels `MoveTask()`.
+
+---
+
 **Why Feature-based Organization?**
 - ✅ **High Cohesion**: Code liên quan đến một feature nằm gần nhau
 - ✅ **Easy Navigation**: Tìm code nhanh hơn - nhìn feature thay vì tìm trong nhiều layer folders

@@ -5,6 +5,7 @@ using Lifes.Presentation.WPF.Features.VersionIncrease;
 using Lifes.Presentation.WPF.Features.DashboardChart;
 using Lifes.Presentation.WPF.Features.DocumentManagement;
 using Lifes.Presentation.WPF.Features.AnnualCalendar;
+using Lifes.Presentation.WPF.Features.SprintBoard;
 using Microsoft.Extensions.Logging;
 
 namespace Lifes.Presentation.WPF;
@@ -21,6 +22,7 @@ public partial class MainWindow : Window
     private readonly MonthlyCalendarViewModel _monthlyCalendarViewModel;
     private readonly ActivityHeatmapViewModel _activityHeatmapViewModel;
     private readonly MementoManagementViewModel _mementoManagementViewModel;
+    private readonly SprintBoardViewModel _sprintBoardViewModel;
     private readonly INavigationService _navigationService;
     private readonly ILogger<MainWindow> _logger;
 
@@ -32,6 +34,7 @@ public partial class MainWindow : Window
         MonthlyCalendarViewModel monthlyCalendarViewModel,
         ActivityHeatmapViewModel activityHeatmapViewModel,
         MementoManagementViewModel mementoManagementViewModel,
+        SprintBoardViewModel sprintBoardViewModel,
         INavigationService navigationService,
         ILogger<MainWindow> logger)
     {
@@ -44,6 +47,7 @@ public partial class MainWindow : Window
         _monthlyCalendarViewModel = monthlyCalendarViewModel;
         _activityHeatmapViewModel = activityHeatmapViewModel;
         _mementoManagementViewModel = mementoManagementViewModel;
+        _sprintBoardViewModel = sprintBoardViewModel;
         _navigationService = navigationService;
         _logger = logger;
 
@@ -119,6 +123,15 @@ public partial class MainWindow : Window
         MainContentControl.Content = view;
     }
 
+    private void ShowSprintBoardView()
+    {
+        var view = new SprintBoardView
+        {
+            DataContext = _sprintBoardViewModel
+        };
+        MainContentControl.Content = view;
+    }
+
     /// <summary>
     /// Swaps the main content area when the user navigates to a different tool.
     /// </summary>
@@ -156,6 +169,10 @@ public partial class MainWindow : Window
 
                 case Constants.ToolIds.MementoManagement:
                     ShowMementoManagementView();
+                    break;
+
+                case Constants.ToolIds.SprintBoard:
+                    ShowSprintBoardView();
                     break;
 
                 default:

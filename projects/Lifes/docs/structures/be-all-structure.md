@@ -128,6 +128,11 @@ src/
 │   │   ├── DocumentManagement/         # US-7.1
 │   │   │   ├── DocumentManagementView.xaml
 │   │   │   └── DocumentManagementViewModel.cs
+│   │   ├── SprintBoard/                # US-10.1
+│   │   │   ├── Models/
+│   │   │   │   └── SprintBoardModels.cs
+│   │   │   ├── SprintBoardView.xaml
+│   │   │   └── SprintBoardViewModel.cs
 │   │   └── VersionIncrease/
 │   │       ├── VersionIncreaseView.xaml      # Search UI + Commit button + Hamburger (US-1.2.1, US-1.3, US-8.5)
 │   │       ├── VersionIncreaseViewModel.cs   # Search + Settings + Git + Navigation (US-1.2.1, US-1.3, US-8.5)
@@ -270,6 +275,15 @@ src/
 - **Memento Management (US-9.8)**
 - Gantt-style timeline rendering in XAML
 - Hamburger Navigation integration
+
+### 10. Sprint Board
+**Status**: ✅ Completed
+**User Stories**: US-10.1
+**Documentation**: [fea-sprint-board-structure.md](./fea-sprint-board-structure.md)
+**Key Components**:
+- SprintBoardView (UniformGrid matrix)
+- SprintBoardViewModel (Mock states)
+- BoardAssigneeModel / BoardFeatureModel
 
 ## Shared Components
 

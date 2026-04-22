@@ -88,6 +88,15 @@ src/
 │               ├── ProjectUpdateDto.cs
 │               └── VersionUpdateResultDto.cs
 │
+├── Lifes.Presentation.WebApi/    # C# Local API Server (US-11.1)
+│   ├── Controllers/                # REST endpoints routing to Application Commands
+│   └── Program.cs                  # WebAPI Bootstrap
+│
+├── Lifes.Presentation.Electron/  # Electron UI (US-11.1)
+│   ├── main.js                     # Electron main process
+│   ├── preload.js                  # IPC Bridge
+│   └── src/                        # Frontend UI (Angular)
+│
 ├── Lifes.Presentation.WPF/     # WPF UI
 │   ├── Constants/                  # US-5.1
 │   │   ├── ToolIds.cs              # Well-known tool ID constants
@@ -186,8 +195,8 @@ src/
 
 ```
 ┌─────────────────────────────────────────┐
-│  Presentation (WPF)                     │
-│  - Views, ViewModels                   │
+│  Presentation (WPF / Electron)          │
+│  - Views, ViewModels, UI Shell          │
 └──────────────┬──────────────────────────┘
                │ depends on
                ▼
@@ -218,7 +227,7 @@ src/
 | **Domain** | Business logic | Core |
 | **Infrastructure** | External services | Core, Domain |
 | **Application** | Use cases | Core, Domain |
-| **Presentation** | UI | Core, Application |
+| **Presentation** | UI (WPF / Electron) | Core, Application |
 | **Testing** | Quality assurance | All layers (for testing) |
 
 ---
@@ -283,7 +292,18 @@ src/
 **Key Components**:
 - SprintBoardView (UniformGrid matrix)
 - SprintBoardViewModel (Mock states)
+- SprintBoardViewModel (Mock states)
 - BoardAssigneeModel / BoardFeatureModel
+
+### 11. Electron UI Integration
+**Status**: ✅ Completed
+**User Stories**: US-11.1
+**Documentation**: [fea-electron-ui-structure.md](./fea-electron-ui-structure.md)
+**Key Components**:
+- `Lifes.Presentation.WebApi`: REST API bridge using ASP.NET Core.
+- `Lifes.Presentation.Electron`: Electron shell hosting an Angular 19 frontend.
+- `ApiService` (Angular): Communicates with the local backend bridge.
+- `Signals` (Angular): Reactive state management for the UI.
 
 ## Shared Components
 
@@ -668,4 +688,4 @@ reportgenerator -reports:**/coverage.cobertura.xml -targetdir:coverage-report -r
 
 **Document Version**: 1.5.1  
 **Last Updated**: 2026-04-22  
-**Status**: ✅ Active (100% Complete - Phase 6 Finalized with Today Indicator US-9.9)
+**Status**: ✅ Active (100% Complete - Phase 11 Finalized with Electron Integration US-11.1)

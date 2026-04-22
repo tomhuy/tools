@@ -16,6 +16,7 @@ using Lifes.Infrastructure.Features.DocumentManagement.Services;
 using Lifes.Presentation.WPF.Features.AnnualCalendar;
 using Lifes.Infrastructure.Features.AnnualCalendar.Services;
 using Lifes.Infrastructure.Features.AnnualCalendar.Repositories;
+using Lifes.Presentation.WPF.Features.SprintBoard;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
@@ -94,6 +95,7 @@ public partial class App : System.Windows.Application
         services.AddTransient<MonthlyCalendarViewModel>();
         services.AddTransient<ActivityHeatmapViewModel>();
         services.AddTransient<MementoManagementViewModel>();
+        services.AddTransient<SprintBoardViewModel>();
 
         // Dashboard Services
         services.AddSingleton<IDashboardDataService, MockDashboardDataService>();
@@ -163,6 +165,13 @@ public partial class App : System.Windows.Application
             Id = ToolIds.MementoManagement,
             Name = "Quản lý Chủ đề",
             Description = "Quản lý danh sách và thứ tự hiển thị các chủ đề (Topics)"
+        });
+
+        nav.RegisterTool(new ToolDefinition
+        {
+            Id = ToolIds.SprintBoard,
+            Name = "Sprint Board",
+            Description = "Visualize team progress and feature tasks on a KanBan matrix"
         });
     }
 

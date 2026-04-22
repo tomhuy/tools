@@ -8,7 +8,7 @@
 | Field | Value |
 |-------|-------|
 | **Product Name** | ETL Deployment Tools Suite |
-| **Version** | 2.1.1 |
+| **Version** | 2.2.0 |
 | **Document Status** | Draft - Initial Version |
 | **Last Updated** | 2026-04-22 |
 | **Author** | Development Team |
@@ -21,8 +21,8 @@
 **ETL Deployment Tools Suite** là một bộ công cụ desktop được xây dựng để hỗ trợ quy trình deploy các dự án ETL một cách tự động, nhanh chóng và đáng tin cậy. Ứng dụng tập hợp nhiều công cụ khác nhau, mỗi công cụ có một màn hình chính riêng biệt, giúp developer và DevOps team thực hiện các tác vụ deployment phổ biến.
 
 **Công nghệ:**
-- **UI Pattern:** MVVM (Model-View-ViewModel)
-- **Framework:** WPF (XAML) với .NET 6.0
+- **UI Pattern:** MVVM (Model-View-ViewModel) / MVC
+- **Framework:** WPF (.NET 6.0) / Electron (Web Technologies)
 - **Design:** Modern dark theme với Fluent Design
 
 ### Mục tiêu chính:
@@ -249,7 +249,8 @@ ETL Deployment Tools Suite cung cấp:
 | Layer | Technology | Version | Purpose |
 |-------|-----------|---------|---------|
 | **Framework** | .NET | 6.0 | Core platform |
-| **UI** | WPF (XAML) | 6.0 | User interface |
+| **Desktop Shell** | WPF / Electron | 6.0 / Latest | User interface shell |
+| **UI** | XAML / Angular | - | UI implementation |
 | **MVVM** | CommunityToolkit.Mvvm | 8.3.2 | MVVM implementation |
 | **UI Framework** | ModernWPF (Fluent Design) | 0.9.6 | Modern UI styling |
 | **DI** | Microsoft.Extensions.DependencyInjection | 7.0.0 | Dependency injection |
@@ -341,7 +342,7 @@ Models/                                 │   └── Services/
 | **Domain** | Core business logic | NONE (pure) | Entities, Value Objects, Business Rules |
 | **Application** | Use cases | Domain, Core | Commands, Queries, DTOs, Workflows |
 | **Infrastructure** | External concerns | Domain, Application, Core | File I/O, Git, Database, APIs |
-| **Presentation** | User interface | Application, Core | Views, ViewModels, UI Logic |
+| **Presentation** | User interface (WPF/Electron) | Application, Core | Views, ViewModels, UI Logic |
 
 **Core (Shared across all layers):**
 - Interfaces và contracts
@@ -499,7 +500,16 @@ private void ConfigureServices(IServiceCollection services)
 Lifes.sln
 │
 ├── src/
-│   ├── Lifes.Presentation.WPF/        # 🎨 Presentation Layer (WPF)
+│   ├── Lifes.Presentation.WebApi/     # 🌐 Local REST API (Backend Bridge) — US-11.1 ✅
+│   │   ├── Controllers/
+│   │   └── Program.cs
+│   │
+│   ├── Lifes.Presentation.Electron/   # 🌐 Presentation Layer (Electron + Angular) — US-11.1 ✅
+│   │   ├── main.js
+│   │   ├── preload.js
+│   │   └── src/ (Angular App)
+│   │
+│   ├── Lifes.Presentation.WPF/        # 🎨 Presentation Layer (WPF) — Legacy Support
 │   │   ├── Features/                      # Feature-based organization
 │   │   │   ├── VersionIncrease/           # Version Increase Tool
 │   │   │   │   ├── VersionIncreaseView.xaml

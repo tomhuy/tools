@@ -1,0 +1,75 @@
+<div
+  class="container"
+  style="background: linear-gradient(135deg, #1e1e1e 0%, #2d2d2d 100%); color: white; min-height: 100vh; padding: 2rem; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+  
+  <header style="border-bottom: 1px solid #3ECF8E; margin-bottom: 2rem; padding-bottom: 1rem;">
+    <h1 style="color: #3ECF8E; margin: 0;">{{ title }}</h1>
+    <p style="opacity: 0.7;">Electron + Angular + .NET Clean Architecture Bridge</p>
+  </header>
+
+  <main>
+    <div style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+      <h2 style="margin-top: 0;">Project Scanner Test (Option A)</h2>
+      <p style="margin-bottom: 1rem; font-size: 0.9rem; color: #aaa;">This UI connects to the C# WebAPI running on localhost:5110 via Angular HttpClient.</p>
+      
+      <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+        <input
+          type="text"
+          style="flex: 1; background: #333; border: 1px solid #444; color: white; padding: 0.75rem; border-radius: 4px; outline: none; font-family: monospace;"
+          placeholder="Base Path (e.g. C:\Projects\MyLife)"
+          [ngModel]="scanPath()"
+          (ngModelChange)="scanPath.set($event)">
+        
+        <button
+          type="button"
+          style="background: #3ECF8E; color: #1e1e1e; border: none; padding: 0.5rem 2rem; border-radius: 4px; font-weight: bold; cursor: pointer; transition: transform 0.1s active;"
+          [disabled]="isLoading()"
+          (click)="onScan()">
+          {{ isLoading() ? 'Scanning...' : 'Scan Projects' }}
+        </button>
+      </div>
+
+      <div
+        *ngIf="errorMessage()"
+        style="background: rgba(255, 107, 107, 0.15); border: 1px solid #ff6b6b; color: #ff6b6b; padding: 1rem; border-radius: 4px; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+        <span style="font-weight: bold;">⚠️ Error:</span> {{ errorMessage() }}
+      </div>
+
+      <div
+        *ngIf="projects().length > 0"
+        style="margin-top: 1rem;">
+        <h3 style="color: #3ECF8E; border-bottom: 1px solid rgba(62, 207, 142, 0.2); padding-bottom: 0.5rem;">Found {{ projects().length }} Projects</h3>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; margin-top: 1rem;">
+          <div
+            *ngFor="let p of projects()"
+            style="padding: 1rem; background: rgba(255,255,255,0.03); border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; gap: 0.25rem;">
+            
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <strong style="color: #eee; font-size: 1.1rem;">{{ p.fileName }}</strong>
+              <span style="background: #3ECF8E; color: #1e1e1e; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold;">v{{ p.currentVersion }}</span>
+            </div>
+            
+            <small
+              style="opacity: 0.4; font-family: monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
+              [title]="p.fullPath">
+              {{ p.relativePath }}
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <div
+        *ngIf="projects().length === 0 && !isLoading() && !errorMessage()"
+        style="text-align: center; padding: 3rem; color: #666; font-style: italic;">
+        No projects scanned yet. Enter a valid path and click scan.
+      </div>
+    </div>
+  </main>
+
+  <footer style="margin-top: 3rem; text-align: center; font-size: 0.8rem; opacity: 0.4;">
+    Built with Antigravity • Modern Clean Architecture
+  </footer>
+</div>
+
+<router-outlet />

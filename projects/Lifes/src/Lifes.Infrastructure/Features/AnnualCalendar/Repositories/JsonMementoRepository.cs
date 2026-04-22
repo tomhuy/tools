@@ -86,6 +86,12 @@ public class JsonMementoRepository : IMementoRepository
         if (query.TagIds != null && query.TagIds.Any())
             result = result.Where(m => m.TagIds.Any(t => query.TagIds.Contains(t)));
 
+        if (query.ParentOnly == true)
+            result = result.Where(m => m.ParentId == null);
+
+        if (!string.IsNullOrWhiteSpace(query.Keyword))
+            result = result.Where(m => m.Title.Contains(query.Keyword, StringComparison.OrdinalIgnoreCase));
+
         return Task.FromResult(result);
     }
 

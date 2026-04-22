@@ -158,7 +158,8 @@ public partial class MonthlyCalendarViewModel : ObservableObject
             // Collect all mementos for lookup
             _allMementos.AddRange(mementos);
                  
-            var monthDisplay = BuildMonthDisplay(monthInfo.Value, mementos);
+            var sortedMementos = mementos.OrderBy(m => m.Order).ThenBy(m => m.Title).ToList();
+            var monthDisplay = BuildMonthDisplay(monthInfo.Value, sortedMementos);
             newDisplayMonths.Add(monthDisplay);
         }
 

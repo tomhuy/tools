@@ -11,4 +11,5 @@ public static class ToolIds
     public const string AnnualCalendar = "AnnualCalendar";
     public const string MonthlyCalendar = "MonthlyCalendar";
     public const string ActivityHeatmap = "ActivityHeatmap";
+    public const string MementoManagement = "memento-management";
 }

@@ -93,6 +93,7 @@ public partial class App : System.Windows.Application
         services.AddTransient<AnnualCalendarViewModel>();
         services.AddTransient<MonthlyCalendarViewModel>();
         services.AddTransient<ActivityHeatmapViewModel>();
+        services.AddTransient<MementoManagementViewModel>();
 
         // Dashboard Services
         services.AddSingleton<IDashboardDataService, MockDashboardDataService>();
@@ -155,6 +156,13 @@ public partial class App : System.Windows.Application
             Id = ToolIds.ActivityHeatmap,
             Name = "Activity Heatmap",
             Description = "Dense grid view of all activities by month/day"
+        });
+
+        nav.RegisterTool(new ToolDefinition
+        {
+            Id = ToolIds.MementoManagement,
+            Name = "Quản lý Chủ đề",
+            Description = "Quản lý danh sách và thứ tự hiển thị các chủ đề (Topics)"
         });
     }
 

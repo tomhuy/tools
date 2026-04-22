@@ -66,6 +66,19 @@ public class CalendarService : ICalendarService
         return mementos;
     }
 
+    public async Task<IEnumerable<MementoModel>> GetMementosAsync(MementoQueryModel query, bool includeChildren = false)
+    {
+        var initialResults = await _mementoRepository.GetByQueryAsync(query);
+        var mementos = initialResults.ToList();
+
+        if (includeChildren)
+        {
+            await FetchChildrenRecursiveAsync(mementos);
+        }
+
+        return mementos;
+    }
+
     public Task SaveMementoAsync(MementoModel memento)
     {
         return _mementoRepository.SaveAsync(memento);

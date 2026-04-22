@@ -20,6 +20,7 @@ public partial class MainWindow : Window
     private readonly AnnualCalendarViewModel _annualCalendarViewModel;
     private readonly MonthlyCalendarViewModel _monthlyCalendarViewModel;
     private readonly ActivityHeatmapViewModel _activityHeatmapViewModel;
+    private readonly MementoManagementViewModel _mementoManagementViewModel;
     private readonly INavigationService _navigationService;
     private readonly ILogger<MainWindow> _logger;
 
@@ -30,6 +31,7 @@ public partial class MainWindow : Window
         AnnualCalendarViewModel annualCalendarViewModel,
         MonthlyCalendarViewModel monthlyCalendarViewModel,
         ActivityHeatmapViewModel activityHeatmapViewModel,
+        MementoManagementViewModel mementoManagementViewModel,
         INavigationService navigationService,
         ILogger<MainWindow> logger)
     {
@@ -41,6 +43,7 @@ public partial class MainWindow : Window
         _annualCalendarViewModel = annualCalendarViewModel;
         _monthlyCalendarViewModel = monthlyCalendarViewModel;
         _activityHeatmapViewModel = activityHeatmapViewModel;
+        _mementoManagementViewModel = mementoManagementViewModel;
         _navigationService = navigationService;
         _logger = logger;
 
@@ -107,6 +110,15 @@ public partial class MainWindow : Window
         MainContentControl.Content = view;
     }
 
+    private void ShowMementoManagementView()
+    {
+        var view = new MementoManagementView
+        {
+            DataContext = _mementoManagementViewModel
+        };
+        MainContentControl.Content = view;
+    }
+
     /// <summary>
     /// Swaps the main content area when the user navigates to a different tool.
     /// </summary>
@@ -140,6 +152,10 @@ public partial class MainWindow : Window
 
                 case Constants.ToolIds.ActivityHeatmap:
                     ShowActivityHeatmapView();
+                    break;
+
+                case Constants.ToolIds.MementoManagement:
+                    ShowMementoManagementView();
                     break;
 
                 default:

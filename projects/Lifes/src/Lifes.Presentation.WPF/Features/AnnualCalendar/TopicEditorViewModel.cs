@@ -26,6 +26,7 @@ public partial class TopicEditorViewModel : ObservableObject
     [ObservableProperty] private string _selectedColor = "#4472C4"; // Default blue
     [ObservableProperty] private bool _isSaving;
     [ObservableProperty] private int? _editingMementoId;
+    [ObservableProperty] private int _order;
 
     public ObservableCollection<SelectableTagViewModel> AvailableTags { get; } = new();
 
@@ -61,6 +62,7 @@ public partial class TopicEditorViewModel : ObservableObject
         EndDate = memento.EndDate;
         SelectedColor = memento.Color ?? "#4472C4";
         HeaderTitle = "Sửa Chủ đề";
+        Order = memento.Order;
 
         // Mark selected tags
         var tagIds = memento.TagIds?.ToHashSet() ?? new HashSet<int>();
@@ -78,6 +80,7 @@ public partial class TopicEditorViewModel : ObservableObject
         EndDate = DateTime.Today;
         SelectedColor = "#4472C4";
         HeaderTitle = "Thêm Chủ đề mới";
+        Order = 0;
         foreach (var tag in AvailableTags)
         {
             tag.IsSelected = false;
@@ -107,7 +110,7 @@ public partial class TopicEditorViewModel : ObservableObject
                 Color = SelectedColor,
                 ParentId = null,
                 CreatedDate = DateTime.Now,
-                Order = 0,
+                Order = Order,
                 TagIds = AvailableTags.Where(t => t.IsSelected).Select(t => t.Id).ToList()
             };
 

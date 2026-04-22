@@ -13,22 +13,43 @@
         <StackPanel>
             <TextBlock Text="{Binding HeaderTitle}" Foreground="#2D3748" FontSize="20" FontWeight="Bold" Margin="0,0,0,24"/>
 
-            <!-- Tiêu đề -->
-            <StackPanel Margin="0,0,0,16">
-                <TextBlock Text="Tiêu đề" Foreground="#718096" FontSize="12" FontWeight="SemiBold" Margin="0,0,0,6"/>
-                <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" 
-                         Background="White" Foreground="#2D3748" BorderBrush="#E2E8F0" 
-                         Padding="10,8" Height="38" VerticalContentAlignment="Center">
-                    <TextBox.Resources>
-                        <Style TargetType="Border">
-                            <Setter Property="CornerRadius" Value="6"/>
-                        </Style>
-                    </TextBox.Resources>
-                    <TextBox.InputBindings>
-                        <KeyBinding Key="Enter" Command="{Binding SaveCommand}"/>
-                    </TextBox.InputBindings>
-                </TextBox>
-            </StackPanel>
+            <!-- Tiêu đề & Thứ tự -->
+            <Grid Margin="0,0,0,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="15"/>
+                    <ColumnDefinition Width="100"/>
+                </Grid.ColumnDefinitions>
+                
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Tiêu đề" Foreground="#718096" FontSize="12" FontWeight="SemiBold" Margin="0,0,0,6"/>
+                    <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" 
+                             Background="White" Foreground="#2D3748" BorderBrush="#E2E8F0" 
+                             Padding="10,8" Height="38" VerticalContentAlignment="Center">
+                        <TextBox.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="6"/>
+                            </Style>
+                        </TextBox.Resources>
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Enter" Command="{Binding SaveCommand}"/>
+                        </TextBox.InputBindings>
+                    </TextBox>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2">
+                    <TextBlock Text="Thứ tự" Foreground="#718096" FontSize="12" FontWeight="SemiBold" Margin="0,0,0,6"/>
+                    <TextBox Text="{Binding Order, UpdateSourceTrigger=PropertyChanged}" 
+                             Background="White" Foreground="#2D3748" BorderBrush="#E2E8F0" 
+                             Padding="10,8" Height="38" VerticalContentAlignment="Center">
+                        <TextBox.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="6"/>
+                            </Style>
+                        </TextBox.Resources>
+                    </TextBox>
+                </StackPanel>
+            </Grid>
 
             <!-- Ngày tháng -->
             <Grid Margin="0,0,0,16">

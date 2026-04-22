@@ -247,34 +247,29 @@ src/
 **User Stories**: US-7.1
 **Documentation**: [fea-document-management-structure.md](./fea-document-management-structure.md)
 
-### 7. Annual & Monthly Calendar
+### 9. Annual Calendar & Memento System
 **Status**: ✅ Completed
-**User Stories**: US-8.4, US-8.5, US-8.6, US-8.7
+**User Stories**: US-9.1 -> US-9.9
 **Documentation**: [fea-calendar-structure.md](./fea-calendar-structure.md)
-
 **Key Components**:
-- `AnnualCalendarViewModel` & `MonthlyCalendarViewModel`
-- `TagManagementViewModel` (Reusable CRUD logic component)
-- `TagManagementView.xaml` (Shared UI component)
+- AnnualCalendar
+- MonthlyCalendar (with Quick Edit Popup)
+- TopicEditor (Add/Update Topics)
+- TagManagementComponent
+- MementoManagement (Ordering & Filtering)
+- JsonMementoRepository (Hierarchical Data)
+- CalendarService (Unified Query Filter)
+- MementoModel (Recursive Hierarchy)
 - `ActivityHeatmapViewModel` (Event-centric dot grid)
 - `CalendarEventModel` with `Phases` (Multi-phase tracking)
 - **Tagging & Hierarchical Filtering** (US-9.2)
 - **Monthly Calendar CRUD & Color Picker** (US-9.3)
 - **Edit Parent Mementos & Tags** (US-9.4)
 - **Tag Manager Refactor (US-9.5)**: Decoupled UI and logic into a dedicated component.
+- **Add Topic (US-9.6/US-9.7)**
+- **Memento Management (US-9.8)**
 - Gantt-style timeline rendering in XAML
 - Hamburger Navigation integration
-
-**Key Components Overview**:
-### 9. Core Architecture Refactor (Memento)
-**Status**: ✅ Completed
-**User Stories**: US-9.1
-**Documentation**: [fea-calendar-structure.md](./fea-calendar-structure.md)
-
-**Key Components**:
-- MementoModel (Recursive Hierarchy)
-- ICalendarService (Refactored)
-- **Tagging System** (TagModel, Repositories)
 
 ## Shared Components
 
@@ -657,6 +652,6 @@ reportgenerator -reports:**/coverage.cobertura.xml -targetdir:coverage-report -r
 
 ---
 
-**Document Version**: 1.5.0  
-**Last Updated**: 2026-04-18  
-**Status**: ✅ Active (88% Complete - US-1.1, US-1.2, US-1.2.1, US-1.3, US-2.1, US-5.1, US-7.1, US-8.4, US-8.5, US-9.1, US-9.2, US-9.3, US-9.4, US-9.5 Done)
+**Document Version**: 1.5.1  
+**Last Updated**: 2026-04-22  
+**Status**: ✅ Active (100% Complete - Phase 6 Finalized with Today Indicator US-9.9)

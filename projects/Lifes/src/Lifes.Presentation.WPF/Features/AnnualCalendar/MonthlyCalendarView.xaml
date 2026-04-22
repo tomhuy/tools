@@ -328,8 +328,16 @@
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
                                                     <Border Style="{StaticResource BorderStyle}" BorderThickness="0,1,1,1" Width="30" Background="#F8F9F9">
-                                                        <TextBlock Text="{Binding DayName}" FontSize="10" Foreground="#7F8C8D" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        <Grid>
+                                                            <Border x:Name="TodayLine" BorderBrush="#FF4D4D" BorderThickness="1,0,0,0" Visibility="Collapsed"/>
+                                                            <TextBlock Text="{Binding DayName}" FontSize="10" Foreground="#7F8C8D" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        </Grid>
                                                     </Border>
+                                                    <DataTemplate.Triggers>
+                                                        <DataTrigger Binding="{Binding IsToday}" Value="True">
+                                                            <Setter TargetName="TodayLine" Property="Visibility" Value="Visible"/>
+                                                        </DataTrigger>
+                                                    </DataTemplate.Triggers>
                                                 </DataTemplate>
                                             </ItemsControl.ItemTemplate>
                                         </ItemsControl>
@@ -363,21 +371,29 @@
                                                                 </Style.Triggers>
                                                             </Style>
                                                         </Border.Style>
-                                                        <TextBlock Text="{Binding DayNumber, StringFormat='\{0:D2\}'}" FontSize="11" FontWeight="Bold">
-                                                            <TextBlock.Style>
-                                                                <Style TargetType="TextBlock">
-                                                                    <Setter Property="Foreground" Value="#2C3E50"/>
-                                                                    <Setter Property="HorizontalAlignment" Value="Center"/>
-                                                                    <Setter Property="VerticalAlignment" Value="Center"/>
-                                                                    <Style.Triggers>
-                                                                        <DataTrigger Binding="{Binding IsToday}" Value="True">
-                                                                            <Setter Property="Foreground" Value="White"/>
-                                                                        </DataTrigger>
-                                                                    </Style.Triggers>
-                                                                </Style>
-                                                            </TextBlock.Style>
-                                                        </TextBlock>
+                                                        <Grid>
+                                                            <Border x:Name="TodayLine" BorderBrush="White" BorderThickness="1,0,0,0" Visibility="Collapsed"/>
+                                                            <TextBlock Text="{Binding DayNumber, StringFormat='\{0:D2\}'}" FontSize="11" FontWeight="Bold">
+                                                                <TextBlock.Style>
+                                                                    <Style TargetType="TextBlock">
+                                                                        <Setter Property="Foreground" Value="#2C3E50"/>
+                                                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                                                        <Style.Triggers>
+                                                                            <DataTrigger Binding="{Binding IsToday}" Value="True">
+                                                                                <Setter Property="Foreground" Value="White"/>
+                                                                            </DataTrigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </TextBlock.Style>
+                                                            </TextBlock>
+                                                        </Grid>
                                                     </Border>
+                                                    <DataTemplate.Triggers>
+                                                        <DataTrigger Binding="{Binding IsToday}" Value="True">
+                                                            <Setter TargetName="TodayLine" Property="Visibility" Value="Visible"/>
+                                                        </DataTrigger>
+                                                    </DataTemplate.Triggers>
                                                 </DataTemplate>
                                             </ItemsControl.ItemTemplate>
                                         </ItemsControl>
@@ -435,6 +451,7 @@
                                                                 <DataTemplate>
                                                                     <Border x:Name="Cell" Width="30" Style="{StaticResource BorderStyle}" Background="Transparent">
                                                                         <Grid>
+                                                                            <Border x:Name="TodayLine" BorderBrush="#FF4D4D" BorderThickness="1,0,0,0" Visibility="Collapsed"/>
                                                                             <Button Style="{StaticResource GhostButtonStyle}"
                                                                                     Command="{Binding DataContext.OpenEditPopupCommand, RelativeSource={RelativeSource AncestorType=UserControl}}">
                                                                                 <Button.CommandParameter>
@@ -467,6 +484,9 @@
                                                                         </Grid>
                                                                     </Border>
                                                                     <DataTemplate.Triggers>
+                                                                        <DataTrigger Binding="{Binding IsToday}" Value="True">
+                                                                            <Setter TargetName="TodayLine" Property="Visibility" Value="Visible"/>
+                                                                        </DataTrigger>
                                                                         <Trigger Property="IsMouseOver" Value="True">
                                                                             <Setter TargetName="Cell" Property="Background" Value="#F7FAFC"/>
                                                                             <Setter TargetName="ColorPickerButton" Property="Visibility" Value="Visible"/>

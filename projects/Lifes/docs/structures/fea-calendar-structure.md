@@ -14,8 +14,9 @@ Công cụ Calendar cung cấp hai chế độ hiển thị: **Annual View** (nh
 - `TagManagementViewModel.cs` - Đóng gói toàn bộ logic CRUD cho Tag, bảng màu và thông báo cập nhật qua sự kiện.
 - `TopicEditorView.xaml` - Form soạn thảo Topic (Thêm mới/Cập nhật) với giao diện Light Theme, cho phép nhập tiêu đề, chọn ngày và gán Tags.
 - `TopicEditorViewModel.cs` - Logic cho Topic Editor (Add/Update, Date validation) và liên kết TagIds.
-- `ActivityHeatmapView.xaml` - Hiển thị "Activity Tracker" dạng lưới ô vuông (Dot Grid), gom nhóm dữ liệu theo sự kiện (Event-centric).
 - `ActivityHeatmapViewModel.cs` - Phân loại dữ liệu heatmap theo đầu mục hành động, quản lý hiển thị 31 ngày đồng bộ cho nhiều tháng.
+- `MementoManagementView.xaml` - Giao diện quản lý tập trung các Topic cha dưới dạng lưới (DataGrid), hỗ trợ chỉnh sửa thứ tự hiển thị.
+- `MementoManagementViewModel.cs` - Logic tải dữ liệu linh hoạt thông qua `ICalendarService.GetMementosAsync`, quản lý bộ lọc tag và lưu thay đổi `Order`.
 - `SelectableTagViewModel.cs` - View model phụ trợ cho việc chọn tag trong bộ lọc UI.
 
 ### Domain Layer (Core)
@@ -25,9 +26,8 @@ Công cụ Calendar cung cấp hai chế độ hiển thị: **Annual View** (nh
 - `IMementoRepository.cs`, `ITagRepository.cs` - Interface cho việc truy xuất dữ liệu thô.
 
 ### Infrastructure Layer
-- `JsonMementoRepository.cs`, `JsonTagRepository.cs` - Implementations lưu trữ dữ liệu bền vững dưới dạng file JSON tại thư mục `database/`.
-- `MockMementoRepository.cs`, `MockTagRepository.cs` - (Deprecated) Các lớp mẫu chỉ dùng cho mục đích unit test hoặc dev-mode nhanh.
-- `CalendarService.cs` - Lớp Service điều phối, thực hiện logic lọc đệ quy (recursive filtering) và chuẩn bị dữ liệu cho View.
+- `JsonMementoRepository.cs`, `JsonTagRepository.cs` - Implementations lưu trữ dữ liệu bền vững dưới dạng file JSON. Repository hỗ trợ lọc `ParentOnly` để lấy riêng danh sách Topic.
+- `CalendarService.cs` - Lớp Service điều phối, cung cấp phương thức `GetMementosAsync` tổng quát cho việc truy vấn dữ liệu theo nhiều tiêu chí (Tags, ParentOnly, includeChildren).
 
 ## Key Classes
 
@@ -58,4 +58,6 @@ Công cụ Calendar cung cấp hai chế độ hiển thị: **Annual View** (nh
 - **Unified Memento Model**: Thay thế mô hình Event/Phase bằng cấu trúc `MementoModel` phân cấp (recursive). Một Memento có `ParentId == null` được coi là một "Topic Note" (Ghi chú chủ đề) với Id là kiểu `int`, trong khi memento có `ParentId` trỏ về Topic được coi là "Supplemental Concept Note" (Ghi chú khái niệm bổ sung).
 - **Tagging & Repository Pattern**: Áp dụng mô hình Repository + Service để tách biệt việc truy vấn dữ liệu thô và logic nghiệp vụ. Hỗ trợ nhiều Tags cho mỗi Memento và cung cấp tính năng **Cascade Filtering**.
 - **JSON File Persistence**: Toàn bộ dữ liệu Mementos và Tags được lưu trữ tại `[AppPath]/database/mementos.json` và `tags.json`. Hệ thống tự động khởi tạo dữ liệu mẫu (seed data) nếu file chưa tồn tại, đảm bảo trải nghiệm người dùng liền mạch từ trạng thái mock sang trạng thái lưu trữ thật.
-- **Self-contained AddTopic Component**: Tính năng thêm Topic mới (US-9.6) được thiết kế như một thành phần độc lập (standalone), giao tiếp với View cha thông qua sự kiện `TopicAdded`. Điều này giúp giữ cho code-behind của Monthly Calendar sạch sẽ và dễ bảo trì.
+- **Self-contained AddTopic Component**: Tính năng thêm Topic mới (US-9.6) được thiết kế như một thành phần độc lập (standalone), giao tiếp với View cha thông qua sự kiện `TopicAdded`. 
+- **Centralized Memento Management (Ordering & Filtering)**: Hệ thống cung cấp màn hình quản lý tập trung (US-9.8) cho phép người dùng tùy chỉnh thứ tự hiển thị (`Order`) của các chủ đề. Thứ tự này được ưu tiên hàng đầu khi render các hàng trong Monthly Calendar, giúp người dùng linh hoạt trong việc ưu tiên thông tin trực quan.
+- **Today Indicator (US-9.9)**: Cải tiến trực quan cho Monthly Calendar bằng cách thêm một vạch kẻ dọc màu đỏ (`#FF4D4D`) ở viền trái của cột ngày hiện tại. Hệ thống sử dụng các Border lồng nhau và `DataTrigger` trên thuộc tính `IsToday` để hiển thị chỉ báo này xuyên suốt từ header đến các hàng dữ liệu, giúp người dùng dễ dàng định vị thời gian mà không phá vỡ cấu trúc lưới tổng thể.

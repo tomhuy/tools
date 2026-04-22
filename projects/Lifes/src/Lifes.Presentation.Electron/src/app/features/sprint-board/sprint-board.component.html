@@ -1,0 +1,207 @@
+<div 
+  class="vars"
+  [class.hide-done]="!showDone()">
+  
+  <div class="topbar">
+    <div class="topbar-left">
+      <span class="page-title">Sprint Board</span>
+      <span class="sprint-chip">Sprint 12</span>
+    </div>
+    <div class="topbar-right">
+      <label class="toggle-label">
+        <input 
+          type="checkbox" 
+          id="showDone" 
+          [checked]="showDone()"
+          (change)="toggleDone($event)">
+        Hiện task done
+      </label>
+      <button 
+        class="btn" 
+        (click)="onAddFeature()">
+        <svg 
+          viewBox="0 0 24 24" 
+          fill="none" 
+          stroke="currentColor" 
+          stroke-width="2.5">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        Feature
+      </button>
+    </div>
+  </div>
+
+  <div class="summary-bar">
+    @for (p of summaryData(); track p.id) {
+      <div 
+        class="summary-pill"
+        [class.pill-blue]="p.color === 'blue'"
+        [class.pill-green]="p.color === 'green'"
+        [class.pill-orange]="p.color === 'orange'"
+        [class.pill-purple]="p.color === 'purple'"
+        [class.dimmed]="activeHighlight() !== null && activeHighlight() !== p.id"
+        (click)="toggleHighlight(p.id)">
+        <div 
+          class="av"
+          [style.background]="'var(--' + p.color + '-bg)'"
+          [style.color]="'var(--' + p.color + ')'">
+          {{ p.initials }}
+        </div>
+        <span class="pill-count">{{ p.total }}</span>
+        <div>
+          <div class="pill-name">{{ p.label }}</div>
+          <div class="pill-sub">{{ p.done }} done · {{ p.active }} active</div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="board-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="min-width: 136px; width: 136px;">
+            <div class="th-in">Feature</div>
+          </th>
+          <th style="min-width: 160px; width: 160px;">
+            <div class="th-in">
+              <svg 
+                width="10" 
+                height="10" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                stroke-width="2.5" 
+                style="vertical-align: middle; margin-right: 4px;">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
+              Làm trước
+            </div>
+          </th>
+          @for (p of people(); track p.id) {
+            <th style="min-width: 160px; width: 160px;">
+              <div class="th-in th-person">
+                <div 
+                  class="av"
+                  [style.background]="'var(--' + p.color + '-bg)'"
+                  [style.color]="'var(--' + p.color + ')'">
+                  {{ p.initials }}
+                </div>
+                {{ p.label }}
+              </div>
+            </th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        @for (feat of boardData().features; track feat.id) {
+          @for (task of feat.tasks; track task.id; let ti = $index) {
+            <tr 
+              [class.done-row]="task.done"
+              [class.feat-boundary]="ti === feat.tasks.length - 1"
+              [class.task-row-even]="ti % 2 === 1"
+              [class]="'ab-' + feat.accent">
+              
+              <!-- Feature cell (rowspan) -->
+              @if (ti === 0) {
+                <td 
+                  class="feat-td"
+                  [rowSpan]="feat.tasks.length">
+                  <div class="feat-inner">
+                    <div 
+                      class="feat-dot"
+                      [style.background]="'var(--' + feat.accent + ')'">
+                    </div>
+                    <span class="feat-name">{{ feat.name }}</span>
+                    <span class="feat-count">
+                      {{ feat.tasks.length }} task{{ feat.tasks.length !== 1 ? 's' : '' }}
+                    </span>
+                  </div>
+                </td>
+              }
+
+              <!-- Content columns (pre + people) -->
+              @let columns = ['pre', 'huy', 'tuan', 'bang', 'hoa'];
+              @for (col of columns; track col) {
+                <td 
+                  class="content-cell"
+                  [class.person-col]="col !== 'pre'"
+                  (dragover)="onDragOver($event)"
+                  (dragleave)="onDragLeave($event)"
+                  (drop)="onDrop($event, feat.id, col)">
+                  
+                  @if (task.person === col) {
+                    <div 
+                      class="task-card"
+                      [draggable]="true"
+                      [class.done]="task.done"
+                      [class.faded]="activeHighlight() !== null && task.person !== activeHighlight()"
+                      [class]="'card-' + task.person"
+                      (click)="onTaskClick(feat.id, task.id)"
+                      (dragstart)="onDragStart($event, feat.id, task.id, task.person)"
+                      (dragend)="onDragEnd($event)">
+                      <span class="task-id">#{{ task.label }}</span>
+                      <span class="task-name">{{ task.name }}</span>
+                      @if (task.done) {
+                        <span class="done-check">✓</span>
+                      }
+                    </div>
+                  } @else {
+                    <div 
+                      class="empty-hint"
+                      (click)="onMoveHintClick(feat.id, task.id, col)">
+                      <svg 
+                        width="9" 
+                        height="9" 
+                        viewBox="0 0 24 24" 
+                        fill="none" 
+                        stroke="currentColor" 
+                        stroke-width="3">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                      </svg> 
+                      thêm
+                    </div>
+                  }
+                </td>
+              }
+            </tr>
+          }
+
+          <!-- Add task hint row -->
+          <tr 
+            class="add-row-hint"
+            [class]="'ab-' + feat.accent">
+            <td class="feat-td-spacer"></td>
+            @for (col of ['pre', 'huy', 'tuan', 'bang', 'hoa']; track col) {
+              <td 
+                class="content-cell"
+                (dragover)="onDragOver($event)"
+                (dragleave)="onDragLeave($event)"
+                (drop)="onDrop($event, feat.id, col)">
+                @if (col === 'pre') {
+                  <div 
+                    class="add-row-btn"
+                    (click)="onAddTask(feat.id)">
+                    <svg 
+                      width="10" 
+                      height="10" 
+                      viewBox="0 0 24 24" 
+                      fill="none" 
+                      stroke="currentColor" 
+                      stroke-width="2.5">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Thêm task
+                  </div>
+                }
+              </td>
+            }
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

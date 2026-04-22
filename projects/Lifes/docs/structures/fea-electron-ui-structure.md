@@ -27,16 +27,18 @@ Dự án tích hợp lớp hiển thị (Presentation Layer) mới sử dụng c
 **Location**: `Lifes.Presentation.WebApi/Controllers/`
 **Purpose**: Expose các chức năng của `ScanProjectsCommand` ra bên ngoài dưới dạng API endpoint `GET /api/VersionIncrease/scan`.
 
+### SprintBoard (Angular Feature)
+**Location**: `src/app/features/sprint-board/`
+**Purpose**: Cung cấp giao diện ma trận Kanban cho Sprint Board. Sử dụng native HTML5 Drag & Drop và Angular Signals để quản lý hiệu năng render ma trận lớn.
+
 ## Data Flow
-1. **User Action**: Người dùng nhấn nút "Scan" trên giao diện Angular.
-2. **Angular Service**: `AppComponent` gọi `apiService.scanProjects(path)`.
-3. **HTTP Request**: Angular gửi request tới `http://localhost:5110/api/...`.
-4. **WebApi Controller**: `VersionIncreaseController` nhận request, gọi `IScanProjectsCommand` thực thi logic.
-5. **Application Layer**: Logic nghiệp vụ được thực thi và trả về `Result<List<ProjectFileDto>>`.
-6. **Response**: WebApi trả về JSON cho Angular.
-7. **Signal Update**: Angular cập nhật `projects.set(data)`, UI tự động render lại.
+1. **User Action**: Người dùng nhấn nút "Scan" hoặc thực hiện kéo thả Task.
+2. **Angular Service**: Component gọi service tương ứng (`apiService` hoặc `sprintBoardService`).
+3. **Reactive state update**: Angular Signals nhận dữ liệu mới và tự động kích hoạt quá trình render UI hiệu quả.
+4. **WebApi Interaction**: Request được gửi tới WebApi Bridge (`Lifes.Presentation.WebApi`) để thực hiện các Application Commands (đối với các tính năng đã đấu nối backend).
 
 ## Key Decisions
 - **Option A (Local API Server)**: Chọn giải pháp này để tận dụng tối đa code .NET hiện có mà không cần port sang Node.js hoàn toàn.
 - **Angular 19 + Signals**: Sử dụng công nghệ mới nhất của Angular để đảm bảo hiệu suất và dễ bảo trì.
 - **CORS Configuration**: Phải cấu hình CORS trong WebAPI để cho phép Origin từ Electron (localhost:4200 hoặc file protocol).
+- **CSS Hierarchy Over Shell Overflow**: Khóa hiện tượng cuộn của Application Shell và giao quyền cuộn dọc cho Component lớn (như SprintBoard) để tránh hiện tượng có quá nhiều thanh cuộn (3 thanh cuộn) trên một màn hình.

@@ -96,6 +96,14 @@ src/
 │   ├── main.js                     # Electron main process
 │   ├── preload.js                  # IPC Bridge
 │   └── src/                        # Frontend UI (Angular)
+│       └── app/
+│           ├── features/
+│           │   ├── sprint-board/    # US-11.2 Sprint Board feature
+│           │   │   ├── sprint-board.component.[ts|html|css]
+│           │   │   └── sprint-board.service.ts
+│           │   └── ...
+│           └── models/
+│               └── sprint-board.model.ts # US-11.2 data models
 │
 ├── Lifes.Presentation.WPF/     # WPF UI
 │   ├── Constants/                  # US-5.1
@@ -287,13 +295,13 @@ src/
 
 ### 10. Sprint Board
 **Status**: ✅ Completed
-**User Stories**: US-10.1
+**User Stories**: US-10.1 (WPF), US-11.2 (Electron)
 **Documentation**: [fea-sprint-board-structure.md](./fea-sprint-board-structure.md)
 **Key Components**:
-- SprintBoardView (UniformGrid matrix)
-- SprintBoardViewModel (Mock states)
-- SprintBoardViewModel (Mock states)
-- BoardAssigneeModel / BoardFeatureModel
+- **WPF**: `SprintBoardView.xaml` (UniformGrid matrix), code-behind Drag & Drop.
+- **Electron/Angular**: `SprintBoardComponent` (Angular 19 + Signals), native HTML5 Drag & Drop.
+- **Data Models**: `SprintBoardData`, `SprintFeature`, `SprintTask` (Angular interfaces).
+- **Service**: `SprintBoardService` (Reactive state with Signals).
 
 ### 11. Electron UI Integration
 **Status**: ✅ Completed

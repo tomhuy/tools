@@ -292,15 +292,16 @@ ETL Deployment Tools Suite cung cấp:
 
 ---
 
-### 6. Sprint Board Matrix (US-10.1)
-**Status**: ✅ Completed (US-10.1 Done)
-**User Stories**: US-10.1
+### 6. Sprint Board Matrix (US-10.1, US-11.2)
+**Status**: ✅ Completed
+**User Stories**: US-10.1 (WPF), US-11.2 (Electron)
 **Documentation**: [fea-sprint-board-structure.md](./docs/structures/fea-sprint-board-structure.md)
 
-**Purpose**: Giao diện ma trận Agile Sprint Board cho phép drag-and-drop task của team members.
+**Purpose**: Giao diện ma trận Agile Sprint Board cho phép drag-and-drop task của team members trên cả hai nền tảng (WPF và Electron).
 **Key Components**:
-- Cấu trúc XAML thẻ động co giãn bằng `UniformGrid`.
-- Cấu trúc Models Observables `ObservableObject`, Drag & Drop hỗ trợ trực tiếp từ code behind view qua MVVM ViewModels `MoveTask()`.
+- **WPF**: `SprintBoardView.xaml` (UniformGrid matrix), code-behind Drag & Drop.
+- **Electron/Angular**: `SprintBoardComponent` sử dụng Angular Signals và native HTML5 Drag & Drop.
+- **Service**: `SprintBoardService` quản lý trạng thái local và đồng bộ dữ liệu (trong tương lai).
 
 ---
 

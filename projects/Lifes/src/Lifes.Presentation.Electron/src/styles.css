@@ -1,1 +1,12 @@
-/* You can add global styles to this file, and also import other style files */
+/* Normalize for Electron */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Prevent system scrollbar */
+  background: #202124; /* Support dark theme shell background */
+}
+
+* {
+  box-sizing: border-box;
+}

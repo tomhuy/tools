@@ -46,6 +46,7 @@ User cung cấp:
 - ✅ **Technical constraints**: Công nghệ, kiến trúc, limitations
 - ✅ **Rule.md reference**: Reference đến coding rules và conventions
 - ✅ **design_rule.md reference**: Tham khảo các quy tắc thiết kế UI/UX và logic Presentation (Event-driven vs Delegate)
+- ✅ **angular_rule.md reference**: Quy tắc bắt buộc khi phát triển UI với Electron + Angular (Signals, inject, v.v.)
 
 ### 1.2 Analysis & User Story Creation
 
@@ -168,10 +169,12 @@ AI Agent thực hiện:
 1. **User cung cấp User Story muốn implement**
    - Reference: `docs/user-stories/us-{story-id}/us-{story-id}.md`
 
+
 2. **AI Agent đọc và understand**
    - Đọc file `rule.md` (coding rules và conventions)
    - Đọc file `design_rule.md` (quy tắc thiết kế và xử lý logic UI)
    - Đọc file `PRD.md` (kiến trúc và design system)
+   - Đọc file `angular_rule.md` (nếu làm việc với Electron + Angular)
    - Đọc User Story chi tiết
    - Identify all tasks cần làm
 
@@ -713,6 +716,7 @@ refactor(infrastructure): extract git service interface
 **Coding Rules**: `rule.md`
 
 **Design Rules**: `docs/guidelines/design_rule.md` (Quy tắc xử lý logic CRUD UI)
+**Angular Rules**: `docs/guidelines/angular_rule.md` (Quy tắc phát triển Electron + Angular)
 
 #### 🔄 Workflow Documents
 

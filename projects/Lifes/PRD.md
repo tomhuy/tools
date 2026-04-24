@@ -8,9 +8,9 @@
 | Field | Value |
 |-------|-------|
 | **Product Name** | ETL Deployment Tools Suite |
-| **Version** | 2.2.0 |
+| **Version** | 2.2.1 |
 | **Document Status** | Draft - Initial Version |
-| **Last Updated** | 2026-04-22 |
+| **Last Updated** | 2026-04-24 |
 | **Author** | Development Team |
 | **Stakeholders** | DevOps Team, Developers, Release Managers |
 
@@ -302,6 +302,22 @@ ETL Deployment Tools Suite cung cấp:
 - **WPF**: `SprintBoardView.xaml` (UniformGrid matrix), code-behind Drag & Drop.
 - **Electron/Angular**: `SprintBoardComponent` sử dụng Angular Signals và native HTML5 Drag & Drop.
 - **Service**: `SprintBoardService` quản lý trạng thái local và đồng bộ dữ liệu (trong tương lai).
+
+---
+
+### 11. Electron UI Integration (US-11.1, US-11.3)
+**Status**: ✅ Completed
+**User Stories**: US-11.1 (Setup), US-11.3 (Build & Deploy)
+**Documentation**: [fea-electron-structure.md](./docs/structures/fea-electron-structure.md)
+
+**Purpose**: Nền tảng UI mới sử dụng Electron và Angular. US-11.3 cung cấp quy trình đóng gói tự động (unpacked distribution), tích hợp logging (Serilog + electron-log), và quản lý vòng đời Backend tự động.
+
+**Key Components**:
+- **Lifes.Presentation.Electron**: Angular 19 frontend trên Electron shell.
+- **Lifes.Presentation.WebApi**: Local API server (.NET 8.0/9.0).
+- **Automated Packaging**: Script đóng gói nhanh (skip nén installer) vào thư mục `win-unpacked`.
+- **Backend Lifecycle**: `main.js` tự động khởi chạy/tắt backend với cấu hình `ASPNETCORE_ENVIRONMENT=Production`.
+- **Robust Logging**: Ghi log song song cho cả Electron và Backend vào thư mục `logs/` cục bộ.
 
 ---
 
@@ -1474,8 +1490,6 @@ private string GetLevelColor(string level)
 
 ---
 
-**Document Version:** 2.1.1
-**Last Updated:** 2026-04-22
-**Status:** ✅ Active (100% Complete - Phase 6 Finalized with Today Indicator)
-
-
+**Document Version**: 2.2.1  
+**Last Updated**: 2026-04-24  
+**Status**: ✅ Active (100% Complete - Phase 11 Finalized with Electron Integration & Deployment US-11.3)

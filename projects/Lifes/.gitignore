@@ -83,3 +83,11 @@ logs/
 # OS
 .DS_Store
 Thumbs.db
+
+# Web & Electron
+node_modules/
+dist/
+dist-electron/
+backend-dist/
+out/
+.angular/

@@ -248,6 +248,7 @@ Select an option:
 |------|--------|---------|---------------|----------|
 | **Testing** | ✅ Complete | 3 scripts | README, QUICK-START, CHANGES | Coverage, Watch, Filter |
 | **Build & Deploy** | ✅ Complete (v1.1.0) | 2 scripts | README, QUICK-START, CHANGES | Backup, Exclude, Preserve |
+| **Build Electron** | ✅ Complete | 2 scripts | US-11.3 | 1-Click Build & Auto-Run Backend |
 | **Main Menu** | ✅ Complete | 1 script | Inline help | Navigation hub |
 
 ---
@@ -510,12 +511,13 @@ dotnet restore
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.2.0 | 2026-04-24 | Added Electron Build & Deploy automation (US-11.3) |
 | 1.1.0 | 2026-02-06 | File reorganization, added backup feature overview |
 | 1.0.0 | 2026-02-06 | Initial creation with US-2.1 and US-3.1 |
 
 ---
 
-**Document Version**: 1.1.0  
-**Last Updated**: 2026-02-06  
+**Document Version**: 1.2.0  
+**Last Updated**: 2026-04-24  
 **Status**: ✅ Active  
-**Related**: US-2.1, US-3.1
+**Related**: US-2.1, US-3.1, US-11.3

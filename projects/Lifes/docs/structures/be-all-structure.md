@@ -166,6 +166,14 @@ src/
 │   ├── App.xaml.cs                 # Registers NavigationService + tools (US-5.1)
 │   └── MainWindow.xaml.cs          # Handles ToolNavigated → swap views (US-5.1)
 │
+├── tasks/                          # Automation & Task Scripts
+│   ├── build-deploy/               # US-3.1 & US-11.3
+│   │   ├── build-electron.ps1      # Packaging Frontend + Backend
+│   │   ├── build-deploy-electron.ps1 # Full deployment + backup logic
+│   │   └── deploy-config-electron.json # Deployment settings
+│   └── run-tests/                  # US-2.1
+│       └── run-tests-quick.ps1     # Fast testing script
+│
 └── tests/                          # Testing Layer (US-2.1)
     ├── Lifes.Domain.Tests/      # Unit tests for Domain
     │   ├── Features/VersionIncrease/
@@ -305,13 +313,13 @@ src/
 
 ### 11. Electron UI Integration
 **Status**: ✅ Completed
-**User Stories**: US-11.1
-**Documentation**: [fea-electron-ui-structure.md](./fea-electron-ui-structure.md)
+**User Stories**: US-11.1, US-11.3
+**Documentation**: [fea-electron-structure.md](./fea-electron-structure.md)
 **Key Components**:
-- `Lifes.Presentation.WebApi`: REST API bridge using ASP.NET Core.
-- `Lifes.Presentation.Electron`: Electron shell hosting an Angular 19 frontend.
-- `ApiService` (Angular): Communicates with the local backend bridge.
-- `Signals` (Angular): Reactive state management for the UI.
+- `Lifes.Presentation.WebApi`: REST API bridge using ASP.NET Core (Serilog integrated).
+- `Lifes.Presentation.Electron`: Electron shell hosting an Angular 19 frontend (electron-log integrated).
+- `main.js`: Backend process management (spawn/kill).
+- `build-deploy-electron.ps1`: Automated packaging and deployment.
 
 ## Shared Components
 

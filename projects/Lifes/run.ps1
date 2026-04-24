@@ -25,6 +25,10 @@ function Show-Menu {
     Write-Host "  4. " -NoNewline -ForegroundColor White
     Write-Host "Build & Deploy Application" -ForegroundColor Gray
     Write-Host "  5. " -NoNewline -ForegroundColor White
+    Write-Host "Build Electron Application" -ForegroundColor Gray
+    Write-Host "  6. " -NoNewline -ForegroundColor White
+    Write-Host "Build & Deploy Electron Application" -ForegroundColor Gray
+    Write-Host "  7. " -NoNewline -ForegroundColor White
     Write-Host "Exit" -ForegroundColor Gray
     Write-Host ""
 }
@@ -69,13 +73,33 @@ function Invoke-BuildDeploy {
     $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
 }
 
+function Invoke-BuildElectron {
+    Write-Host "Launching Build Electron Application..." -ForegroundColor Green
+    Write-Host ""
+    $scriptPath = Join-Path $PSScriptRoot "tasks\build-deploy\build-electron.ps1"
+    & $scriptPath
+    Write-Host ""
+    Write-Host "Press any key to return to menu..." -ForegroundColor Gray
+    $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+}
+
+function Invoke-BuildDeployElectron {
+    Write-Host "Launching Build & Deploy Electron Application..." -ForegroundColor Green
+    Write-Host ""
+    $scriptPath = Join-Path $PSScriptRoot "tasks\build-deploy\build-deploy-electron.ps1"
+    & $scriptPath
+    Write-Host ""
+    Write-Host "Press any key to return to menu..." -ForegroundColor Gray
+    $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+}
+
 # Main loop
 $continue = $true
 while ($continue) {
     Show-Banner
     Show-Menu
     
-    Write-Host "Enter your choice (1-5): " -NoNewline -ForegroundColor Yellow
+    Write-Host "Enter your choice (1-7): " -NoNewline -ForegroundColor Yellow
     $choice = Read-Host
     
     Write-Host ""
@@ -94,11 +118,17 @@ while ($continue) {
             Invoke-BuildDeploy
         }
         "5" {
+            Invoke-BuildElectron
+        }
+        "6" {
+            Invoke-BuildDeployElectron
+        }
+        "7" {
             Write-Host "Exiting..." -ForegroundColor Green
             $continue = $false
         }
         default {
-            Write-Host "Invalid option. Please select 1-5." -ForegroundColor Red
+            Write-Host "Invalid option. Please select 1-7." -ForegroundColor Red
             Start-Sleep -Seconds 2
         }
     }

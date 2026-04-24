@@ -1,0 +1,10 @@
+{
+  "deployPath": "C:\\Tools\\Lifes-Electron",
+  "backupPath": "C:\\Tools\\Lifes_Backups_Electron",
+  "projectPath": "src/Lifes.Presentation.Electron",
+  "backupSettings": {
+    "enabled": true,
+    "keepZipOnly": true,
+    "zipNameFormat": "Lifes_Electron_yyyyMMdd_HHmmss"
+  }
+}

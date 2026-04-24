@@ -330,12 +330,12 @@ src/
 - `build-deploy-electron.ps1`: Automated packaging and deployment.
 
 ### 12. Monthly Calendar (Electron)
-**Status**: ✅ Completed (UI & API Integration)
-**User Stories**: US-12.1, US-12.1.1
+**Status**: ✅ Completed (CRUD Topics & API Integration)
+**User Stories**: US-12.1, US-12.1.1, US-12.2
 **Documentation**: [fea-monthly-calendar-structure.md](./fea-monthly-calendar-structure.md)
 **Key Components**:
 - **Backend**: `CalendarController`, `ApiResponse<T>` (Envelope), `ICalendarService`.
-- **Frontend**: `MonthlyCalendarService` (Signals), `CalendarApiService`, `MonthlyGridComponent`, `MonthlyCalendarPageComponent`.
+- **Frontend**: `MonthlyCalendarService` (Signals + CRUD), `CalendarApiService`, `MonthlyGridComponent`, `TopicEditorComponent`, `MonthlyCalendarPageComponent`.
 - Multi-year support and precise pixel styling.
 
 ## Shared Components

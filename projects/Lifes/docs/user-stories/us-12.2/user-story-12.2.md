@@ -35,12 +35,12 @@
 - Cascade delete: mặc định xóa luôn children; có thể đổi sau dựa trên feedback user.
 
 ## Tasks Breakdown
-- [ ] Task 1: Thiết kế form schema (title, startDate, endDate, color, tagIds[]).
-- [ ] Task 2: Tạo `TopicEditorComponent` + form validation.
-- [ ] Task 3: Integrate mở/đóng form từ `MonthlyCalendarComponent`.
-- [ ] Task 4: Bổ sung method `addTopic/updateTopic/deleteTopic` vào service (immutable).
-- [ ] Task 5: Verify re-render scope (chỉ row thay đổi re-render).
-- [ ] Task 6: Manual test.
+- [x] Task 1: Thiết kế form schema (title, startDate, endDate, order, color, tagIds[]).
+- [x] Task 2: Tạo `TopicEditorComponent` + form validation.
+- [x] Task 3: Integrate mở/đóng form từ `MonthlyCalendarComponent`.
+- [x] Task 4: Bổ sung method `addTopic/updateTopic/deleteTopic` vào service (immutable).
+- [x] Task 5: Verify re-render scope (chỉ row thay đổi re-render).
+- [x] Task 6: Manual test.
 
 ## Dependencies
 - **Depends on**: US-12.1 (service + rendering contract sẵn có).
@@ -51,8 +51,25 @@
 - Drag-and-drop để reorder → US-12.4 hoặc US sau.
 
 ## Definition of Done
-- [ ] Add/Edit/Delete Topic hoạt động trên UI.
-- [ ] Validation pass.
-- [ ] Re-render scope đúng contract US-12.1.
-- [ ] Code tuân thủ `angular_rule.md`.
-- [ ] User review & approve.
+- [x] Add/Edit/Delete Topic hoạt động trên UI.
+- [x] Validation pass.
+- [x] Re-render scope đúng contract US-12.1.
+- [x] Code tuân thủ `angular_rule.md`.
+- [x] User review & approve.
+
+## Implementation Progress
+
+### Files Created
+- [x] `src/app/features/monthly-calendar/topic-editor/topic-editor.component.ts`
+- [x] `src/app/features/monthly-calendar/topic-editor/topic-editor.component.html`
+- [x] `src/app/features/monthly-calendar/topic-editor/topic-editor.component.css`
+
+### Files Modified
+- [x] `src/app/features/monthly-calendar/monthly-calendar.service.ts`
+- [x] `src/app/features/monthly-calendar/monthly-calendar-page/monthly-calendar-page.component.ts`
+- [x] `src/app/features/monthly-calendar/monthly-calendar-page/monthly-calendar-page.component.html`
+
+### Current Status
+- **Status**: ✅ Completed
+- **Completed Date**: 2026-04-25
+- **Notes**: Topic Editor hoàn tất với đầy đủ tính năng CRUD, tích hợp palette màu chuẩn hệ thống và hỗ trợ cascade delete.

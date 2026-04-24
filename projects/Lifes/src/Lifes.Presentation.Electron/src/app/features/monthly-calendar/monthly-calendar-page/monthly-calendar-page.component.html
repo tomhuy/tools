@@ -46,7 +46,7 @@
           }
         </div>
 
-        <button class="action-btn primary">
+        <button class="action-btn primary" (click)="onAddTopic()">
           <span class="plus">+</span> Thêm chủ đề
         </button>
         <div class="mode-select-container">
@@ -75,3 +75,12 @@
     </app-monthly-grid>
   </div>
 </div>
+
+@if (showTopicEditor()) {
+  <app-topic-editor
+    [topic]="editingTopic()"
+    (save)="onEditorSave($event)"
+    (delete)="onEditorDelete($event)"
+    (cancel)="onEditorCancel()">
+  </app-topic-editor>
+}

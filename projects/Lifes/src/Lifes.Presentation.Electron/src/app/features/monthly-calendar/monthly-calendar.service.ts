@@ -61,6 +61,13 @@ export class MonthlyCalendarService {
     });
   }
 
+  addTopic(topic: Memento) {
+    this.api.saveMemento(topic).subscribe({
+      next: saved => this.mementos.update(l => [...l, saved]),
+      error: err => this.lastError.set(err.message ?? 'Failed to add topic')
+    });
+  }
+
   addChild(child: Memento) {
     this.api.saveMemento(child).subscribe({
       next: saved => this.mementos.update(l => [...l, saved]),
@@ -68,10 +75,24 @@ export class MonthlyCalendarService {
     });
   }
 
+  updateTopic(topic: Memento) {
+    this.api.saveMemento(topic).subscribe({
+      next: saved => this.mementos.update(l => l.map(x => x.id === saved.id ? saved : x)),
+      error: err => this.lastError.set(err.message ?? 'Failed to update topic')
+    });
+  }
+
   updateMemento(m: Memento) {
     this.api.saveMemento(m).subscribe({
       next: saved => this.mementos.update(l => l.map(x => x.id === saved.id ? saved : x)),
       error: err => this.lastError.set(err.message ?? 'Failed to update memento')
+    });
+  }
+
+  deleteTopic(id: number) {
+    this.api.deleteMemento(id).subscribe({
+      next: () => this.mementos.update(l => l.filter(x => x.id !== id && x.parentId !== id)),
+      error: err => this.lastError.set(err.message ?? 'Failed to delete topic')
     });
   }
 

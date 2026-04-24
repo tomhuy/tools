@@ -9,6 +9,7 @@ Di chuyển giao diện Lịch tháng (Monthly Calendar) từ WPF sang Electron/
 - `monthly-calendar-page.component.ts` - Container component quản lý toolbar, state của tháng được chọn, và chế độ hiển thị. Thực hiện load dữ liệu ban đầu qua `ngOnInit`.
 - `monthly-grid.component.ts` - Pure presentational component chịu trách nhiệm render lưới Gantt, vạch Today, và các phase bars.
 - `monthly-grid.component.css` - Chứa logic CSS Grid 31 cột và các style hiển thị (Gantt, Dot, Pure Dot).
+- `topic-editor.component.ts` - [NEW] Component standalone xử lý Form CRUD cho Topic (parentId == null).
 
 ### Application Layer (Services & API)
 - `calendar-api.service.ts` - [NEW] Service cấp thấp xử lý giao tiếp HTTP với WebApi, unwrap `ApiResponse`.
@@ -36,11 +37,20 @@ Di chuyển giao diện Lịch tháng (Monthly Calendar) từ WPF sang Electron/
 **Purpose**: Single source of truth cho dữ liệu lịch. Sử dụng Signal-based state để đảm bảo chỉ những row bị thay đổi mới re-render.
 **Key Logic**:
 - `loadInitial(year)`: Gọi API để lấy mementos và tags đồng thời qua `forkJoin`.
-- `addChild` / `updateMemento` / `deleteMemento`: Các phương thức mutation đã được kết nối với Backend API qua `CalendarApiService`.
+- `addTopic` / `updateTopic` / `deleteTopic`: [NEW] Các phương thức mutation dành riêng cho Topic, hỗ trợ cascade delete trên frontend.
+- `addChild` / `updateMemento` / `deleteMemento`: Các phương thức mutation cho child mementos (phases).
 
 ### CalendarController (Backend)
 **Location**: `src/Lifes.Presentation.WebApi/Controllers/`
 **Purpose**: Cung cấp các REST endpoints (`GET`, `POST`, `DELETE`) để thao tác với `ICalendarService`. Trả về dữ liệu bọc trong `ApiResponse<T>`.
+
+### TopicEditorComponent
+**Location**: `src/app/features/monthly-calendar/topic-editor/`
+**Purpose**: Form modal để thêm mới, cập nhật hoặc xóa Topic.
+**Key Logic**:
+- Reactive Forms với validation `dateRangeValidator`.
+- Emission of `save`, `cancel`, và `delete` events.
+- Color preset palette cho việc chọn màu nhanh.
 
 ## Data Flow
 1. `MonthlyCalendarPageComponent` kích hoạt `loadInitial` trong `ngOnInit`.

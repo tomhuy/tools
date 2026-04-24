@@ -1,0 +1,77 @@
+<div class="page-container">
+  <header class="toolbar">
+    <div class="toolbar-left">
+      <button class="menu-toggle">
+        <i class="icon-menu"></i>
+      </button>
+      <h1 class="page-title">Monthly Calendar</h1>
+    </div>
+
+    <div class="toolbar-right">
+      <div class="toolbar-actions">
+        <div class="dropdown-wrapper">
+          <button class="action-btn secondary" (click)="toggleMonthPicker()">
+            Chọn tháng <span class="chevron-down">▼</span>
+          </button>
+          
+          @if (showMonthPicker()) {
+            <div class="dropdown-menu month-picker">
+              <div class="dropdown-header">Chọn các tháng muốn xem</div>
+              <div class="month-list">
+                @for (m of months; track m.month) {
+                  <label class="month-item">
+                    <input 
+                      type="checkbox" 
+                      [checked]="isMonthSelected(m.month, m.year)"
+                      (change)="onMonthToggle(m.month, m.year)">
+                    <span class="month-label">{{ m.label }}</span>
+                  </label>
+                }
+              </div>
+            </div>
+          }
+        </div>
+
+        <div class="dropdown-wrapper">
+          <button class="action-btn secondary" (click)="toggleTagPicker()">
+            Tags <span class="chevron-down">▼</span>
+          </button>
+
+          @if (showTagPicker()) {
+            <div class="dropdown-menu tag-picker">
+              <div class="dropdown-header">Chọn Tag để lọc</div>
+              <!-- Tag list would go here -->
+              <div class="empty-msg">Tính năng đang phát triển</div>
+            </div>
+          }
+        </div>
+
+        <button class="action-btn primary">
+          <span class="plus">+</span> Thêm chủ đề
+        </button>
+        <div class="mode-select-container">
+          <select 
+            class="mode-select" 
+            [value]="displayMode()"
+            (change)="onModeSelectChange($event)">
+            <option value="gantt">Gantt</option>
+            <option value="dot">Dot</option>
+            <option value="pure-dot">Pure Dot</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="scroll-content">
+    <app-monthly-grid
+      [topics]="topics()"
+      [childrenByParent]="childrenByParent()"
+      [selectedMonths]="selectedMonths()"
+      [displayMode]="displayMode()"
+      [today]="today()"
+      (topicClick)="onTopicClick($event)"
+      (phaseClick)="onPhaseClick($event)">
+    </app-monthly-grid>
+  </div>
+</div>

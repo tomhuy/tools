@@ -10,7 +10,7 @@
 | **Product Name** | ETL Deployment Tools Suite |
 | **Version** | 2.2.1 |
 | **Document Status** | Draft - Initial Version |
-| **Last Updated** | 2026-04-24 |
+| **Last Updated** | 2026-04-25 |
 | **Author** | Development Team |
 | **Stakeholders** | DevOps Team, Developers, Release Managers |
 
@@ -305,16 +305,17 @@ ETL Deployment Tools Suite cung cấp:
 
 ---
 
-### 11. Electron UI Integration (US-11.1, US-11.3)
+### 11. Electron UI Integration (US-11.1, US-11.3, US-12.1)
 **Status**: ✅ Completed
-**User Stories**: US-11.1 (Setup), US-11.3 (Build & Deploy)
-**Documentation**: [fea-electron-structure.md](./docs/structures/fea-electron-structure.md)
+**User Stories**: US-11.1 (Setup), US-11.3 (Build & Deploy), US-12.1 (Monthly Calendar)
+**Documentation**: [fea-electron-structure.md](./docs/structures/fea-electron-structure.md), [fea-monthly-calendar-structure.md](./docs/structures/fea-monthly-calendar-structure.md)
 
 **Purpose**: Nền tảng UI mới sử dụng Electron và Angular. US-11.3 cung cấp quy trình đóng gói tự động (unpacked distribution), tích hợp logging (Serilog + electron-log), và quản lý vòng đời Backend tự động.
 
 **Key Components**:
 - **Lifes.Presentation.Electron**: Angular 19 frontend trên Electron shell.
 - **Lifes.Presentation.WebApi**: Local API server (.NET 8.0/9.0).
+- **Monthly Calendar (US-12.1)**: Giao diện lịch tháng chính xác từng pixel với bản WPF, hỗ trợ Gantt/Dot rendering, multi-month view, và multi-year logic.
 - **Automated Packaging**: Script đóng gói nhanh (skip nén installer) vào thư mục `win-unpacked`.
 - **Backend Lifecycle**: `main.js` tự động khởi chạy/tắt backend với cấu hình `ASPNETCORE_ENVIRONMENT=Production`.
 - **Robust Logging**: Ghi log song song cho cả Electron và Backend vào thư mục `logs/` cục bộ.

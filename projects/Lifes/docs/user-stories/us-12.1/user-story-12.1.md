@@ -156,41 +156,42 @@ Data flow: `Service signal` → `Page reads signal` → `Page truyền vào Grid
 ### Files to Create
 
 **Page component (smart / container):**
-- [ ] `src/Lifes.Presentation.Electron/src/app/features/monthly-calendar/monthly-calendar-page/monthly-calendar-page.component.ts`
-- [ ] `src/Lifes.Presentation.Electron/src/app/features/monthly-calendar/monthly-calendar-page/monthly-calendar-page.component.html`
-- [ ] `src/Lifes.Presentation.Electron/src/app/features/monthly-calendar/monthly-calendar-page/monthly-calendar-page.component.css`
+- [x] `src/Lifes.Presentation.Electron/src/app/features/monthly-calendar/monthly-calendar-page/monthly-calendar-page.component.ts`
+- [x] `src/Lifes.Presentation.Electron/src/app/features/monthly-calendar/monthly-calendar-page/monthly-calendar-page.component.html`
+- [x] `src/Lifes.Presentation.Electron/src/app/features/monthly-calendar/monthly-calendar-page/monthly-calendar-page.component.css`
 
 **Grid component (pure presentational):**
-- [ ] `src/Lifes.Presentation.Electron/src/app/features/monthly-calendar/monthly-grid/monthly-grid.component.ts`
-- [ ] `src/Lifes.Presentation.Electron/src/app/features/monthly-calendar/monthly-grid/monthly-grid.component.html`
-- [ ] `src/Lifes.Presentation.Electron/src/app/features/monthly-calendar/monthly-grid/monthly-grid.component.css`
+- [x] `src/Lifes.Presentation.Electron/src/app/features/monthly-calendar/monthly-grid/monthly-grid.component.ts`
+- [x] `src/Lifes.Presentation.Electron/src/app/features/monthly-calendar/monthly-grid/monthly-grid.component.html`
+- [x] `src/Lifes.Presentation.Electron/src/app/features/monthly-calendar/monthly-grid/monthly-grid.component.css`
 
 **Shared (service + constants + models):**
-- [ ] `src/Lifes.Presentation.Electron/src/app/features/monthly-calendar/monthly-calendar.service.ts`
-- [ ] `src/Lifes.Presentation.Electron/src/app/features/monthly-calendar/monthly-calendar.constants.ts`
-- [ ] `src/Lifes.Presentation.Electron/src/app/models/memento.model.ts`
-- [ ] `src/Lifes.Presentation.Electron/src/app/models/tag.model.ts`
-- [ ] `src/Lifes.Presentation.Electron/src/app/models/display-mode.model.ts`
+- [x] `src/Lifes.Presentation.Electron/src/app/features/monthly-calendar/monthly-calendar.service.ts`
+- [x] `src/Lifes.Presentation.Electron/src/app/features/monthly-calendar/monthly-calendar.constants.ts`
+- [x] `src/Lifes.Presentation.Electron/src/app/models/memento.model.ts`
+- [x] `src/Lifes.Presentation.Electron/src/app/models/tag.model.ts`
+- [x] `src/Lifes.Presentation.Electron/src/app/models/display-mode.model.ts`
+- [x] `src/Lifes.Presentation.Electron/src/app/models/selectable-month.model.ts`
 
 ### Files to Modify
 
-- [ ] `src/Lifes.Presentation.Electron/src/app/app.routes.ts` — thêm route `/monthly-calendar`.
-- [ ] `src/Lifes.Presentation.Electron/src/app/app.component.html` — thêm menu item.
+- [x] `src/Lifes.Presentation.Electron/src/app/app.routes.ts` — thêm route `/monthly-calendar`.
+- [x] `src/Lifes.Presentation.Electron/src/app/app.component.html` — thêm menu item.
 
 ## Tasks Breakdown
 
-- [ ] Task 1: Định nghĩa TypeScript interfaces: `Memento`, `Tag`, `DisplayMode`, `SelectableMonth`.
-- [ ] Task 2: Tạo `MonthlyCalendarService` với signal state + computed derivations (`topicRows`, `childrenByParent`) + mutation stubs (immutable).
-- [ ] Task 3: Seed fake data trong service khớp cấu trúc `MementoModel` bản WPF (để parity test).
-- [ ] Task 4: Tạo `MonthlyGridComponent` (pure presentational) với `input.required<>()` + `output<>()` signature.
-- [ ] Task 5: Implement render Gantt trong grid: topic rows + child phases với `@for track id`, CSS Grid 31 cột.
-- [ ] Task 6: Implement 3 display modes trong grid bằng class binding trên container (không đụng row).
-- [ ] Task 7: Implement Today Indicator trong grid (CSS `::before` + `[class.is-today]`).
-- [ ] Task 8: Tạo `MonthlyCalendarPageComponent` (smart) — inject service, render toolbar (month selector + display mode toggle), truyền data vào grid.
-- [ ] Task 9: Wire outputs của grid lên page (tạm chỉ log hoặc stub — hành vi thực ở US-12.2).
-- [ ] Task 10: Routing `/monthly-calendar` → page + menu navigation.
-- [ ] Task 11: Dev-console verify: gọi `service.addChild/updateMemento/deleteMemento` và quan sát chỉ row liên quan re-render (qua Angular DevTools / inspection).
-- [ ] Task 12: Build Electron thành công, không lỗi TS.
+- [x] Task 1: Định nghĩa TypeScript interfaces: `Memento`, `Tag`, `DisplayMode`, `SelectableMonth`.
+- [x] Task 2: Tạo `MonthlyCalendarService` với signal state + computed derivations (`topicRows`, `childrenByParent`) + mutation stubs (immutable).
+- [x] Task 3: Seed fake data trong service khớp cấu trúc `MementoModel` bản WPF (để parity test).
+- [x] Task 4: Tạo `MonthlyGridComponent` (pure presentational) với `input.required<>()` + `output<>()` signature.
+- [x] Task 5: Implement render Gantt trong grid: topic rows + child phases với `@for track id`, CSS Grid 31 cột.
+- [x] Task 6: Implement 3 display modes trong grid bằng class binding trên container (không đụng row).
+- [x] Task 7: Implement Today Indicator trong grid (CSS `::before` + `[class.is-today]`).
+- [x] Task 8: Tạo `MonthlyCalendarPageComponent` (smart) — inject service, render toolbar (month selector + display mode toggle), truyền data vào grid.
+- [x] Task 9: Wire outputs của grid lên page (tạm chỉ log hoặc stub — hành vi thực ở US-12.2).
+- [x] Task 10: Routing `/monthly-calendar` → page + menu navigation.
+- [x] Task 11: Dev-console verify: gọi `service.addChild/updateMemento/deleteMemento` và quan sát chỉ row liên quan re-render (qua Angular DevTools / inspection).
+- [x] Task 12: Build Electron thành công, không lỗi TS.
 
 ## Dependencies
 - **Depends on**: US-11.1, US-11.2.
@@ -205,10 +206,15 @@ Data flow: `Service signal` → `Page reads signal` → `Page truyền vào Grid
 - Xoá WPF implementation cũ → US cleanup sau khi toàn bộ 12.x duyệt.
 
 ## Definition of Done
-- [ ] Monthly Calendar accessible qua menu Electron.
-- [ ] Render đúng topic rows + child phases cho các tháng được chọn.
-- [ ] 3 display modes + Today indicator hoạt động.
-- [ ] Service stubs (`addChild/updateMemento/deleteMemento`) đã có và verify được re-render scope đúng contract.
-- [ ] Code tuân thủ `angular_rule.md`.
-- [ ] Build Electron không lỗi.
-- [ ] User review & approve.
+- [x] Monthly Calendar accessible qua menu Electron.
+- [x] Render đúng topic rows + child phases cho các tháng được chọn.
+- [x] 3 display modes + Today indicator hoạt động.
+- [x] Service stubs (`addChild/updateMemento/deleteMemento`) đã có và verify được re-render scope đúng contract.
+- [x] Code tuân thủ `angular_rule.md`.
+- [x] Build Electron không lỗi.
+- [x] User review & approve.
+
+## Final Status
+- **Status**: ✅ Completed
+- **Completed Date**: 2026-04-24
+- **Approved By**: bmhuy

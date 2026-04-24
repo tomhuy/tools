@@ -1,0 +1,87 @@
+<div class="grid-container" [class]="'mode-' + displayMode()">
+  @for (month of selectedMonths(); track month) {
+    <div class="month-block">
+      <!-- Month Header (Row 0) -->
+      <div class="month-title-row">
+        <div class="month-name-cell">
+          {{ getMonthName(month.month, month.year) }} {{ month.year }}
+        </div>
+        <div class="month-header-filler"></div>
+      </div>
+
+      <div class="month-table">
+        <!-- Day Names (Row 1) -->
+        <div class="header-row day-names">
+          <div class="topic-header">Event / Date</div>
+          <div class="days-container">
+            @for (day of daysArray; track day) {
+              <div class="day-cell weekday" [class.is-today]="isToday(day, month.month, month.year)">
+                @if (isToday(day, month.month, month.year)) {
+                  <div class="today-indicator-line"></div>
+                }
+                {{ getWeekday(day, month.month, month.year) }}
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Day Numbers (Row 2) -->
+        <div class="header-row day-numbers">
+          <div class="topic-header filler"></div>
+          <div class="days-container">
+            @for (day of daysArray; track day) {
+              <div class="day-cell date" [class.is-today]="isToday(day, month.month, month.year)">
+                @if (isToday(day, month.month, month.year)) {
+                  <div class="today-indicator-line white"></div>
+                }
+                {{ day | number: '2.0' }}
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Topic Rows -->
+        @for (topic of topics(); track topic.id) {
+          <div class="topic-row">
+            <div class="topic-info" (click)="topicClick.emit(topic)">
+              <div class="topic-indicator" [style.background-color]="topic.color"></div>
+              <div class="topic-title">{{ topic.title }}</div>
+            </div>
+            
+            <div class="days-container grid-area">
+              <!-- Grid Cells (Background lines) -->
+              <div class="grid-cells">
+                @for (day of daysArray; track day) {
+                  <div class="grid-cell" [class.is-today]="isToday(day, month.month, month.year)">
+                    @if (isToday(day, month.month, month.year)) {
+                      <div class="today-indicator-line"></div>
+                    }
+                  </div>
+                }
+              </div>
+
+              <!-- Phase Bars -->
+              <div class="bars-overlay">
+                @for (child of childrenByParent().get(topic.id); track child.id) {
+                  @if (isChildInMonth(child, month)) {
+                    <div 
+                      class="phase-bar"
+                      [style.grid-column-start]="getStartCol(child, month)"
+                      [style.grid-column-end]="getEndCol(child, month)"
+                      [style.background-color]="child.color || topic.color"
+                      [title]="child.title"
+                      (click)="phaseClick.emit(child)">
+                      @if (displayMode() === 'gantt' && shouldShowTitle(child)) {
+                        <span class="phase-title">{{ child.title }}</span>
+                      }
+                    </div>
+                  }
+                }
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

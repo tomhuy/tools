@@ -1,0 +1,238 @@
+:host {
+  display: block;
+  background-color: #fff;
+  color: #2D3748;
+  font-family: 'Google Sans', sans-serif;
+}
+
+.grid-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.month-block {
+  background-color: #fff;
+  border: 1px solid #E0E0E0;
+  border-radius: 0; /* WPF uses square corners for blocks */
+  overflow: hidden;
+}
+
+/* Row 0: Month Header */
+.month-title-row {
+  display: flex;
+  height: 40px;
+  background-color: #F9FAFB;
+  border-bottom: 1px solid #E0E0E0;
+}
+
+.month-name-cell {
+  width: 250px;
+  background-color: #EDF2F7;
+  padding: 0 15px;
+  display: flex;
+  align-items: center;
+  font-weight: 800; /* ExtraBold */
+  font-size: 14px;
+  color: #2D3748;
+  border-right: 1px solid #E0E0E0;
+  flex-shrink: 0;
+}
+
+.month-header-filler {
+  flex: 1;
+}
+
+.month-table {
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+}
+
+.days-container {
+  display: grid;
+  grid-template-columns: repeat(31, 30px);
+}
+
+.header-row {
+  display: flex;
+  background-color: #F8F9F9;
+  border-bottom: 1px solid #E0E0E0;
+  height: 30px;
+}
+
+.topic-header {
+  width: 250px;
+  flex-shrink: 0;
+  font-weight: 700;
+  font-size: 11px;
+  color: #333333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid #E0E0E0;
+}
+
+.topic-header.filler {
+  border-right: 1px solid #E0E0E0;
+}
+
+.day-cell {
+  width: 30px;
+  text-align: center;
+  border-right: 1px solid #E0E0E0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.day-cell.weekday {
+  font-size: 10px;
+  color: #7F8C8D;
+}
+
+.day-cell.date {
+  font-size: 11px;
+  font-weight: 700;
+  color: #2C3E50;
+}
+
+.day-cell.is-today.date {
+  background-color: #FF4D4D;
+  color: #fff;
+}
+
+.today-indicator-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: #FF4D4D;
+  z-index: 10;
+}
+
+.today-indicator-line.white {
+  background-color: #FFFFFF;
+}
+
+.topic-row {
+  display: flex;
+  border-bottom: 1px solid #E0E0E0;
+  height: 30px;
+}
+
+.topic-row:hover {
+  background-color: #F7FAFC;
+}
+
+.topic-info {
+  width: 250px;
+  flex-shrink: 0;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-right: 1px solid #E0E0E0;
+  cursor: pointer;
+}
+
+.topic-indicator {
+  width: 4px;
+  height: 16px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.topic-title {
+  font-size: 11px;
+  color: #2C3E50;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 600; /* SemiBold */
+}
+
+.grid-area {
+  position: relative;
+  height: 100%;
+}
+
+.grid-cells {
+  display: grid;
+  grid-template-columns: repeat(31, 30px);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.grid-cell {
+  width: 30px;
+  border-right: 1px solid #E0E0E0;
+  height: 100%;
+  position: relative;
+}
+
+.grid-cell.is-today {
+  /* No background highlight in grid rows, only line */
+}
+
+.bars-overlay {
+  display: grid;
+  grid-template-columns: repeat(31, 30px);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  align-items: center;
+  z-index: 5;
+}
+
+.phase-bar {
+  height: 18px;
+  border-radius: 2px;
+  font-size: 9px;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  border: 1px solid rgba(0,0,0,0.05);
+  margin: 0 1px;
+}
+
+.phase-bar:hover {
+  filter: brightness(1.1);
+}
+
+.phase-title {
+  font-weight: 600;
+  padding: 0 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Display Modes adjustment */
+.mode-dot .phase-bar, .mode-pure-dot .phase-bar {
+  width: 10px !important;
+  height: 10px !important;
+  border-radius: 50%;
+  margin: auto;
+  grid-column-end: span 1 !important;
+}
+
+.mode-dot .phase-bar {
+  background-color: rgba(16, 0, 0, 0.06); /* Faint background from WPF */
+  border: 1px solid currentColor;
+}
+
+.mode-pure-dot .phase-bar {
+  border: none;
+  box-shadow: none;
+}

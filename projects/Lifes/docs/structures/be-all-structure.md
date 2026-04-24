@@ -101,9 +101,17 @@ src/
 │           │   ├── sprint-board/    # US-11.2 Sprint Board feature
 │           │   │   ├── sprint-board.component.[ts|html|css]
 │           │   │   └── sprint-board.service.ts
+│           │   ├── monthly-calendar/ # US-12.1 Monthly Calendar feature
+│           │   │   ├── monthly-grid/
+│           │   │   ├── monthly-calendar-page/
+│           │   │   └── monthly-calendar.service.ts
 │           │   └── ...
 │           └── models/
-│               └── sprint-board.model.ts # US-11.2 data models
+│               ├── sprint-board.model.ts # US-11.2 data models
+│               ├── memento.model.ts      # US-12.1
+│               ├── tag.model.ts          # US-12.1
+│               ├── display-mode.model.ts # US-12.1
+│               └── selectable-month.model.ts # US-12.1
 │
 ├── Lifes.Presentation.WPF/     # WPF UI
 │   ├── Constants/                  # US-5.1
@@ -320,6 +328,16 @@ src/
 - `Lifes.Presentation.Electron`: Electron shell hosting an Angular 19 frontend (electron-log integrated).
 - `main.js`: Backend process management (spawn/kill).
 - `build-deploy-electron.ps1`: Automated packaging and deployment.
+
+### 12. Monthly Calendar (Electron Migration)
+**Status**: ✅ Completed (US-12.1 Done)
+**User Stories**: US-12.1
+**Documentation**: [fea-monthly-calendar-structure.md](./fea-monthly-calendar-structure.md)
+**Key Components**:
+- `MonthlyGridComponent`: Presentational component for Gantt/Dot rendering.
+- `MonthlyCalendarPageComponent`: Container component for toolbar and page state.
+- `MonthlyCalendarService`: Reactive state management with Angular Signals.
+- Multi-year support and precise pixel styling.
 
 ## Shared Components
 

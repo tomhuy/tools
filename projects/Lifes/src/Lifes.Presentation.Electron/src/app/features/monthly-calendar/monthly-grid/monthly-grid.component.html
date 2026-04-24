@@ -42,44 +42,47 @@
 
         <!-- Topic Rows -->
         @for (topic of topics(); track topic.id) {
-          <div class="topic-row">
-            <div class="topic-info" (click)="topicClick.emit(topic)">
-              <div class="topic-indicator" [style.background-color]="topic.color"></div>
-              <div class="topic-title">{{ topic.title }}</div>
-            </div>
-            
-            <div class="days-container grid-area">
-              <!-- Grid Cells (Background lines) -->
-              <div class="grid-cells">
-                @for (day of daysArray; track day) {
-                  <div class="grid-cell" [class.is-today]="isToday(day, month.month, month.year)">
-                    @if (isToday(day, month.month, month.year)) {
-                      <div class="today-indicator-line"></div>
-                    }
-                  </div>
-                }
+          @if (isMementoInMonth(topic, month)) {
+            <div class="topic-row">
+              <div class="topic-info" (click)="topicClick.emit(topic)">
+                <div class="topic-indicator" [style.background-color]="getBgColor(topic)"></div>
+                <div class="topic-title">{{ topic.title }}</div>
               </div>
-
-              <!-- Phase Bars -->
-              <div class="bars-overlay">
-                @for (child of childrenByParent().get(topic.id); track child.id) {
-                  @if (isChildInMonth(child, month)) {
-                    <div 
-                      class="phase-bar"
-                      [style.grid-column-start]="getStartCol(child, month)"
-                      [style.grid-column-end]="getEndCol(child, month)"
-                      [style.background-color]="child.color || topic.color"
-                      [title]="child.title"
-                      (click)="phaseClick.emit(child)">
-                      @if (displayMode() === 'gantt' && shouldShowTitle(child)) {
-                        <span class="phase-title">{{ child.title }}</span>
+              
+              <div class="days-container grid-area">
+                <!-- Grid Cells (Background lines) -->
+                <div class="grid-cells">
+                  @for (day of daysArray; track day) {
+                    <div class="grid-cell" [class.is-today]="isToday(day, month.month, month.year)">
+                      @if (isToday(day, month.month, month.year)) {
+                        <div class="today-indicator-line"></div>
                       }
                     </div>
                   }
-                }
+                </div>
+
+                <!-- Phase Bars -->
+                <div class="bars-overlay">
+                  @for (child of childrenByParent().get(topic.id); track child.id) {
+                    @if (isMementoInMonth(child, month)) {
+                      <div 
+                        class="phase-bar"
+                        [style.grid-column-start]="getStartCol(child, month)"
+                        [style.grid-column-end]="getEndCol(child, month)"
+                        [style.background-color]="getBgColor(child, topic)"
+                        [style.color]="getFgColor(child, topic)"
+                        [title]="child.title"
+                        (click)="phaseClick.emit(child)">
+                        @if (displayMode() === 'gantt' && shouldShowTitle(child)) {
+                          <span class="phase-title">{{ child.title }}</span>
+                        }
+                      </div>
+                    }
+                  }
+                </div>
               </div>
             </div>
-          </div>
+          }
         }
       </div>
     </div>

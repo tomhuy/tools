@@ -1,13 +1,17 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { inject, Injectable, computed, signal } from '@angular/core';
+import { forkJoin } from 'rxjs';
 import { Memento } from '../../models/memento.model';
 import { Tag } from '../../models/tag.model';
 import { DisplayMode } from '../../models/display-mode.model';
 import { SelectableMonth } from '../../models/selectable-month.model';
+import { CalendarApiService } from './calendar-api.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MonthlyCalendarService {
+  private readonly api = inject(CalendarApiService);
+
   readonly mementos = signal<Memento[]>([]);
   readonly tags = signal<Tag[]>([]);
   readonly displayMode = signal<DisplayMode>('gantt');
@@ -15,6 +19,9 @@ export class MonthlyCalendarService {
     { year: 2026, month: 3, label: 'Tháng 3' },
     { year: 2026, month: 4, label: 'Tháng 4' }
   ]);
+
+  readonly isLoading = signal(false);
+  readonly lastError = signal<string | null>(null);
 
   readonly topicRows = computed(() =>
     this.mementos()
@@ -33,20 +40,46 @@ export class MonthlyCalendarService {
     return map;
   });
 
-  constructor() {
-    this.seedFakeData();
+  loadInitial(year: number) {
+    this.isLoading.set(true);
+    this.lastError.set(null);
+
+    forkJoin({
+      mementos: this.api.getMementos({ year, includeChildren: true }),
+      tags: this.api.getTags()
+    }).subscribe({
+      next: ({ mementos, tags }) => {
+        this.mementos.set(mementos);
+        this.tags.set(tags);
+        this.isLoading.set(false);
+      },
+      error: err => {
+        console.error('Failed to load initial calendar data', err);
+        this.lastError.set(err.message ?? 'Unknown error');
+        this.isLoading.set(false);
+      }
+    });
   }
 
   addChild(child: Memento) {
-    this.mementos.update(l => [...l, child]);
+    this.api.saveMemento(child).subscribe({
+      next: saved => this.mementos.update(l => [...l, saved]),
+      error: err => this.lastError.set(err.message ?? 'Failed to add child')
+    });
   }
 
   updateMemento(m: Memento) {
-    this.mementos.update(l => l.map(x => x.id === m.id ? m : x));
+    this.api.saveMemento(m).subscribe({
+      next: saved => this.mementos.update(l => l.map(x => x.id === saved.id ? saved : x)),
+      error: err => this.lastError.set(err.message ?? 'Failed to update memento')
+    });
   }
 
   deleteMemento(id: number) {
-    this.mementos.update(l => l.filter(x => x.id !== id));
+    this.api.deleteMemento(id).subscribe({
+      next: () => this.mementos.update(l => l.filter(x => x.id !== id)),
+      error: err => this.lastError.set(err.message ?? 'Failed to delete memento')
+    });
   }
 
   setDisplayMode(mode: DisplayMode) {
@@ -65,41 +98,5 @@ export class MonthlyCalendarService {
         );
       }
     });
-  }
-
-  private seedFakeData() {
-    const year = 2026;
-
-    const fakeTags: Tag[] = [
-      { id: 1, name: 'Gia đình', color: '#4A90E2' },
-      { id: 2, name: 'Học tập', color: '#50E3C2' },
-      { id: 3, name: 'Công việc', color: '#F5A623' }
-    ];
-
-    const fakeMementos: Memento[] = [
-      // Topic 1
-      { id: 1, title: 'Vì gia đình', parentId: null, startDate: '2026-03-01', endDate: '2026-04-30', order: 1, color: '#3498db' },
-      { id: 11, title: 'X', parentId: 1, startDate: '2026-03-01', endDate: '2026-03-31', order: 1, color: '#3498db' },
-      { id: 12, title: 'X', parentId: 1, startDate: '2026-04-01', endDate: '2026-04-15', order: 1, color: '#3498db' },
-
-      // Topic 2
-      { id: 2, title: 'Học tâm lý học', parentId: null, startDate: '2026-03-01', endDate: '2026-04-30', order: 2, color: '#27ae60' },
-      { id: 21, title: 'Học', parentId: 2, startDate: '2026-03-05', endDate: '2026-03-05', order: 1, color: '#27ae60' },
-      { id: 22, title: 'Học', parentId: 2, startDate: '2026-03-12', endDate: '2026-03-12', order: 1, color: '#27ae60' },
-      { id: 23, title: 'Học', parentId: 2, startDate: '2026-04-02', endDate: '2026-04-02', order: 1, color: '#27ae60' },
-
-      // Topic 3
-      { id: 3, title: 'Đi xem phim', parentId: null, startDate: '2026-03-01', endDate: '2026-04-30', order: 3, color: '#2980b9' },
-      { id: 31, title: 'X', parentId: 3, startDate: '2026-03-20', endDate: '2026-03-20', order: 1, color: '#2980b9' },
-      { id: 32, title: 'X', parentId: 3, startDate: '2026-04-10', endDate: '2026-04-10', order: 1, color: '#2980b9' },
-
-      // Topic 4
-      { id: 4, title: 'Học tư duy', parentId: null, startDate: '2026-03-01', endDate: '2026-04-30', order: 4, color: '#8e44ad' },
-      { id: 41, title: 'H...', parentId: 4, startDate: '2026-03-08', endDate: '2026-03-08', order: 1, color: '#8e44ad' },
-      { id: 42, title: 'H...', parentId: 4, startDate: '2026-04-05', endDate: '2026-04-06', order: 1, color: '#8e44ad' }
-    ];
-
-    this.tags.set(fakeTags);
-    this.mementos.set(fakeMementos);
   }
 }

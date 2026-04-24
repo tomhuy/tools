@@ -329,14 +329,13 @@ src/
 - `main.js`: Backend process management (spawn/kill).
 - `build-deploy-electron.ps1`: Automated packaging and deployment.
 
-### 12. Monthly Calendar (Electron Migration)
-**Status**: ✅ Completed (US-12.1 Done)
-**User Stories**: US-12.1
+### 12. Monthly Calendar (Electron)
+**Status**: ✅ Completed (UI & API Integration)
+**User Stories**: US-12.1, US-12.1.1
 **Documentation**: [fea-monthly-calendar-structure.md](./fea-monthly-calendar-structure.md)
 **Key Components**:
-- `MonthlyGridComponent`: Presentational component for Gantt/Dot rendering.
-- `MonthlyCalendarPageComponent`: Container component for toolbar and page state.
-- `MonthlyCalendarService`: Reactive state management with Angular Signals.
+- **Backend**: `CalendarController`, `ApiResponse<T>` (Envelope), `ICalendarService`.
+- **Frontend**: `MonthlyCalendarService` (Signals), `CalendarApiService`, `MonthlyGridComponent`, `MonthlyCalendarPageComponent`.
 - Multi-year support and precise pixel styling.
 
 ## Shared Components

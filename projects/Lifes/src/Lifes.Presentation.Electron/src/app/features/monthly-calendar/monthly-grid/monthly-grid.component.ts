@@ -4,6 +4,7 @@ import { Memento } from '../../../models/memento.model';
 import { DisplayMode } from '../../../models/display-mode.model';
 import { SelectableMonth } from '../../../models/selectable-month.model';
 import { DAYS_IN_MONTH } from '../monthly-calendar.constants';
+import { getSolidBgColor, getSolidFgColor } from '../../../utils/color-utils';
 
 @Component({
   selector: 'app-monthly-grid',
@@ -25,9 +26,9 @@ export class MonthlyGridComponent {
 
   readonly daysArray = Array.from({ length: DAYS_IN_MONTH }, (_, i) => i + 1);
 
-  isChildInMonth(child: Memento, month: SelectableMonth): boolean {
-    const start = new Date(child.startDate);
-    const end = new Date(child.endDate);
+  isMementoInMonth(memento: Memento, month: SelectableMonth): boolean {
+    const start = new Date(memento.startDate);
+    const end = new Date(memento.endDate);
     
     // Convert to comparable numbers YYYYMM
     const startVal = start.getFullYear() * 100 + (start.getMonth() + 1);
@@ -79,10 +80,19 @@ export class MonthlyGridComponent {
     return weekdays[date.getDay()];
   }
 
+
   shouldShowTitle(child: Memento): boolean {
     const start = new Date(child.startDate);
     const end = new Date(child.endDate);
     const diff = (end.getTime() - start.getTime()) / (1000 * 3600 * 24);
     return diff >= 2; // Only show title if bar is at least 3 days long
+  }
+
+  getBgColor(memento: Memento, fallback?: Memento): string {
+    return getSolidBgColor(memento.color || fallback?.color);
+  }
+
+  getFgColor(memento: Memento, fallback?: Memento): string {
+    return getSolidFgColor(memento.color || fallback?.color);
   }
 }

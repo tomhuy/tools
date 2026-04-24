@@ -305,20 +305,20 @@ ETL Deployment Tools Suite cung cấp:
 
 ---
 
-### 11. Electron UI Integration (US-11.1, US-11.3, US-12.1)
+### 11. Electron UI Integration (US-11.1, US-11.3, US-12.1, US-12.1.1)
 **Status**: ✅ Completed
-**User Stories**: US-11.1 (Setup), US-11.3 (Build & Deploy), US-12.1 (Monthly Calendar)
+**User Stories**: US-11.1 (Setup), US-11.3 (Build & Deploy), US-12.1 (Monthly Grid), US-12.1.1 (API Integration)
 **Documentation**: [fea-electron-structure.md](./docs/structures/fea-electron-structure.md), [fea-monthly-calendar-structure.md](./docs/structures/fea-monthly-calendar-structure.md)
 
-**Purpose**: Nền tảng UI mới sử dụng Electron và Angular. US-11.3 cung cấp quy trình đóng gói tự động (unpacked distribution), tích hợp logging (Serilog + electron-log), và quản lý vòng đời Backend tự động.
+**Purpose**: Nền tảng UI mới sử dụng Electron và Angular. Tích hợp hoàn chỉnh với Backend .NET qua REST API, hỗ trợ persistence và reactive state management.
 
 **Key Components**:
 - **Lifes.Presentation.Electron**: Angular 19 frontend trên Electron shell.
-- **Lifes.Presentation.WebApi**: Local API server (.NET 8.0/9.0).
-- **Monthly Calendar (US-12.1)**: Giao diện lịch tháng chính xác từng pixel với bản WPF, hỗ trợ Gantt/Dot rendering, multi-month view, và multi-year logic.
-- **Automated Packaging**: Script đóng gói nhanh (skip nén installer) vào thư mục `win-unpacked`.
-- **Backend Lifecycle**: `main.js` tự động khởi chạy/tắt backend với cấu hình `ASPNETCORE_ENVIRONMENT=Production`.
-- **Robust Logging**: Ghi log song song cho cả Electron và Backend vào thư mục `logs/` cục bộ.
+- **Lifes.Presentation.WebApi**: REST API bridge phục vụ cho Electron frontend.
+- **Monthly Calendar API (US-12.1.1)**: Triển khai `CalendarController` và `ApiResponse` envelope cho phép Electron thao tác với dữ liệu thực từ backend.
+- **Automated Packaging**: Quy trình đóng gói vào thư mục `win-unpacked` giúp tăng tốc độ deploy và test.
+- **Backend Lifecycle**: Tự động quản lý vòng đời WebApi backend từ Electron shell.
+- **Robust Logging**: Hệ thống ghi log tập trung cho cả Frontend và Backend.
 
 ---
 
@@ -1437,7 +1437,7 @@ private string GetLevelColor(string level)
 - ✅ Advanced Calendar Selection & Event Phases (US-8.4)
 - ✅ Hamburger Navigation Menu (US-8.5)
 
-### Phase 6: Memento Tagging & Hierarchical Filtering - v2.1.0 (In Development)
+### Phase 6: Memento Tagging & Hierarchical Filtering - v2.1.0 (Completed)
 - ✅ **Tagging System**: Categorize mementos with multiple tags (Work, Health, Personal, etc. US-9.2)
 - ✅ **Hierarchical Filtering**: Automatically include all child notes if the parent topic matches the selected tag.
 - ✅ **Monthly Calendar CRUD**: Add, edit, delete, and color-pick mementos directly on the monthly grid (US-9.3).
@@ -1448,6 +1448,13 @@ private string GetLevelColor(string level)
 - ✅ **Topic Editor (Add/Update)**: Enhanced AddTopic form to support full editing of existing topics via Monthly Calendar (US-9.7).
 - ✅ **Memento Management (US-9.8)**: Centralized grid for managing Topics (Parent only), with tag filtering and custom visual ordering.
 - ✅ **Today Calendar Indicator (US-9.9)**: Visual vertical red line indicator for current date across all calendar rows for better navigation.
+
+### Phase 12: Electron Migration & API Integration - v2.2.0 (Completed)
+- ✅ **Setup Electron & Angular**: Initial setup and build/deploy pipeline (US-11.1, US-11.3).
+- ✅ **Monthly Calendar Migration**: Pixel-perfect port from WPF to Angular with Signal-based state (US-12.1).
+- ✅ **REST API Integration**: Connection to .NET backend with `ApiResponse` envelope (US-12.1.1).
+- ✅ **Color Palette Port**: Migration of WPF brand colors and contrast logic to TypeScript utilities.
+- ✅ **Multi-Month Rendering**: Support for topic rows spanning across multiple months with smart grid filtering.
 
 ---
 
@@ -1491,6 +1498,6 @@ private string GetLevelColor(string level)
 
 ---
 
-**Document Version**: 2.2.1  
-**Last Updated**: 2026-04-24  
-**Status**: ✅ Active (100% Complete - Phase 11 Finalized with Electron Integration & Deployment US-11.3)
+**Document Version**: 2.3.0  
+**Last Updated**: 2026-04-25  
+**Status**: ✅ Active (100% Complete - Phase 12 Finalized with Electron Migration & API Integration US-12.1.1)

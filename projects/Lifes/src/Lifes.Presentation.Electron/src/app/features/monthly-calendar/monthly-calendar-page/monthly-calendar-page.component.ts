@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MonthlyCalendarService } from '../monthly-calendar.service';
 import { MonthlyGridComponent } from '../monthly-grid/monthly-grid.component';
@@ -12,17 +12,21 @@ import { DisplayMode } from '../../../models/display-mode.model';
   templateUrl: './monthly-calendar-page.component.html',
   styleUrl: './monthly-calendar-page.component.css'
 })
-export class MonthlyCalendarPageComponent {
-  private readonly calendarService = inject(MonthlyCalendarService);
-
-  readonly topics = this.calendarService.topicRows;
-  readonly childrenByParent = this.calendarService.childrenByParent;
-  readonly selectedMonths = this.calendarService.selectedMonths;
-  readonly displayMode = this.calendarService.displayMode;
-  readonly today = signal(new Date(2026, 3, 24));
-
+export class MonthlyCalendarPageComponent implements OnInit {
+  readonly service = inject(MonthlyCalendarService);
+  
   readonly showMonthPicker = signal(false);
   readonly showTagPicker = signal(false);
+
+  readonly topics = this.service.topicRows;
+  readonly childrenByParent = this.service.childrenByParent;
+  readonly selectedMonths = this.service.selectedMonths;
+  readonly displayMode = this.service.displayMode;
+  readonly today = signal(new Date(2026, 3, 24));
+
+  ngOnInit() {
+    this.service.loadInitial(2026);
+  }
 
   readonly months: SelectableMonth[] = Array.from({ length: 12 }, (_, i) => ({
     year: 2026,
@@ -35,7 +39,7 @@ export class MonthlyCalendarPageComponent {
   }
 
   onMonthToggle(monthNum: number, year: number = 2026) {
-    this.calendarService.toggleMonth(monthNum, year);
+    this.service.toggleMonth(monthNum, year);
   }
 
   toggleMonthPicker() {
@@ -49,7 +53,7 @@ export class MonthlyCalendarPageComponent {
   }
 
   onDisplayModeChange(mode: DisplayMode) {
-    this.calendarService.setDisplayMode(mode);
+    this.service.setDisplayMode(mode);
   }
 
   onModeSelectChange(event: Event) {

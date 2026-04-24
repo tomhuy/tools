@@ -2,6 +2,9 @@ using Lifes.Application.Features.VersionIncrease.Commands;
 using Lifes.Core.Interfaces;
 using Lifes.Infrastructure.Common.Configuration;
 using Lifes.Infrastructure.Features.VersionIncrease.Services;
+using Lifes.Infrastructure.Features.AnnualCalendar.Repositories;
+using Lifes.Infrastructure.Features.AnnualCalendar.Services;
+using Lifes.Core.Models;
 using Serilog;
 
 // Đảm bảo thư mục làm việc (Working Directory) luôn là thư mục chứa file exe
@@ -50,6 +53,11 @@ try
     builder.Services.AddSingleton<IVersionService, VersionService>();
     builder.Services.AddSingleton<ISettingsService, SettingsService>();
     builder.Services.AddSingleton<IGitService, Lifes.Infrastructure.Features.VersionIncrease.Git.GitService>();
+
+    // Memento & Calendar Services
+    builder.Services.AddSingleton<ITagRepository, JsonTagRepository>();
+    builder.Services.AddSingleton<IMementoRepository, JsonMementoRepository>();
+    builder.Services.AddSingleton<ICalendarService, CalendarService>();
 
     builder.Services.AddTransient<IScanProjectsCommand, ScanProjectsCommand>();
     builder.Services.AddTransient<IUpdateVersionsCommand, UpdateVersionsCommand>();

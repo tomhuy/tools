@@ -69,8 +69,8 @@ public class CalendarController : ControllerBase
     {
         try
         {
-            await _svc.SaveMementoAsync(m);
-            return Ok(ApiResponse<MementoModel>.Ok(m));
+            var saved = await _svc.SaveMementoAsync(m);
+            return Ok(ApiResponse<MementoModel>.Ok(saved));
         }
         catch (Exception ex)
         {
@@ -99,8 +99,8 @@ public class CalendarController : ControllerBase
     {
         try
         {
-            await _svc.SaveTagAsync(t);
-            return Ok(ApiResponse<TagModel>.Ok(t));
+            var saved = await _svc.SaveTagAsync(t);
+            return Ok(ApiResponse<TagModel>.Ok(saved));
         }
         catch (Exception ex)
         {

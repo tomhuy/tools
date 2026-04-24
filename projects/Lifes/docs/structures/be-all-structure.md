@@ -331,7 +331,7 @@ src/
 
 ### 12. Monthly Calendar (Electron)
 **Status**: ✅ Completed (CRUD Topics & API Integration)
-**User Stories**: US-12.1, US-12.1.1, US-12.2
+**User Stories**: US-12.1, US-12.1.1, US-12.2, US-12.2.1
 **Documentation**: [fea-monthly-calendar-structure.md](./fea-monthly-calendar-structure.md)
 **Key Components**:
 - **Backend**: `CalendarController`, `ApiResponse<T>` (Envelope), `ICalendarService`.

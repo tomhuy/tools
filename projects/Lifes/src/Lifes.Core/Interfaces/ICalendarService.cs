@@ -10,8 +10,8 @@ public interface ICalendarService
     Task<IEnumerable<MementoModel>> GetMonthlyEventsAsync(int year, int month, List<int>? tagIds = null, bool includeChildren = false);
     Task<IEnumerable<MementoModel>> GetMementosAsync(MementoQueryModel query, bool includeChildren = false);
     Task<IEnumerable<TagModel>> GetTagsAsync();
-    Task SaveMementoAsync(MementoModel memento);
+    Task<MementoModel> SaveMementoAsync(MementoModel memento);
     Task DeleteMementoAsync(int id);
-    Task SaveTagAsync(TagModel tag);
+    Task<TagModel> SaveTagAsync(TagModel tag);
     Task DeleteTagAsync(int id);
 }

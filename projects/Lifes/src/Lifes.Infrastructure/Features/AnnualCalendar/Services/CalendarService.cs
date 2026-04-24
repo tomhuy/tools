@@ -79,7 +79,7 @@ public class CalendarService : ICalendarService
         return mementos;
     }
 
-    public Task SaveMementoAsync(MementoModel memento)
+    public Task<MementoModel> SaveMementoAsync(MementoModel memento)
     {
         return _mementoRepository.SaveAsync(memento);
     }
@@ -89,7 +89,7 @@ public class CalendarService : ICalendarService
         return _mementoRepository.DeleteAsync(id);
     }
 
-    public Task SaveTagAsync(TagModel tag)
+    public Task<TagModel> SaveTagAsync(TagModel tag)
     {
         return _tagRepository.SaveAsync(tag);
     }

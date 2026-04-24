@@ -101,7 +101,7 @@ public class JsonMementoRepository : IMementoRepository
         return Task.FromResult<IEnumerable<MementoModel>>(result.ToList());
     }
 
-    public async Task SaveAsync(MementoModel memento)
+    public async Task<MementoModel> SaveAsync(MementoModel memento)
     {
         if (memento.Id == 0)
         {
@@ -124,6 +124,7 @@ public class JsonMementoRepository : IMementoRepository
         }
         
         await Task.Run(() => SaveData(_mementos));
+        return memento;
     }
 
     public async Task DeleteAsync(int id)

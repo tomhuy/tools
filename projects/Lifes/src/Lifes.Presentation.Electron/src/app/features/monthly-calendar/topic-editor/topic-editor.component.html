@@ -1,62 +1,14 @@
 <div class="modal-backdrop" (click)="cancel.emit()">
   <div class="modal-container" (click)="$event.stopPropagation()">
     <header class="modal-header">
-      <h2>{{ isEditMode() ? 'Chỉnh sửa chủ đề' : 'Thêm chủ đề mới' }}</h2>
-      <button class="close-btn" (click)="cancel.emit()">×</button>
+      <h2>{{ isEditMode() ? 'Chỉnh sửa Chủ đề' : 'Thêm Chủ đề mới' }}</h2>
     </header>
 
     <form [formGroup]="topicForm" (ngSubmit)="onSubmit()" class="modal-form">
-      <div class="form-group">
-        <label for="title">Tiêu đề</label>
-        <input 
-          type="text" 
-          id="title" 
-          formControlName="title" 
-          placeholder="Nhập tiêu đề chủ đề..."
-          [class.invalid]="isFieldInvalid('title')">
-        @if (isFieldInvalid('title')) {
-          <span class="error-msg">Vui lòng nhập tiêu đề</span>
-        }
-      </div>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label for="startDate">Ngày bắt đầu</label>
-          <input 
-            type="date" 
-            id="startDate" 
-            formControlName="startDate"
-            [class.invalid]="isFieldInvalid('startDate')">
-        </div>
-        <div class="form-group">
-          <label for="endDate">Ngày kết thúc</label>
-          <input 
-            type="date" 
-            id="endDate" 
-            formControlName="endDate"
-            [class.invalid]="isFieldInvalid('endDate') || topicForm.errors?.['dateRangeInvalid']">
-        </div>
-      </div>
-      @if (topicForm.errors?.['dateRangeInvalid']) {
-        <span class="error-msg">Ngày bắt đầu phải trước hoặc bằng ngày kết thúc</span>
-      }
-
-      <div class="form-row">
-        <div class="form-group">
-          <label for="color">Màu sắc</label>
-          <div class="color-picker-container">
-            <input type="color" id="color" formControlName="color">
-            <div class="preset-colors">
-              @for (c of presetColors; track c) {
-                <div 
-                  class="color-swatch" 
-                  [style.background-color]="c"
-                  [class.active]="topicForm.get('color')?.value === c"
-                  (click)="topicForm.get('color')?.setValue(c)">
-                </div>
-              }
-            </div>
-          </div>
+      <div class="form-row header-row">
+        <div class="form-group title-group">
+          <label for="title">Tiêu đề</label>
+          <input type="text" id="title" formControlName="title">
         </div>
         <div class="form-group order-group">
           <label for="order">Thứ tự</label>
@@ -64,16 +16,27 @@
         </div>
       </div>
 
-      <div class="form-group">
-        <label>Tags</label>
+      <div class="form-row date-row">
+        <div class="form-group">
+          <label for="startDate">Ngày bắt đầu</label>
+          <input type="date" id="startDate" formControlName="startDate">
+        </div>
+        <div class="form-group">
+          <label for="endDate">Ngày kết thúc</label>
+          <input type="date" id="endDate" formControlName="endDate">
+        </div>
+      </div>
+
+      <div class="form-group tag-section">
+        <label>Gán Tags</label>
         <div class="tag-selector">
           @for (tag of tags(); track tag.id) {
-            <label class="tag-item" [style.--tag-color]="tag.color">
-              <input 
-                type="radio" 
-                [value]="tag.id" 
-                formControlName="tagId">
-              <span class="tag-badge">{{ tag.name }}</span>
+            <label class="tag-item">
+              <input type="radio" [value]="tag.id" formControlName="tagId">
+              <span class="tag-badge">
+                <span class="tag-dot" [style.background-color]="tag.color"></span>
+                {{ tag.name }}
+              </span>
             </label>
           }
           <label class="tag-item no-tag">
@@ -83,14 +46,31 @@
         </div>
       </div>
 
+      <div class="form-group color-section">
+        <label class="color-label">
+          Màu đại diện Topic 
+          <span class="color-preview" [style.background-color]="topicForm.get('color')?.value"></span>
+        </label>
+        <div class="color-grid">
+          @for (c of presetColors; track c) {
+            <div 
+              class="color-swatch" 
+              [style.background-color]="c"
+              [class.active]="topicForm.get('color')?.value === c"
+              (click)="topicForm.get('color')?.setValue(c)">
+            </div>
+          }
+        </div>
+      </div>
+
       <footer class="modal-footer">
         @if (isEditMode()) {
-          <button type="button" class="btn btn-danger" (click)="onDelete()">Xóa</button>
+          <button type="button" class="btn btn-danger-text" (click)="onDelete()">Xóa</button>
         }
         <div class="spacer"></div>
-        <button type="button" class="btn btn-secondary" (click)="cancel.emit()">Hủy</button>
-        <button type="submit" class="btn btn-primary" [disabled]="topicForm.invalid">
-          {{ isEditMode() ? 'Lưu thay đổi' : 'Thêm mới' }}
+        <button type="button" class="btn btn-cancel" (click)="cancel.emit()">Hủy bỏ</button>
+        <button type="submit" class="btn btn-save" [disabled]="topicForm.invalid">
+          {{ isEditMode() ? 'Lưu thay đổi' : 'Lưu thông tin' }}
         </button>
       </footer>
     </form>

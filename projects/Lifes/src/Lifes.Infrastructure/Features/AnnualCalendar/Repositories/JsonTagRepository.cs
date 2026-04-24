@@ -78,7 +78,7 @@ public class JsonTagRepository : ITagRepository
         return Task.FromResult<IEnumerable<TagModel>>(_tags);
     }
     
-    public Task SaveAsync(TagModel tag)
+    public Task<TagModel> SaveAsync(TagModel tag)
     {
         if (tag.Id == 0)
         {
@@ -96,7 +96,7 @@ public class JsonTagRepository : ITagRepository
         }
         
         SaveData(_tags);
-        return Task.CompletedTask;
+        return Task.FromResult(tag);
     }
     
     public Task DeleteAsync(int id)

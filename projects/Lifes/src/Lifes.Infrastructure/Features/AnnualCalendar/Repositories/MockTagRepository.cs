@@ -27,6 +27,6 @@ public class MockTagRepository : ITagRepository
         return Task.FromResult<IEnumerable<TagModel>>(_tags);
     }
 
-    public Task SaveAsync(TagModel tag) => Task.CompletedTask;
+    public Task<TagModel> SaveAsync(TagModel tag) => Task.FromResult(tag);
     public Task DeleteAsync(int id) => Task.CompletedTask;
 }

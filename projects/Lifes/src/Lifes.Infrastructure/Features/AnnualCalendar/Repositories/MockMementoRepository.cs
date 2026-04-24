@@ -38,7 +38,7 @@ public class MockMementoRepository : IMementoRepository
         return Task.FromResult<IEnumerable<MementoModel>>(result);
     }
 
-    public Task SaveAsync(MementoModel memento)
+    public Task<MementoModel> SaveAsync(MementoModel memento)
     {
         if (memento.Id == 0)
         {
@@ -59,7 +59,7 @@ public class MockMementoRepository : IMementoRepository
                 existing.Order = memento.Order;
             }
         }
-        return Task.CompletedTask;
+        return Task.FromResult(memento);
     }
 
     public Task DeleteAsync(int id)

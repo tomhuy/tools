@@ -53,7 +53,10 @@
                 <!-- Grid Cells (Background lines) -->
                 <div class="grid-cells">
                   @for (day of daysArray; track day) {
-                    <div class="grid-cell" [class.is-today]="isToday(day, month.month, month.year)">
+                    <div 
+                      class="grid-cell" 
+                      [class.is-today]="isToday(day, month.month, month.year)"
+                      (click)="onGridCellClick($event, topic, day, month.month, month.year)">
                       @if (isToday(day, month.month, month.year)) {
                         <div class="today-indicator-line"></div>
                       }
@@ -72,7 +75,8 @@
                         [style.background-color]="getBgColor(child, topic)"
                         [style.color]="getFgColor(child, topic)"
                         [title]="child.title"
-                        (click)="phaseClick.emit(child)">
+                        (click)="onPhaseClick($event, child)">
+                        <div class="phase-color-trigger" (click)="onOpenColorPicker($event, child)">▾</div>
                         @if (displayMode() === 'gantt' && shouldShowTitle(child)) {
                           <span class="phase-title">{{ child.title }}</span>
                         }
@@ -88,3 +92,58 @@
     </div>
   }
 </div>
+
+<!-- Quick Phase Popup -->
+@if (activePopup(); as popup) {
+  <div class="quick-popup-backdrop" (click)="closePopup()"></div>
+  <div 
+    class="quick-phase-popup" 
+    [style.left.px]="popup.position.x" 
+    [style.top.px]="popup.position.y"
+    (click)="$event.stopPropagation()">
+    
+    <div class="popup-body">
+      <div class="input-row">
+        <input 
+          #titleInput
+          type="text" 
+          [value]="popup.memento.title" 
+          (input)="popup.memento.title = $any($event.target).value"
+          (keyup.enter)="onUpdatePhase()"
+          placeholder="Title">
+        
+        @if (!popup.isNew) {
+          <button class="btn-icon delete" (click)="onDeletePhase(popup.memento.id)">
+            <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19V4M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"/></svg>
+          </button>
+        }
+      </div>
+      
+      <div class="popup-footer">
+        <button class="btn-update" (click)="onUpdatePhase()">
+          {{ popup.isNew ? 'Thêm' : 'Cập nhật' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Quick Color Picker -->
+@if (activeColorPicker(); as cp) {
+  <div class="quick-popup-backdrop" (click)="closeColorPicker()"></div>
+  <div 
+    class="quick-color-picker" 
+    [style.left.px]="cp.position.x" 
+    [style.top.px]="cp.position.y"
+    (click)="$event.stopPropagation()">
+    <div class="color-grid">
+      @for (color of presetColors; track color) {
+        <div 
+          class="color-swatch" 
+          [style.background-color]="color"
+          (click)="onSelectColor(cp.memento, color)">
+        </div>
+      }
+    </div>
+  </div>
+}

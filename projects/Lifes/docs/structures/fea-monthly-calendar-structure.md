@@ -9,7 +9,8 @@ Di chuyển giao diện Lịch tháng (Monthly Calendar) từ WPF sang Electron/
 - `monthly-calendar-page.component.ts` - Container component quản lý toolbar, state của tháng được chọn, và chế độ hiển thị. Thực hiện load dữ liệu ban đầu qua `ngOnInit`.
 - `monthly-grid.component.ts` - Pure presentational component chịu trách nhiệm render lưới Gantt, vạch Today, và các phase bars.
 - `monthly-grid.component.css` - Chứa logic CSS Grid 31 cột và các style hiển thị (Gantt, Dot, Pure Dot).
-- `topic-editor.component.ts` - [NEW] Component standalone xử lý Form CRUD cho Topic (parentId == null). Đã tối ưu hóa giao diện Compact và hỗ trợ chọn nhiều Tag.
+- `topic-editor.component.ts` - Component standalone xử lý Form CRUD cho Topic.
+- `monthly-grid.component.ts` - Đã bổ sung logic cho `QuickPhasePopup` và `QuickColorPicker` để CRUD phase nhanh.
 
 ### Application Layer (Services & API)
 - `calendar-api.service.ts` - [NEW] Service cấp thấp xử lý giao tiếp HTTP với WebApi, unwrap `ApiResponse`.
@@ -65,4 +66,7 @@ Di chuyển giao diện Lịch tháng (Monthly Calendar) từ WPF sang Electron/
 - **CSS Grid (31 columns)**: Sử dụng grid cố định 31 cột (mỗi cột 30px) để đảm bảo các thanh Gantt khớp chính xác với tiêu đề ngày.
 - **Signal-based Computing**: Sử dụng `computed` để map child mementos theo parent ID, giúp việc render bars trong từng row cực kỳ hiệu quả.
 - **Multi-Year Support**: Toàn bộ logic hiển thị và tính toán weekday đều nhận tham số `year` để hỗ trợ hiển thị lịch qua nhiều năm.
+- **Quick Phase CRUD**: Cho phép tạo/sửa/xóa phase cực nhanh qua popup tại ô lưới, tránh phải mở form lớn.
+- **Floating Popup Positioning**: Sử dụng tọa độ chuột (`MouseEvent`) để định vị popup linh hoạt trên màn hình fixed.
+- **Single Row Constraint**: Ép các phase bar vào `grid-row: 1` để tránh hiện tượng nhảy dòng khi có nhiều dữ liệu chồng lấn.
 - **ApiResponse Envelope**: Sử dụng một cấu trúc phản hồi chuẩn để quản lý lỗi và dữ liệu một cách nhất quán giữa .NET và Angular.

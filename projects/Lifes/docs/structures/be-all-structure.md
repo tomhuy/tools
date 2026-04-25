@@ -331,12 +331,13 @@ src/
 
 ### 12. Monthly Calendar (Electron)
 **Status**: ✅ Completed (CRUD Topics & API Integration)
-**User Stories**: US-12.1, US-12.1.1, US-12.2, US-12.2.1
+**User Stories**: US-12.1, US-12.1.1, US-12.2, US-12.2.1, US-12.2.2
 **Documentation**: [fea-monthly-calendar-structure.md](./fea-monthly-calendar-structure.md)
 **Key Components**:
 - **Backend**: `CalendarController`, `ApiResponse<T>` (Envelope), `ICalendarService`.
 - **Frontend**: `MonthlyCalendarService` (Signals + CRUD), `CalendarApiService`, `MonthlyGridComponent`, `TopicEditorComponent`, `MonthlyCalendarPageComponent`.
 - Multi-year support and precise pixel styling.
+- **Quick Phase CRUD**: [NEW] Hệ thống Popup nhanh cho việc tạo và xóa phase trực tiếp trên lưới.
 
 ## Shared Components
 

@@ -716,6 +716,7 @@ refactor(infrastructure): extract git service interface
 **Coding Rules**: `rule.md`
 
 **Design Rules**: `docs/guidelines/design_rule.md` (Quy tắc xử lý logic CRUD UI)
+**FE Design Rules**: `docs/guidelines/fe_design_rule.md` (Pixel-perfect UI dimensions)
 **Angular Rules**: `docs/guidelines/angular_rule.md` (Quy tắc phát triển Electron + Angular)
 
 #### 🔄 Workflow Documents

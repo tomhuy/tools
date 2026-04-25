@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MonthlyCalendarService } from '../monthly-calendar.service';
 import { MonthlyGridComponent } from '../monthly-grid/monthly-grid.component';
 import { TopicEditorComponent } from '../topic-editor/topic-editor.component';
+import { TagManagementComponent } from '../tag-management/tag-management.component';
 import { SelectableMonth } from '../../../models/selectable-month.model';
 import { DisplayMode } from '../../../models/display-mode.model';
 import { Memento } from '../../../models/memento.model';
@@ -10,7 +11,7 @@ import { Memento } from '../../../models/memento.model';
 @Component({
   selector: 'app-monthly-calendar-page',
   standalone: true,
-  imports: [CommonModule, MonthlyGridComponent, TopicEditorComponent],
+  imports: [CommonModule, MonthlyGridComponent, TopicEditorComponent, TagManagementComponent],
   templateUrl: './monthly-calendar-page.component.html',
   styleUrl: './monthly-calendar-page.component.css'
 })
@@ -19,6 +20,7 @@ export class MonthlyCalendarPageComponent implements OnInit {
   
   readonly showMonthPicker = signal(false);
   readonly showTagPicker = signal(false);
+  readonly showTagManager = signal(false);
   readonly showTopicEditor = signal(false);
   readonly editingTopic = signal<Memento | null>(null);
 
@@ -54,6 +56,11 @@ export class MonthlyCalendarPageComponent implements OnInit {
   toggleTagPicker() {
     this.showTagPicker.update(v => !v);
     if (this.showTagPicker()) this.showMonthPicker.set(false);
+  }
+
+  onManageTags() {
+    this.showTagPicker.set(false);
+    this.showTagManager.set(true);
   }
 
   onDisplayModeChange(mode: DisplayMode) {

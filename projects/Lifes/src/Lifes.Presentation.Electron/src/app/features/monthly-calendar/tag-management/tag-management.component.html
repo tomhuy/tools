@@ -1,0 +1,73 @@
+<div class="modal-overlay" (click)="onBackdropClick($event)">
+  <div class="modal-content">
+    <header class="modal-header">
+      <h2>Quản lý thẻ</h2>
+      <button class="close-btn" (click)="close.emit()">
+        &times;
+      </button>
+    </header>
+
+    <div class="modal-body">
+      @if (isLoading()) {
+      <div class="loading-overlay">
+        <div class="spinner"></div>
+      </div>
+      }
+
+      <div class="tag-list-container">
+        <div class="list-header">Gán Thẻ</div>
+
+        <div class="tag-list">
+          @for (tag of tags(); track tag.id) {
+          <div class="tag-item" (click)="onEdit(tag)">
+            <span class="color-swatch" [style.backgroundColor]="tag.color">
+            </span>
+            <span class="tag-name">{{ tag.name }}</span>
+            <div class="tag-actions">
+              <button class="icon-btn delete" (click)="$event.stopPropagation(); onDelete(tag.id)" title="Xóa">
+                ✕
+              </button>
+            </div>
+          </div>
+          } @empty {
+          <div class="empty-state">Chưa có thẻ nào.</div>
+          }
+        </div>
+      </div>
+
+      <div class="tag-form">
+        <h3>{{ editingTag() ? 'Chỉnh sửa thẻ' : 'Thêm thẻ mới' }}</h3>
+
+        <div class="form-group">
+          <label>Tên thẻ</label>
+          <input type="text" [(ngModel)]="formName" placeholder="Nhập tên thẻ..." class="form-input"
+            (keyup.enter)="onSave()">
+        </div>
+
+        <div class="form-group">
+          <label>Màu sắc</label>
+          <div class="color-palette">
+            @for (color of palette; track color) {
+            <button class="color-option" [class.selected]="formColor() === color" [style.backgroundColor]="color"
+              (click)="selectColor(color)">
+            </button>
+            }
+          </div>
+          <div class="custom-color">
+            <input type="color" [(ngModel)]="formColor" class="color-input">
+            <input type="text" [(ngModel)]="formColor" placeholder="#000000" class="hex-input">
+          </div>
+        </div>
+
+        <div class="form-footer">
+          <button class="btn secondary" (click)="onCancel()">
+            Hủy bỏ
+          </button>
+          <button class="btn primary" [disabled]="!formName().trim()" (click)="onSave()">
+            Lưu thông tin
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

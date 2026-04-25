@@ -5,15 +5,17 @@ import { Tag } from '../../models/tag.model';
 import { DisplayMode } from '../../models/display-mode.model';
 import { SelectableMonth } from '../../models/selectable-month.model';
 import { CalendarApiService } from './calendar-api.service';
+import { TagService } from './tag.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MonthlyCalendarService {
   private readonly api = inject(CalendarApiService);
+  private readonly tagService = inject(TagService);
 
   readonly mementos = signal<Memento[]>([]);
-  readonly tags = signal<Tag[]>([]);
+  readonly tags = this.tagService.tags;
   readonly displayMode = signal<DisplayMode>('gantt');
   readonly selectedMonths = signal<SelectableMonth[]>([
     { year: 2026, month: 3, label: 'Tháng 3' },
@@ -50,7 +52,7 @@ export class MonthlyCalendarService {
     }).subscribe({
       next: ({ mementos, tags }) => {
         this.mementos.set(mementos);
-        this.tags.set(tags);
+        this.tagService.setTags(tags);
         this.isLoading.set(false);
       },
       error: err => {
@@ -60,6 +62,18 @@ export class MonthlyCalendarService {
       }
     });
   }
+
+  /**
+   * Listens for tag deletions to strip the deleted tag ID from all mementos.
+   */
+  private readonly _cascadeDeleteSubscription = this.tagService.tagDeleted$.subscribe(tagId => {
+    this.mementos.update(mementos => 
+      mementos.map(m => ({
+        ...m,
+        tagIds: m.tagIds.filter(id => id !== tagId)
+      }))
+    );
+  });
 
   addTopic(topic: Memento) {
     this.api.saveMemento(topic).subscribe({

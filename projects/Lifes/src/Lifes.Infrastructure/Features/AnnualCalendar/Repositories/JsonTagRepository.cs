@@ -82,7 +82,7 @@ public class JsonTagRepository : ITagRepository
     {
         if (tag.Id == 0)
         {
-            tag.Id = _tags.Any() ? _tags.Max(t => t.Id) + 1 : 1;
+            tag.Id = (int)(DateTime.Now.Ticks / 10000 % 1000000000);
             _tags.Add(tag);
         }
         else

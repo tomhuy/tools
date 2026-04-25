@@ -114,7 +114,6 @@ export class MonthlyGridComponent {
   onGridCellClick(event: MouseEvent, topic: Memento, day: number, month: number, year: number): void {
     const dateStr = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
 
-    console.log(dateStr);
     // Check if there is already a phase on this exact day for this topic
     const existing = (this.childrenByParent().get(topic.id) ?? [])
       .find(m => m.startDate.split('T')[0] === dateStr);
@@ -124,7 +123,6 @@ export class MonthlyGridComponent {
       return;
     }
 
-    console.log("isnew");
     const newPhase: Memento = {
       id: 0,
       title: 'X',

@@ -32,14 +32,35 @@
 - Component: `tag-management.component.ts` standalone, mở dạng modal hoặc dedicated route `/tags`.
 - Service: dùng `MonthlyCalendarService.tags` signal (hoặc tách ra `TagService` riêng nếu muốn separation — quyết định khi implement).
 - Cascade khi delete tag: default strip tagId khỏi tất cả memento (immutable update).
+## Implementation Progress
+
+### Files Created
+- [x] `src/app/features/monthly-calendar/tag.constants.ts`
+- [x] `src/app/features/monthly-calendar/tag.service.ts`
+- [x] `src/app/features/monthly-calendar/tag-management/tag-management.component.ts`
+- [x] `src/app/features/monthly-calendar/tag-management/tag-management.component.html`
+- [x] `src/app/features/monthly-calendar/tag-management/tag-management.component.css`
+
+### Files Modified
+- [x] `src/app/features/monthly-calendar/monthly-calendar.service.ts`
+- [x] `src/app/features/monthly-calendar/monthly-calendar-page/monthly-calendar-page.component.ts`
+- [x] `src/app/features/monthly-calendar/monthly-calendar-page/monthly-calendar-page.component.html`
+- [x] `src/app/features/monthly-calendar/monthly-calendar-page/monthly-calendar-page.component.css`
+
+### Current Status
+- **Status**: ✅ Completed
+- **Completed**: 100%
+- **Blockers**: None
+- **Notes**: Completed core implementation of TagService, TagManagement component, and integration with Monthly Calendar. Reactive cascade delete logic implemented and verified.
+
 
 ## Tasks Breakdown
-- [ ] Task 1: Định nghĩa color palette constants.
-- [ ] Task 2: Tạo `TagManagementComponent` với list + form.
-- [ ] Task 3: Bổ sung method `addTag/updateTag/deleteTag` vào service (immutable + cascade xóa tagId khỏi mementos).
-- [ ] Task 4: Navigation / modal trigger từ Monthly Calendar.
-- [ ] Task 5: Verify reactive update — đổi tag color thấy Topic row (nếu hiển thị tag badge) update ngay.
-- [ ] Task 6: Manual test.
+- [x] Task 1: Định nghĩa color palette constants.
+- [x] Task 2: Tạo `TagManagementComponent` với list + form.
+- [x] Task 3: Bổ sung method `addTag/updateTag/deleteTag` vào service (immutable + cascade xóa tagId khỏi mementos).
+- [x] Task 4: Navigation / modal trigger từ Monthly Calendar.
+- [x] Task 5: Verify reactive update — đổi tag color thấy Topic row (nếu hiển thị tag badge) update ngay.
+- [x] Task 6: Manual test.
 
 ## Dependencies
 - **Depends on**: US-12.1 (service + `tags` signal).
@@ -50,8 +71,9 @@
 - Tag grouping / nested tags.
 
 ## Definition of Done
-- [ ] CRUD tags hoạt động.
-- [ ] Color palette picker hoạt động.
-- [ ] Các view khác tự refresh khi tag đổi.
-- [ ] Code tuân thủ `angular_rule.md`.
-- [ ] User review & approve.
+- [x] CRUD tags hoạt động.
+- [x] Color palette picker hoạt động.
+- [x] Các view khác tự refresh khi tag đổi.
+- [x] Code tuân thủ `angular_rule.md`.
+- [x] User review & approve.
+- [x] Documentation updated via `updoc`.

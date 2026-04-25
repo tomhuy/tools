@@ -105,7 +105,7 @@ public class JsonMementoRepository : IMementoRepository
     {
         if (memento.Id == 0)
         {
-            memento.Id = _mementos.Any() ? _mementos.Max(m => m.Id) + 1 : 1;
+            memento.Id = (int)(DateTime.Now.Ticks / 10000 % 1000000000);
             _mementos.Add(memento);
         }
         else

@@ -10,11 +10,13 @@ Di chuyển giao diện Lịch tháng (Monthly Calendar) từ WPF sang Electron/
 - `monthly-grid.component.ts` - Pure presentational component chịu trách nhiệm render lưới Gantt, vạch Today, và các phase bars.
 - `monthly-grid.component.css` - Chứa logic CSS Grid 31 cột và các style hiển thị (Gantt, Dot, Pure Dot).
 - `topic-editor.component.ts` - Component standalone xử lý Form CRUD cho Topic.
+- `tag-management.component.ts` - [NEW] Component xử lý quản lý Tags (CRUD + Palette). Form luôn hiển thị và tự chuyển chế độ khi chọn tag.
 - `monthly-grid.component.ts` - Đã bổ sung logic cho `QuickPhasePopup` và `QuickColorPicker` để CRUD phase nhanh.
 
 ### Application Layer (Services & API)
 - `calendar-api.service.ts` - [NEW] Service cấp thấp xử lý giao tiếp HTTP với WebApi, unwrap `ApiResponse`.
-- `monthly-calendar.service.ts` - Quản lý state bằng Angular Signals. Đã refactor để fetch dữ liệu thực từ API thay vì dữ liệu mẫu.
+- `tag.service.ts` - [NEW] Quản lý state của tags toàn cục. Cung cấp stream `tagDeleted$` để xử lý cascade delete.
+- `monthly-calendar.service.ts` - Quản lý state bằng Angular Signals. Đã refactor để fetch dữ liệu thực từ API và lắng nghe `TagService` để xóa tagId khỏi mementos.
 
 ### Domain Layer (Models & Utils)
 - `memento.model.ts` - Định nghĩa cấu trúc phân cấp của Memento (Topic và Child).
@@ -53,7 +55,15 @@ Di chuyển giao diện Lịch tháng (Monthly Calendar) từ WPF sang Electron/
 - Emission of `save`, `cancel`, và `delete` events.
 - Color preset palette cho việc chọn màu nhanh.
 - **Multi-tag Selection**: Sử dụng checkbox selector để gán nhiều tag đồng thời.
-- **Compact UI Design**: Tông màu Light mode (Hanbok inspired/System native), lưới grid 9 cột cho color picker.
+- **Compact UI Design**: Tông màu Light mode (Hanbok inspired/System native), lưới grid 9 cột cho color picker. tuân thủ `fe_design_rule.md`.
+
+### TagManagementComponent
+**Location**: `src/app/features/monthly-calendar/tag-management/`
+**Purpose**: Quản lý danh sách tag toàn cục.
+**Key Logic**:
+- **Single-flow Form**: Form thêm mới luôn hiện bên dưới, click tag trên list sẽ nạp vào form để update.
+- **Pixel-perfect**: Chiều rộng cố định 380px, bo góc 10px, swatch 18px.
+- **Color Picker**: Hỗ trợ 32+ màu presets và custom hex input.
 
 ## Data Flow
 1. `MonthlyCalendarPageComponent` kích hoạt `loadInitial` trong `ngOnInit`.
@@ -70,3 +80,4 @@ Di chuyển giao diện Lịch tháng (Monthly Calendar) từ WPF sang Electron/
 - **Floating Popup Positioning**: Sử dụng tọa độ chuột (`MouseEvent`) để định vị popup linh hoạt trên màn hình fixed.
 - **Single Row Constraint**: Ép các phase bar vào `grid-row: 1` để tránh hiện tượng nhảy dòng khi có nhiều dữ liệu chồng lấn.
 - **ApiResponse Envelope**: Sử dụng một cấu trúc phản hồi chuẩn để quản lý lỗi và dữ liệu một cách nhất quán giữa .NET và Angular.
+- **Tag Cascade Delete**: `MonthlyCalendarService` subcribe vào `TagService.tagDeleted$` để tự động lọc bỏ `tagId` bị xóa khỏi mementos đang cache trong signal, đảm bảo tính nhất quán dữ liệu mà không cần reload trang.

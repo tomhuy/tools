@@ -40,8 +40,22 @@
           @if (showTagPicker()) {
             <div class="dropdown-menu tag-picker">
               <div class="dropdown-header">Chọn Tag để lọc</div>
-              <!-- Tag list would go here -->
-              <div class="empty-msg">Tính năng đang phát triển</div>
+              <div class="tag-list">
+                @for (tag of service.tags(); track tag.id) {
+                  <label class="tag-item">
+                    <input type="checkbox">
+                    <span class="color-dot" [style.backgroundColor]="tag.color"></span>
+                    <span class="tag-label">{{ tag.name }}</span>
+                  </label>
+                } @empty {
+                  <div class="empty-msg">Chưa có tag nào</div>
+                }
+              </div>
+              <div class="dropdown-footer">
+                <button class="manage-tags-link" (click)="onManageTags()">
+                  Quản lý Tags...
+                </button>
+              </div>
             </div>
           }
         </div>
@@ -83,4 +97,10 @@
     (delete)="onEditorDelete($event)"
     (cancel)="onEditorCancel()">
   </app-topic-editor>
+}
+
+@if (showTagManager()) {
+  <app-tag-management
+    (close)="showTagManager.set(false)">
+  </app-tag-management>
 }

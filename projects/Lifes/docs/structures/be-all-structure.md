@@ -104,6 +104,9 @@ src/
 │           │   ├── monthly-calendar/ # US-12.1 Monthly Calendar feature
 │           │   │   ├── monthly-grid/
 │           │   │   ├── monthly-calendar-page/
+│           │   │   ├── tag-management/  # US-12.3 Tag Management UI
+│           │   │   ├── tag.service.ts   # US-12.3 Global tag state
+│           │   │   ├── tag.constants.ts # US-12.3 Color palette
 │           │   │   └── monthly-calendar.service.ts
 │           │   └── ...
 │           └── models/
@@ -330,14 +333,14 @@ src/
 - `build-deploy-electron.ps1`: Automated packaging and deployment.
 
 ### 12. Monthly Calendar (Electron)
-**Status**: ✅ Completed (CRUD Topics & API Integration)
-**User Stories**: US-12.1, US-12.1.1, US-12.2, US-12.2.1, US-12.2.2
+**Status**: ✅ Completed (CRUD Topics, Tags & API Integration)
+**User Stories**: US-12.1, US-12.1.1, US-12.2, US-12.2.1, US-12.2.2, US-12.3
 **Documentation**: [fea-monthly-calendar-structure.md](./fea-monthly-calendar-structure.md)
 **Key Components**:
 - **Backend**: `CalendarController`, `ApiResponse<T>` (Envelope), `ICalendarService`.
-- **Frontend**: `MonthlyCalendarService` (Signals + CRUD), `CalendarApiService`, `MonthlyGridComponent`, `TopicEditorComponent`, `MonthlyCalendarPageComponent`.
-- Multi-year support and precise pixel styling.
-- **Quick Phase CRUD**: [NEW] Hệ thống Popup nhanh cho việc tạo và xóa phase trực tiếp trên lưới.
+- **Frontend**: `MonthlyCalendarService` (Signals + CRUD), `TagService` (Global Tags), `CalendarApiService`, `MonthlyGridComponent`, `TopicEditorComponent`, `TagManagementComponent`.
+- **Cascade Delete**: Tự động dọn dẹp tagId khỏi mementos khi xóa tag.
+- **Guideline**: [fe_design_rule.md](../guidelines/fe_design_rule.md) (Pixel-perfect UI rules).
 
 ## Shared Components
 

@@ -305,9 +305,9 @@ ETL Deployment Tools Suite cung cấp:
 
 ---
 
-### 11. Electron UI Integration (US-11.1, US-11.3, US-12.1, US-12.1.1, US-12.2, US-12.2.1)
+### 11. Electron UI Integration (US-11.1, US-11.3, US-12.1, US-12.1.1, US-12.2, US-12.2.1, US-12.3)
 **Status**: ✅ Completed
-**User Stories**: US-11.1 (Setup), US-11.3 (Build & Deploy), US-12.1 (Monthly Grid), US-12.1.1 (API Integration), US-12.2 (Topic Editor CRUD), US-12.2.1 (Returning Saved ID), US-12.2.2 (Quick Phase CRUD)
+**User Stories**: US-11.1 (Setup), US-11.3 (Build & Deploy), US-12.1 (Monthly Grid), US-12.1.1 (API Integration), US-12.2 (Topic Editor), US-12.3 (Tag Management UI)
 **Documentation**: [fea-electron-structure.md](./docs/structures/fea-electron-structure.md), [fea-monthly-calendar-structure.md](./docs/structures/fea-monthly-calendar-structure.md)
 
 **Purpose**: Nền tảng UI mới sử dụng Electron và Angular. Tích hợp hoàn chỉnh với Backend .NET qua REST API, hỗ trợ persistence và reactive state management. Đã bổ sung tính năng Quick Phase CRUD (Popup) và Quick Color Edit (Hover).

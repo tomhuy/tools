@@ -23,7 +23,7 @@ export class TopicEditorComponent implements OnInit {
 
   topicForm!: FormGroup;
   readonly tags = this.calendarService.tags;
-  
+
   readonly isEditMode = computed(() => this.topic !== null);
 
   readonly presetColors = STANDARD_COLOR_PALETTE;
@@ -34,15 +34,17 @@ export class TopicEditorComponent implements OnInit {
 
   private initForm(): void {
     const today = new Date().toISOString().split('T')[0];
-    
+    const startDate = this.topic?.startDate.split('T')[0] ?? today;
+    const endDate = this.topic?.endDate.split('T')[0] ?? today;
+
     this.topicForm = this.fb.group({
       id: [this.topic?.id ?? 0],
       title: [this.topic?.title ?? '', [Validators.required]],
-      startDate: [this.topic?.startDate ?? today, [Validators.required]],
-      endDate: [this.topic?.endDate ?? today, [Validators.required]],
+      startDate: [startDate, [Validators.required]],
+      endDate: [endDate, [Validators.required]],
       order: [this.topic?.order ?? 0],
       color: [this.topic?.color ?? this.presetColors[0]],
-      tagId: [this.topic?.tagId ?? null],
+      tagIds: [this.topic?.tagIds ?? []],
       parentId: [null] // Always null for Topics
     }, { validators: this.dateRangeValidator });
   }
@@ -56,6 +58,23 @@ export class TopicEditorComponent implements OnInit {
   isFieldInvalid(field: string): boolean {
     const control = this.topicForm.get(field);
     return !!(control && control.invalid && (control.dirty || control.touched));
+  }
+
+  onTagToggle(tagId: number): void {
+    const control = this.topicForm.get('tagIds');
+    if (!control) return;
+    
+    const current = control.value as number[];
+    if (current.includes(tagId)) {
+      control.setValue(current.filter(id => id !== tagId));
+    } else {
+      control.setValue([...current, tagId]);
+    }
+    control.markAsDirty();
+  }
+
+  isTagSelected(tagId: number): boolean {
+    return (this.topicForm.get('tagIds')?.value as number[] ?? []).includes(tagId);
   }
 
   onSubmit(): void {

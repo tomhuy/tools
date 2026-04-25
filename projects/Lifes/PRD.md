@@ -8,7 +8,7 @@
 | Field | Value |
 |-------|-------|
 | **Product Name** | ETL Deployment Tools Suite |
-| **Version** | 2.2.1 |
+| **Version** | 2.2.2 |
 | **Document Status** | Draft - Initial Version |
 | **Last Updated** | 2026-04-25 |
 | **Author** | Development Team |
@@ -310,7 +310,7 @@ ETL Deployment Tools Suite cung cấp:
 **User Stories**: US-11.1 (Setup), US-11.3 (Build & Deploy), US-12.1 (Monthly Grid), US-12.1.1 (API Integration), US-12.2 (Topic Editor CRUD), US-12.2.1 (Returning Saved ID)
 **Documentation**: [fea-electron-structure.md](./docs/structures/fea-electron-structure.md), [fea-monthly-calendar-structure.md](./docs/structures/fea-monthly-calendar-structure.md)
 
-**Purpose**: Nền tảng UI mới sử dụng Electron và Angular. Tích hợp hoàn chỉnh với Backend .NET qua REST API, hỗ trợ persistence và reactive state management.
+**Purpose**: Nền tảng UI mới sử dụng Electron và Angular. Tích hợp hoàn chỉnh với Backend .NET qua REST API, hỗ trợ persistence và reactive state management. Đã bổ sung tính năng Multi-tag selection và Compact UI design cho Topic Editor.
 
 **Key Components**:
 - **Lifes.Presentation.Electron**: Angular 19 frontend trên Electron shell.

@@ -27,7 +27,7 @@ src/
 │       ├── ToolNavigatedEventArgs.cs # US-5.1 — navigation event args
 │       ├── CalendarEventModel.cs   # US-8.4 — Multi-phase event entity
 │       ├── CalendarEventPhaseModel.cs # US-8.4 — event phase detail
-│       ├── MementoModel.cs         # US-9.1 — Recursive hierarchy
+│       ├── MementoModel.cs         # US-9.1 — Recursive hierarchy (TagIds support)
 │       ├── TagModel.cs             # US-9.2 — Tagging system
 │       └── MementoQueryModel.cs    # US-9.2 — Filtering model
 │
@@ -108,7 +108,7 @@ src/
 │           │   └── ...
 │           └── models/
 │               ├── sprint-board.model.ts # US-11.2 data models
-│               ├── memento.model.ts      # US-12.1
+│               ├── memento.model.ts      # US-12.1 (Updated TagIds[])
 │               ├── tag.model.ts          # US-12.1
 │               ├── display-mode.model.ts # US-12.1
 │               └── selectable-month.model.ts # US-12.1

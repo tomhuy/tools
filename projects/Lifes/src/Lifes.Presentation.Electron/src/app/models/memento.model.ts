@@ -6,5 +6,5 @@ export interface Memento {
   endDate: string;   // ISO string
   order: number;
   color?: string;
-  tagId?: number;
+  tagIds: number[];
 }

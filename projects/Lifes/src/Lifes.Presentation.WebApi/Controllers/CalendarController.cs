@@ -85,7 +85,7 @@ public class CalendarController : ControllerBase
         try
         {
             await _svc.DeleteMementoAsync(id);
-            return StatusCode(204, ApiResponse<object>.Ok(null!));
+            return Ok(ApiResponse<object>.Ok(null!));
         }
         catch (Exception ex)
         {
@@ -115,7 +115,7 @@ public class CalendarController : ControllerBase
         try
         {
             await _svc.DeleteTagAsync(id);
-            return StatusCode(204, ApiResponse<object>.Ok(null!));
+            return Ok(ApiResponse<object>.Ok(null!));
         }
         catch (Exception ex)
         {

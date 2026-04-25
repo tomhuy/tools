@@ -32,17 +32,16 @@
         <div class="tag-selector">
           @for (tag of tags(); track tag.id) {
             <label class="tag-item">
-              <input type="radio" [value]="tag.id" formControlName="tagId">
+              <input 
+                type="checkbox" 
+                [checked]="isTagSelected(tag.id)"
+                (change)="onTagToggle(tag.id)">
               <span class="tag-badge">
                 <span class="tag-dot" [style.background-color]="tag.color"></span>
                 {{ tag.name }}
               </span>
             </label>
           }
-          <label class="tag-item no-tag">
-            <input type="radio" [value]="null" formControlName="tagId">
-            <span class="tag-badge">Không tag</span>
-          </label>
         </div>
       </div>
 

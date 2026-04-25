@@ -76,7 +76,7 @@ try
     }
 
     app.UseCors("ElectronVuePolicy");
-    app.UseHttpsRedirection();
+    // app.UseHttpsRedirection();
     app.MapControllers();
 
     app.Run();

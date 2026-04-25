@@ -9,7 +9,7 @@ Di chuyển giao diện Lịch tháng (Monthly Calendar) từ WPF sang Electron/
 - `monthly-calendar-page.component.ts` - Container component quản lý toolbar, state của tháng được chọn, và chế độ hiển thị. Thực hiện load dữ liệu ban đầu qua `ngOnInit`.
 - `monthly-grid.component.ts` - Pure presentational component chịu trách nhiệm render lưới Gantt, vạch Today, và các phase bars.
 - `monthly-grid.component.css` - Chứa logic CSS Grid 31 cột và các style hiển thị (Gantt, Dot, Pure Dot).
-- `topic-editor.component.ts` - [NEW] Component standalone xử lý Form CRUD cho Topic (parentId == null).
+- `topic-editor.component.ts` - [NEW] Component standalone xử lý Form CRUD cho Topic (parentId == null). Đã tối ưu hóa giao diện Compact và hỗ trợ chọn nhiều Tag.
 
 ### Application Layer (Services & API)
 - `calendar-api.service.ts` - [NEW] Service cấp thấp xử lý giao tiếp HTTP với WebApi, unwrap `ApiResponse`.
@@ -51,6 +51,8 @@ Di chuyển giao diện Lịch tháng (Monthly Calendar) từ WPF sang Electron/
 - Reactive Forms với validation `dateRangeValidator`.
 - Emission of `save`, `cancel`, và `delete` events.
 - Color preset palette cho việc chọn màu nhanh.
+- **Multi-tag Selection**: Sử dụng checkbox selector để gán nhiều tag đồng thời.
+- **Compact UI Design**: Tông màu Light mode (Hanbok inspired/System native), lưới grid 9 cột cho color picker.
 
 ## Data Flow
 1. `MonthlyCalendarPageComponent` kích hoạt `loadInitial` trong `ngOnInit`.

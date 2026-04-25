@@ -1,0 +1,67 @@
+[
+  {
+    "Id": 1,
+    "Name": "Work",
+    "Color": "#3b82f6"
+  },
+  {
+    "Id": 2,
+    "Name": "Personal",
+    "Color": "#2196F3"
+  },
+  {
+    "Id": 3,
+    "Name": "Health",
+    "Color": "#F44336"
+  },
+  {
+    "Id": 4,
+    "Name": "Learning",
+    "Color": "#9C27B0"
+  },
+  {
+    "Id": 5,
+    "Name": "Review",
+    "Color": "#FFC107"
+  },
+  {
+    "Id": 6,
+    "Name": "G\u00EDa tr\u1ECB th\u1EE9 2",
+    "Color": "#4CAF50"
+  },
+  {
+    "Id": 7,
+    "Name": "Mood",
+    "Color": "#FFC000"
+  },
+  {
+    "Id": 8,
+    "Name": "\u0110\u1ECDc s\u00E1ch",
+    "Color": "#5B9BD5"
+  },
+  {
+    "Id": 9,
+    "Name": "Nh\u1EADt k\u00FD s\u1EF1 ki\u1EC7n",
+    "Color": "#4CAF50"
+  },
+  {
+    "Id": 10,
+    "Name": "Ng\u1EE7",
+    "Color": "#4CAF50"
+  },
+  {
+    "Id": 11,
+    "Name": "Qu\u1EA3n l\u00FD c\u1EA3m x\u00FAc",
+    "Color": "#FFC000"
+  },
+  {
+    "Id": 742093541,
+    "Name": "qu\u1EA3n l\u00FD c\u1EA3m x\u00FAc v2",
+    "Color": "#3b82f6"
+  },
+  {
+    "Id": 742429864,
+    "Name": "qu\u1EA3n l\u00FD c\u1EA3m x\u00FAc v3",
+    "Color": "#3b82f6"
+  }
+]

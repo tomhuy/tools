@@ -17,7 +17,7 @@ import { Memento } from '../../../models/memento.model';
 })
 export class MonthlyCalendarPageComponent implements OnInit {
   readonly service = inject(MonthlyCalendarService);
-  
+
   readonly showMonthPicker = signal(false);
   readonly showTagPicker = signal(false);
   readonly showTagManager = signal(false);
@@ -28,12 +28,14 @@ export class MonthlyCalendarPageComponent implements OnInit {
   readonly selectedTagIds = signal<number[]>([]);
   readonly includeChildren = signal(true);
   readonly showTimeline = signal(false);
+  readonly isVerticalView = signal(false);
+  readonly forceShowTooltips = signal(false);
 
   readonly topics = this.service.topicRows;
   readonly childrenByParent = this.service.childrenByParent;
   readonly selectedMonths = this.service.selectedMonths;
   readonly displayMode = this.service.displayMode;
-  readonly today = signal(new Date(2026, 3, 24));
+  readonly today = signal(new Date());
 
   constructor() {
     effect(() => {
@@ -75,7 +77,7 @@ export class MonthlyCalendarPageComponent implements OnInit {
   }
 
   onTagToggle(tagId: number) {
-    this.selectedTagIds.update(ids => 
+    this.selectedTagIds.update(ids =>
       ids.includes(tagId) ? ids.filter(id => id !== tagId) : [...ids, tagId]
     );
   }
@@ -86,6 +88,14 @@ export class MonthlyCalendarPageComponent implements OnInit {
 
   toggleShowTimeline() {
     this.showTimeline.update(v => !v);
+  }
+
+  toggleAxes() {
+    this.isVerticalView.update(v => !v);
+  }
+
+  toggleForceShowTooltips() {
+    this.forceShowTooltips.update(v => !v);
   }
 
   onManageTags() {

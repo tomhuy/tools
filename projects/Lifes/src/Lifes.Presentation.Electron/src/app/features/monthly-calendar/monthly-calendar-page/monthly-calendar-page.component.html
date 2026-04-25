@@ -70,6 +70,22 @@
           }
         </div>
 
+        <button 
+          class="action-btn secondary" 
+          [class.active]="isVerticalView()"
+          (click)="toggleAxes()"
+          title="Switch X and Y axes">
+          <span>⇄</span> {{ isVerticalView() ? 'Gantt' : 'Timeline' }}
+        </button>
+
+        <button 
+          class="action-btn secondary" 
+          [class.active]="forceShowTooltips()"
+          (click)="toggleForceShowTooltips()"
+          title="Show all titles as tooltips">
+          <span>💬</span>
+        </button>
+
         <button class="action-btn primary" (click)="onAddTopic()">
           <span class="plus">+</span> Thêm chủ đề
         </button>
@@ -95,6 +111,8 @@
       [displayMode]="displayMode()"
       [includeChildren]="includeChildren()"
       [showTimeline]="showTimeline()"
+      [forceShowTooltips]="forceShowTooltips()"
+      [isVertical]="isVerticalView()"
       [today]="today()"
       (topicClick)="onTopicClick($event)"
       (phaseClick)="onPhaseClick($event)">

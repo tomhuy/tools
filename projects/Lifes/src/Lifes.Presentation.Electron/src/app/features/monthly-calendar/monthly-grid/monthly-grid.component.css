@@ -154,6 +154,61 @@
   font-weight: 600; /* SemiBold */
 }
 
+/* Floating Tooltip */
+.phase-floating-tooltip {
+  position: absolute;
+  bottom: 100%; /* Position exactly above the top edge */
+  left: 50%;
+  transform: translateX(-50%) translateY(-5px);
+  background-color: rgba(45, 55, 72, 0.95);
+  color: white;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  white-space: nowrap;
+  z-index: 100;
+  pointer-events: none;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  animation: fadeIn 0.2s ease-out;
+}
+
+.phase-floating-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: rgba(45, 55, 72, 0.95) transparent transparent transparent;
+}
+
+/* For vertical mode, adjust position to the right */
+.vertical-mode .phase-floating-tooltip {
+  top: 50%;
+  bottom: auto;
+  left: 100%; 
+  transform: translateY(-50%) translateX(8px);
+}
+
+.vertical-mode .phase-floating-tooltip::after {
+  top: 50%;
+  left: -10px;
+  margin-left: 0;
+  margin-top: -5px;
+  border-color: transparent rgba(45, 55, 72, 0.95) transparent transparent;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translate(-50%, 5px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+.vertical-mode @keyframes fadeIn {
+  from { opacity: 0; transform: translate(-5px, -50%); }
+  to { opacity: 1; transform: translate(0, -50%); }
+}
+
 .grid-area {
   position: relative;
   height: 100%;
@@ -208,6 +263,7 @@
   border: 1px solid rgba(0,0,0,0.05);
   margin: 0 1px;
   grid-row: 1; /* Stay in the first row */
+  position: relative; /* CRITICAL: for absolute tooltips */
 }
 
 .phase-bar:hover {
@@ -393,4 +449,125 @@
 @keyframes scaleIn {
   from { opacity: 0; transform: scale(0.95); }
   to { opacity: 1; transform: scale(1); }
+}
+
+/* Vertical Mode Styles */
+.vertical-mode .month-table {
+  flex-direction: row;
+}
+
+.vertical-mode .days-header-vertical {
+  display: flex;
+  flex-direction: column;
+  background-color: #F8F9F9;
+  border-right: 1px solid #E0E0E0;
+  width: 60px; /* Wider to accommodate weekday + date */
+  flex-shrink: 0;
+}
+
+.vertical-mode .day-header-cell {
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #E0E0E0;
+  font-size: 11px;
+  gap: 5px;
+}
+
+.vertical-mode .day-header-cell.is-today {
+  background-color: #FF4D4D;
+  color: white;
+}
+
+.vertical-mode .topics-container {
+  display: flex;
+  overflow-x: auto;
+}
+
+.vertical-mode .topic-column {
+  display: flex;
+  flex-direction: column;
+  width: 150px; /* Fixed width for topic columns */
+  border-right: 1px solid #E0E0E0;
+}
+
+.vertical-mode .topic-column-header {
+  height: 60px; /* Taller to fit topic title */
+  padding: 5px;
+  background-color: #EDF2F7;
+  border-bottom: 1px solid #E0E0E0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+}
+
+.vertical-mode .topic-column-header:hover {
+  background-color: #E2E8F0;
+}
+
+.vertical-mode .grid-area-vertical {
+  position: relative;
+  height: calc(31 * 30px); /* 31 days * 30px */
+  display: grid;
+  grid-template-rows: repeat(31, 30px);
+}
+
+.vertical-mode .grid-cells-vertical {
+  display: grid;
+  grid-template-rows: repeat(31, 30px);
+  position: absolute;
+  inset: 0;
+}
+
+.vertical-mode .grid-cell-vertical {
+  height: 30px;
+  border-bottom: 1px solid #F0F0F0;
+}
+
+.vertical-mode .bars-overlay-vertical {
+  display: grid;
+  grid-template-rows: repeat(31, 30px);
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  justify-items: center;
+}
+
+.vertical-mode .phase-bar-vertical {
+  width: 18px; /* Fixed width in vertical mode */
+  border-radius: 2px;
+  font-size: 9px;
+  color: white;
+  cursor: pointer;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  border: 1px solid rgba(0,0,0,0.05);
+  margin: 1px 0;
+  grid-column: 1; /* Stay in the first column */
+  position: relative; /* CRITICAL */
+}
+
+.vertical-mode .phase-title-vertical {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  font-weight: 600;
+  padding: 5px 0;
+}
+
+.vertical-mode .topic-ghost-bar-vertical {
+  width: 8px;
+  border-radius: 4px;
+  opacity: 0.15;
+  grid-column: 1;
+  pointer-events: none;
+  margin: 1px 0;
 }

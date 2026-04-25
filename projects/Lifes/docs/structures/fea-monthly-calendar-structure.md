@@ -8,10 +8,10 @@ Di chuyển giao diện Lịch tháng (Monthly Calendar) từ WPF sang Electron/
 ### Presentation Layer (Angular)
 - `monthly-calendar-page.component.ts` - Container component quản lý toolbar, state của tháng được chọn, và chế độ hiển thị. Thực hiện load dữ liệu ban đầu qua `ngOnInit`.
 - `monthly-grid.component.ts` - Pure presentational component chịu trách nhiệm render lưới Gantt, vạch Today, và các phase bars.
-- `monthly-grid.component.css` - Chứa logic CSS Grid 31 cột và các style hiển thị (Gantt, Dot, Pure Dot).
+- `monthly-grid.component.css` - Chứa logic CSS Grid 31 cột và các style hiển thị (Gantt, Dot, Pure Dot). [NEW] Đã bổ sung `.vertical-mode` để hỗ trợ hoán đổi trục X-Y.
 - `topic-editor.component.ts` - Component standalone xử lý Form CRUD cho Topic.
 - `tag-management.component.ts` - [NEW] Component xử lý quản lý Tags (CRUD + Palette). Form luôn hiển thị và tự chuyển chế độ khi chọn tag.
-- `monthly-grid.component.ts` - Đã bổ sung logic cho `QuickPhasePopup` và `QuickColorPicker` để CRUD phase nhanh.
+- `monthly-grid.component.ts` - Đã bổ sung logic cho `QuickPhasePopup` và `QuickColorPicker` để CRUD phase nhanh. Đã tích hợp signal `isVertical` và `forceShowTooltips`.
 
 ### Application Layer (Services & API)
 - `calendar-api.service.ts` - [NEW] Service cấp thấp xử lý giao tiếp HTTP với WebApi, unwrap `ApiResponse`.
@@ -83,3 +83,6 @@ Di chuyển giao diện Lịch tháng (Monthly Calendar) từ WPF sang Electron/
 - **Tag Cascade Delete**: `MonthlyCalendarService` subcribe vào `TagService.tagDeleted$` để tự động lọc bỏ `tagId` bị xóa khỏi mementos đang cache trong signal, đảm bảo tính nhất quán dữ liệu mà không cần reload trang.
 - **Signal-based Filtering (US-12.5)**: Sử dụng `effect()` trong component để tự động gọi `loadMementos` với `MementoQuery` mới mỗi khi `selectedTagIds` hoặc `includeChildren` thay đổi.
 - **Ghost Memento Rendering (US-12.5)**: Khi tắt "Include children", Topic cha vẫn hiển thị dưới dạng thanh mờ (`topic-ghost-bar`) để định vị khoảng thời gian tổng quát mà không cần hiện chi tiết phase con.
+- **X-Y Axis Switching (US-12.6)**: Sử dụng cấu trúc HTML kép bên trong `@if (isVertical())`. Khi ở chế độ dọc, Topic trở thành cột (`flex-direction: row` cho month-table) và Ngày trở thành dòng (`grid-template-rows`).
+- **Floating Tooltips (US-12.6)**: Thay thế hoàn toàn tiêu đề nội bộ (inline titles) bằng một nhãn nổi (`phase-floating-tooltip`) có `z-index: 100`. Nhãn này được kích hoạt toàn cục qua nút 💬 trên toolbar, giúp đọc nội dung rõ ràng kể cả với các memento siêu ngắn.
+- **Position Relative Enforcement**: Để tooltips nổi căn chỉnh đúng, các thanh phase bar (`.phase-bar`, `.phase-bar-vertical`) bắt buộc phải có `position: relative`.

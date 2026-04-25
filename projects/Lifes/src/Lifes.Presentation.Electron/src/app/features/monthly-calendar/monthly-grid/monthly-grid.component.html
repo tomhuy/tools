@@ -1,4 +1,4 @@
-<div class="grid-container" [class]="'mode-' + displayMode()">
+<div class="grid-container" [class]="'mode-' + displayMode()" [class.vertical-mode]="isVertical()">
   @for (month of selectedMonths(); track month) {
     <div class="month-block">
       <!-- Month Header (Row 0) -->
@@ -9,7 +9,8 @@
         <div class="month-header-filler"></div>
       </div>
 
-      <div class="month-table">
+      @if (!isVertical()) {
+        <div class="month-table">
         <!-- Day Names (Row 1) -->
         <div class="header-row day-names">
           <div class="topic-header">Event / Date</div>
@@ -87,8 +88,8 @@
                         [title]="child.title"
                         (click)="onPhaseClick($event, child)">
                         <div class="phase-color-trigger" (click)="onOpenColorPicker($event, child)">▾</div>
-                        @if (displayMode() === 'gantt' && shouldShowTitle(child)) {
-                          <span class="phase-title">{{ child.title }}</span>
+                        @if (forceShowTooltips()) {
+                          <div class="phase-floating-tooltip">{{ child.title }}</div>
                         }
                       </div>
                     }
@@ -98,7 +99,81 @@
             </div>
           }
         }
-      </div>
+        </div>
+      } @else {
+        <div class="month-table vertical">
+          <!-- Days Header (Left Column) -->
+          <div class="days-header-vertical">
+            <div class="topic-column-header" style="height: 60px;">Topic / Date</div>
+            @for (day of daysArray; track day) {
+              <div class="day-header-cell" [class.is-today]="isToday(day, month.month, month.year)">
+                <span class="weekday">{{ getWeekday(day, month.month, month.year) }}</span>
+                <span class="date">{{ day | number: '2.0' }}</span>
+              </div>
+            }
+          </div>
+
+          <!-- Topics Container (Scrolling Right) -->
+          <div class="topics-container">
+            @for (topic of topics(); track topic.id) {
+              @if (isMementoInMonth(topic, month)) {
+                <div class="topic-column">
+                  <!-- Topic Header (Top Cell) -->
+                  <div class="topic-column-header" (click)="topicClick.emit(topic)">
+                    <div class="topic-indicator" [style.background-color]="getBgColor(topic)"></div>
+                    <div class="topic-title">{{ topic.title }}</div>
+                  </div>
+
+                  <!-- Vertical Grid Area -->
+                  <div class="grid-area-vertical">
+                    <!-- Background Grid Cells -->
+                    <div class="grid-cells-vertical">
+                      @for (day of daysArray; track day) {
+                        <div 
+                          class="grid-cell-vertical"
+                          [class.is-today]="isToday(day, month.month, month.year)"
+                          (click)="onGridCellClick($event, topic, day, month.month, month.year)">
+                        </div>
+                      }
+                    </div>
+
+                    <!-- Vertical Phase Bars -->
+                    <div class="bars-overlay-vertical">
+                      <!-- Ghost Bar -->
+                      @if (showTimeline()) {
+                        <div 
+                          class="topic-ghost-bar-vertical"
+                          [style.grid-row-start]="getStartCol(topic, month)"
+                          [style.grid-row-end]="getEndCol(topic, month)"
+                          [style.background-color]="getBgColor(topic)">
+                        </div>
+                      }
+
+                      @for (child of childrenByParent().get(topic.id); track child.id) {
+                        @if (isMementoInMonth(child, month)) {
+                          <div 
+                            class="phase-bar-vertical"
+                            [style.grid-row-start]="getStartCol(child, month)"
+                            [style.grid-row-end]="getEndCol(child, month)"
+                            [style.background-color]="getBgColor(child, topic)"
+                            [style.color]="getFgColor(child, topic)"
+                            [title]="child.title"
+                            (click)="onPhaseClick($event, child)">
+                            <div class="phase-color-trigger" (click)="onOpenColorPicker($event, child)">▾</div>
+                            @if (forceShowTooltips()) {
+                              <div class="phase-floating-tooltip">{{ child.title }}</div>
+                            }
+                          </div>
+                        }
+                      }
+                    </div>
+                  </div>
+                </div>
+              }
+            }
+          </div>
+        </div>
+      }
     </div>
   }
 </div>

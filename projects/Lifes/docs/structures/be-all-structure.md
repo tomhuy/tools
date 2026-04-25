@@ -336,9 +336,9 @@ src/
 - `main.js`: Backend process management (spawn/kill).
 - `build-deploy-electron.ps1`: Automated packaging and deployment.
 
-### 12. Monthly Calendar (Electron)
-**Status**: ✅ Completed (CRUD Topics, Tags, Management, API Integration & Tag Filtering)
-**User Stories**: US-12.1, US-12.1.1, US-12.2, US-12.2.1, US-12.2.2, US-12.3, US-12.4, US-12.5
+### 12. Monthly Calendar (Electron Shell)
+**Status**: ✅ Completed
+**User Stories**: US-12.1, US-12.1.1, US-12.2, US-12.2.1, US-12.2.2, US-12.3, US-12.4, US-12.5, US-12.6
 **Documentation**: [fea-monthly-calendar-structure.md](./fea-monthly-calendar-structure.md), [fea-memento-management-structure.md](./fea-memento-management-structure.md)
 **Key Components**:
 - **Backend**: `CalendarController`, `ApiResponse<T>`, `ICalendarService`.

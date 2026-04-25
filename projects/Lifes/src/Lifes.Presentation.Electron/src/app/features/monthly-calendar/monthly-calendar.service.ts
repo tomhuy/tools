@@ -16,10 +16,21 @@ export class MonthlyCalendarService {
   readonly mementos = signal<Memento[]>([]);
   readonly tags = this.tagService.tags;
   readonly displayMode = signal<DisplayMode>('gantt');
-  readonly selectedMonths = signal<SelectableMonth[]>([
-    { year: 2026, month: 3, label: 'Tháng 3' },
-    { year: 2026, month: 4, label: 'Tháng 4' }
-  ]);
+  readonly selectedMonths = signal<SelectableMonth[]>(this.getDefaultQuarterMonths());
+
+  private getDefaultQuarterMonths(): SelectableMonth[] {
+    const now = new Date();
+    const year = 2026; // Keeping your fixed year for now as per project context
+    const month = now.getMonth(); // 0-11
+    const quarter = Math.floor(month / 3); // 0, 1, 2, 3
+    const startMonth = quarter * 3 + 1; // 1, 4, 7, 10
+    
+    return [
+      { year, month: startMonth, label: `Tháng ${startMonth}` },
+      { year, month: startMonth + 1, label: `Tháng ${startMonth + 1}` },
+      { year, month: startMonth + 2, label: `Tháng ${startMonth + 2}` }
+    ];
+  }
 
   readonly isLoading = signal(false);
   readonly lastError = signal<string | null>(null);

@@ -15,31 +15,37 @@
 ## Scope
 - Table/grid view liệt kê Topic mementos (`parentId == null`).
 - Filter theo 1 hoặc nhiều Tag (cascade).
+- Filter theo Keyword (Title), StartDate và EndDate.
 - Edit field `Order` inline.
-- Reflects về Monthly Calendar: đổi Order → row resort ngay (re-render qua `topicRows()` computed trong US-12.1).
+- Tạo mới Topic trực tiếp từ lưới.
+
 
 ## Acceptance Criteria
 
 1. **Route / Navigation**: Truy cập qua menu, route `/memento-management`.
 2. **Table Columns**: Title, Tags (badges), StartDate, EndDate, Order, Actions.
-3. **Filter by Tag**: Multi-select tag filter; áp dụng cascade (topic phải có ít nhất 1 tag thỏa).
+3. **Filtering**: 
+   - Multi-select tag filter; áp dụng cascade.
+   - Filter theo Keyword (search text).
+   - Filter theo khoảng thời gian (StartDate/EndDate).
 4. **Edit Order**: Click field Order → inline edit → save → Monthly Calendar reflect resort (verify reactive).
 5. **Reactive Contract**: Mọi thay đổi đi qua `MonthlyCalendarService` immutable update; `topicRows()` computed tự resort; Monthly Calendar render lại DOM với `track id` ở đúng thứ tự mới.
 6. Tuân thủ `angular_rule.md`.
 
 ## Technical Design
-- Component: `memento-management.component.ts` standalone.
-- Dùng `MonthlyCalendarService.topicRows()` làm data source + local filter signal cho tag filter.
-- Inline edit Order: `[(ngModel)]` trên số + blur/enter trigger `updateMemento` immutable.
-- Có thể dùng Angular CDK Table hoặc plain `<table>` — quyết định khi implement.
+- Component: `memento-management.component.ts` standalone (Smart Component).
+- Service: `MementoManagementService` chuyên biệt để fetch dữ liệu độc lập với scope của Calendar.
+- Filtering: Sử dụng `effect()` để theo dõi filter signals và reload dữ liệu tự động.
+- Table: `memento-table.component.ts` (Passive Component) hỗ trợ hiển thị, sắp xếp và inline editing.
+- Inline edit Order: Blur/enter trigger `saveTopic` qua API.
 
 ## Tasks Breakdown
-- [ ] Task 1: Tạo `MementoManagementComponent` với table skeleton.
-- [ ] Task 2: Implement tag filter (multi-select) với Signals.
-- [ ] Task 3: Inline edit Order + validation (số nguyên ≥ 0).
-- [ ] Task 4: Routing + navigation.
-- [ ] Task 5: Verify: đổi Order → Monthly Calendar resort trực tiếp, không reload.
-- [ ] Task 6: Manual test flow filter + reorder.
+- [x] Task 1: Tạo `MementoManagementComponent` với table skeleton.
+- [x] Task 2: Implement tag filter (multi-select) với Signals.
+- [x] Task 3: Inline edit Order + validation (số nguyên ≥ 0).
+- [x] Task 4: Routing + navigation.
+- [x] Task 5: Verify: đổi Order → Monthly Calendar resort trực tiếp, không reload.
+- [x] Task 6: Manual test flow filter + reorder.
 
 ## Dependencies
 - **Depends on**: US-12.1 (service + `topicRows` computed), US-12.3 (Tag list sẵn cho filter).
@@ -50,8 +56,13 @@
 - Export / import.
 
 ## Definition of Done
-- [ ] Memento Management UI hoạt động.
-- [ ] Filter + edit Order hoạt động.
-- [ ] Monthly Calendar reflect đổi Order immediate.
-- [ ] Code tuân thủ `angular_rule.md`.
-- [ ] User review & approve.
+- [x] Memento Management UI hoạt động.
+- [x] Filter + edit Order hoạt động.
+- [x] Monthly Calendar reflect đổi Order immediate.
+- [x] Code tuân thủ `angular_rule.md`.
+- [x] User review & approve.
+
+## Final Status
+- **Status**: ✅ Completed
+- **Completed Date**: 2026-04-25
+- **Approved By**: bmhuy

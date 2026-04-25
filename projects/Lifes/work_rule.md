@@ -360,6 +360,10 @@ Update Product Requirements Document với thông tin mới:
    - Document limitations
    - Add workarounds
 
+4. **Architectural Decisions (all-ards.md)**
+   - Cập nhật các lựa chọn về phương án implement nếu có sự thảo luận và chốt phương án với người dùng.
+   - Trả lời 3 câu hỏi: Vấn đề, Các phương án, Lựa chọn và lý do.
+
 **Example:**
 ```markdown
 ### Phase 1: Version Increase Tool - v1.0.0 (Current Sprint)
@@ -479,6 +483,7 @@ src/
 - [ ] PRD.md updated with completed features
 - [ ] Feature structure document created/updated
 - [ ] Overall structure document updated
+- [ ] all-ards.md updated with implementation decisions (if any)
 - [ ] Code examples added (if needed)
 - [ ] Diagrams updated (if architecture changed)
 - [ ] Known issues documented
@@ -714,6 +719,8 @@ refactor(infrastructure): extract git service interface
 **Product Requirements**: `PRD.md`
 
 **Coding Rules**: `rule.md`
+
+**ADR Records**: `docs/adrs/all-ards.md`
 
 **Design Rules**: `docs/guidelines/design_rule.md` (Quy tắc xử lý logic CRUD UI)
 **FE Design Rules**: `docs/guidelines/fe_design_rule.md` (Pixel-perfect UI dimensions)

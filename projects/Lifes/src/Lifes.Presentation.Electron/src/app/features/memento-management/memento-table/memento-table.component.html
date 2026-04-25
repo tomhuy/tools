@@ -1,0 +1,74 @@
+<div class="table-container">
+  <table class="memento-table">
+    <thead>
+      <tr>
+        <th (click)="toggleSort('title')" class="sortable">
+          Title
+          <i class="codicon" [class.codicon-chevron-up]="sortField() === 'title' && sortDirection() === 'asc'" [class.codicon-chevron-down]="sortField() === 'title' && sortDirection() === 'desc'"></i>
+        </th>
+        <th>Tags</th>
+        <th (click)="toggleSort('startDate')" class="sortable">
+          Start Date
+          <i class="codicon" [class.codicon-chevron-up]="sortField() === 'startDate' && sortDirection() === 'asc'" [class.codicon-chevron-down]="sortField() === 'startDate' && sortDirection() === 'desc'"></i>
+        </th>
+        <th (click)="toggleSort('endDate')" class="sortable">
+          End Date
+          <i class="codicon" [class.codicon-chevron-up]="sortField() === 'endDate' && sortDirection() === 'asc'" [class.codicon-chevron-down]="sortField() === 'endDate' && sortDirection() === 'desc'"></i>
+        </th>
+        <th (click)="toggleSort('order')" class="sortable">
+          Order
+          <i class="codicon" [class.codicon-chevron-up]="sortField() === 'order' && sortDirection() === 'asc'" [class.codicon-chevron-down]="sortField() === 'order' && sortDirection() === 'desc'"></i>
+        </th>
+        <th class="actions-col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (item of sortedData(); track item.id) {
+        <tr>
+          <td (dblclick)="edit.emit(item)">
+            <div class="title-cell-content">
+              <div class="memento-color" [style.background-color]="item.color || '#3b82f6'"></div>
+              {{ item.title }}
+            </div>
+          </td>
+          <td>
+            <div class="tag-list">
+              @for (tagId of item.tagIds; track tagId) {
+                @let tag = getTagForId(tagId);
+                @if (tag) {
+                  <span class="tag-badge">
+                    <span class="tag-dot" [style.background-color]="tag.color"></span>
+                    {{ tag.name }}
+                  </span>
+                }
+              }
+            </div>
+          </td>
+          <td>{{ item.startDate | date:'dd/MM/yyyy' }}</td>
+          <td>{{ item.endDate | date:'dd/MM/yyyy' }}</td>
+          <td>
+            <input
+              type="number"
+              class="order-input"
+              [value]="item.order"
+              (click)="$event.stopPropagation()"
+              (blur)="onOrderBlur(item, $event)"
+              (keydown)="onOrderKeydown(item, $event)" />
+          </td>
+          <td class="actions-col">
+            <button class="btn-icon" (click)="edit.emit(item)" title="Edit">
+              <i class="codicon codicon-edit"></i>
+            </button>
+            <button class="btn-icon delete" (click)="delete.emit(item.id)" title="Delete">
+              <i class="codicon codicon-trash"></i>
+            </button>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="6" class="empty-msg">No mementos found.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

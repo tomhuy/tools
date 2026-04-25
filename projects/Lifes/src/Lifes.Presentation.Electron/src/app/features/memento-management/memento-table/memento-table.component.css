@@ -1,0 +1,156 @@
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e9ecef;
+}
+
+.memento-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #343a40;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.memento-table th {
+  text-align: left;
+  padding: 12px 16px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+.memento-table th.sortable {
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s;
+}
+
+.memento-table th.sortable:hover {
+  background: #f1f3f5;
+}
+
+.memento-table th i {
+  font-size: 0.8rem;
+  margin-left: 4px;
+  color: #3498db;
+}
+
+.memento-table td {
+  padding: 8px 16px;
+  border-bottom: 1px solid #e9ecef;
+  vertical-align: middle;
+  font-size: 0.8rem;
+}
+
+.memento-table tr:hover {
+  background: #fdfdfd;
+}
+
+.title-cell-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  color: #2c3e50;
+  cursor: pointer;
+  height: 100%;
+}
+
+.memento-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag-badge {
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: #495057;
+  background: #f1f3f5;
+  border: 1px solid transparent;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tag-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.order-input {
+  height: 28px;
+  width: 60px;
+  padding: 5px 10px;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  color: #343a40;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.order-input:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.05);
+}
+
+.actions-col {
+  text-align: right;
+  width: 100px;
+  white-space: nowrap;
+}
+
+.btn-icon {
+  background: none;
+  border: none;
+  color: #95a5a6;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;
+}
+
+.btn-icon:hover {
+  color: #3498db;
+  background: rgba(52, 152, 219, 0.05);
+}
+
+.btn-icon.delete {
+  color: #e74c3c;
+}
+
+.btn-icon i {
+  font-size: 1rem;
+  display: inline-block;
+  line-height: 1;
+}
+
+.empty-msg {
+  text-align: center;
+  padding: 40px;
+  color: #95a5a6;
+  font-style: italic;
+}

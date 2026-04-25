@@ -305,17 +305,18 @@ ETL Deployment Tools Suite cung cấp:
 
 ---
 
-### 11. Electron UI Integration (US-11.1, US-11.3, US-12.1, US-12.1.1, US-12.2, US-12.2.1, US-12.3)
+### 11. Electron UI Integration (US-11.1, US-11.3, US-12.1, US-12.1.1, US-12.2, US-12.2.1, US-12.3, US-12.4)
 **Status**: ✅ Completed
-**User Stories**: US-11.1 (Setup), US-11.3 (Build & Deploy), US-12.1 (Monthly Grid), US-12.1.1 (API Integration), US-12.2 (Topic Editor), US-12.3 (Tag Management UI)
-**Documentation**: [fea-electron-structure.md](./docs/structures/fea-electron-structure.md), [fea-monthly-calendar-structure.md](./docs/structures/fea-monthly-calendar-structure.md)
+**User Stories**: US-11.1 (Setup), US-11.3 (Build & Deploy), US-12.1 (Monthly Grid), US-12.1.1 (API Integration), US-12.2 (Topic Editor), US-12.3 (Tag Management UI), US-12.4 (Memento Management)
+**Documentation**: [fea-electron-structure.md](./docs/structures/fea-electron-structure.md), [fea-monthly-calendar-structure.md](./docs/structures/fea-monthly-calendar-structure.md), [fea-memento-management-structure.md](./docs/structures/fea-memento-management-structure.md)
 
-**Purpose**: Nền tảng UI mới sử dụng Electron và Angular. Tích hợp hoàn chỉnh với Backend .NET qua REST API, hỗ trợ persistence và reactive state management. Đã bổ sung tính năng Quick Phase CRUD (Popup) và Quick Color Edit (Hover).
+**Purpose**: Nền tảng UI mới sử dụng Electron và Angular. Tích hợp hoàn chỉnh với Backend .NET qua REST API, hỗ trợ persistence và reactive state management. Đã bổ sung tính năng Quick Phase CRUD (Popup), Quick Color Edit (Hover) và Memento Management (Ordering & Filtering).
 
 **Key Components**:
 - **Lifes.Presentation.Electron**: Angular 19 frontend trên Electron shell.
 - **Lifes.Presentation.WebApi**: REST API bridge phục vụ cho Electron frontend.
-- **Monthly Calendar API (US-12.1.1)**: Triển khai `CalendarController` và `ApiResponse` envelope cho phép Electron thao tác với dữ liệu thực từ backend.
+- **Monthly Calendar API (US-12.1.1)**: Triển khai `CalendarController` và `ApiResponse` envelope.
+- **Memento Management Service (US-12.4)**: Cung cấp khả năng lọc và sắp xếp mementos độc lập với Calendar scope.
 - **Automated Packaging**: Quy trình đóng gói vào thư mục `win-unpacked` giúp tăng tốc độ deploy và test.
 - **Backend Lifecycle**: Tự động quản lý vòng đời WebApi backend từ Electron shell.
 - **Robust Logging**: Hệ thống ghi log tập trung cho cả Frontend và Backend.

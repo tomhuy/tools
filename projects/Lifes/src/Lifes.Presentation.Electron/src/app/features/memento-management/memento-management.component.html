@@ -1,0 +1,74 @@
+<div class="management-page">
+  <header class="page-header">
+    <div class="header-content">
+      <h1>Memento Management 1</h1>
+      <p class="subtitle">Manage topics, priorities, and organization</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn-secondary" (click)="clearFilters()">
+        <i class="codicon codicon-clear-all"></i>
+        Clear Filters
+      </button>
+      <button class="btn-primary" (click)="onAddTopic()">
+        <i class="codicon codicon-add"></i>
+        New Topic
+      </button>
+    </div>
+  </header>
+
+  <section class="filters-section">
+    <div class="filter-row">
+      <div class="filter-group keyword-filter">
+        <label>Search</label>
+        <div class="input-with-icon">
+          <i class="codicon codicon-search"></i>
+          <input type="text" placeholder="Search by title..." [ngModel]="keyword()"
+            (ngModelChange)="keyword.set($event)" />
+        </div>
+      </div>
+
+      <div class="filter-group date-filter">
+        <label>From</label>
+        <input type="date" [ngModel]="startDate()" (ngModelChange)="startDate.set($event)" />
+      </div>
+
+      <div class="filter-group date-filter">
+        <label>To</label>
+        <input type="date" [ngModel]="endDate()" (ngModelChange)="endDate.set($event)" />
+      </div>
+    </div>
+
+    <div class="filter-group tags-row">
+      <label>Filter by Tags</label>
+      <div class="tag-filters">
+        @for (tag of tags(); track tag.id) {
+        <button class="tag-filter-btn" [class.active]="selectedTagIds().includes(tag.id)"
+          (click)="toggleTagFilter(tag.id)">
+          <span class="tag-dot" [style.background-color]="tag.color"></span>
+          {{ tag.name }}
+        </button>
+        }
+      </div>
+    </div>
+  </section>
+
+  <main class="content-section">
+    <div class="loading-overlay" *ngIf="isLoading()">
+      <div class="spinner"></div>
+    </div>
+
+    <app-memento-table [data]="mementos()" [tags]="tags()" (updateOrder)="onUpdateOrder($event)"
+      (edit)="onEditTopic($event)" (delete)="onDeleteTopic($event)">
+    </app-memento-table>
+  </main>
+
+  @if (showEditor()) {
+  <div class="editor-overlay" (click)="closeEditor()">
+    <div class="editor-modal" (click)="$event.stopPropagation()">
+      <app-topic-editor [topic]="editingTopic()" (save)="onSaveTopic($event)" (cancel)="closeEditor()"
+        (delete)="onDeleteTopic($event)">
+      </app-topic-editor>
+    </div>
+  </div>
+  }
+</div>

@@ -7,11 +7,14 @@ import { Memento } from '../../models/memento.model';
 import { Tag } from '../../models/tag.model';
 
 export interface MementoQuery {
-  year: number;
+  year?: number;
   month?: number;
-  tagIds?: number[];
+  tagIds?: number[] | string;
   parentOnly?: boolean;
   includeChildren?: boolean;
+  startDate?: string;
+  endDate?: string;
+  keyword?: string;
 }
 
 @Injectable({
@@ -22,13 +25,21 @@ export class CalendarApiService {
   private readonly base = `${API_BASE_URL}/calendar`;
 
   getMementos(query: MementoQuery): Observable<Memento[]> {
-    let params = new HttpParams()
-      .set('year', query.year.toString());
-
+    let params = new HttpParams();
+    
+    if (query.year !== undefined) params = params.set('year', query.year.toString());
     if (query.month !== undefined) params = params.set('month', query.month.toString());
-    if (query.tagIds && query.tagIds.length > 0) params = params.set('tagIds', query.tagIds.join(','));
+    
+    if (query.tagIds) {
+      const tagIdsValue = Array.isArray(query.tagIds) ? query.tagIds.join(',') : query.tagIds;
+      params = params.set('tagIds', tagIdsValue);
+    }
+    
     if (query.parentOnly !== undefined) params = params.set('parentOnly', query.parentOnly.toString());
     if (query.includeChildren !== undefined) params = params.set('includeChildren', query.includeChildren.toString());
+    if (query.startDate) params = params.set('startDate', query.startDate);
+    if (query.endDate) params = params.set('endDate', query.endDate);
+    if (query.keyword) params = params.set('keyword', query.keyword);
 
     return this.http.get<ApiResponse<Memento[]>>(`${this.base}/mementos`, { params })
       .pipe(map(r => this.unwrap(r)));

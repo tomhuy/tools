@@ -20,24 +20,32 @@ public class CalendarController : ControllerBase
 
     [HttpGet("mementos")]
     public async Task<ActionResult<ApiResponse<IEnumerable<MementoModel>>>> GetMementos(
-        [FromQuery] int year,
+        [FromQuery] int? year,
         [FromQuery] int? month,
         [FromQuery] string? tagIds,
         [FromQuery] bool parentOnly = false,
-        [FromQuery] bool includeChildren = false)
+        [FromQuery] bool includeChildren = false,
+        [FromQuery] DateTime? startDate = null,
+        [FromQuery] DateTime? endDate = null,
+        [FromQuery] string? keyword = null)
     {
         try
         {
             var query = new MementoQueryModel
             {
-                StartDate = new DateTime(year, month ?? 1, 1),
-                EndDate = month.HasValue 
-                    ? new DateTime(year, month.Value, DateTime.DaysInMonth(year, month.Value)) 
-                    : new DateTime(year, 12, 31),
+                StartDate = startDate ?? (year.HasValue 
+                    ? new DateTime(year.Value, month ?? 1, 1) 
+                    : null),
+                EndDate = endDate ?? (year.HasValue 
+                    ? (month.HasValue 
+                        ? new DateTime(year.Value, month.Value, DateTime.DaysInMonth(year.Value, month.Value)) 
+                        : new DateTime(year.Value, 12, 31))
+                    : null),
                 TagIds = string.IsNullOrEmpty(tagIds) 
                     ? null 
                     : tagIds.Split(',').Select(int.Parse).ToList(),
-                ParentOnly = parentOnly
+                ParentOnly = parentOnly,
+                Keyword = keyword
             };
             var data = await _svc.GetMementosAsync(query, includeChildren);
             return Ok(ApiResponse<IEnumerable<MementoModel>>.Ok(data));

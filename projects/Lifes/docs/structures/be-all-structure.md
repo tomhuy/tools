@@ -108,6 +108,10 @@ src/
 │           │   │   ├── tag.service.ts   # US-12.3 Global tag state
 │           │   │   ├── tag.constants.ts # US-12.3 Color palette
 │           │   │   └── monthly-calendar.service.ts
+│           │   ├── memento-management/  # US-12.4 Memento Management feature
+│           │   │   ├── memento-table/   # Passive table component
+│           │   │   ├── memento-management.component.[ts|html|css]
+│           │   │   └── memento-management.service.ts
 │           │   └── ...
 │           └── models/
 │               ├── sprint-board.model.ts # US-11.2 data models
@@ -333,14 +337,13 @@ src/
 - `build-deploy-electron.ps1`: Automated packaging and deployment.
 
 ### 12. Monthly Calendar (Electron)
-**Status**: ✅ Completed (CRUD Topics, Tags & API Integration)
-**User Stories**: US-12.1, US-12.1.1, US-12.2, US-12.2.1, US-12.2.2, US-12.3
-**Documentation**: [fea-monthly-calendar-structure.md](./fea-monthly-calendar-structure.md)
+**Status**: ✅ Completed (CRUD Topics, Tags, Management & API Integration)
+**User Stories**: US-12.1, US-12.1.1, US-12.2, US-12.2.1, US-12.2.2, US-12.3, US-12.4
+**Documentation**: [fea-monthly-calendar-structure.md](./fea-monthly-calendar-structure.md), [fea-memento-management-structure.md](./fea-memento-management-structure.md)
 **Key Components**:
-- **Backend**: `CalendarController`, `ApiResponse<T>` (Envelope), `ICalendarService`.
-- **Frontend**: `MonthlyCalendarService` (Signals + CRUD), `TagService` (Global Tags), `CalendarApiService`, `MonthlyGridComponent`, `TopicEditorComponent`, `TagManagementComponent`.
+- **Backend**: `CalendarController`, `ApiResponse<T>`, `ICalendarService`.
+- **Frontend**: `MonthlyCalendarService`, `TagService`, `MementoManagementService` (US-12.4), `MonthlyGridComponent`, `TopicEditorComponent`, `MementoTableComponent` (US-12.4).
 - **Cascade Delete**: Tự động dọn dẹp tagId khỏi mementos khi xóa tag.
-- **Guideline**: [fe_design_rule.md](../guidelines/fe_design_rule.md) (Pixel-perfect UI rules).
 
 ## Shared Components
 

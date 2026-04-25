@@ -8,9 +8,9 @@
 | Field | Value |
 |-------|-------|
 | **Product Name** | ETL Deployment Tools Suite |
-| **Version** | 2.2.3 |
+| **Version** | 2.2.4 |
 | **Document Status** | Draft - Initial Version |
-| **Last Updated** | 2026-04-25 |
+| **Last Updated** | 2026-04-26 |
 | **Author** | Development Team |
 | **Stakeholders** | DevOps Team, Developers, Release Managers |
 
@@ -305,12 +305,12 @@ ETL Deployment Tools Suite cung cấp:
 
 ---
 
-### 11. Electron UI Integration (US-11.1, US-11.3, US-12.1, US-12.1.1, US-12.2, US-12.2.1, US-12.3, US-12.4)
+### 11. Electron UI Integration (US-11.1, US-11.3, US-12.1, US-12.1.1, US-12.2, US-12.2.1, US-12.3, US-12.4, US-12.5)
 **Status**: ✅ Completed
-**User Stories**: US-11.1 (Setup), US-11.3 (Build & Deploy), US-12.1 (Monthly Grid), US-12.1.1 (API Integration), US-12.2 (Topic Editor), US-12.3 (Tag Management UI), US-12.4 (Memento Management)
+**User Stories**: US-11.1 (Setup), US-11.3 (Build & Deploy), US-12.1 (Monthly Grid), US-12.1.1 (API Integration), US-12.2 (Topic Editor), US-12.3 (Tag Management UI), US-12.4 (Memento Management), US-12.5 (Tag Filtering & Ghost Memento)
 **Documentation**: [fea-electron-structure.md](./docs/structures/fea-electron-structure.md), [fea-monthly-calendar-structure.md](./docs/structures/fea-monthly-calendar-structure.md), [fea-memento-management-structure.md](./docs/structures/fea-memento-management-structure.md)
 
-**Purpose**: Nền tảng UI mới sử dụng Electron và Angular. Tích hợp hoàn chỉnh với Backend .NET qua REST API, hỗ trợ persistence và reactive state management. Đã bổ sung tính năng Quick Phase CRUD (Popup), Quick Color Edit (Hover) và Memento Management (Ordering & Filtering).
+**Purpose**: Nền tảng UI mới sử dụng Electron và Angular. Tích hợp hoàn chỉnh với Backend .NET qua REST API, hỗ trợ persistence và reactive state management. Đã bổ sung tính năng Quick Phase CRUD (Popup), Quick Color Edit (Hover), Memento Management (Ordering & Filtering) và hệ thống lọc Tag nâng cao hỗ trợ "Ghost Memento".
 
 **Key Components**:
 - **Lifes.Presentation.Electron**: Angular 19 frontend trên Electron shell.

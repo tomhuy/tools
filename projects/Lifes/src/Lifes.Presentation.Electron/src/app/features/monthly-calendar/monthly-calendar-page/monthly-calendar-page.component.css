@@ -214,11 +214,22 @@
   overflow-y: auto;
 }
 
+.dropdown-divider {
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.1);
+  margin: 8px 12px;
+}
+
+.include-children-opt .tag-label.highlight {
+  font-weight: 600;
+  color: var(--accent-color, #0078d4);
+}
+
 .tag-item {
   display: flex;
   align-items: center;
-  padding: 8px 10px;
-  border-radius: 6px;
+  padding: 8px 12px;
+  gap: 10px;
   cursor: pointer;
   transition: background-color 0.2s;
   user-select: none;

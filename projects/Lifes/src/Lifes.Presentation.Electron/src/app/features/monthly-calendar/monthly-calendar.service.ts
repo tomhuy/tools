@@ -1,10 +1,9 @@
 import { inject, Injectable, computed, signal } from '@angular/core';
-import { forkJoin } from 'rxjs';
 import { Memento } from '../../models/memento.model';
 import { Tag } from '../../models/tag.model';
 import { DisplayMode } from '../../models/display-mode.model';
 import { SelectableMonth } from '../../models/selectable-month.model';
-import { CalendarApiService } from './calendar-api.service';
+import { CalendarApiService, MementoQuery } from './calendar-api.service';
 import { TagService } from './tag.service';
 
 @Injectable({
@@ -43,20 +42,25 @@ export class MonthlyCalendarService {
   });
 
   loadInitial(year: number) {
+    this.loadMementos({ year, includeChildren: true });
+    this.loadTags();
+  }
+
+  public loadTags() {
+    this.api.getTags().subscribe(tags => this.tagService.setTags(tags));
+  }
+
+  public loadMementos(query: MementoQuery) {
     this.isLoading.set(true);
     this.lastError.set(null);
 
-    forkJoin({
-      mementos: this.api.getMementos({ year, includeChildren: true }),
-      tags: this.api.getTags()
-    }).subscribe({
-      next: ({ mementos, tags }) => {
+    this.api.getMementos(query).subscribe({
+      next: mementos => {
         this.mementos.set(mementos);
-        this.tagService.setTags(tags);
         this.isLoading.set(false);
       },
       error: err => {
-        console.error('Failed to load initial calendar data', err);
+        console.error('Failed to load mementos', err);
         this.lastError.set(err.message ?? 'Unknown error');
         this.isLoading.set(false);
       }

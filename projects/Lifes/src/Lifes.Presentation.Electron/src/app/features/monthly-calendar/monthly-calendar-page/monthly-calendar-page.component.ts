@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MonthlyCalendarService } from '../monthly-calendar.service';
 import { MonthlyGridComponent } from '../monthly-grid/monthly-grid.component';
@@ -24,14 +24,30 @@ export class MonthlyCalendarPageComponent implements OnInit {
   readonly showTopicEditor = signal(false);
   readonly editingTopic = signal<Memento | null>(null);
 
+  // Filters
+  readonly selectedTagIds = signal<number[]>([]);
+  readonly includeChildren = signal(true);
+  readonly showTimeline = signal(false);
+
   readonly topics = this.service.topicRows;
   readonly childrenByParent = this.service.childrenByParent;
   readonly selectedMonths = this.service.selectedMonths;
   readonly displayMode = this.service.displayMode;
   readonly today = signal(new Date(2026, 3, 24));
 
+  constructor() {
+    effect(() => {
+      this.service.loadMementos({
+        year: 2026,
+        tagIds: this.selectedTagIds().length > 0 ? this.selectedTagIds() : undefined,
+        includeChildren: this.includeChildren()
+      });
+    });
+  }
+
   ngOnInit() {
-    this.service.loadInitial(2026);
+    // Initial tag load is enough, mementos are loaded by effect
+    this.service.loadTags();
   }
 
   readonly months: SelectableMonth[] = Array.from({ length: 12 }, (_, i) => ({
@@ -56,6 +72,20 @@ export class MonthlyCalendarPageComponent implements OnInit {
   toggleTagPicker() {
     this.showTagPicker.update(v => !v);
     if (this.showTagPicker()) this.showMonthPicker.set(false);
+  }
+
+  onTagToggle(tagId: number) {
+    this.selectedTagIds.update(ids => 
+      ids.includes(tagId) ? ids.filter(id => id !== tagId) : [...ids, tagId]
+    );
+  }
+
+  toggleIncludeChildren() {
+    this.includeChildren.update(v => !v);
+  }
+
+  toggleShowTimeline() {
+    this.showTimeline.update(v => !v);
   }
 
   onManageTags() {

@@ -222,6 +222,16 @@
   text-overflow: ellipsis;
 }
 
+/* Ghost Memento Bar */
+.topic-ghost-bar {
+  height: 8px;
+  border-radius: 4px;
+  opacity: 0.15;
+  grid-row: 1;
+  pointer-events: none;
+  margin: 0 1px;
+}
+
 /* Display Modes adjustment */
 .mode-dot .phase-bar, .mode-pure-dot .phase-bar {
   width: 10px !important;

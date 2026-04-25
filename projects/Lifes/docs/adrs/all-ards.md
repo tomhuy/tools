@@ -83,4 +83,22 @@ tại sao lại cần concern chuyên này
     - Các module phải sâu
     - logic đang vẫn ở cấp độ đơn giản và dễ hiểu
     - FE sẽ có nhiều lựa chọn hơn
+ 
+## ADR 4: Ghost Memento Visualization for Tag Filtering (US-12.5)
+**Ngày ra quyết định: 2026-04-26**
+**Người viết: AI, huy**
 
+**1. Vấn đề/Concern/Feature đang cần ra quyết định:**
+Làm thế nào để người dùng vẫn thấy được "tầm vóc thời gian" của một Topic khi đang lọc theo Tag mà không gây nhầm lẫn với các phase con (Ghost Memento). Ban đầu tính năng này phụ thuộc vào việc ẩn phase con (`!includeChildren`), nhưng cần một cách tiếp cận linh hoạt hơn.
+
+**2. Các phương án đã được gợi ý:**
+- **Phương án 1 (Implicit)**: Tự động hiển thị Ghost Bar khi người dùng tắt "Include children".
+- **Phương án 2 (Explicit/Decoupled)**: Tách biệt hoàn toàn tính năng này thành một checkbox riêng biệt tên là **"Show timeline"**. Ghost Bar sẽ chỉ hiển thị khi người dùng chủ động chọn, không phụ thuộc vào trạng thái của "Include children".
+
+**3. Lựa chọn và lý do lựa chọn:**
+- **Lựa chọn**: **Phương án 2 (Explicit/Decoupled - Show timeline)**.
+- **Lý do**: 
+    - **Linh hoạt**: Cho phép người dùng kết hợp linh hoạt (ví dụ: vừa hiện timeline tổng quát làm nền, vừa hiện phase con chi tiết).
+    - **Dễ hiểu**: Tên gọi "Show timeline" phản ánh đúng bản chất thị giác hơn là việc suy luận từ trạng thái ẩn phase con.
+    - **UX**: Người dùng có quyền kiểm soát tuyệt đối giao diện lưới (grid) mà không bị ràng buộc bởi logic tải dữ liệu (recursive loading).
+    - **Khả năng mở rộng**: Dễ dàng bổ sung các loại "timeline" khác trong tương lai mà không làm phức tạp hóa logic filter.

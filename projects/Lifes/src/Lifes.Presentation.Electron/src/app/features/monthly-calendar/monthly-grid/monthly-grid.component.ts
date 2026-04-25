@@ -20,6 +20,8 @@ export class MonthlyGridComponent {
   readonly selectedMonths = input.required<SelectableMonth[]>();
   readonly displayMode = input.required<DisplayMode>();
   readonly today = input.required<Date>();
+  readonly includeChildren = input<boolean>(true);
+  readonly showTimeline = input<boolean>(false);
 
   readonly topicClick = output<Memento>();
   readonly phaseClick = output<Memento>();

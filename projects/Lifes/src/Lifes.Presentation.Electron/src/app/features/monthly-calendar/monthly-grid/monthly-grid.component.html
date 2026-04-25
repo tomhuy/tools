@@ -66,6 +66,16 @@
 
                 <!-- Phase Bars -->
                 <div class="bars-overlay">
+                  <!-- Ghost Bar (Topic Duration) -->
+                  @if (showTimeline()) {
+                    <div 
+                      class="topic-ghost-bar"
+                      [style.grid-column-start]="getStartCol(topic, month)"
+                      [style.grid-column-end]="getEndCol(topic, month)"
+                      [style.background-color]="getBgColor(topic)">
+                    </div>
+                  }
+
                   @for (child of childrenByParent().get(topic.id); track child.id) {
                     @if (isMementoInMonth(child, month)) {
                       <div 

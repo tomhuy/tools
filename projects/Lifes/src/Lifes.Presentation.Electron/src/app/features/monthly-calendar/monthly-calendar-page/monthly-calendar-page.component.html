@@ -43,13 +43,23 @@
               <div class="tag-list">
                 @for (tag of service.tags(); track tag.id) {
                   <label class="tag-item">
-                    <input type="checkbox">
+                    <input type="checkbox" [checked]="selectedTagIds().includes(tag.id)" (change)="onTagToggle(tag.id)">
                     <span class="color-dot" [style.backgroundColor]="tag.color"></span>
                     <span class="tag-label">{{ tag.name }}</span>
                   </label>
                 } @empty {
                   <div class="empty-msg">Chưa có tag nào</div>
                 }
+                
+                <div class="dropdown-divider"></div>
+                <label class="tag-item include-children-opt">
+                  <input type="checkbox" [checked]="showTimeline()" (change)="toggleShowTimeline()">
+                  <span class="tag-label highlight">Show timeline</span>
+                </label>
+                <label class="tag-item include-children-opt">
+                  <input type="checkbox" [checked]="includeChildren()" (change)="toggleIncludeChildren()">
+                  <span class="tag-label highlight">Include the children</span>
+                </label>
               </div>
               <div class="dropdown-footer">
                 <button class="manage-tags-link" (click)="onManageTags()">
@@ -83,6 +93,8 @@
       [childrenByParent]="childrenByParent()"
       [selectedMonths]="selectedMonths()"
       [displayMode]="displayMode()"
+      [includeChildren]="includeChildren()"
+      [showTimeline]="showTimeline()"
       [today]="today()"
       (topicClick)="onTopicClick($event)"
       (phaseClick)="onPhaseClick($event)">

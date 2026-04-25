@@ -81,3 +81,5 @@ Di chuyển giao diện Lịch tháng (Monthly Calendar) từ WPF sang Electron/
 - **Single Row Constraint**: Ép các phase bar vào `grid-row: 1` để tránh hiện tượng nhảy dòng khi có nhiều dữ liệu chồng lấn.
 - **ApiResponse Envelope**: Sử dụng một cấu trúc phản hồi chuẩn để quản lý lỗi và dữ liệu một cách nhất quán giữa .NET và Angular.
 - **Tag Cascade Delete**: `MonthlyCalendarService` subcribe vào `TagService.tagDeleted$` để tự động lọc bỏ `tagId` bị xóa khỏi mementos đang cache trong signal, đảm bảo tính nhất quán dữ liệu mà không cần reload trang.
+- **Signal-based Filtering (US-12.5)**: Sử dụng `effect()` trong component để tự động gọi `loadMementos` với `MementoQuery` mới mỗi khi `selectedTagIds` hoặc `includeChildren` thay đổi.
+- **Ghost Memento Rendering (US-12.5)**: Khi tắt "Include children", Topic cha vẫn hiển thị dưới dạng thanh mờ (`topic-ghost-bar`) để định vị khoảng thời gian tổng quát mà không cần hiện chi tiết phase con.

@@ -1,5 +1,6 @@
 import { Component, inject, OnInit, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { MonthlyCalendarService } from '../monthly-calendar.service';
 import { MonthlyGridComponent } from '../monthly-grid/monthly-grid.component';
 import { TopicEditorComponent } from '../topic-editor/topic-editor.component';
@@ -11,7 +12,7 @@ import { Memento } from '../../../models/memento.model';
 @Component({
   selector: 'app-monthly-calendar-page',
   standalone: true,
-  imports: [CommonModule, MonthlyGridComponent, TopicEditorComponent, TagManagementComponent],
+  imports: [CommonModule, RouterModule, MonthlyGridComponent, TopicEditorComponent, TagManagementComponent],
   templateUrl: './monthly-calendar-page.component.html',
   styleUrl: './monthly-calendar-page.component.css'
 })

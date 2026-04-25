@@ -1,0 +1,10 @@
+<div class="view-chart-container">
+  <!-- Left Column: Topic List -->
+  <app-topic-search-list></app-topic-search-list>
+
+  <!-- Right Column: Chart Box -->
+  <app-chart-container 
+    [selectedTopics]="service.selectedTopics()" 
+    (removeTopic)="service.removeTopic($event)">
+  </app-chart-container>
+</div>

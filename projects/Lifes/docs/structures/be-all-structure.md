@@ -345,6 +345,15 @@ src/
 - **Frontend**: `MonthlyCalendarService`, `TagService`, `MementoManagementService` (US-12.4), `MonthlyGridComponent`, `TopicEditorComponent`, `MementoTableComponent` (US-12.4).
 - **Cascade Delete**: Tự động dọn dẹp tagId khỏi mementos khi xóa tag.
 
+### 13. View Chart & Data Analysis (Electron Shell)
+**Status**: ✅ Completed (Layout & Selection)
+**User Stories**: US-14.1
+**Documentation**: [fea-view-chart-structure.md](./fea-view-chart-structure.md)
+**Key Components**:
+- **Local Services**: `MementoService`, `ViewChartService`.
+- **UI**: `ViewChartPageComponent` (Split layout) with Passive components.
+- **Data Flow**: Multi-select topics and search synchronization via local `ViewChartService`.
+
 ## Shared Components
 
 ### Core Layer

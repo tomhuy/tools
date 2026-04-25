@@ -1,0 +1,8 @@
+.view-chart-container {
+  display: flex;
+  height: 100%;
+  background-color: #f8fafc;
+  overflow: hidden;
+}
+
+/* Page container specific styles if any */

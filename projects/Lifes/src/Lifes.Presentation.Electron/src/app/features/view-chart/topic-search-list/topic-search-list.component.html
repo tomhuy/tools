@@ -1,0 +1,37 @@
+<aside class="topic-sidebar">
+  <div class="search-header">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input 
+        type="text" 
+        placeholder="Search topics..." 
+        [ngModel]="service.searchTerm()" 
+        (ngModelChange)="service.setSearchTerm($event)"
+      >
+    </div>
+  </div>
+
+  <div class="topic-list-scroll">
+    @if (service.isLoading()) {
+      <div class="loading-state">Loading topics...</div>
+    } @else {
+      @for (topic of service.topics(); track topic.id) {
+        <div 
+          class="topic-card" 
+          [class.selected]="service.isSelected(topic.id)"
+          (click)="service.toggleTopicSelection(topic)"
+        >
+          <div class="topic-indicator" [style.background-color]="topic.color || '#cbd5e0'"></div>
+          <div class="topic-info">
+            <span class="topic-name">{{ topic.title }}</span>
+          </div>
+          @if (service.isSelected(topic.id)) {
+            <span class="check-icon">✓</span>
+          }
+        </div>
+      } @empty {
+        <div class="empty-state">No topics found</div>
+      }
+    }
+  </div>
+</aside>

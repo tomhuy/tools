@@ -1,0 +1,35 @@
+<section class="chart-main">
+  <header class="chart-header">
+    <div class="selected-chips">
+      @for (topic of selectedTopics; track topic.id) {
+        <div class="topic-chip" [style.border-left-color]="topic.color || '#cbd5e0'">
+          <span class="chip-text">{{ topic.title }}</span>
+          <button class="remove-chip" (click)="onRemove(topic.id)">×</button>
+        </div>
+      } @empty {
+        <span class="placeholder-text">Select topics from the left to start analysis</span>
+      }
+    </div>
+    <div class="header-actions">
+      <!-- Future: Chart type selector, etc. -->
+      <div class="chart-controls">
+        <button class="action-btn-outline">Weekly</button>
+        <button class="action-btn-outline active">Monthly</button>
+        <button class="action-btn-outline">Yearly</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="chart-content">
+    <div class="empty-chart-placeholder">
+      <div class="placeholder-icon">📊</div>
+      <h3>Analysis Area</h3>
+      <p>Data visualization for the selected topics will appear here.</p>
+      
+      <!-- Future US-14.2 components will be injected here -->
+      <div class="chart-preview-mock">
+         <!-- This is where the actual charts will go -->
+      </div>
+    </div>
+  </div>
+</section>

@@ -323,12 +323,21 @@ ETL Deployment Tools Suite cung cấp:
 
 ---
 
-### 12. Activity Heatmap Tracker (US-12.7)
+### 12. View Chart & Data Analysis (US-14.1)
+**Status**: ✅ Completed
+**User Stories**: US-14.1
+**Documentation**: [fea-view-chart-structure.md](./docs/structures/fea-view-chart-structure.md)
+
+**Purpose**: Trang phân tích dữ liệu chuyên sâu với bố cục Email-box style. Hỗ trợ tìm kiếm Topic và chọn nhiều Topic để chuẩn bị cho việc vẽ biểu đồ. Sử dụng kiến trúc Local Scoped Services để đảm bảo tính cách ly dữ liệu tuyệt đối giữa các màn hình.
+
+---
+
+### 13. Chart Visualizations (US-14.2)
 **Status**: 📋 Planned
-**User Stories**: US-12.7
+**User Stories**: US-14.2
 **Documentation**: TBD
 
-**Purpose**: Hiển thị lưới mật độ hoạt động (Heatmap) theo năm cho từng Topic, giúp theo dõi thói quen và tính liên tục của các hành động.
+**Purpose**: Triển khai các loại biểu đồ (Line, Bar, Pie) để trực quan hóa dữ liệu memento dựa trên các Topic đã chọn.
 
 **Why Feature-based Organization?**
 - ✅ **High Cohesion**: Code liên quan đến một feature nằm gần nhau

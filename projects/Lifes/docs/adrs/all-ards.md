@@ -137,3 +137,21 @@ Lựa chọn tên gọi cho tham số query lọc các Topic đã hoàn thành. 
     - **Tính trực quan**: Trên UI, người dùng đang tương tác với một toggle "Show completed". Việc ánh xạ trực tiếp sang `showAchieved` giúp logic ở cả Frontend và Backend trở nên cực kỳ dễ đọc.
     - **Logic mặc định**: Hệ thống yêu cầu "mặc định ẩn các topic đã hoàn thành". Với `showAchieved`, chúng ta chỉ cần kiểm tra `showAchieved == true` để quyết định có bao gồm dữ liệu cũ hay không. Nếu không được truyền (null/false), hệ thống sẽ tự động lọc bỏ (`!m.IsAchieved`).
     - **Ngữ nghĩa**: `isAchieved` ám chỉ một trạng thái cố định của object, trong khi `showAchieved` ám chỉ một hành động lọc/hiển thị của hệ thống.
+
+## ADR 7: Local State Management vs. Event-driven Reload (US-15.1)
+**Ngày ra quyết định: 2026-04-26**
+**Người viết: AI, huy**
+
+**1. Vấn đề/Concern/Feature đang cần ra quyết định:**
+Khi một Topic được cập nhật trạng thái `isAchieved`, làm thế nào để đồng bộ giao diện (ẩn/hiện) một cách tối ưu nhất. Có nên sử dụng cơ chế "Bắn Event -> Reload toàn bộ từ Server" hay "Tự quản lý và lọc dữ liệu tại Local State"?
+
+**2. Các phương án đã được gợi ý:**
+- **Phương án 1 (Event-driven Reload)**: Sử dụng `Subject` (ví dụ `mementoChanged$`) để báo hiệu cho Component biết cần gọi lại API `loadMementos()`.
+- **Phương án 2 (Local State Management - Option B)**: Service tự chịu trách nhiệm cập nhật hoặc loại bỏ item khỏi Signal `mementos` dựa trên giá trị mới và bộ lọc hiện tại.
+
+**3. Lựa chọn và lý do lựa chọn:**
+- **Lựa chọn**: **Phương án 2 (Local State Management)**.
+- **Lý do**: 
+    - **Trách nhiệm của Service**: Các Service nên làm tốt công việc của mình. Khi có sự kiện thay đổi dữ liệu xảy ra, Service nên tự quản lý tốt state mà nó đang nắm giữ vì nó đang cung cấp dữ liệu đó cho nhiều bên ngoài sử dụng. Việc Service tự "làm sạch" dữ liệu của mình giúp các component sử dụng nó luôn nhận được data chuẩn mà không cần thêm logic phụ trợ.
+    - **Tối ưu hóa hiệu năng**: Việc sử dụng Subject để emit ra bên ngoài và kích hoạt reload toàn bộ danh sách là quá tốn kém về performance (HTTP request, re-calculate computed signals, re-render DOM) và không cần thiết khi chúng ta đã có sẵn dữ liệu mới trong tay sau khi Save thành công.
+    - **UX**: Mang lại trải nghiệm mượt mà (snappy), dữ liệu thay đổi tức thì mà không có độ trễ của mạng.

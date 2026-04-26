@@ -135,7 +135,8 @@ export class MonthlyGridComponent {
       parentId: topic.id,
       order: 0,
       tagIds: [],
-      color: topic.color
+      color: topic.color,
+      isAchieved: false
     };
 
     this.activePopup.set({

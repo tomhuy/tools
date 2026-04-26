@@ -19,6 +19,7 @@ export class MementoManagementService {
   readonly mementos = signal<Memento[]>([]);
   readonly isLoading = signal(false);
   readonly lastError = signal<string | null>(null);
+  readonly showAchieved = signal<boolean>(false);
 
   loadMementos(filter: MementoFilter = {}) {
     this.isLoading.set(true);
@@ -67,11 +68,23 @@ export class MementoManagementService {
   }
 
   updateMementoLocal(saved: Memento) {
-    this.mementos.update(l => l.map(x => x.id === saved.id ? saved : x));
+    this.mementos.update(l => {
+      // Option B: If now achieved and we are hiding, remove it.
+      if (saved.isAchieved && !this.showAchieved()) {
+        return l.filter(x => x.id !== saved.id);
+      }
+      return l.map(x => x.id === saved.id ? saved : x);
+    });
   }
 
   addMementoLocal(saved: Memento) {
-    this.mementos.update(l => [...l, saved]);
+    this.mementos.update(l => {
+      // Option B: If now achieved and we are hiding, don't add to list
+      if (saved.isAchieved && !this.showAchieved()) {
+        return l;
+      }
+      return [...l, saved];
+    });
   }
 
   removeMementoLocal(id: number) {

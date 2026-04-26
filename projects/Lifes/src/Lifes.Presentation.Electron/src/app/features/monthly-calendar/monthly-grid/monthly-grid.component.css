@@ -189,6 +189,7 @@
   bottom: auto;
   left: 100%; 
   transform: translateY(-50%) translateX(8px);
+  animation: fadeInVertical 0.2s ease-out;
 }
 
 .vertical-mode .phase-floating-tooltip::after {
@@ -204,7 +205,7 @@
   to { opacity: 1; transform: translate(-50%, 0); }
 }
 
-.vertical-mode @keyframes fadeIn {
+@keyframes fadeInVertical {
   from { opacity: 0; transform: translate(-5px, -50%); }
   to { opacity: 1; transform: translate(0, -50%); }
 }

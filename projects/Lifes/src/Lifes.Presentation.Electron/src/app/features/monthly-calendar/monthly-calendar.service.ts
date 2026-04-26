@@ -17,6 +17,7 @@ export class MonthlyCalendarService {
   readonly tags = this.tagService.tags;
   readonly displayMode = signal<DisplayMode>('gantt');
   readonly selectedMonths = signal<SelectableMonth[]>(this.getDefaultQuarterMonths());
+  readonly showAchieved = signal<boolean>(false);
 
   private getDefaultQuarterMonths(): SelectableMonth[] {
     const now = new Date();
@@ -92,21 +93,37 @@ export class MonthlyCalendarService {
 
   addTopic(topic: Memento) {
     this.api.saveMemento(topic).subscribe({
-      next: saved => this.mementos.update(l => [...l, saved]),
+      next: saved => this.addMementoLocal(saved),
       error: err => this.lastError.set(err.message ?? 'Failed to add topic')
+    });
+  }
+
+  private addMementoLocal(saved: Memento) {
+    this.mementos.update(l => {
+      if (saved.isAchieved && !this.showAchieved()) return l;
+      return [...l, saved];
     });
   }
 
   addChild(child: Memento) {
     this.api.saveMemento(child).subscribe({
-      next: saved => this.mementos.update(l => [...l, saved]),
+      next: saved => this.addMementoLocal(saved),
       error: err => this.lastError.set(err.message ?? 'Failed to add child')
     });
   }
 
   updateTopic(topic: Memento) {
     this.api.saveMemento(topic).subscribe({
-      next: saved => this.mementos.update(l => l.map(x => x.id === saved.id ? saved : x)),
+      next: saved => {
+        this.mementos.update(l => {
+          // Option B: If the topic is now achieved and we are hiding achieved topics, remove it from the list.
+          if (saved.isAchieved && !this.showAchieved()) {
+            return l.filter(x => x.id !== saved.id && x.parentId !== saved.id);
+          }
+          // Otherwise, just update it in the list
+          return l.map(x => x.id === saved.id ? saved : x);
+        });
+      },
       error: err => this.lastError.set(err.message ?? 'Failed to update topic')
     });
   }

@@ -1,7 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Lifes.Core.Interfaces;
 using Lifes.Core.Models;
 using Lifes.Presentation.WebApi.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace Lifes.Presentation.WebApi.Controllers;
 
@@ -27,7 +32,8 @@ public class CalendarController : ControllerBase
         [FromQuery] bool includeChildren = false,
         [FromQuery] DateTime? startDate = null,
         [FromQuery] DateTime? endDate = null,
-        [FromQuery] string? keyword = null)
+        [FromQuery] string? keyword = null,
+        [FromQuery] bool? showAchieved = null)
     {
         try
         {
@@ -45,7 +51,8 @@ public class CalendarController : ControllerBase
                     ? null 
                     : tagIds.Split(',').Select(int.Parse).ToList(),
                 ParentOnly = parentOnly,
-                Keyword = keyword
+                Keyword = keyword,
+                ShowAchieved = showAchieved
             };
             var data = await _svc.GetMementosAsync(query, includeChildren);
             return Ok(ApiResponse<IEnumerable<MementoModel>>.Ok(data));

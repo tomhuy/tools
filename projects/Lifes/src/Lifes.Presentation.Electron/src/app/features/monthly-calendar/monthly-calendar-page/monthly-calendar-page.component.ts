@@ -31,7 +31,7 @@ export class MonthlyCalendarPageComponent implements OnInit {
   readonly showTimeline = signal(false);
   readonly isVerticalView = signal(false);
   readonly forceShowTooltips = signal(false);
-  readonly showAchieved = signal(false);
+  readonly showAchieved = this.service.showAchieved;
 
   readonly topics = this.service.topicRows;
   readonly childrenByParent = this.service.childrenByParent;

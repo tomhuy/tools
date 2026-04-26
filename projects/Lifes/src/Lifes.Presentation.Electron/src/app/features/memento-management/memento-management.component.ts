@@ -21,7 +21,7 @@ export class MementoManagementComponent implements OnInit {
   readonly tags = this.tagService.tags;
   readonly mementos = this.managementService.mementos;
   readonly isLoading = this.managementService.isLoading;
-  readonly showAchieved = signal(false);
+  readonly showAchieved = this.managementService.showAchieved;
 
   // Filters state
   readonly keyword = signal('');

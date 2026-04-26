@@ -86,6 +86,16 @@ export class TopicEditorComponent implements OnInit {
     }
   }
 
+  onHexBlur(): void {
+    const control = this.topicForm.get('color');
+    if (!control) return;
+    let val = control.value as string;
+    if (val && !val.startsWith('#')) {
+      val = '#' + val;
+      control.setValue(val);
+    }
+  }
+
   onDelete(): void {
     if (this.topic && confirm('Bạn có chắc chắn muốn xóa chủ đề này? Tất cả các giai đoạn con cũng sẽ bị xóa.')) {
       this.delete.emit(this.topic.id);

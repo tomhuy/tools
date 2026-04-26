@@ -1471,7 +1471,8 @@ private string GetLevelColor(string level)
 - ✅ **Monthly Calendar Migration**: Pixel-perfect port from WPF to Angular with Signal-based state (US-12.1).
 - ✅ **REST API Integration**: Connection to .NET backend with `ApiResponse` envelope (US-12.1.1).
 - ✅ **Color Palette Port**: Migration of WPF brand colors and contrast logic to TypeScript utilities.
-- ✅ **Multi-Month Rendering**: Support for topic rows spanning across multiple months with smart grid filtering.
+- ✅ **US-15.1: IsAchieved Topic Filtering**: Cho phép đánh dấu topic đã hoàn thành và cung cấp toggle "Show Completed" để ẩn/hiện các topic này trên Board và Management.
+- ✅ **US-15.2: Custom Hex Color Input**: Cho phép người dùng nhập trực tiếp mã màu Hex tùy chỉnh trong Topic Editor và Quick Color Picker.
 
 ---
 

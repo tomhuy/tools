@@ -55,6 +55,12 @@
         <label class="color-label">
           Màu đại diện Topic 
           <span class="color-preview" [style.background-color]="topicForm.get('color')?.value"></span>
+          <input 
+            type="text" 
+            class="hex-input" 
+            formControlName="color" 
+            placeholder="#000000"
+            (blur)="onHexBlur()">
         </label>
         <div class="color-grid">
           @for (c of presetColors; track c) {

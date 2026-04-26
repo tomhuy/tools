@@ -88,3 +88,5 @@ Di chuyển giao diện Lịch tháng (Monthly Calendar) từ WPF sang Electron/
 - **Floating Tooltips (US-12.6)**: Thay thế hoàn toàn tiêu đề nội bộ (inline titles) bằng một nhãn nổi (`phase-floating-tooltip`) có `z-index: 100`. Nhãn này được kích hoạt toàn cục qua nút 💬 trên toolbar, giúp đọc nội dung rõ ràng kể cả với các memento siêu ngắn.
 - **Position Relative Enforcement**: Để tooltips nổi căn chỉnh đúng, các thanh phase bar (`.phase-bar`, `.phase-bar-vertical`) bắt buộc phải có `position: relative`.
 - **Achieved Filtering (US-15.1)**: Mặc định ẩn các Topic đã hoàn thành thông qua `showAchieved = false`. Khi `showAchieved` signal thay đổi, `effect` sẽ tự động gọi lại API với tham số `showAchieved` để nạp dữ liệu phù hợp.
+- **Option B State Refresh (US-15.1)**: Khi cập nhật một topic thành hoàn thành, thay vì reload toàn bộ danh sách, service sẽ chủ động xóa (filter) topic đó khỏi mảng `mementos` local nếu filter ẩn đang bật, giúp UI cập nhật tức thì (snappy).
+- **Custom Hex Color Input (US-15.2)**: Hỗ trợ nhập mã màu Hex tùy chỉnh trong Topic Editor và Quick Color Picker. Tự động thêm dấu `#` và viết hoa mã màu khi `blur` ô input để đảm bảo tính nhất quán.

@@ -167,9 +167,18 @@ export class MonthlyGridComponent {
   }
 
   onSelectColor(memento: Memento, color: string): void {
+    if (color && !color.startsWith('#')) {
+      color = '#' + color;
+    }
     const updated = { ...memento, color };
     this.calendarService.updateMemento(updated);
     this.closeColorPicker();
+  }
+
+  onHexBlurMemento(memento: Memento): void {
+    if (memento.color && !memento.color.startsWith('#')) {
+      memento.color = '#' + memento.color;
+    }
   }
 
   onUpdatePhase(): void {

@@ -230,5 +230,15 @@
         </div>
       }
     </div>
+    <div class="custom-color-row">
+      <input 
+        type="text" 
+        [value]="cp.memento.color || ''" 
+        (input)="cp.memento.color = $any($event.target).value"
+        (keyup.enter)="onSelectColor(cp.memento, cp.memento.color!)"
+        (blur)="onHexBlurMemento(cp.memento)"
+        placeholder="#Hex">
+      <button class="btn-confirm" (click)="onSelectColor(cp.memento, cp.memento.color!)">✓</button>
+    </div>
   </div>
 }

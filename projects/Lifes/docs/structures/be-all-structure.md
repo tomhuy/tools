@@ -346,13 +346,19 @@ src/
 - **Cascade Delete**: Tự động dọn dẹp tagId khỏi mementos khi xóa tag.
 
 ### 13. View Chart & Data Analysis (Electron Shell)
-**Status**: ✅ Completed (Layout & Selection)
-**User Stories**: US-14.1
+**Status**: ✅ Completed
+**User Stories**: US-14.1, US-14.2
 **Documentation**: [fea-view-chart-structure.md](./fea-view-chart-structure.md)
 **Key Components**:
 - **Local Services**: `MementoService`, `ViewChartService`.
-- **UI**: `ViewChartPageComponent` (Split layout) with Passive components.
-- **Data Flow**: Multi-select topics and search synchronization via local `ViewChartService`.
+- **UI Architecture**: `ViewChartPageComponent` (Smart Host) + `ChartContainerComponent` (Passive Coordinator).
+- **Visualization Engines**:
+    - `ChartVisualizerComponent` (SVG Native): High-performance, premium aesthetics via Angular templates.
+    - `D3SampleComponent` (D3.js): Advanced mathematical scaling and dynamic transitions.
+- **Config & Data Flow**: 
+    - `TopicConfigPopupComponent`: Grid mapping (Label -> Value -> Color).
+    - **Multi-row Stacked Layout**: Integrated Events, Emotions, and Sleep data on a single timeline.
+    - **Data Transformation**: Recursive mapping of child mementos to parent topics.
 
 ## Shared Components
 

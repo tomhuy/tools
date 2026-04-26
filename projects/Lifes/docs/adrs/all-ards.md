@@ -101,4 +101,22 @@ Làm thế nào để người dùng vẫn thấy được "tầm vóc thời gi
     - **Linh hoạt**: Cho phép người dùng kết hợp linh hoạt (ví dụ: vừa hiện timeline tổng quát làm nền, vừa hiện phase con chi tiết).
     - **Dễ hiểu**: Tên gọi "Show timeline" phản ánh đúng bản chất thị giác hơn là việc suy luận từ trạng thái ẩn phase con.
     - **UX**: Người dùng có quyền kiểm soát tuyệt đối giao diện lưới (grid) mà không bị ràng buộc bởi logic tải dữ liệu (recursive loading).
-    - **Khả năng mở rộng**: Dễ dàng bổ sung các loại "timeline" khác trong tương lai mà không làm phức tạp hóa logic filter.
+## ADR 5: Visualization Engine & Multi-row Layout for Data Analysis (US-14.2)
+**Ngày ra quyết định: 2026-04-26**
+**Người viết: AI, huy**
+
+**1. Vấn đề/Concern/Feature đang cần ra quyết định:**
+Lựa chọn công nghệ vẽ biểu đồ (Visualization Engine) và thiết kế Layout cho tính năng phân tích dữ liệu chuyên sâu. Cần đảm bảo tính thẩm mỹ "Premium", hiệu suất cao và khả năng mở rộng trong tương lai.
+
+**2. Các phương án đã được gợi ý:**
+- **Phương án 1 (Native SVG + Angular Templates)**: Sử dụng trực tiếp thẻ `<svg>` trong Angular template, binding dữ liệu thông qua logic tính toán tọa độ đơn giản.
+- **Phương án 2 (D3.js Library)**: Sử dụng thư viện D3.js chuyên dụng để quản lý DOM SVG, toán học (Scales) và transitions.
+- **Phương án 3 (Hybrid Approach)**: Triển khai engine chính bằng Native SVG để tối ưu hiệu suất và dễ styling bằng CSS, đồng thời tích hợp D3.js như một engine bổ trợ cho các phân tích toán học phức tạp.
+
+**3. Lựa chọn và lý do lựa chọn:**
+- **Lựa chọn**: **Phương án 3 (Hybrid Approach - Native SVG with D3 Sample)**.
+- **Lý do**: 
+    - **Thẩm mỹ Premium**: Native SVG cho phép tận dụng tối đa CSS và Angular template binding để đạt được giao diện pixel-perfect y hệt bản thiết kế mẫu (sample_chart.svg).
+    - **Hiệu suất**: Tránh việc D3.js can thiệp trực tiếp vào DOM của Angular (giảm xung đột Change Detection).
+    - **Tính linh hoạt (Multi-row Layout)**: Quyết định sử dụng **Stacked Multi-row Layout** (Events -> Emotions -> Sleep) giúp quan sát được mối tương quan giữa các chiều dữ liệu khác nhau trên cùng một trục thời gian.
+    - **Scale & Math**: D3.js vẫn được giữ lại trong codebase như một "Alternative Engine" để xử lý các biểu đồ yêu cầu toán học cao hơn trong tương lai (ví dụ: Zooming, Complex interpolations).

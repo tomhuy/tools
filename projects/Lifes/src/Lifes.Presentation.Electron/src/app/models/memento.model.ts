@@ -7,4 +7,5 @@ export interface Memento {
   order: number;
   color?: string;
   tagIds: number[];
+  children?: Memento[];
 }

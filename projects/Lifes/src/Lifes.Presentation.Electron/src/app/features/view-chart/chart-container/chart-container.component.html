@@ -2,34 +2,45 @@
   <header class="chart-header">
     <div class="selected-chips">
       @for (topic of selectedTopics; track topic.id) {
-        <div class="topic-chip" [style.border-left-color]="topic.color || '#cbd5e0'">
+        <div 
+          class="topic-chip clickable" 
+          [style.border-left-color]="topic.color || '#cbd5e0'"
+          (click)="onConfigure(topic.id)"
+          title="Click to configure chart"
+        >
           <span class="chip-text">{{ topic.title }}</span>
-          <button class="remove-chip" (click)="onRemove(topic.id)">×</button>
+          <button class="remove-chip" (click)="onRemove(topic.id, $event)">×</button>
         </div>
       } @empty {
         <span class="placeholder-text">Select topics from the left to start analysis</span>
       }
     </div>
     <div class="header-actions">
-      <!-- Future: Chart type selector, etc. -->
-      <div class="chart-controls">
-        <button class="action-btn-outline">Weekly</button>
-        <button class="action-btn-outline active">Monthly</button>
-        <button class="action-btn-outline">Yearly</button>
-      </div>
+      <button 
+        class="render-btn" 
+        [disabled]="selectedTopics.length === 0"
+        (click)="onRender()"
+      >
+        🚀 Render
+      </button>
     </div>
   </header>
 
   <div class="chart-content">
-    <div class="empty-chart-placeholder">
-      <div class="placeholder-icon">📊</div>
-      <h3>Analysis Area</h3>
-      <p>Data visualization for the selected topics will appear here.</p>
-      
-      <!-- Future US-14.2 components will be injected here -->
-      <div class="chart-preview-mock">
-         <!-- This is where the actual charts will go -->
+    @if (chartData.length > 0) {
+      <div class="visualizer-wrapper">
+        <app-chart-visualizer [chartData]="chartData" [monthLabel]="monthLabel"></app-chart-visualizer>
       </div>
-    </div>
+
+      <div class="d3-demo-section" style="margin-top: 40px; width: 100%;">
+        <app-d3-sample [chartData]="chartData"></app-d3-sample>
+      </div>
+    } @else {
+      <div class="empty-chart-placeholder">
+        <div class="placeholder-icon">📊</div>
+        <h3>Analysis Area</h3>
+        <p>Configure your topics and click <b>Render</b> to see the visualization.</p>
+      </div>
+    }
   </div>
 </section>

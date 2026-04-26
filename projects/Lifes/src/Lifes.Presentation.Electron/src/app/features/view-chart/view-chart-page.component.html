@@ -5,6 +5,20 @@
   <!-- Right Column: Chart Box -->
   <app-chart-container 
     [selectedTopics]="service.selectedTopics()" 
-    (removeTopic)="service.removeTopic($event)">
+    [chartData]="chartData()"
+    [monthLabel]="monthLabel"
+    (removeTopic)="service.removeTopic($event)"
+    (configureTopic)="onConfigureTopic($event)"
+    (render)="onRender()">
   </app-chart-container>
+
+  <!-- Configuration Popup -->
+  @if (configuringTopic()) {
+    <app-topic-config-popup
+      [topic]="configuringTopic()!"
+      [initialSetting]="service.getTopicSetting(configuringTopic()!.id)"
+      (save)="onSaveConfig($event)"
+      (cancel)="onCancelConfig()">
+    </app-topic-config-popup>
+  }
 </div>

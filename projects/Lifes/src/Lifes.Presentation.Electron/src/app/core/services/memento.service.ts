@@ -1,4 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
+import { map, Observable } from 'rxjs';
 import { CalendarApiService } from '../../features/monthly-calendar/calendar-api.service';
 import { Memento } from '../../models/memento.model';
 
@@ -43,5 +44,27 @@ export class MementoService {
         this.isLoading.set(false);
       }
     });
+  }
+
+  getTopicDetails(topicId: number, month: number, year: number): Observable<Memento | null> {
+    const params = {
+      year,
+      month,
+      includeChildren: true,
+      parentOnly: false
+    };
+
+    // Map children to parent topic after API returns
+    return this.api.getMementos(params).pipe(
+      map((mementos: Memento[]) => {
+        const parent = mementos.find(m => m.id === topicId);
+        if (parent) {
+          // Ensure children are linked (in case API returns flat list)
+          parent.children = mementos.filter(m => m.parentId === topicId);
+          return parent;
+        }
+        return null;
+      })
+    );
   }
 }

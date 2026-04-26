@@ -28,8 +28,28 @@ Feature này áp dụng mô hình **Local Scoped Services** để đảm bảo t
 ## Files Structure
 - `src/app/core/services/memento.service.ts`: Local data engine.
 - `src/app/features/view-chart/view-chart.service.ts`: Page business logic.
-- `src/app/features/view-chart/view-chart-page.component.*`: Main UI.
+- `src/app/features/view-chart/view-chart-page.component.*`: Main UI Host.
+- `src/app/features/view-chart/chart-container/`: Chứa `ChartContainerComponent` và UI điều phối render.
+- `src/app/features/view-chart/chart-visualizer/`: `ChartVisualizerComponent` — SVG Engine cho thiết kế Premium.
+- `src/app/features/view-chart/d3-sample/`: `D3SampleComponent` — Mẫu engine sử dụng D3.js.
+- `src/app/features/view-chart/topic-config-popup/`: Modal cấu hình biểu đồ cho từng Topic.
+- `src/app/models/chart.model.ts`: Định nghĩa các interface cấu hình biểu đồ (`LabelValue`, `ChartSetting`).
+
+## Key Logic (Updated US-14.2)
+
+### Multi-row Stacked Layout
+Hệ thống hỗ trợ tự động phân tầng dữ liệu thành 3 khu vực (Rows) trên cùng một coordinate system nhưng có các dải Y-axis khác nhau:
+1. **Events (Hoạt động)**: Hiển thị dạng Dots/Lines cho các memento không có giá trị số (ví dụ: Học tập, Công việc).
+2. **Emotions (Cảm xúc)**: Biểu đồ đường (Line) kết hợp vùng màu nền (Zones: Xanh/Vàng/Đỏ) và nhãn trục Y định tính (A, B, C, D).
+3. **Sleep (Giấc ngủ)**: Biểu đồ cột (Bar) với đường mục tiêu "7h ★".
+
+### Data Transformation
+Logic chuyển đổi từ Memento Title (Text) sang Chart Value (Number) được thực hiện linh hoạt thông qua bảng mapping trong `ChartSetting`. Điều này cho phép người dùng tự định nghĩa "tốt" là mấy điểm, "xấu" là mấy điểm.
 
 ## Technical Decisions
+- **Manual SVG vs D3.js**: Hệ thống hiện tại hỗ trợ cả 2 hướng tiếp cận. 
+    - **Manual SVG**: Tối ưu cho hiệu suất Angular và dễ dàng styling "Premium" bằng CSS/HTML template.
+    - **D3.js**: Cung cấp khả năng tính toán Scale và tọa độ mạnh mẽ cho các yêu cầu phân tích chuyên sâu hơn.
+- **Stacked Visualization**: Quyết định chia layer theo chiều dọc giúp quan sát được mối tương quan giữa Tác nhân (Events) -> Phản ứng (Emotions) -> Phục hồi (Sleep).
 - **Local Providers**: Quyết định không sử dụng `providedIn: 'root'` cho các service này để tránh việc dữ liệu bị "nhiễm" từ các trang khác (ví dụ: Management) và đảm bảo state được dọn dẹp sạch sẽ khi rời trang.
 - **Email-box Layout**: Tăng cường trải nghiệm người dùng trong việc lọc và chọn dữ liệu phức tạp.

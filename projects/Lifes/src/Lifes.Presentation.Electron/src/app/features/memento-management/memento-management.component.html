@@ -36,6 +36,14 @@
         <label>To</label>
         <input type="date" [ngModel]="endDate()" (ngModelChange)="endDate.set($event)" />
       </div>
+
+      <div class="filter-group toggle-filter">
+        <label>Status</label>
+        <label class="checkbox-label">
+          <input type="checkbox" [ngModel]="showAchieved()" (ngModelChange)="toggleShowAchieved($event)" />
+          <span>Show Completed</span>
+        </label>
+      </div>
     </div>
 
     <div class="filter-group tags-row">

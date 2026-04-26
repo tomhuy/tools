@@ -10,4 +10,5 @@ public class MementoQueryModel
     public DateTime? EndDate { get; set; }
     public bool? ParentOnly { get; set; }
     public string? Keyword { get; set; }
+    public bool? ShowAchieved { get; set; }
 }

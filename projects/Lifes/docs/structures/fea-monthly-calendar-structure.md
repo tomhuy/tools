@@ -55,6 +55,7 @@ Di chuyển giao diện Lịch tháng (Monthly Calendar) từ WPF sang Electron/
 - Emission of `save`, `cancel`, và `delete` events.
 - Color preset palette cho việc chọn màu nhanh.
 - **Multi-tag Selection**: Sử dụng checkbox selector để gán nhiều tag đồng thời.
+- **IsAchieved Status**: Checkbox để đánh dấu Topic đã hoàn thành, phục vụ việc ẩn bớt dữ liệu cũ.
 - **Compact UI Design**: Tông màu Light mode (Hanbok inspired/System native), lưới grid 9 cột cho color picker. tuân thủ `fe_design_rule.md`.
 
 ### TagManagementComponent
@@ -86,3 +87,4 @@ Di chuyển giao diện Lịch tháng (Monthly Calendar) từ WPF sang Electron/
 - **X-Y Axis Switching (US-12.6)**: Sử dụng cấu trúc HTML kép bên trong `@if (isVertical())`. Khi ở chế độ dọc, Topic trở thành cột (`flex-direction: row` cho month-table) và Ngày trở thành dòng (`grid-template-rows`).
 - **Floating Tooltips (US-12.6)**: Thay thế hoàn toàn tiêu đề nội bộ (inline titles) bằng một nhãn nổi (`phase-floating-tooltip`) có `z-index: 100`. Nhãn này được kích hoạt toàn cục qua nút 💬 trên toolbar, giúp đọc nội dung rõ ràng kể cả với các memento siêu ngắn.
 - **Position Relative Enforcement**: Để tooltips nổi căn chỉnh đúng, các thanh phase bar (`.phase-bar`, `.phase-bar-vertical`) bắt buộc phải có `position: relative`.
+- **Achieved Filtering (US-15.1)**: Mặc định ẩn các Topic đã hoàn thành thông qua `showAchieved = false`. Khi `showAchieved` signal thay đổi, `effect` sẽ tự động gọi lại API với tham số `showAchieved` để nạp dữ liệu phù hợp.

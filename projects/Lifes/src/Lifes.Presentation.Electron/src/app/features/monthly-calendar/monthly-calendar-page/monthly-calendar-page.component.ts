@@ -31,6 +31,7 @@ export class MonthlyCalendarPageComponent implements OnInit {
   readonly showTimeline = signal(false);
   readonly isVerticalView = signal(false);
   readonly forceShowTooltips = signal(false);
+  readonly showAchieved = signal(false);
 
   readonly topics = this.service.topicRows;
   readonly childrenByParent = this.service.childrenByParent;
@@ -43,7 +44,8 @@ export class MonthlyCalendarPageComponent implements OnInit {
       this.service.loadMementos({
         year: 2026,
         tagIds: this.selectedTagIds().length > 0 ? this.selectedTagIds() : undefined,
-        includeChildren: this.includeChildren()
+        includeChildren: this.includeChildren(),
+        showAchieved: this.showAchieved()
       });
     });
   }
@@ -89,6 +91,10 @@ export class MonthlyCalendarPageComponent implements OnInit {
 
   toggleShowTimeline() {
     this.showTimeline.update(v => !v);
+  }
+
+  toggleShowAchieved() {
+    this.showAchieved.update(v => !v);
   }
 
   toggleAxes() {

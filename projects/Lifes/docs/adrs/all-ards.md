@@ -120,3 +120,20 @@ Lựa chọn công nghệ vẽ biểu đồ (Visualization Engine) và thiết k
     - **Hiệu suất**: Tránh việc D3.js can thiệp trực tiếp vào DOM của Angular (giảm xung đột Change Detection).
     - **Tính linh hoạt (Multi-row Layout)**: Quyết định sử dụng **Stacked Multi-row Layout** (Events -> Emotions -> Sleep) giúp quan sát được mối tương quan giữa các chiều dữ liệu khác nhau trên cùng một trục thời gian.
     - **Scale & Math**: D3.js vẫn được giữ lại trong codebase như một "Alternative Engine" để xử lý các biểu đồ yêu cầu toán học cao hơn trong tương lai (ví dụ: Zooming, Complex interpolations).
+## ADR 6: Naming Convention for Achievement Filtering (US-15.1)
+**Ngày ra quyết định: 2026-04-26**
+**Người viết: AI, huy**
+
+**1. Vấn đề/Concern/Feature đang cần ra quyết định:**
+Lựa chọn tên gọi cho tham số query lọc các Topic đã hoàn thành. Ban đầu field dữ liệu là `IsAchieved`, nhưng khi đưa vào Query Model để làm filter thì cần một tên gọi phản ánh đúng hành vi người dùng trên UI.
+
+**2. Các phương án đã được gợi ý:**
+- **Phương án 1 (`isAchieved`)**: Giữ nguyên tên field từ database. Giá trị `false` nghĩa là ẩn, `true` nghĩa là hiện, hoặc lọc chính xác.
+- **Phương án 2 (`showAchieved`)**: Sử dụng tiền tố `show` để biểu thị đây là một tùy chọn hiển thị.
+
+**3. Lựa chọn và lý do lựa chọn:**
+- **Lựa chọn**: **Phương án 2 (`showAchieved`)**.
+- **Lý do**: 
+    - **Tính trực quan**: Trên UI, người dùng đang tương tác với một toggle "Show completed". Việc ánh xạ trực tiếp sang `showAchieved` giúp logic ở cả Frontend và Backend trở nên cực kỳ dễ đọc.
+    - **Logic mặc định**: Hệ thống yêu cầu "mặc định ẩn các topic đã hoàn thành". Với `showAchieved`, chúng ta chỉ cần kiểm tra `showAchieved == true` để quyết định có bao gồm dữ liệu cũ hay không. Nếu không được truyền (null/false), hệ thống sẽ tự động lọc bỏ (`!m.IsAchieved`).
+    - **Ngữ nghĩa**: `isAchieved` ám chỉ một trạng thái cố định của object, trong khi `showAchieved` ám chỉ một hành động lọc/hiển thị của hệ thống.

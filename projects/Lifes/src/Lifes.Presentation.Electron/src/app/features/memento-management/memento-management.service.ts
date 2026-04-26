@@ -7,6 +7,7 @@ export interface MementoFilter {
   startDate?: string;
   endDate?: string;
   tagIds?: number[];
+  showAchieved?: boolean;
 }
 
 @Injectable({
@@ -33,6 +34,10 @@ export class MementoManagementService {
     if (filter.endDate) params.endDate = filter.endDate;
     if (filter.tagIds && filter.tagIds.length > 0) {
       params.tagIds = filter.tagIds;
+    }
+    
+    if (filter.showAchieved !== undefined) {
+      params.showAchieved = filter.showAchieved;
     }
 
     // If no dates provided, fallback to current year to avoid loading everything

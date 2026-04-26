@@ -25,6 +25,7 @@ Tính năng Memento Management cung cấp giao diện quản lý tập trung cho
 **Key Actions**:
 - `clearFilters()`: Reset toàn bộ bộ lọc về trạng thái mặc định.
 - `onUpdateOrder()`: Xử lý sự kiện cập nhật thứ tự từ bảng và gọi API lưu trữ.
+- **ShowAchieved Toggle**: Signal cục bộ điều khiển việc hiển thị các topic đã hoàn thành.
 
 ### MementoTableComponent (Passive)
 **Purpose**: Hiển thị danh sách mementos và cung cấp các tương tác tại chỗ.
@@ -45,3 +46,4 @@ Tính năng Memento Management cung cấp giao diện quản lý tập trung cho
 ## Key Decisions (ADR 2)
 - **Dedicated Service**: Sử dụng `MementoManagementService` thay vì dùng chung `MonthlyCalendarService` để tránh việc dữ liệu bị giới hạn trong phạm vi Năm/Tháng của lịch.
 - **Backend Filter Override**: Nếu truyền `StartDate/EndDate`, API sẽ ưu tiên lọc theo khoảng thời gian này và bỏ qua Year/Month context.
+- **ShowAchieved Clarity**: Đổi tên tham số query từ `isAchieved` thành `showAchieved` để phản ánh đúng ý nghĩa "bao gồm các mục đã hoàn thành" thay vì lọc chính xác theo trạng thái.

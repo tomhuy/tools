@@ -15,6 +15,7 @@ export interface MementoQuery {
   startDate?: string;
   endDate?: string;
   keyword?: string;
+  showAchieved?: boolean;
 }
 
 @Injectable({
@@ -40,6 +41,7 @@ export class CalendarApiService {
     if (query.startDate) params = params.set('startDate', query.startDate);
     if (query.endDate) params = params.set('endDate', query.endDate);
     if (query.keyword) params = params.set('keyword', query.keyword);
+    if (query.showAchieved !== undefined) params = params.set('showAchieved', query.showAchieved.toString());
 
     return this.http.get<ApiResponse<Memento[]>>(`${this.base}/mementos`, { params })
       .pipe(map(r => this.unwrap(r)));

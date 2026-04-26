@@ -21,6 +21,7 @@ export class MementoManagementComponent implements OnInit {
   readonly tags = this.tagService.tags;
   readonly mementos = this.managementService.mementos;
   readonly isLoading = this.managementService.isLoading;
+  readonly showAchieved = signal(false);
 
   // Filters state
   readonly keyword = signal('');
@@ -38,7 +39,8 @@ export class MementoManagementComponent implements OnInit {
         keyword: this.keyword(),
         startDate: this.startDate(),
         endDate: this.endDate(),
-        tagIds: this.selectedTagIds()
+        tagIds: this.selectedTagIds(),
+        showAchieved: this.showAchieved()
       });
     });
   }
@@ -61,6 +63,11 @@ export class MementoManagementComponent implements OnInit {
     this.startDate.set('');
     this.endDate.set('');
     this.selectedTagIds.set([]);
+    this.showAchieved.set(false);
+  }
+
+  toggleShowAchieved(val: boolean) {
+    this.showAchieved.set(val);
   }
 
   onUpdateOrder(event: { memento: Memento, order: number }) {

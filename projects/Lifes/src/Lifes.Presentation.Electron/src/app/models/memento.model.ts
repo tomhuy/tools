@@ -7,5 +7,6 @@ export interface Memento {
   order: number;
   color?: string;
   tagIds: number[];
+  isAchieved: boolean;
   children?: Memento[];
 }

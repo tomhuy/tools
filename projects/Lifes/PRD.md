@@ -305,12 +305,12 @@ ETL Deployment Tools Suite cung cấp:
 
 ---
 
-### 11. Electron UI Integration (US-11.1, US-11.3, US-12.1, US-12.1.1, US-12.2, US-12.2.1, US-12.3, US-12.4, US-12.5, US-12.6)
+### 11. Electron UI Integration (US-11.1, US-11.3, US-12.1, US-12.1.1, US-12.2, US-12.3, US-12.4, US-12.5, US-12.6, US-15.1)
 **Status**: ✅ Completed
-**User Stories**: US-11.1 (Setup), US-11.3 (Build & Deploy), US-12.1 (Monthly Grid), US-12.1.1 (API Integration), US-12.2 (Topic Editor), US-12.3 (Tag Management UI), US-12.4 (Memento Management), US-12.5 (Tag Filtering & Ghost Memento), US-12.6 (Switch Axes & Tooltips)
+**User Stories**: US-11.1 (Setup), US-11.3 (Build & Deploy), US-12.1 (Monthly Grid), US-12.1.1 (API Integration), US-12.2 (Topic Editor), US-12.3 (Tag Management UI), US-12.4 (Memento Management), US-12.5 (Tag Filtering & Ghost Memento), US-12.6 (Switch Axes & Tooltips), US-15.1 (IsAchieved Status)
 **Documentation**: [fea-electron-structure.md](./docs/structures/fea-electron-structure.md), [fea-monthly-calendar-structure.md](./docs/structures/fea-monthly-calendar-structure.md), [fea-memento-management-structure.md](./docs/structures/fea-memento-management-structure.md)
 
-**Purpose**: Nền tảng UI mới sử dụng Electron và Angular. Tích hợp hoàn chỉnh với Backend .NET qua REST API, hỗ trợ persistence và reactive state management. Đã bổ sung tính năng Quick Phase CRUD (Popup), Quick Color Edit (Hover), Memento Management (Ordering & Filtering), hệ thống lọc Tag nâng cao hỗ trợ "Ghost Memento", tính năng Hoán đổi trục (X-Y Switch) và Floating Tooltips cho chế độ hiển thị tối giản.
+**Purpose**: Nền tảng UI mới sử dụng Electron và Angular. Tích hợp hoàn chỉnh với Backend .NET qua REST API, hỗ trợ persistence và reactive state management. Đã bổ sung tính năng Quick Phase CRUD (Popup), Quick Color Edit (Hover), Memento Management (Ordering & Filtering), hệ thống lọc Tag nâng cao hỗ trợ "Ghost Memento", tính năng Hoán đổi trục (X-Y Switch), Floating Tooltips và trạng thái **IsAchieved** (Hoàn thành) để tự động ẩn các topic không còn theo dõi.
 
 **Key Components**:
 - **Lifes.Presentation.Electron**: Angular 19 frontend trên Electron shell.

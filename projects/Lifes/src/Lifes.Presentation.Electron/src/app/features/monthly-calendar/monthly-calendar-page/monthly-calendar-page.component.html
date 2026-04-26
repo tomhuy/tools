@@ -64,6 +64,10 @@
                   <input type="checkbox" [checked]="includeChildren()" (change)="toggleIncludeChildren()">
                   <span class="tag-label highlight">Include the children</span>
                 </label>
+                <label class="tag-item include-children-opt">
+                  <input type="checkbox" [checked]="showAchieved()" (change)="toggleShowAchieved()">
+                  <span class="tag-label highlight">Show completed topics</span>
+                </label>
               </div>
               <div class="dropdown-footer">
                 <button class="manage-tags-link" (click)="onManageTags()">

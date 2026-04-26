@@ -27,9 +27,9 @@ src/
 │       ├── ToolNavigatedEventArgs.cs # US-5.1 — navigation event args
 │       ├── CalendarEventModel.cs   # US-8.4 — Multi-phase event entity
 │       ├── CalendarEventPhaseModel.cs # US-8.4 — event phase detail
-│       ├── MementoModel.cs         # US-9.1 — Recursive hierarchy (TagIds support)
+│       ├── MementoModel.cs         # US-9.1 — Recursive hierarchy (TagIds & IsAchieved support)
 │       ├── TagModel.cs             # US-9.2 — Tagging system
-│       └── MementoQueryModel.cs    # US-9.2 — Filtering model
+│       └── MementoQueryModel.cs    # US-9.2 — Filtering model (ShowAchieved support)
 │
 ├── Lifes.Domain/                # Business logic and entities
 │   ├── Common/                     # US-1.2.1
@@ -338,7 +338,7 @@ src/
 
 ### 12. Monthly Calendar (Electron Shell)
 **Status**: ✅ Completed
-**User Stories**: US-12.1, US-12.1.1, US-12.2, US-12.2.1, US-12.2.2, US-12.3, US-12.4, US-12.5, US-12.6
+**User Stories**: US-12.1, US-12.1.1, US-12.2, US-12.2.1, US-12.2.2, US-12.3, US-12.4, US-12.5, US-12.6, US-15.1
 **Documentation**: [fea-monthly-calendar-structure.md](./fea-monthly-calendar-structure.md), [fea-memento-management-structure.md](./fea-memento-management-structure.md)
 **Key Components**:
 - **Backend**: `CalendarController`, `ApiResponse<T>`, `ICalendarService`.

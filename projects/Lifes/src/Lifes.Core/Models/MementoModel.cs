@@ -23,4 +23,6 @@ public class MementoModel
     public string Description { get; set; } = string.Empty;
     
     public List<int> TagIds { get; set; } = new();
+    
+    public bool IsAchieved { get; set; }
 }

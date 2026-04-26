@@ -45,6 +45,7 @@ export class TopicEditorComponent implements OnInit {
       order: [this.topic?.order ?? 0],
       color: [this.topic?.color ?? this.presetColors[0]],
       tagIds: [this.topic?.tagIds ?? []],
+      isAchieved: [this.topic?.isAchieved ?? false],
       parentId: [null] // Always null for Topics
     }, { validators: this.dateRangeValidator });
   }

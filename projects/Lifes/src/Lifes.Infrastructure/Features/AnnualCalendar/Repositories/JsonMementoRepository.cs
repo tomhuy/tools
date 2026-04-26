@@ -92,6 +92,9 @@ public class JsonMementoRepository : IMementoRepository
         if (!string.IsNullOrWhiteSpace(query.Keyword))
             result = result.Where(m => m.Title.Contains(query.Keyword, StringComparison.OrdinalIgnoreCase));
 
+        if (query.ShowAchieved != true)
+            result = result.Where(m => !m.IsAchieved);
+
         return Task.FromResult(result);
     }
 
@@ -120,6 +123,7 @@ public class JsonMementoRepository : IMementoRepository
                 existing.ParentId = memento.ParentId;
                 existing.TagIds = memento.TagIds;
                 existing.Order = memento.Order;
+                existing.IsAchieved = memento.IsAchieved;
             }
         }
         

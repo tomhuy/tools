@@ -1,0 +1,43 @@
+<div class="overlay" (click)="onBackdropClick($event)">
+  <div class="modal">
+    <header class="modal-header">
+      <span class="time">{{ formatHour(entry.hour) }}</span>
+    </header>
+
+    <div class="energy-list">
+      @for (level of energyLevels; track level.grade) {
+        <div class="energy-item" 
+             [class.selected]="selectedGrade === level.grade"
+             (click)="selectedGrade = level.grade">
+          <div class="indicator" [style.background-color]="level.color"></div>
+          <span class="label">{{ level.label }}</span>
+          <span class="grade">{{ level.grade }}</span>
+        </div>
+      }
+    </div>
+
+    <div class="tags-section">
+      <span class="section-label">Đang làm gì / gặp ai</span>
+      <div class="tags-grid">
+        @for (tag of availableTags; track tag) {
+          <button class="tag-chip" 
+                  [class.active]="selectedTags.includes(tag)"
+                  (click)="toggleTag(tag)">
+            {{ tag }}
+          </button>
+        }
+      </div>
+    </div>
+
+    <div class="note-section">
+      <span class="section-label">Ghi chú thêm</span>
+      <textarea placeholder="vd: sau meeting căng thẳng, nghe nhạc..." 
+                [(ngModel)]="note"></textarea>
+    </div>
+
+    <footer class="modal-footer">
+      <button class="delete-btn" (click)="onDelete()">Xóa</button>
+      <button class="save-btn" (click)="onSave()">Lưu</button>
+    </footer>
+  </div>
+</div>

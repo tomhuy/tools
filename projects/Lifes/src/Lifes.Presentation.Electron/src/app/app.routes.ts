@@ -4,11 +4,13 @@ import { MonthlyCalendarPageComponent } from './features/monthly-calendar/monthl
 
 import { MementoManagementComponent } from './features/memento-management/memento-management.component';
 import { ViewChartPageComponent } from './features/view-chart/view-chart-page.component';
+import { DailyTimelinePageComponent } from './features/daily-timeline/daily-timeline-page/daily-timeline-page.component';
 
 export const routes: Routes = [
+  { path: 'daily-timeline', component: DailyTimelinePageComponent },
   { path: 'sprint-board', component: SprintBoardComponent },
   { path: 'monthly-calendar', component: MonthlyCalendarPageComponent },
   { path: 'memento-management', component: MementoManagementComponent },
   { path: 'view-chart', component: ViewChartPageComponent },
-  { path: '', redirectTo: 'monthly-calendar', pathMatch: 'full' }
+  { path: '', redirectTo: 'daily-timeline', pathMatch: 'full' }
 ];

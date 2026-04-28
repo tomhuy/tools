@@ -1,0 +1,78 @@
+<div class="daily-container">
+  <header class="header">
+    <div class="nav-controls">
+      <button class="nav-btn" (click)="navigateDate(-1)">
+        <i class="arrow left"></i>
+      </button>
+      <h1 class="current-date">Hôm nay</h1>
+      <button class="nav-btn" (click)="navigateDate(1)">
+        <i class="arrow right"></i>
+      </button>
+    </div>
+    <button class="today-btn" (click)="goToToday()">Hôm nay</button>
+  </header>
+
+  <section class="summary-section">
+    <div class="summary-card">
+      <span class="label">Đã ghi</span>
+      <div class="value-row">
+        <span class="main-value">{{ summaryCount() }}</span>
+        <span class="sub-value">/ 24 giờ</span>
+      </div>
+    </div>
+
+    <div class="summary-card" *ngIf="highestEnergy() as high">
+      <span class="label">Cao nhất</span>
+      <div class="value-row">
+        <span class="grade-value" [style.color]="high.color">{{ high.grade }}</span>
+      </div>
+      <span class="time-value">{{ high.time }}</span>
+    </div>
+
+    <div class="summary-card" *ngIf="lowestEnergy() as low">
+      <span class="label">Thấp nhất</span>
+      <div class="value-row">
+        <span class="grade-value" [style.color]="low.color">{{ low.grade }}</span>
+      </div>
+      <span class="time-value">{{ low.time }}</span>
+    </div>
+  </section>
+
+  <div class="timeline-container">
+    <div class="timeline-scroll">
+      @for (entry of entries(); track entry.hour) {
+        <div class="timeline-row">
+          <div class="time-label">
+            {{ getLabelForHour(entry.hour) }}
+          </div>
+          <div class="slot-container">
+            <div class="slot" 
+                 [class.filled]="entry.energyGrade"
+                 [style.background-color]="getGradeColor(entry.energyGrade)"
+                 (click)="onSlotClick(entry.hour)">
+              @if (entry.energyGrade) {
+                <div class="slot-content">
+                  <div class="slot-grade">{{ entry.energyGrade }}</div>
+                  <div class="slot-info">
+                    <span class="slot-tags">{{ entry.tags.join(', ') }}</span>
+                    @if (entry.note) {
+                      <span class="slot-note">· {{ entry.note }}</span>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <app-entry-editor 
+    *ngIf="selectedEntry() as entry"
+    [entry]="entry"
+    (save)="onSaveEntry($event)"
+    (delete)="onDeleteEntry($event)"
+    (close)="onCloseEditor()">
+  </app-entry-editor>
+</div>

@@ -112,13 +112,16 @@ src/
 │           │   │   ├── memento-table/   # Passive table component
 │           │   │   ├── memento-management.component.[ts|html|css]
 │           │   │   └── memento-management.service.ts
+│           │   ├── daily-timeline/       # US-16.1 Daily Timeline feature
+│           │   │   └── daily-timeline.component.[ts|html|css]
 │           │   └── ...
 │           └── models/
 │               ├── sprint-board.model.ts # US-11.2 data models
 │               ├── memento.model.ts      # US-12.1 (Updated TagIds[])
 │               ├── tag.model.ts          # US-12.1
 │               ├── display-mode.model.ts # US-12.1
-│               └── selectable-month.model.ts # US-12.1
+│               ├── selectable-month.model.ts # US-12.1
+│               └── daily-timeline.model.ts   # US-16.1
 │
 ├── Lifes.Presentation.WPF/     # WPF UI
 │   ├── Constants/                  # US-5.1
@@ -361,6 +364,15 @@ src/
     - `TopicConfigPopupComponent`: Grid mapping (Label -> Value -> Color).
     - **Multi-row Stacked Layout**: Integrated Events, Emotions, and Sleep data on a single timeline.
     - **Data Transformation**: Recursive mapping of child mementos to parent topics.
+
+### 14. Daily Timeline Feature (Electron Shell)
+**Status**: ✅ Completed (UI Prototype)
+**User Stories**: US-16.1
+**Documentation**: [fea-daily-timeline-structure.md](./fea-daily-timeline-structure.md)
+**Key Components**:
+- **UI Components**: `DailyTimelinePageComponent`, `EntryEditorComponent`.
+- **Logic & Data**: `DailyTimelineService` (Reactive state with Signals), `DailyEntry` model.
+- **Experience**: Slide-up/Fade-in animations, Glassmorphism backdrop.
 
 ## Shared Components
 

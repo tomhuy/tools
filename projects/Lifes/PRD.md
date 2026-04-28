@@ -338,6 +338,22 @@ ETL Deployment Tools Suite cung cấp:
 **Documentation**: [fea-view-chart-structure.md](./docs/structures/fea-view-chart-structure.md)
 
 **Purpose**: Triển khai hệ thống biểu đồ động đa tầng (Multi-row Stacked Layout). Hỗ trợ cả Native SVG Engine (cho hiệu suất cao) và D3.js Engine (cho phân tích nâng cao). Cho phép mapping dữ liệu linh hoạt và trực quan hóa mối tương quan giữa Hoạt động -> Cảm xúc -> Giấc ngủ.
+---
+
+### 14. Daily Timeline Feature (US-16.1)
+**Status**: ✅ Completed (UI Prototype)
+**User Stories**: US-16.1
+**Documentation**: [fea-daily-timeline-structure.md](./docs/structures/fea-daily-timeline-structure.md)
+
+**Purpose**: Giao diện theo dõi hoạt động hàng ngày theo mốc thời gian (Daily Timeline). Cho phép ghi nhận mức độ năng lượng (Energy Level), các hoạt động (Tags) và ghi chú chi tiết cho từng khung giờ trong ngày. Thiết kế tập trung vào trải nghiệm người dùng cao cấp (Premium UI) với hiệu ứng animation và dark theme đồng bộ.
+
+**Key Components**:
+- **DailyTimelinePageComponent**: Màn hình chính hiển thị 24 khung giờ và các thẻ tóm tắt (Summary Cards).
+- **DailyTimelineService**: Quản lý dữ liệu mock và logic tính toán chỉ số năng lượng cao nhất/thấp nhất.
+- **EntryEditorComponent**: Modal overlay cho phép chỉnh sửa nhanh thông tin khung giờ (Energy, Tags, Note).
+- **Premium Aesthetics**: Tích hợp hiệu ứng Fade-in và Slide-up animation cho trải nghiệm mượt mà.
+
+---
 
 **Why Feature-based Organization?**
 - ✅ **High Cohesion**: Code liên quan đến một feature nằm gần nhau

@@ -1,0 +1,136 @@
+<div class="stream-container">
+  <!-- Header -->
+  <header class="stream-header">
+    <div class="header-left">
+      <button class="btn-outline">Năm</button>
+      <button class="btn-outline active">Stream</button>
+    </div>
+    
+    <div class="header-center">
+      <button class="nav-btn" (click)="prevYear()">&larr;</button>
+      <span class="current-year">{{ currentYear() }}</span>
+      <button class="nav-btn" (click)="nextYear()">&rarr;</button>
+    </div>
+    
+    <div class="header-right">
+      <button class="btn-primary" (click)="goToday()">Hôm nay</button>
+    </div>
+  </header>
+
+  <!-- Filter Tabs -->
+  <div class="filter-tabs">
+    <button [class.active]="currentFilter() === 'all'" (click)="setFilter('all')">Tất cả</button>
+    <button [class.active]="currentFilter() === 'mood'" (click)="setFilter('mood')">Có mood</button>
+    <button [class.active]="currentFilter() === 'idea'" (click)="setFilter('idea')">Có ý tưởng</button>
+  </div>
+
+  <!-- Grid View -->
+  <div class="grid-wrapper">
+    <div class="stream-grid">
+      <!-- Grid Header -->
+      <div class="grid-row header-row">
+        <div class="day-label"></div>
+        <div class="month-col" *ngFor="let m of monthSummaries()">
+          <span class="month-name" [class.current-month]="m.name === 'Apr'">{{ m.name }}</span>
+          <span class="month-count">{{ m.count || '—' }}</span>
+        </div>
+      </div>
+
+      <!-- Grid Body -->
+      <div class="grid-row" *ngFor="let day of days; let dIdx = index" [class.today-row]="isToday(day)">
+        <div class="day-label" [class.highlight]="isToday(day)">{{ formatDay(day) }}</div>
+        
+        <div class="month-col" *ngFor="let month of months; let mIdx = index">
+          <div class="cell-content" *ngIf="grid()[dIdx][mIdx] as entry" [class.future-cell]="isCellFuture(day, mIdx)">
+            <div class="entry-bar" [style.background-color]="isCellFuture(day, mIdx) ? 'transparent' : entry.color"></div>
+            <span class="entry-label">{{ entry.label }}</span>
+            <div class="dots-container">
+              <span class="dot" *ngFor="let dotColor of entry.dots" [style.background-color]="isCellFuture(day, mIdx) ? '#333' : dotColor"></span>
+            </div>
+            <!-- Post Indicators -->
+            <div class="posts-indicators" *ngIf="entry.posts?.length">
+              <div class="post-rect" *ngFor="let post of entry.posts" (click)="openPostReader(entry.posts!)"></div>
+            </div>
+
+            <!-- Book Icon -->
+            <button class="btn-book" *ngIf="entry.books?.length" (click)="openReader(entry.books!)">
+              <span class="icon-book">📖</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Book Reader Popup -->
+  <div class="reader-overlay" *ngIf="selectedBooks() as books" (click)="closeReader()">
+    <div class="reader-modal" (click)="$event.stopPropagation()">
+      <header class="reader-header">
+        <h3>Tủ sách cá nhân</h3>
+        <button class="btn-close" (click)="closeReader()">&times;</button>
+      </header>
+      <div class="reader-content">
+        <div class="book-item" *ngFor="let book of books">
+          <h4 class="book-title">{{ book.title }}</h4>
+          <p class="book-text">{{ book.content }}</p>
+        </div>
+      </div>
+      <footer class="reader-footer">
+        <button class="btn-primary" (click)="closeReader()">Xong</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Post Reader Popup (Mailbox Style) -->
+  <div class="reader-overlay" *ngIf="selectedPosts() as posts" (click)="closePostReader()">
+    <div class="reader-modal mailbox-reader" (click)="$event.stopPropagation()">
+      <header class="reader-header">
+        <h3>Bài viết mới</h3>
+        <button class="btn-close" (click)="closePostReader()">&times;</button>
+      </header>
+      
+      <div class="mailbox-container">
+        <!-- Sidebar: List of posts -->
+        <aside class="mailbox-sidebar">
+          <div class="mailbox-item" 
+               *ngFor="let post of posts; let i = index" 
+               [class.active]="selectedPostIndex() === i"
+               (click)="selectPost(i)">
+            <div class="mailbox-item-meta">
+              <span class="item-date">{{ post.date }}</span>
+            </div>
+            <h4 class="item-title">{{ post.title }}</h4>
+            <p class="item-excerpt">{{ post.excerpt }}</p>
+          </div>
+        </aside>
+
+        <!-- Main Content: Selected post detail -->
+        <main class="mailbox-main">
+          <ng-container *ngIf="posts[selectedPostIndex()] as post">
+            <div class="post-detail-header">
+              <h2 class="post-detail-title">{{ post.title }}</h2>
+              <div class="post-detail-meta">
+                <span class="post-author">By {{ post.author }}</span>
+                <span class="post-date">{{ post.date }}</span>
+              </div>
+            </div>
+            <div class="post-detail-content">
+              <p class="post-text">{{ post.content }}</p>
+            </div>
+          </ng-container>
+        </main>
+      </div>
+
+      <footer class="reader-footer">
+        <button class="btn-primary" (click)="closePostReader()">Đóng</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Footer Action -->
+  <div class="footer-action">
+    <button class="btn-scroll-down">
+      <span class="arrow-down">&darr;</span>
+    </button>
+  </div>
+</div>

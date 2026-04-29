@@ -114,6 +114,9 @@ src/
 │           │   │   └── memento-management.service.ts
 │           │   ├── daily-timeline/       # US-16.1 Daily Timeline feature
 │           │   │   └── daily-timeline.component.[ts|html|css]
+│           │   ├── yearly-stream/        # US-17.1 Yearly Stream feature
+│           │   │   ├── yearly-stream-page/
+│           │   │   └── yearly-stream.service.ts
 │           │   └── ...
 │           └── models/
 │               ├── sprint-board.model.ts # US-11.2 data models
@@ -121,7 +124,8 @@ src/
 │               ├── tag.model.ts          # US-12.1
 │               ├── display-mode.model.ts # US-12.1
 │               ├── selectable-month.model.ts # US-12.1
-│               └── daily-timeline.model.ts   # US-16.1
+│               ├── daily-timeline.model.ts   # US-16.1
+│               └── yearly-stream.model.ts    # US-17.1
 │
 ├── Lifes.Presentation.WPF/     # WPF UI
 │   ├── Constants/                  # US-5.1
@@ -373,6 +377,21 @@ src/
 - **UI Components**: `DailyTimelinePageComponent`, `EntryEditorComponent`.
 - **Logic & Data**: `DailyTimelineService` (Reactive state with Signals), `DailyEntry` model.
 - **Experience**: Slide-up/Fade-in animations, Glassmorphism backdrop.
+
+---
+
+### 15. Yearly Stream View (US-17.1)
+**Status**: ✅ Completed (UI Prototype)
+**User Stories**: US-17.1
+**Documentation**: [fea-yearly-stream-structure.md](./fea-yearly-stream-structure.md)
+
+**Purpose**: Cung cấp cái nhìn tổng quan toàn năm (12 tháng x 31 ngày) dưới dạng ma trận. Hỗ trợ theo dõi thói quen đọc sách và các hoạt động khác thông qua giao diện trực quan và bộ lọc Signal-based.
+
+**Key Components**:
+- **YearlyStreamPageComponent**: Hiển thị lưới ma trận 12x31 với khả năng tối ưu hóa cho màn hình 4K.
+- **YearlyStreamService**: Quản lý dữ liệu mock và logic lọc bài viết/sách.
+- **Mailbox Style Reader**: Popup đọc bài viết với bố cục 2 cột (List - Detail) chuyên nghiệp.
+- **Future Muting**: Tự động ẩn màu sắc và làm mờ các ô ngày trong tương lai để tập trung vào dữ liệu hiện tại.
 
 ## Shared Components
 

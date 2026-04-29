@@ -5,9 +5,11 @@ import { MonthlyCalendarPageComponent } from './features/monthly-calendar/monthl
 import { MementoManagementComponent } from './features/memento-management/memento-management.component';
 import { ViewChartPageComponent } from './features/view-chart/view-chart-page.component';
 import { DailyTimelinePageComponent } from './features/daily-timeline/daily-timeline-page/daily-timeline-page.component';
+import { YearlyStreamPageComponent } from './features/yearly-stream/yearly-stream-page/yearly-stream-page.component';
 
 export const routes: Routes = [
   { path: 'daily-timeline', component: DailyTimelinePageComponent },
+  { path: 'yearly-stream', component: YearlyStreamPageComponent },
   { path: 'sprint-board', component: SprintBoardComponent },
   { path: 'monthly-calendar', component: MonthlyCalendarPageComponent },
   { path: 'memento-management', component: MementoManagementComponent },

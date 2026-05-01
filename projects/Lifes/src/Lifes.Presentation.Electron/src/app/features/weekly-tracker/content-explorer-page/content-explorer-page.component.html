@@ -1,0 +1,140 @@
+<div class="weekly-tracker-container explorer-mode">
+  <!-- Header Section (Same as Range Tracker) -->
+  <header class="tracker-header">
+    <div class="nav-controls">
+      <button class="nav-btn" (click)="explorerService.prevWeek()">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <span class="week-range">{{ weekRangeLabel }}</span>
+      <button class="nav-btn" (click)="explorerService.nextWeek()">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+      <button class="today-btn" (click)="explorerService.goToToday()">Hôm nay</button>
+    </div>
+
+      <div class="category-toggle-group segmented">
+        @for (cat of explorerService.categories(); track cat) {
+          <button [class.active]="(explorerService.filterCategory() || 'Tất cả') === cat" 
+                  [attr.data-cat]="cat"
+                  (click)="setCategory(cat)">
+            <div class="cat-dot" [attr.data-cat]="cat"></div>
+            {{ cat }}
+          </button>
+        }
+      </div>
+  </header>
+
+  <!-- Filter row -->
+  <div class="sub-filters">
+    <div class="threshold-filter">
+      <label>Khoảng thời gian</label>
+      <div class="dropdown-wrap">
+        <div class="select-wrapper" (click)="toggleRangeDropdown()">
+          <i class="fas fa-calendar-alt"></i>
+          <span>{{ explorerService.rangeDays() }} ngày</span>
+          <span class="dd-arrow">▾</span>
+        </div>
+        @if (isRangeDropdownOpen()) {
+          <div class="dd-panel" style="min-width: 160px;">
+            <div class="dd-section">
+              <div class="dd-section-label">CHỌN SỐ NGÀY</div>
+              @for (r of ranges; track r) {
+                <div class="radio-row" [class.sel]="explorerService.rangeDays() === r" (click)="setRange(r); toggleRangeDropdown()">
+                  <div class="radio-circle" [class.checked]="explorerService.rangeDays() === r"></div>
+                  <span class="radio-text">{{ r }} ngày</span>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Grid Explorer Section -->
+  <div class="grid-scroll-container">
+    <div class="matrix-grid">
+      <div class="grid-header-row" [style.grid-template-columns]="'42px repeat(' + explorerService.rangeDays() + ', 1fr)'">
+        <div class="time-column-header"></div>
+        @for (day of explorerService.dayHeaders(); track day.date) {
+          <div class="day-column-header" [class.is-today]="day.isToday">
+            <span class="day-label">{{ day.dayLabel }}</span>
+            <span class="day-number">{{ day.dayNumber }}</span>
+          </div>
+        }
+      </div>
+
+      <div class="grid-body">
+        @for (hour of hours; track hour) {
+          <div class="hour-row" [style.grid-template-columns]="'42px repeat(' + explorerService.rangeDays() + ', 1fr)'">
+            <div class="time-cell" [class.marker]="hour === 6 || hour === 12 || hour === 18">
+              {{ hour.toString().padStart(2, '0') }}
+            </div>
+
+            @for (day of explorerService.dayHeaders(); track day.date) {
+              @let entry = getEntry(day.date, hour);
+              <div class="entry-cell explorer-cell" 
+                   [class.has-content]="entry"
+                   [class.future]="isFuture(day.date, hour)"
+                   (click)="entry ? openDetail(entry) : null">
+                
+                @if (entry) {
+                  <div class="explorer-card" 
+                       [class.dimmed]="!matchesFilter(entry)"
+                       [style.--mood-color]="getMoodColor(entry.moodId)">
+                    
+                    <div class="card-mood-info">
+                      @if (entry.tags.length) {
+                        <span class="card-text-snippet" style="color: var(--color-text-secondary); font-weight: 500;">{{ entry.tags[0] }}</span>
+                      }
+                      <span class="card-text-snippet">{{ entry.note || entry.reason }}</span>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Detail Popup -->
+@if (isDetailOpen()) {
+  <div class="detail-overlay" (click)="closeDetail()">
+    <div class="detail-modal" (click)="$event.stopPropagation()">
+      <div class="detail-header" [style.border-bottom-color]="getMoodColor(viewingEntry()!.moodId)">
+        <div class="detail-time">
+          <h3>{{ viewingEntry()!.date | date:'HH:mm' }}</h3>
+          <span>{{ viewingEntry()!.date | date:'EEEE, d MMMM yyyy' }}</span>
+        </div>
+        <button class="close-btn" (click)="closeDetail()">×</button>
+      </div>
+
+      <div class="detail-content">
+        <div class="detail-mood-info">
+          <div class="mood-pill" [style.background]="getMoodColor(viewingEntry()!.moodId) + '20'" [style.color]="getMoodColor(viewingEntry()!.moodId)">
+            <div class="mood-dot" [style.background]="getMoodColor(viewingEntry()!.moodId)"></div>
+            {{ getMoodLabel(viewingEntry()!.moodId) }}
+          </div>
+          @for (tag of viewingEntry()!.tags; track tag) {
+            <span class="detail-tag">#{{ tag }}</span>
+          }
+        </div>
+
+        <div class="detail-section">
+          <label>Hoạt động & Ghi chú</label>
+          <div class="detail-text">{{ viewingEntry()!.note || 'Không có ghi chú' }}</div>
+        </div>
+
+        @if (viewingEntry()!.reason) {
+          <div class="detail-section reason-section">
+            <label>Lý do thay đổi tâm trạng</label>
+            <div class="detail-text italic">“{{ viewingEntry()!.reason }}”</div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+}

@@ -1,0 +1,230 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.editor-card {
+  background: #1e1e1e;
+  border: 1px solid #2a2a2a;
+  border-radius: 20px;
+  width: 380px; /* Reduced width */
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 24px; /* Reduced padding */
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Tighter gap */
+  position: relative;
+  animation: modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.editor-header {
+  border-bottom: 1px solid #2a2a2a;
+  padding-bottom: 12px;
+}
+
+.title {
+  font-size: 1.15rem; /* Smaller font */
+  font-weight: 700;
+  margin: 0;
+  color: #fff;
+}
+
+.subtitle {
+  color: #666;
+  margin: 4px 0 0 0;
+  font-weight: 500;
+  font-size: 0.8rem; /* Smaller font */
+}
+
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.section-label {
+  font-weight: 600;
+  color: #888;
+  font-size: 0.75rem; /* Smaller font */
+  letter-spacing: 0.02em;
+}
+
+/* Mood Selection */
+.mood-grid {
+  display: flex;
+  justify-content: space-between;
+  gap: 2px;
+  background: transparent;
+  padding: 0;
+}
+
+.mood-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  padding: 6px 0;
+  border-radius: 8px;
+  transition: all 0.2s;
+  flex: 1;
+}
+
+.mood-item:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.mood-item.active {
+  background: #2a2a2a;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.mood-dot {
+  width: 10px; /* Smaller dots */
+  height: 10px;
+  border-radius: 50%;
+}
+
+.mood-label {
+  font-size: 0.6rem; /* Tiny label */
+  color: #555;
+  font-weight: 700;
+}
+
+.active .mood-label {
+  color: #aaa;
+}
+
+/* Tags */
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag-btn {
+  background: #252525;
+  border: 1px solid #333;
+  color: #888;
+  padding: 6px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.75rem; /* Smaller font */
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.tag-btn:hover {
+  border-color: #444;
+  color: #ccc;
+}
+
+.tag-btn.active {
+  background: #fff;
+  border-color: #fff;
+  color: #000;
+}
+
+/* Inputs */
+.form-input {
+  background: #181818;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  padding: 12px;
+  color: #fff;
+  font-size: 0.85rem; /* Smaller font */
+  min-height: 70px;
+  resize: none; /* Prevent manual resize to keep it compact */
+  line-height: 1.4;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #333;
+}
+
+.form-input::placeholder {
+  color: #333;
+  font-weight: 500;
+}
+
+/* Footer Actions */
+.editor-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 5px;
+}
+
+.main-actions {
+  display: flex;
+  gap: 10px;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.action-btn {
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  font-size: 0.85rem;
+}
+
+.save-btn {
+  background: #ffffff;
+  color: #000000;
+  flex: 1;
+  max-width: 120px;
+}
+
+.save-btn:hover {
+  background: #eee;
+}
+
+.cancel-btn {
+  background: #2a2a2a;
+  color: #777;
+}
+
+.delete-btn {
+  background: transparent;
+  color: #ef4444;
+  font-size: 0.8rem;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalPop {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Hide scrollbar but keep functionality */
+.editor-card::-webkit-scrollbar {
+  width: 4px;
+}
+.editor-card::-webkit-scrollbar-track {
+  background: transparent;
+}
+.editor-card::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 10px;
+}

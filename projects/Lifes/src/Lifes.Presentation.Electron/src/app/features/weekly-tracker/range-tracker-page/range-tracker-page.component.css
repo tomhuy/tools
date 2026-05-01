@@ -1,0 +1,43 @@
+@import '../weekly-tracker-page/weekly-tracker-page.component.css';
+
+.range-selector {
+  display: flex;
+  background: var(--color-background-secondary);
+  padding: 3px;
+  border-radius: var(--border-radius-md);
+  margin-right: 8px;
+}
+
+.range-btn {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  cursor: pointer;
+  color: var(--color-text-tertiary);
+  border: none;
+  background: none;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.range-btn:hover {
+  color: var(--color-text-secondary);
+}
+
+.range-btn.active {
+  background: var(--color-background-primary);
+  color: var(--color-text-primary);
+  border: 0.5px solid var(--color-border-tertiary);
+}
+
+.div-line {
+  width: 1px;
+  height: 20px;
+  background: var(--color-border-tertiary);
+  margin: 0 8px;
+}
+
+/* Override matrix grid min-width if range is large */
+.matrix-grid {
+  min-width: 1200px; /* Force scroll for longer ranges */
+}

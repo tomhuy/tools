@@ -155,3 +155,58 @@ Khi một Topic được cập nhật trạng thái `isAchieved`, làm thế nà
     - **Trách nhiệm của Service**: Các Service nên làm tốt công việc của mình. Khi có sự kiện thay đổi dữ liệu xảy ra, Service nên tự quản lý tốt state mà nó đang nắm giữ vì nó đang cung cấp dữ liệu đó cho nhiều bên ngoài sử dụng. Việc Service tự "làm sạch" dữ liệu của mình giúp các component sử dụng nó luôn nhận được data chuẩn mà không cần thêm logic phụ trợ.
     - **Tối ưu hóa hiệu năng**: Việc sử dụng Subject để emit ra bên ngoài và kích hoạt reload toàn bộ danh sách là quá tốn kém về performance (HTTP request, re-calculate computed signals, re-render DOM) và không cần thiết khi chúng ta đã có sẵn dữ liệu mới trong tay sau khi Save thành công.
     - **UX**: Mang lại trải nghiệm mượt mà (snappy), dữ liệu thay đổi tức thì mà không có độ trễ của mạng.
+
+## ADR 8: Implementation Approach for Daily Timeline (US-16.1)
+**Ngày ra quyết định: 2026-04-28**
+**Người viết: AI, huy**
+
+**1. Vấn đề/Concern/Feature đang cần ra quyết định:**
+Cần triển khai tính năng Daily Timeline để theo dõi năng lượng và hoạt động theo giờ. Câu hỏi là nên triển khai tích hợp đầy đủ Backend ngay lập tức hay làm bản UI Prototype trước?
+
+**2. Các phương án đã được gợi ý:**
+- **Phương án 1**: Triển khai đầy đủ từ Database, WebAPI đến Frontend. Đảm bảo dữ liệu được lưu trữ thật ngay từ đầu.
+- **Phương án 2**: Triển khai UI Prototype với dữ liệu Mock. Tập trung vào việc clone chính xác giao diện người dùng (Pixel-perfect) và trải nghiệm người dùng (UX/Animations).
+
+**3. Lựa chọn và lý do lựa chọn:**
+- **Lựa chọn**: **Phương án 2 (UI Prototype with Mock Data)**.
+- **Lý do**: 
+    - **Yêu cầu người dùng**: Người dùng yêu cầu "clone cái giao diện này về, chỉ là prototype UI, sẽ quyết định backend sau".
+    - **Tính linh hoạt**: Giúp người dùng có cái nhìn trực quan về giao diện và tương tác trước khi cam kết cấu trúc dữ liệu backend.
+    - **Tốc độ & Thẩm mỹ**: Tốc độ triển khai nhanh, tập trung tối đa vào phần "Premium Aesthetics" (màu sắc, animations, logic summary).
+    - **Dữ liệu mock**: Được quản lý qua Angular Signals giúp dễ dàng chuyển đổi sang API Call sau này mà không làm thay đổi logic hiển thị.
+
+## ADR 9: Yearly Matrix Grid Rendering & Navigation Strategy (US-17.1)
+**Ngày ra quyết định: 2026-04-29**
+**Người viết: AI, huy**
+
+**1. Vấn đề/Concern/Feature đang cần ra quyết định:**
+Làm thế nào để render một lưới 12 tháng x 31 ngày hiệu quả mà vẫn đảm bảo tính thẩm mỹ cao (Premium UI) và tối ưu hóa cho màn hình 4K. Ngoài ra, cần xác định cơ chế hiển thị nội dung chi tiết (Books/Posts).
+
+**2. Các phương án đã được gợi ý:**
+- **Phương án 1 (Calendar Library)**: Sử dụng các thư viện lịch có sẵn (FullCalendar, DayJS) để render.
+- **Phương án 2 (Custom Matrix with Flexbox)**: Tự xây dựng ma trận dữ liệu 2 chiều (31 ngày x 12 tháng) và render bằng Flexbox thuần. Sử dụng Angular Computed Signals để tính toán dữ liệu lưới từ danh sách phẳng.
+
+**3. Lựa chọn và lý do lựa chọn:**
+- **Lựa chọn**: **Phương án 2 (Custom Matrix with Flexbox)**.
+- **Lý do**: 
+    - **Kiểm soát tuyệt đối**: Thư viện lịch thường khó tùy chỉnh để đạt được giao diện ma trận đặc thù (31 hàng dọc) và các indicator tùy biến cao (chấm mood, hình chữ nhật post).
+    - **Tối ưu 4K**: Flexbox cho phép kiểm soát chính xác việc co giãn các cell để lấp đầy không gian màn hình lớn mà không làm vỡ bố cục.
+    - **Mailbox Style Reader**: Quyết định sử dụng bố cục 2 cột (List - Detail) cho bài viết giúp xử lý tình huống một ngày có nhiều nội dung mà không gây rối giao diện.
+    - **Future Muting logic**: Việc tự render giúp dễ dàng áp dụng các logic điều kiện (như ẩn màu sắc cho ngày tương lai) một cách linh hoạt nhất.
+## ADR 10: Service & CSS Isolation for Content Explorer Refinement
+**Ngày ra quyết định: 2026-04-30**
+**Người viết: AI, huy**
+
+**1. Vấn đề/Concern/Feature đang cần ra quyết định:**
+Làm thế nào để triển khai tính năng Content Explorer (với dữ liệu tin tức công nghệ phong phú) mà không làm "gãy" giao diện hoặc làm ô nhiễm dữ liệu của trang Range Tracker vốn đang cần sự tối giản và ổn định tuyệt đối.
+
+**2. Các phương án đã được gợi ý:**
+- **Phương án 1 (Unified Service)**: Sử dụng chung `WeeklyTrackerService` cho cả hai trang, sử dụng các cờ (flags) để switch loại dữ liệu mock.
+- **Phương án 2 (Isolated Services & Styles)**: Tách biệt hoàn toàn `ContentExplorerService` và viết lại CSS độc lập cho trang Explorer.
+
+**3. Lựa chọn và lý do lựa chọn:**
+- **Lựa chọn**: **Phương án 2 (Isolated Services & Styles)**.
+- **Lý do**: 
+    - **Tính ổn định (Robustness)**: Dữ liệu tin tức dài (Tech News) gây vỡ layout trên các lưới mật độ cao của Range Tracker. Việc tách Service giúp Range Tracker luôn giữ được dữ liệu "sạch" và an toàn.
+    - **Tự do thiết kế (Design Freedom)**: Trang Explorer yêu cầu các quy tắc CSS riêng (căn lề 34px, xử lý ellipsis, segmented control). CSS Isolation giúp tinh chỉnh Explorer đạt mức pixel-perfect mà không sợ làm ảnh hưởng đến các trang Tracker hiện có.
+    - **Maintainability**: Tuân thủ nguyên tắc "Module sâu" và "Tách biệt mối quan tâm" (Separation of Concerns). Mỗi page quản lý state và style riêng giúp việc debug và mở rộng sau này dễ dàng hơn nhiều.

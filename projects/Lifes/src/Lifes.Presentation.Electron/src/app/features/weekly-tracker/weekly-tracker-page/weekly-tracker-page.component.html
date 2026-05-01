@@ -1,0 +1,171 @@
+<div class="weekly-tracker-container">
+  <!-- Header Section -->
+  <header class="tracker-header">
+    <div class="nav-controls">
+      <button class="nav-btn" (click)="trackerService.prevWeek()">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <span class="week-range">{{ weekRangeLabel }}</span>
+      <button class="nav-btn" (click)="trackerService.nextWeek()">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+      <button class="today-btn" (click)="trackerService.goToToday()">Tuần này</button>
+    </div>
+
+    <div class="filter-controls">
+      <div class="display-mode-toggle">
+        <button [class.active]="trackerService.displayMode() === 'both'" (click)="setDisplayMode('both')">
+          <div class="dot-multi"></div> Cả hai
+        </button>
+        <button [class.active]="trackerService.displayMode() === 'mood'" (click)="setDisplayMode('mood')">
+          <div class="dot mood"></div> Mood
+        </button>
+        <button [class.active]="trackerService.displayMode() === 'action'" (click)="setDisplayMode('action')">
+          <div class="dot action"></div> Hành động
+        </button>
+        <button [class.active]="trackerService.displayMode() === 'reason'" (click)="setDisplayMode('reason')">
+          <div class="dot reason"></div> Lý do
+        </button>
+      </div>
+      <button class="more-btn"><i class="fas fa-ellipsis-h"></i></button>
+    </div>
+  </header>
+
+  <!-- Filter row -->
+  <div class="sub-filters">
+    <div class="threshold-filter">
+      <label>Ngưỡng cảm xúc</label>
+      <div class="filter-row-wrap">
+        <div class="dropdown-wrap">
+          <div class="select-wrapper" (click)="toggleFilterDropdown()">
+            <div class="dot-all" [style.background]="currentFilterMood?.color || ''"></div>
+            <span>{{ filterModeLabel }} {{ currentFilterMood?.label || '' }}</span>
+            <span class="dd-arrow">▾</span>
+          </div>
+
+          @if (isFilterDropdownOpen()) {
+            <div class="dd-panel">
+              <div class="dd-section">
+                <div class="dd-section-label">CHẾ ĐỘ LỌC</div>
+                <div class="radio-row" [class.sel]="trackerService.filterMode() === 'all'" (click)="setFilterMode('all')">
+                  <div class="radio-circle" [class.checked]="trackerService.filterMode() === 'all'"></div>
+                  <span class="radio-text">Tất cả</span>
+                  <span class="radio-desc">Hiện toàn bộ</span>
+                </div>
+                <div class="radio-row" [class.sel]="trackerService.filterMode() === 'equal'" (click)="setFilterMode('equal')">
+                  <div class="radio-circle" [class.checked]="trackerService.filterMode() === 'equal'"></div>
+                  <span class="radio-text">Bằng</span>
+                  <span class="radio-desc">= level này</span>
+                </div>
+                <div class="radio-row" [class.sel]="trackerService.filterMode() === 'above'" (click)="setFilterMode('above')">
+                  <div class="radio-circle" [class.checked]="trackerService.filterMode() === 'above'"></div>
+                  <span class="radio-text">Trên ngưỡng</span>
+                  <span class="radio-desc">≥ level này</span>
+                </div>
+                <div class="radio-row" [class.sel]="trackerService.filterMode() === 'below'" (click)="setFilterMode('below')">
+                  <div class="radio-circle" [class.checked]="trackerService.filterMode() === 'below'"></div>
+                  <span class="radio-text">Dưới ngưỡng</span>
+                  <span class="radio-desc">≤ level này</span>
+                </div>
+              </div>
+
+              @if (trackerService.filterMode() !== 'all') {
+                <div class="dd-div"></div>
+                <div class="dd-section">
+                  <div class="dd-section-label">CHỌN LEVEL NGƯỠNG</div>
+                  <div class="mood-picker-row">
+                    @for (mood of availableMoods; track mood.id) {
+                      <div class="mpick" [class.sel]="trackerService.filterMoodId() === mood.id" (click)="setFilterMood(mood.id)">
+                        <div class="mpick-d" [style.background]="mood.color"></div>
+                        <span class="mpick-l">{{ mood.label }}</span>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+
+        @if (filterBadgeLabel) {
+          <div class="filter-badge show">
+            <div class="fb-dot" [style.background]="currentFilterMood?.color"></div>
+            <span>{{ filterBadgeLabel }}</span>
+            <span class="fb-clear" (click)="clearFilter()">×</span>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Grid Section -->
+  <div class="grid-scroll-container">
+    <div class="matrix-grid">
+      <!-- Grid Header -->
+      <div class="grid-header-row" [style.grid-template-columns]="'42px repeat(' + trackerService.rangeDays() + ', 1fr)'">
+        <div class="time-column-header"></div>
+        @for (day of trackerService.dayHeaders(); track day.date) {
+          <div class="day-column-header" [class.is-today]="day.isToday">
+            <span class="day-label">{{ day.dayLabel }}</span>
+            <span class="day-number">{{ day.dayNumber }}</span>
+            <div class="day-dots">
+              @for (dot of day.dots; track $index) {
+                <span class="summary-dot" [style.background-color]="dot"></span>
+              }
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Grid Body -->
+      <div class="grid-body">
+        @for (hour of hours; track hour) {
+          <div class="hour-row" [style.grid-template-columns]="'42px repeat(' + trackerService.rangeDays() + ', 1fr)'">
+            <!-- Time Label -->
+            <div class="time-cell" [class.marker]="hour === 6 || hour === 12 || hour === 18">
+              @if (hour === 6) { <span>SÁNG</span> }
+              @else if (hour === 12) { <span>TRƯA</span> }
+              @else if (hour === 18) { <span>TỐI</span> }
+              @else { {{ hour.toString().padStart(2, '0') }} }
+            </div>
+
+            <!-- Day Cells -->
+            @for (day of trackerService.dayHeaders(); track day.date) {
+              <div class="entry-cell" 
+                   [class.future]="isFuture(day.date, hour)"
+                   (click)="onCellClick(day.date, hour)">
+                @let entry = getEntry(day.date, hour);
+                @if (entry) {
+                  <div class="entry-content" 
+                       [class.dimmed]="!matchesFilter(entry.moodId)"
+                       [style.--mood-color]="getMoodColor(entry.moodId)">
+                    <span class="mood-text" [style.color]="getMoodColor(entry.moodId)">{{ getMoodLabel(entry.moodId) }}</span>
+                    
+                    @if (trackerService.displayMode() === 'action' && entry.note) {
+                      <span class="entry-note">{{ entry.note }}</span>
+                    } @else if (trackerService.displayMode() === 'reason' && entry.reason) {
+                      <span class="entry-note reason-text">{{ entry.reason }}</span>
+                    } @else if (trackerService.displayMode() === 'both') {
+                      @if (entry.note) { <span class="entry-note">{{ entry.note }}</span> }
+                      @if (entry.reason) { <div class="reason-indicator"></div> }
+                    }
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Editor Modal Placeholder (Will be a separate component soon) -->
+@if (isEditorOpen()) {
+  <app-entry-editor 
+    [entry]="selectedEntry()!" 
+    (close)="closeEditor()"
+    (save)="closeEditor()"
+    (delete)="closeEditor()">
+  </app-entry-editor>
+}

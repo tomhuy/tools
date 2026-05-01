@@ -117,6 +117,12 @@ src/
 │           │   ├── yearly-stream/        # US-17.1 Yearly Stream feature
 │           │   │   ├── yearly-stream-page/
 │           │   │   └── yearly-stream.service.ts
+│           │   ├── weekly-tracker/       # US-18.1 Weekly Tracker feature
+│           │   │   ├── weekly-tracker-page/
+│           │   │   ├── content-explorer-page/ # Refinement (Content Mode)
+│           │   │   ├── entry-editor/
+│           │   │   ├── content-explorer.service.ts # Isolated content data
+│           │   │   └── weekly-tracker.service.ts
 │           │   └── ...
 │           └── models/
 │               ├── sprint-board.model.ts # US-11.2 data models
@@ -125,7 +131,8 @@ src/
 │               ├── display-mode.model.ts # US-12.1
 │               ├── selectable-month.model.ts # US-12.1
 │               ├── daily-timeline.model.ts   # US-16.1
-│               └── yearly-stream.model.ts    # US-17.1
+│               ├── yearly-stream.model.ts    # US-17.1
+│               └── weekly-tracker.model.ts   # US-18.1
 │
 ├── Lifes.Presentation.WPF/     # WPF UI
 │   ├── Constants/                  # US-5.1
@@ -392,6 +399,22 @@ src/
 - **YearlyStreamService**: Quản lý dữ liệu mock và logic lọc bài viết/sách.
 - **Mailbox Style Reader**: Popup đọc bài viết với bố cục 2 cột (List - Detail) chuyên nghiệp.
 - **Future Muting**: Tự động ẩn màu sắc và làm mờ các ô ngày trong tương lai để tập trung vào dữ liệu hiện tại.
+
+---
+
+### 16. Weekly Mood & Activity Tracker (US-18.1)
+**Status**: ✅ Completed (UI Prototype)
+**User Stories**: US-18.1
+**Documentation**: [fea-weekly-tracker-structure.md](./fea-weekly-tracker-structure.md)
+
+**Purpose**: Cung cấp giao diện theo dõi tâm trạng và hoạt động theo từng khung giờ trong tuần (7 ngày x 24 giờ). Tích hợp chế độ **Content Explorer** chuyên dụng cho nội dung văn bản.
+
+**Key Components**:
+- **WeeklyTrackerPageComponent**: Hiển thị lưới ma trận 7x24 với thanh điều hướng tuần.
+- **ContentExplorerPageComponent**: Chế độ xem nội dung chuyên sâu với bộ lọc danh mục và CSS Isolation.
+- **WeeklyTrackerService**: Quản lý trạng thái Tracker tối giản.
+- **ContentExplorerService**: Quản lý dữ liệu tin tức/nội dung độc lập (Tech News).
+- **WeeklyEntryEditorComponent**: Modal glassmorphism cho việc nhập liệu.
 
 ## Shared Components
 
@@ -774,6 +797,6 @@ reportgenerator -reports:**/coverage.cobertura.xml -targetdir:coverage-report -r
 
 ---
 
-**Document Version**: 1.5.1  
-**Last Updated**: 2026-04-22  
-**Status**: ✅ Active (100% Complete - Phase 11 Finalized with Electron Integration US-11.1)
+**Document Version**: 1.6.0  
+**Last Updated**: 2026-05-01  
+**Status**: ✅ Active (100% Complete - Phase 16 Finalized with Content Explorer)

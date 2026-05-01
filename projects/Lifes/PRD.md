@@ -1490,6 +1490,16 @@ private string GetLevelColor(string level)
 - ✅ **US-15.1: IsAchieved Topic Filtering**: Cho phép đánh dấu topic đã hoàn thành và cung cấp toggle "Show Completed" để ẩn/hiện các topic này trên Board và Management.
 - ✅ **US-15.2: Custom Hex Color Input**: Cho phép người dùng nhập trực tiếp mã màu Hex tùy chỉnh trong Topic Editor và Quick Color Picker.
 
+### Phase 15: Weekly Tracker - v2.3.0 (Completed)
+- ✅ **Weekly Matrix (7x24)**: Giao diện lưới 7 ngày x 24 giờ cho phép theo dõi chi tiết hoạt động và tâm trạng theo khung giờ (US-18.1).
+- ✅ **Hourly Editing**: Modal chỉnh sửa glassmorphism hỗ trợ chọn Mood, Tag hoạt động và ghi chú tự do.
+- ✅ **Mood Analysis**: Hệ thống Day Headers tự động tóm tắt tâm trạng trong ngày qua các chấm màu chỉ thị.
+
+### Phase 16: Content Explorer & Data Isolation - v2.3.1 (Completed)
+- ✅ **Content Explorer Mode**: Chế độ xem chuyên dụng cho nội dung tin tức/bài viết với giao diện Segmented Control cao cấp.
+- ✅ **Service Isolation**: Tách biệt hoàn toàn `ContentExplorerService` để quản lý dữ liệu phong phú (Tech News) mà không ảnh hưởng đến `Range Tracker`.
+- ✅ **CSS Isolation**: Kiến trúc CSS độc lập giúp ngăn chặn xung đột giao diện và đảm bảo tính pixel-perfect cho lưới nội dung.
+
 ---
 
 ## 🧪 Testing Strategy (Optimized)
@@ -1532,6 +1542,6 @@ private string GetLevelColor(string level)
 
 ---
 
-**Document Version**: 2.3.0  
-**Last Updated**: 2026-04-25  
-**Status**: ✅ Active (100% Complete - Phase 12 Finalized with Electron Migration & API Integration US-12.1.1)
+**Document Version**: 2.3.1  
+**Last Updated**: 2026-05-01  
+**Status**: ✅ Active (100% Complete - Phase 16 Finalized with Content Explorer & Service Isolation)

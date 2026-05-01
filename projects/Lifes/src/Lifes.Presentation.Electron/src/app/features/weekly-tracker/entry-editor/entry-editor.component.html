@@ -1,0 +1,62 @@
+<div class="modal-overlay" (click)="onCancel()">
+  <div class="editor-card" (click)="$event.stopPropagation()">
+    <header class="editor-header">
+      <h2 class="title">{{ formattedDate }}</h2>
+      <p class="subtitle">Lúc {{ formattedTime }}</p>
+    </header>
+
+    <div class="editor-body">
+      <!-- Mood Selector -->
+      <section class="form-section">
+        <label class="section-label">Cảm xúc lúc này</label>
+        <div class="mood-grid">
+          @for (m of moods; track m.id) {
+            <div class="mood-item" 
+                 [class.active]="entry.moodId === m.id"
+                 (click)="entry.moodId = m.id">
+              <span class="mood-dot" [style.background-color]="m.color"></span>
+              <span class="mood-label">{{ m.label }}</span>
+            </div>
+          }
+        </div>
+      </section>
+
+      <!-- Activity Tags -->
+      <section class="form-section">
+        <label class="section-label">Đang làm gì / gặp ai</label>
+        <div class="tags-container">
+          @for (tag of tags; track tag.id) {
+            <button class="tag-btn" 
+                    [class.active]="entry.tags.includes(tag.id)"
+                    (click)="toggleTag(tag.id)">
+              {{ tag.label }}
+            </button>
+          }
+        </div>
+      </section>
+
+      <!-- Free Text -->
+      <section class="form-section">
+        <label class="section-label">Hoặc ghi tự do</label>
+        <textarea class="form-input" 
+                  [(ngModel)]="entry.note" 
+                  placeholder="vd: sau meeting căng thẳng..."></textarea>
+      </section>
+
+      <section class="form-section">
+        <label class="section-label">Tại sao cảm xúc thay đổi?</label>
+        <textarea class="form-input" 
+                  [(ngModel)]="entry.reason" 
+                  placeholder="vd: gọi điện cho bạn, đi dạo..."></textarea>
+      </section>
+    </div>
+
+    <footer class="editor-footer">
+      <button class="action-btn delete-btn" (click)="onDelete()" *ngIf="entry.id">Xoá</button>
+      <div class="main-actions">
+        <button class="action-btn cancel-btn" (click)="onCancel()">Huỷ</button>
+        <button class="action-btn save-btn" (click)="onSave()">Lưu</button>
+      </div>
+    </footer>
+  </div>
+</div>

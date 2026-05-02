@@ -26,17 +26,17 @@ export class LaputaApiService {
       .pipe(map(r => this.unwrap(r)));
   }
 
-  saveNote(id: number, title: string, contentHtml: string): Observable<Note> {
-    return this.http.post<ApiResponse<Note>>(this.base, { id, title, contentHtml })
+  saveNote(id: string, title: string, content: string): Observable<Note> {
+    return this.http.post<ApiResponse<Note>>(this.base, { id, title, content })
       .pipe(map(r => this.unwrap(r)));
   }
 
-  duplicateNote(id: number): Observable<Note> {
+  duplicateNote(id: string): Observable<Note> {
     return this.http.post<ApiResponse<Note>>(`${this.base}/${id}/duplicate`, {})
       .pipe(map(r => this.unwrap(r)));
   }
 
-  deleteNote(id: number): Observable<void> {
+  deleteNote(id: string): Observable<void> {
     return this.http.delete<ApiResponse<null>>(`${this.base}/${id}`)
       .pipe(map(r => { this.unwrap(r); }));
   }

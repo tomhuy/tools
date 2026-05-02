@@ -16,9 +16,9 @@ export class LaputaSidebarComponent {
 
   getNavSvg(icon: string): string {
     const svgs: { [key: string]: string } = {
-      inbox: '<path d="M1 8h3l1.5 2h3L10 8h3V11a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V8z" stroke="currentColor" stroke-width="1.2" fill="none"/><path d="M1 8l2-5h8l2 5" stroke="currentColor" stroke-width="1.2" fill="none"/>',
-      all: '<rect x="1" y="1" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="8" y="1" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="1" y="8" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="8" y="8" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2" fill="none"/>',
-      star: '<path d="M7 1l1.5 4H13l-3.5 2.5 1.5 4L7 9l-4 2.5 1.5-4L1 5h4.5z" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linejoin="round"/>',
+      inbox: '<svg viewBox="0 0 14 14" fill="none"><path d="M1 8h3l1.5 2h3L10 8h3V11a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V8z" stroke="currentColor" stroke-width="1.2" fill="none"/><path d="M1 8l2-5h8l2 5" stroke="currentColor" stroke-width="1.2" fill="none"/></svg>',
+      all: '<svg viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="8" y="1" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="1" y="8" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="8" y="8" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2" fill="none"/></svg>',
+      star: '<svg viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 4H13l-3.5 2.5 1.5 4L7 9l-4 2.5 1.5-4L1 5h4.5z" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linejoin="round"/></svg>',
     };
     return svgs[icon] || svgs['all'];
   }

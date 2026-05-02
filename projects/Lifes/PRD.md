@@ -401,20 +401,20 @@ ETL Deployment Tools Suite cung cấp:
 
 ---
 
-### 18. Laputa Notes Interface (US-20.1, US-20.2)
+### 18. Laputa Notes Interface (US-20.1, US-20.2, US-20.3)
 **Status**: ✅ Completed
-**User Stories**: US-20.1 (UI), US-20.2 (Service & Sync)
+**User Stories**: US-20.1 (UI Clone), US-20.2 (API Integration), US-20.3 (UI Refinement & Pixel-perfect)
 **Documentation**: [fea-laputa-notes-structure.md](./docs/structures/fea-laputa-notes-structure.md)
 
-**Purpose**: Giao diện Note-taking tích hợp hỗ trợ soạn thảo Markdown, tổ chức theo tag/section, cùng khả năng chuyển đổi 4 chế độ hiển thị. Đã tích hợp hệ thống đồng bộ hóa phản hồi (Reactive synchronization), tự động lưu với debounce và hàng đợi lưu tuần tự để đảm bảo toàn vẹn dữ liệu.
+**Purpose**: Giao diện Note-taking tích hợp hỗ trợ soạn thảo Markdown, tổ chức theo tag/section, cùng khả năng chuyển đổi 4 chế độ hiển thị (List, Card, Compact, Grid). Đã được tinh chỉnh đạt độ chính xác pixel-perfect so với nguyên mẫu.
 
 **Key Components**:
-- **LaputaNotesPageComponent**: Container chính cho bố cục Layout.
-- **LaputaSidebarComponent**: Quản lý Section, Tags và Theme (Dark/Sepia).
-- **LaputaNoteListComponent**: Giao diện danh sách ghi chú với hỗ trợ Infinite Scrolling và Context Menu.
-- **LaputaEditorComponent**: Trình soạn thảo Markdown sử dụng Reactive Forms với cơ chế Auto-save (1s debounce).
-- **LaputaNotesService**: Quản lý State tập trung bằng Angular Signals; triển khai `concatMap` cho hàng đợi Save/Delete và `switchMap` cho phân trang/tìm kiếm.
-- **LaputaApiService**: Endpoint trung gian kết nối với `${API_BASE_URL}/notes`.
+- **LaputaNotesPageComponent**: Layout container chính.
+- **LaputaSidebarComponent**: Sidebar với Section, Tags và Theme Switcher (Dark/Sepia).
+- **LaputaNoteListComponent**: Danh sách ghi chú với hỗ trợ Infinite Scroll, Context Menu và 4 View Modes.
+- **LaputaEditorComponent**: Trình soạn thảo Markdown với cơ chế Auto-save và Reactive Forms.
+- **LaputaNotesService**: Quản lý State tập trung bằng Angular Signals và RxJS (ID đồng bộ kiểu `string`).
+- **LaputaApiService**: Kết nối REST API backend.
 
 ---
 

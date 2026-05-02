@@ -5,6 +5,8 @@ using Lifes.Infrastructure.Features.VersionIncrease.Services;
 using Lifes.Infrastructure.Features.AnnualCalendar.Repositories;
 using Lifes.Infrastructure.Features.AnnualCalendar.Services;
 using Lifes.Core.Models;
+using Lifes.Infrastructure.Features.LaputaNotes.Repositories;
+using Lifes.Application.Features.LaputaNotes.Strategies;
 using Serilog;
 
 // Đảm bảo thư mục làm việc (Working Directory) luôn là thư mục chứa file exe
@@ -58,6 +60,10 @@ try
     builder.Services.AddSingleton<ITagRepository, JsonTagRepository>();
     builder.Services.AddSingleton<IMementoRepository, JsonMementoRepository>();
     builder.Services.AddSingleton<ICalendarService, CalendarService>();
+
+    // Laputa Notes Services
+    builder.Services.AddSingleton<INoteRepository, ObsidianNoteRepository>();
+    builder.Services.AddSingleton<NoteQueryStrategyFactory>();
 
     builder.Services.AddTransient<IScanProjectsCommand, ScanProjectsCommand>();
     builder.Services.AddTransient<IUpdateVersionsCommand, UpdateVersionsCommand>();

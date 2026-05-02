@@ -25,7 +25,7 @@ export class LaputaNoteListComponent {
   public ctxMenuVisible = false;
   public ctxMenuX = 0;
   public ctxMenuY = 0;
-  public ctxTargetId: number | null = null;
+  public ctxTargetId: string | null = null;
 
   @HostListener('document:mousemove', ['$event'])
   onMouseMove(e: MouseEvent) {
@@ -81,12 +81,12 @@ export class LaputaNoteListComponent {
     return sec;
   }
 
-  openNote(id: number) {
+  openNote(id: string) {
     this.noteService.currentNoteId.set(id);
     this.noteService.isPreview.set(false);
   }
 
-  showCtxMenu(e: MouseEvent, id: number) {
+  showCtxMenu(e: MouseEvent, id: string) {
     e.preventDefault();
     this.ctxTargetId = id;
     this.ctxMenuVisible = true;

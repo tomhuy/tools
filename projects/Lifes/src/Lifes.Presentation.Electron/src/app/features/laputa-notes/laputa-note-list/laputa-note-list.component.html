@@ -63,24 +63,25 @@
         (contextmenu)="showCtxMenu($event, note.id)">
         
         <div class="card-accent-bar" [style.background]="getAccentColor(note.section)"></div>
-        <div class="card-content">
-          <div class="card-title-row">
-            <span class="card-title">{{ note.title }}</span>
-            <svg *ngIf="note.starred" class="star-icon" viewBox="0 0 11 11" width="10" height="10" fill="var(--accent)"><path d="M5.5 1l1.2 3h3.2l-2.6 1.9 1 3L5.5 7.2 3.2 8.9l1-3L1.6 4h3.2z"/></svg>
+        <div class="card-top">
+          <span class="card-title">{{ note.title }}</span>
+          <svg *ngIf="note.starred" class="star-icon" viewBox="0 0 11 11" width="10" height="10" fill="var(--accent)"><path d="M5.5 1l1.2 3h3.2l-2.6 1.9 1 3L5.5 7.2 3.2 8.9l1-3L1.6 4h3.2z"/></svg>
+        </div>
+        
+        <div class="card-preview" *ngIf="noteService.viewMode() === 'card'">{{ getPreview(note.content) }}</div>
+        
+        <div class="card-excerpt-bullets" *ngIf="noteService.viewMode() === 'list' || noteService.viewMode() === 'grid'">
+          <div *ngFor="let b of getBullets(note.content)" class="ceb-item">
+            <span class="ceb-dot"></span>
+            <span class="ceb-text">{{ b }}</span>
           </div>
-          
-          <div class="card-preview" *ngIf="noteService.viewMode() === 'card'">{{ getPreview(note.content) }}</div>
-          
-          <div class="card-bullets" *ngIf="noteService.viewMode() === 'list' || noteService.viewMode() === 'grid'">
-            <div *ngFor="let b of getBullets(note.content)" class="bullet-item">• {{ b }}</div>
-          </div>
+        </div>
 
-          <div class="card-meta">
-            <span class="meta-time">{{ relTime(note.modified) }}</span>
-            <div class="meta-tags">
-              <span *ngFor="let t of note.tags.slice(0,2)" class="meta-tag">#{{ t }}</span>
-            </div>
+        <div class="card-meta">
+          <div class="card-tags">
+            <span *ngFor="let t of note.tags.slice(0,2)" class="card-tag">#{{ t }}</span>
           </div>
+          <span class="card-time">{{ relTime(note.modified) }}</span>
         </div>
       </div>
     </div>

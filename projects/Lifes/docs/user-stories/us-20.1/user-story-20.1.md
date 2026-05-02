@@ -57,6 +57,7 @@
 - [x] Task 5: Implement Editor area with Markdown formatting toolbar and preview.
 - [x] Task 6: Implement Context Menu and New Note Modal.
 - [x] Task 7: Integrate routing and navigation.
+- [x] Task 8: Pixel-perfect UI restoration and refinement (CSS gaps, density, typography).
 
 ## Dependencies
 - Depends on: None

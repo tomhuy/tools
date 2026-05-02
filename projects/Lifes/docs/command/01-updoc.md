@@ -29,3 +29,5 @@ Check list:
 - đã cập nhật thông tin vào file be-all-structure.md
 - user story đã được check các mục đã hoàn thành chưa
 - all-ards.md đã được cập nhật thông tin về phương án implement chưa, nếu người dùng có lựa chọn phương án trong quá trình thảo luận
+- có implement gì về backend không? nếu có, kiểu tra xem đã cập nhật các thông tin về backend vào các file chưa
+- có implement gì về front-end không? nếu có, kiểm tra xem đã cập nhật các thông tin về front-end chưa

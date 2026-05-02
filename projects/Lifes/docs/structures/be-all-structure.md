@@ -20,7 +20,8 @@ src/
 │   │   ├── INavigationService.cs   # US-5.1
 │   │   ├── ICalendarService.cs     # US-9.1
 │   │   ├── IMementoRepository.cs   # US-9.2
-│   │   └── ITagRepository.cs       # US-9.2
+│   │   ├── ITagRepository.cs       # US-9.2
+│   │   └── INoteRepository.cs      # US-20.3
 │   └── Models/
 │       ├── Result.cs               # Result<T> pattern
 │       ├── ToolDefinition.cs       # US-5.1 — tool metadata
@@ -42,8 +43,10 @@ src/
 │           ├── ValueObjects/
 │           │   ├── VersionInfo.cs  # Core version increment logic
 │           │   └── GitCommitInfo.cs # US-1.3
-│           └── Enums/
 │               └── ProjectStatus.cs
+│       └── LaputaNotes/            # US-20.3
+│           └── Entities/
+│               └── Note.cs         # String-based ID note entity
 │
 ├── Lifes.Infrastructure/        # External services
 │   ├── Common/                     # US-1.2.1
@@ -65,6 +68,9 @@ src/
 │               ├── MockTagRepository.cs     # US-9.2 (Deprecated)
 │               ├── JsonMementoRepository.cs # US-9.3
 │               └── JsonTagRepository.cs     # US-9.3
+│       └── LaputaNotes/            # US-20.3
+│           └── Repositories/
+│               └── ObsidianNoteRepository.cs # Markdown-based storage
 │
 ├── Lifes.Application/           # Use cases and commands
 │   ├── Common/                     # US-1.2.1
@@ -87,9 +93,19 @@ src/
 │               ├── CommitResultDto.cs         # US-1.3
 │               ├── ProjectUpdateDto.cs
 │               └── VersionUpdateResultDto.cs
+│       └── LaputaNotes/            # US-20.3
+│           ├── Commands/
+│           │   ├── SaveNoteCommand.cs
+│           │   ├── DeleteNoteCommand.cs
+│           │   └── DuplicateNoteCommand.cs
+│           ├── Queries/
+│           │   └── GetNotesQuery.cs
+│           └── Strategies/
+│               └── NoteQueryStrategies.cs # Strategy Pattern implementation
 │
 ├── Lifes.Presentation.WebApi/    # C# Local API Server (US-11.1)
 │   ├── Controllers/                # REST endpoints routing to Application Commands
+│   │   └── NotesController.cs      # US-20.3
 │   └── Program.cs                  # WebAPI Bootstrap
 │
 ├── Lifes.Presentation.Electron/  # Electron UI (US-11.1)
@@ -123,13 +139,12 @@ src/
 │           │   │   ├── entry-editor/
 │           │   │   ├── content-explorer.service.ts # Isolated content data
 │           │   │   └── weekly-tracker.service.ts
-│           │   ├── laputa-notes/         # US-20.1, US-20.2 Laputa Notes
+│           │   ├── laputa-notes/         # US-20.1, US-20.2, US-20.3 Laputa Notes
 │           │   │   ├── laputa-notes-page/
 │           │   │   ├── laputa-sidebar/
-│           │   │   ├── laputa-note-list/ # With infinite scroll
+│           │   │   ├── laputa-note-list/ # Infinite scroll, Context Menu, View Modes
 │           │   │   ├── laputa-editor/    # Reactive Forms + Auto-save
-│           │   │   ├── services/         # LaputaNotesService, LaputaApiService
-│           │   │   └── models/           # (Moved to global models)
+│           │   │   └── services/         # LaputaNotesService, LaputaApiService
 │           │   └── ...
 │           └── models/
 │               ├── sprint-board.model.ts # US-11.2 data models

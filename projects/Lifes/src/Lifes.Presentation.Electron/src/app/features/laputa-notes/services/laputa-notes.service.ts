@@ -1,4 +1,4 @@
-import { Injectable, signal, computed, inject, DestroyRef, effect } from '@angular/core';
+import { Injectable, signal, computed, inject, DestroyRef, effect, untracked } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Note, NavItem, NavSection, NoteQuery } from '../models/note.model';
 import { LaputaApiService } from './laputa-api.service';
@@ -23,7 +23,7 @@ export class LaputaNotesService {
   public viewMode = signal<'list' | 'card' | 'compact' | 'grid'>('card');
   public theme = signal<'dark' | 'sepia'>('dark');
   public currentSection = signal<string>('all');
-  public currentNoteId = signal<number | null>(null);
+  public currentNoteId = signal<string | null>(null);
   public isPreview = signal<boolean>(false);
   public isSidebarOpen = signal<boolean>(true);
   public searchQuery = signal<string>('');
@@ -65,13 +65,13 @@ export class LaputaNotesService {
   public notes = signal<Note[]>([]);
 
   // Sequential Save Queue
-  private saveSubject = new Subject<{ id: number, title: string, content: string }>();
+  private saveSubject = new Subject<{ id: string, title: string, content: string }>();
   
   // Reactive Fetch Trigger
   private fetchSubject = new Subject<{ reset: boolean }>();
 
   // Sequential Delete Queue
-  private deleteSubject = new Subject<number>();
+  private deleteSubject = new Subject<string>();
 
   constructor() {
     // Process save requests sequentially
@@ -102,11 +102,11 @@ export class LaputaNotesService {
         }
 
         const query: NoteQuery = {
-          queryType: this.currentSection() as any,
-          page: this.currentPage(),
-          pageSize: this.pageSize(),
-          search: this.searchQuery(),
-          sort: this.sortAsc() ? 'asc' : 'desc'
+          queryType: untracked(() => this.currentSection() as any),
+          page: untracked(() => this.currentPage()),
+          pageSize: untracked(() => this.pageSize()),
+          search: untracked(() => this.searchQuery()),
+          sort: untracked(() => this.sortAsc() ? 'asc' : 'desc')
         };
 
         return this.api.getNotes(query).pipe(
@@ -151,12 +151,13 @@ export class LaputaNotesService {
 
     // Auto-reload when filters change
     effect(() => {
+      // Track these signals
       this.searchQuery();
       this.currentSection();
       this.sortAsc();
       
-      // Reset and fetch
-      this.fetchNotes(true);
+      // Reset and fetch - use untracked to avoid tracking signals inside fetchNotes
+      untracked(() => this.fetchNotes(true));
     }, { allowSignalWrites: true });
   }
 
@@ -184,7 +185,7 @@ export class LaputaNotesService {
     // In a real app, this would be an API call to create
     // For now, simulate local creation then sync
     const newNote: Note = {
-      id: Math.floor(Math.random() * 1000000),
+      id: Math.floor(Math.random() * 1000000).toString(),
       title: title || 'Ghi chú mới',
       content: `# ${title || 'Ghi chú mới'}\n\n`,
       tags: [...tags],
@@ -199,7 +200,7 @@ export class LaputaNotesService {
     this.saveNote(newNote.id, newNote.title, newNote.content);
   }
 
-  public saveNote(id: number, title: string, content: string) {
+  public saveNote(id: string, title: string, content: string) {
     this.saveSubject.next({ id, title, content });
   }
 
@@ -207,7 +208,7 @@ export class LaputaNotesService {
     this.notes.update(notes => notes.map(n => n.id === updatedNote.id ? updatedNote : n));
   }
 
-  public deleteNote(id: number) {
+  public deleteNote(id: string) {
     // Optimistic Update: Remove from UI immediately
     this.notes.update(notes => notes.filter(n => n.id !== id));
     if (this.currentNoteId() === id) {
@@ -218,14 +219,14 @@ export class LaputaNotesService {
     this.deleteSubject.next(id);
   }
 
-  public duplicateNote(id: number) {
+  public duplicateNote(id: string) {
     this.api.duplicateNote(id).subscribe(newNote => {
       this.notes.update(n => [newNote, ...n]);
       this.currentNoteId.set(newNote.id);
     });
   }
 
-  public toggleStar(id: number) {
+  public toggleStar(id: string) {
     this.notes.update(notes => notes.map(n => n.id === id ? { ...n, starred: !n.starred } : n));
   }
 

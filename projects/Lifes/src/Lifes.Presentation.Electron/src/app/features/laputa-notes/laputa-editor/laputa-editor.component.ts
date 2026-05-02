@@ -1,12 +1,14 @@
-import { Component, inject, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
+import { Component, inject, ViewChild, ElementRef, AfterViewChecked, effect, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { LaputaNotesService } from '../services/laputa-notes.service';
+import { debounceTime, distinctUntilChanged, tap } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-laputa-editor',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './laputa-editor.component.html',
   styleUrls: ['./laputa-editor.component.css'],
   host: {
@@ -16,23 +18,67 @@ import { LaputaNotesService } from '../services/laputa-notes.service';
 })
 export class LaputaEditorComponent implements AfterViewChecked {
   public noteService = inject(LaputaNotesService);
+  private fb = inject(FormBuilder);
+  private destroyRef = inject(DestroyRef);
   
   @ViewChild('noteTitle') noteTitleInput!: ElementRef<HTMLTextAreaElement>;
   @ViewChild('noteContent') noteContentInput!: ElementRef<HTMLTextAreaElement>;
   @ViewChild('dpNoteTitle') dpNoteTitleInput!: ElementRef<HTMLTextAreaElement>;
   @ViewChild('dpNoteContent') dpNoteContentInput!: ElementRef<HTMLTextAreaElement>;
 
+  public noteForm: FormGroup;
+  private isPatching = false;
+
+  constructor() {
+    this.noteForm = this.fb.group({
+      title: [''],
+      content: ['']
+    });
+
+    // Handle auto-save with debounce
+    this.noteForm.valueChanges.pipe(
+      debounceTime(1000),
+      distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)),
+      tap(value => {
+        if (this.isPatching) return;
+        const note = this.noteService.currentNote();
+        if (note) {
+          this.noteService.saveNote(note.id, value.title, value.content);
+        }
+      }),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe();
+
+    // Sync form when current note changes
+    effect(() => {
+      const note = this.noteService.currentNote();
+      if (note) {
+        this.isPatching = true;
+        this.noteForm.patchValue({
+          title: note.title,
+          content: note.content
+        }, { emitEvent: false });
+        this.isPatching = false;
+        
+        // Also trigger auto-resize after patch
+        setTimeout(() => {
+          if (this.noteContentInput?.nativeElement) this.autoResize(this.noteContentInput.nativeElement);
+          if (this.dpNoteContentInput?.nativeElement) this.autoResize(this.dpNoteContentInput.nativeElement);
+        }, 0);
+      }
+    });
+  }
+
   // Computed words and characters
   get wordCount(): number {
-    const note = this.noteService.currentNote();
-    if (!note || !note.content.trim()) return 0;
-    return note.content.trim().split(/\s+/).length;
+    const content = this.noteForm.get('content')?.value || '';
+    if (!content.trim()) return 0;
+    return content.trim().split(/\s+/).length;
   }
 
   get charCount(): number {
-    const note = this.noteService.currentNote();
-    if (!note) return 0;
-    return note.content.length;
+    const content = this.noteForm.get('content')?.value || '';
+    return content.length;
   }
 
   autoResize(textarea: HTMLTextAreaElement) {
@@ -50,18 +96,6 @@ export class LaputaEditorComponent implements AfterViewChecked {
     }
   }
 
-  onTitleChange(newTitle: string) {
-    const note = this.noteService.currentNote();
-    if (!note) return;
-    this.noteService.updateNote(note.id, { title: newTitle });
-  }
-
-  onContentChange(newContent: string) {
-    const note = this.noteService.currentNote();
-    if (!note) return;
-    this.noteService.updateNote(note.id, { content: newContent });
-  }
-
   togglePreview() {
     this.noteService.isPreview.set(!this.noteService.isPreview());
   }
@@ -77,10 +111,10 @@ export class LaputaEditorComponent implements AfterViewChecked {
   exportNote() {
     const note = this.noteService.currentNote();
     if (!note) return;
-    const blob = new Blob([note.content], { type: 'text/markdown' });
+    const blob = new Blob([this.noteForm.value.content], { type: 'text/markdown' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = note.title.replace(/[^a-z0-9\\u00C0-\\u024F\\s]/gi, '_') + '.md';
+    a.download = this.noteForm.value.title.replace(/[^a-z0-9\\u00C0-\\u024F\\s]/gi, '_') + '.md';
     a.click();
   }
 
@@ -121,22 +155,22 @@ export class LaputaEditorComponent implements AfterViewChecked {
       case 'code': replacement = `\`${sel || 'code'}\``; offset = sel ? 0 : 1; break;
       case 'h1': {
         const line = ta.value.slice(lineStart, end || lineStart + 1);
-        ta.value = ta.value.slice(0, lineStart) + '# ' + line.replace(/^#+\\s?/, '') + ta.value.slice(end || lineStart + line.length);
-        this.onContentChange(ta.value);
+        const newValue = ta.value.slice(0, lineStart) + '# ' + line.replace(/^#+\\s?/, '') + ta.value.slice(end || lineStart + line.length);
+        this.noteForm.patchValue({ content: newValue });
         setTimeout(() => ta.focus(), 0);
         return;
       }
       case 'h2': {
         const line = ta.value.slice(lineStart, end || lineStart + 1);
-        ta.value = ta.value.slice(0, lineStart) + '## ' + line.replace(/^#+\\s?/, '') + ta.value.slice(end || lineStart + line.length);
-        this.onContentChange(ta.value);
+        const newValue = ta.value.slice(0, lineStart) + '## ' + line.replace(/^#+\\s?/, '') + ta.value.slice(end || lineStart + line.length);
+        this.noteForm.patchValue({ content: newValue });
         setTimeout(() => ta.focus(), 0);
         return;
       }
       case 'h3': {
         const line = ta.value.slice(lineStart, end || lineStart + 1);
-        ta.value = ta.value.slice(0, lineStart) + '### ' + line.replace(/^#+\\s?/, '') + ta.value.slice(end || lineStart + line.length);
-        this.onContentChange(ta.value);
+        const newValue = ta.value.slice(0, lineStart) + '### ' + line.replace(/^#+\\s?/, '') + ta.value.slice(end || lineStart + line.length);
+        this.noteForm.patchValue({ content: newValue });
         setTimeout(() => ta.focus(), 0);
         return;
       }
@@ -152,7 +186,7 @@ export class LaputaEditorComponent implements AfterViewChecked {
     }
     ta.focus();
     this.autoResize(ta);
-    this.onContentChange(ta.value);
+    this.noteForm.patchValue({ content: ta.value });
   }
 
   parseMarkdown(md: string): string {
@@ -175,8 +209,9 @@ export class LaputaEditorComponent implements AfterViewChecked {
       .replace(/<p><\/p>/g, '');
   }
 
-  relTime(d: Date): string {
-    const diff = Date.now() - d.getTime();
+  relTime(d: Date | string): string {
+    const date = typeof d === 'string' ? new Date(d) : d;
+    const diff = Date.now() - date.getTime();
     if (diff < 60000) return 'vừa xong';
     if (diff < 3600000) return Math.floor(diff / 60000) + ' phút trước';
     if (diff < 86400000) return Math.floor(diff / 3600000) + ' giờ trước';

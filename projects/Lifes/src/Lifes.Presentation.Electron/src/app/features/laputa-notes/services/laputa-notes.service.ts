@@ -1,33 +1,15 @@
-import { Injectable, signal, computed } from '@angular/core';
-
-export interface Note {
-  id: number;
-  title: string;
-  content: string;
-  tags: string[];
-  section: string | null;
-  starred: boolean;
-  modified: Date;
-}
-
-export interface NavItem {
-  id: string;
-  label: string;
-  icon: string;
-  badge?: number;
-  color?: string;
-}
-
-export interface NavSection {
-  id: string;
-  label: string;
-  items: NavItem[];
-}
+import { Injectable, signal, computed, inject, DestroyRef, effect } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Note, NavItem, NavSection, NoteQuery } from '../models/note.model';
+import { LaputaApiService } from './laputa-api.service';
+import { Subject, concatMap, tap, catchError, of, switchMap, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LaputaNotesService {
+  private api = inject(LaputaApiService);
+  private destroyRef = inject(DestroyRef);
 
   // Colors mapping for sections
   public readonly COLORS: { [key: string]: string } = {
@@ -46,6 +28,12 @@ export class LaputaNotesService {
   public isSidebarOpen = signal<boolean>(true);
   public searchQuery = signal<string>('');
   public sortAsc = signal<boolean>(false);
+
+  // Pagination State
+  public currentPage = signal<number>(1);
+  public pageSize = signal<number>(20);
+  public hasMore = signal<boolean>(true);
+  public isLoading = signal<boolean>(false);
 
   // Data Signals
   public navConfig = signal<{ pinned: NavItem[], sections: NavSection[] }>({
@@ -74,33 +62,107 @@ export class LaputaNotesService {
     ]
   });
 
-  public notes = signal<Note[]>([
-    { id: 1, title: 'Zeigarnik Effect & 15 phút cuối ngày', content: `# Zeigarnik Effect & 15 phút cuối ngày\n\nNão bộ **không cần bạn hoàn thành 100% việc** — nó chỉ cần một tín hiệu đủ thuyết phục rằng việc đó "đã được xử lý".\n\n## Cơ chế hoạt động\n\nKhi một nhiệm vụ còn dở dang, não bộ giữ một "loop" mở trong working memory. Loop này:\n\n- Tiêu thụ cognitive resources liên tục\n- Gây cảm giác bồn chồn, khó tập trung\n- Tự động kích hoạt lại khi có liên kết bất kỳ\n\n## Giải pháp\n\n15 phút đọc trước khi ngủ không phải "hoàn thành việc" — mà là *tín hiệu đủ để não bộ coi việc đó là "đã xử lý"* và cho phép buông.\n\n> "Capturing" trong GTD của David Allen hoạt động theo nguyên lý này.\n\n## Ứng dụng cá nhân\n\n1. Review note ngắn cuối ngày\n2. Viết 1–2 câu về việc còn dở\n3. Não sẽ cho phép ngủ ngon hơn`, tags: ['tâm lý học', 'GTD'], section: 'psychology', starred: true, modified: new Date(Date.now() - 3600000 * 2) },
-    { id: 2, title: 'Self-compassion — Kristin Neff', content: `# Self-Compassion theo Kristin Neff\n\n## Ba thành phần cốt lõi\n\n1. **Self-kindness** — đối xử với bản thân như với người bạn\n2. **Common humanity** — nhận ra rằng đau khổ là phần của trải nghiệm con người\n3. **Mindfulness** — quan sát cảm xúc không phán xét\n\n## Phân biệt với self-esteem\n\nSelf-esteem thường phụ thuộc vào kết quả bên ngoài. Self-compassion thì không — nó ổn định hơn và bền vững hơn.\n\n*Đọc: Self-Compassion — The Proven Power of Being Kind to Yourself*`, tags: ['tâm lý học', 'đọc sách'], section: 'psychology', starred: false, modified: new Date(Date.now() - 86400000) },
-    { id: 3, title: 'Hệ thống màu sắc cho emotion tracker', content: `# Hệ thống màu sắc — Emotion Tracker\n\n## Nguyên tắc\n\nMàu sắc nên encode **ý nghĩa tâm lý**, không phải danh mục.\n\n## Ramp cảm xúc\n\n| Level | Màu | Hex |\n|-------|-----|-----|\n| A — Flow | Teal | #1D9E75 |\n| B+ — Thả lỏng | Teal nhạt | #5DCAA5 |\n| B — Ổn định | Xanh lá | #97C459 |\n| B- — Chưa mãn | Amber | #EF9F27 |\n| C+ — Mệt | Coral | #D85A30 |\n\n## Lý do dùng ramp đơn\n\nNão bộ xử lý gradient màu tự nhiên theo thang nhiệt độ. Một ramp liên tục giúp đọc pattern ngay lập tức mà không cần đọc legend.`, tags: ['design', 'color'], section: 'ideas', starred: true, modified: new Date(Date.now() - 86400000 * 2) },
-    { id: 4, title: 'Flow — Csikszentmihalyi', content: `# Flow: The Psychology of Optimal Experience\n\n## Điều kiện để đạt Flow\n\n- **Challenge–skill balance**: thách thức vừa đủ, không quá dễ cũng không quá khó\n- Clear goals, immediate feedback\n- Deep concentration — không bị ngắt\n\n## Mô hình 8 trạng thái\n\nTừ Boredom đến Anxiety, Flow nằm ở điểm cân bằng giữa kỹ năng cao và thách thức cao.\n\n## Ứng dụng cá nhân\n\n- Coding với AI: thường đạt flow khi bài toán vừa sức\n- Đọc sách: cần môi trường yên tĩnh`, tags: ['đọc sách', 'psychology'], section: 'resources', starred: false, modified: new Date(Date.now() - 86400000 * 3) },
-    { id: 5, title: 'Morning routine — thử nghiệm', content: `# Morning Routine — Thử nghiệm Q2 2026\n\n## Cấu trúc hiện tại\n\n- 6:00 — Thức dậy, uống nước\n- 6:15 — 15 phút đọc sách (không điện thoại)\n- 6:30 — Ghi chú ngắn: 3 điều cần làm hôm nay\n- 7:00 — Bắt đầu deep work block đầu tiên\n\n## Nhận xét sau 2 tuần\n\nNhững buổi sáng theo routine này thường có **mood B+** trong suốt buổi sáng. Cảm giác kiểm soát cao hơn.\n\n> Không check điện thoại trước 8h là yếu tố quan trọng nhất.`, tags: ['habit', 'journal'], section: 'journal', starred: false, modified: new Date(Date.now() - 86400000 * 5) },
-  ]);
+  public notes = signal<Note[]>([]);
 
-  private nextId = 6;
+  // Sequential Save Queue
+  private saveSubject = new Subject<{ id: number, title: string, content: string }>();
+  
+  // Reactive Fetch Trigger
+  private fetchSubject = new Subject<{ reset: boolean }>();
+
+  // Sequential Delete Queue
+  private deleteSubject = new Subject<number>();
+
+  constructor() {
+    // Process save requests sequentially
+    this.saveSubject.pipe(
+      concatMap(data => {
+        console.log(`[Laputa] Saving note ${data.id}...`);
+        return this.api.saveNote(data.id, data.title, data.content).pipe(
+          tap(updatedNote => {
+            console.log(`[Laputa] Note ${data.id} saved successfully.`);
+            this.updateNoteInState(updatedNote);
+          }),
+          catchError(err => {
+            console.error(`[Laputa] Failed to save note ${data.id}:`, err);
+            return of(null);
+          })
+        );
+      }),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe();
+
+    // Centralized Reactive Fetch Stream
+    this.fetchSubject.pipe(
+      switchMap(({ reset }) => {
+        this.isLoading.set(true);
+        if (reset) {
+          this.currentPage.set(1);
+          this.hasMore.set(true);
+        }
+
+        const query: NoteQuery = {
+          queryType: this.currentSection() as any,
+          page: this.currentPage(),
+          pageSize: this.pageSize(),
+          search: this.searchQuery(),
+          sort: this.sortAsc() ? 'asc' : 'desc'
+        };
+
+        return this.api.getNotes(query).pipe(
+          map(notes => ({ notes, reset })),
+          catchError(err => {
+            console.error('[Laputa] Fetch error:', err);
+            this.isLoading.set(false);
+            return of({ notes: [], reset });
+          })
+        );
+      }),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(({ notes, reset }) => {
+      if (notes.length < this.pageSize()) {
+        this.hasMore.set(false);
+      }
+      
+      if (reset) {
+        this.notes.set(notes);
+      } else {
+        this.notes.update(current => [...current, ...notes]);
+      }
+      
+      this.currentPage.update(p => p + 1);
+      this.isLoading.set(false);
+    });
+
+    // Sequential Delete Stream
+    this.deleteSubject.pipe(
+      concatMap(id => {
+        console.log(`[Laputa] Deleting note ${id}...`);
+        return this.api.deleteNote(id).pipe(
+          tap(() => console.log(`[Laputa] Note ${id} deleted from server.`)),
+          catchError(err => {
+            console.error(`[Laputa] Failed to delete note ${id}:`, err);
+            return of(null);
+          })
+        );
+      }),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe();
+
+    // Auto-reload when filters change
+    effect(() => {
+      this.searchQuery();
+      this.currentSection();
+      this.sortAsc();
+      
+      // Reset and fetch
+      this.fetchNotes(true);
+    }, { allowSignalWrites: true });
+  }
 
   // Computed properties
   public filteredNotes = computed(() => {
-    let filtered = this.notes().filter(n => {
-      const sec = this.currentSection();
-      if (sec === 'starred') return n.starred;
-      if (sec === 'inbox') return !n.section;
-      if (sec !== 'all') return n.section === sec;
-      return true;
-    });
-
-    const query = this.searchQuery().toLowerCase();
-    if (query) {
-      filtered = filtered.filter(n => n.title.toLowerCase().includes(query) || n.content.toLowerCase().includes(query));
-    }
-
-    filtered.sort((a, b) => this.sortAsc() ? a.modified.getTime() - b.modified.getTime() : b.modified.getTime() - a.modified.getTime());
-    return filtered;
+    return this.notes();
   });
 
   public currentNote = computed(() => {
@@ -110,42 +172,57 @@ export class LaputaNotesService {
   });
 
   // Actions
+  public fetchNotes(reset: boolean = false) {
+    // If not reset, guard against redundant calls (e.g. scroll)
+    if (!reset && (!this.hasMore() || this.isLoading())) return;
+    
+    // Trigger the reactive stream
+    this.fetchSubject.next({ reset });
+  }
+
   public addNote(title: string, tags: string[]) {
-    const section = (this.currentSection() === 'all' || this.currentSection() === 'inbox') ? null : this.currentSection();
+    // In a real app, this would be an API call to create
+    // For now, simulate local creation then sync
     const newNote: Note = {
-      id: this.nextId++,
+      id: Math.floor(Math.random() * 1000000),
       title: title || 'Ghi chú mới',
       content: `# ${title || 'Ghi chú mới'}\n\n`,
       tags: [...tags],
-      section,
+      section: (this.currentSection() === 'all' || this.currentSection() === 'inbox') ? null : this.currentSection(),
       starred: false,
       modified: new Date()
     };
     this.notes.update(n => [newNote, ...n]);
     this.currentNoteId.set(newNote.id);
+    
+    // Trigger initial save to server
+    this.saveNote(newNote.id, newNote.title, newNote.content);
   }
 
-  public updateNote(id: number, updates: Partial<Note>) {
-    this.notes.update(notes => notes.map(n => n.id === id ? { ...n, ...updates, modified: new Date() } : n));
+  public saveNote(id: number, title: string, content: string) {
+    this.saveSubject.next({ id, title, content });
+  }
+
+  private updateNoteInState(updatedNote: Note) {
+    this.notes.update(notes => notes.map(n => n.id === updatedNote.id ? updatedNote : n));
   }
 
   public deleteNote(id: number) {
+    // Optimistic Update: Remove from UI immediately
     this.notes.update(notes => notes.filter(n => n.id !== id));
     if (this.currentNoteId() === id) {
       this.currentNoteId.set(null);
     }
+    
+    // Trigger the sequential delete stream
+    this.deleteSubject.next(id);
   }
 
   public duplicateNote(id: number) {
-    const note = this.notes().find(n => n.id === id);
-    if (!note) return;
-    const dup: Note = {
-      ...note,
-      id: this.nextId++,
-      title: note.title + ' (copy)',
-      modified: new Date()
-    };
-    this.notes.update(n => [dup, ...n]);
+    this.api.duplicateNote(id).subscribe(newNote => {
+      this.notes.update(n => [newNote, ...n]);
+      this.currentNoteId.set(newNote.id);
+    });
   }
 
   public toggleStar(id: number) {

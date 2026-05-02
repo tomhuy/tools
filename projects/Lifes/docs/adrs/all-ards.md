@@ -228,3 +228,24 @@ Làm thế nào để xử lý layout cho Editor khi người dùng ở chế đ
     - **UX/Thẩm mỹ**: Đảm bảo layout linh hoạt, phần list tự động co lại và giữ nguyên bố cục chữ nhật của các thẻ, tạo cảm giác mượt mà và trực quan thay vì bị che khuất bởi panel absolute.
     - **Reusability**: Sử dụng lại toàn bộ component `laputa-editor` mà không cần viết một component riêng biệt cho Detail Panel. Chỉ cần thay đổi thuộc tính CSS dựa trên Angular Host Binding (`[class.view-grid]`, `[class.has-note]`).
     - **Clean Code**: Quản lý state thông qua Signals và class-binding giúp việc tính toán layout được giao hoàn toàn cho CSS engine (sử dụng hàm `max()`, `calc()`), giảm thiểu việc phải dùng JavaScript để tính chiều rộng, tuân thủ nguyên tắc responsive layout.
+
+## ADR 12: Reactive Synchronization & Infinite Scrolling Strategy (US-20.2)
+**Ngày ra quyết định: 2026-05-02**
+**Người viết: AI, huy**
+
+**1. Vấn đề/Concern/Feature đang cần ra quyết định:**
+Làm thế nào để đảm bảo tính toàn vẹn dữ liệu khi người dùng thực hiện thao tác nhanh (như gõ phím liên tục kích hoạt auto-save hoặc xóa nhiều ghi chú) và cách quản lý phân trang mượt mà cho danh sách ghi chú lớn.
+
+**2. Các phương án đã được gợi ý:**
+- **Phương án 1 (Simple Subscription)**: Gọi API trực tiếp trong phương thức subscribe của component. Không quản lý thứ tự request.
+- **Phương án 2 (Reactive Queueing - Selected)**: Sử dụng RxJS Operators để điều phối luồng dữ liệu:
+    - `concatMap` cho Save/Delete: Đảm bảo các yêu cầu được thực hiện theo đúng thứ tự (FIFO) và request sau chỉ chạy khi request trước đã xong.
+    - `switchMap` cho Fetching: Tự động hủy request cũ khi người dùng thay đổi bộ lọc hoặc cuộn nhanh, tránh Race Condition.
+
+**3. Lựa chọn và lý do lựa chọn:**
+- **Lựa chọn**: **Phương án 2 (Reactive Queueing)**.
+- **Lý do**: 
+    - **Tính toàn vẹn (Data Integrity)**: `concatMap` cực kỳ quan trọng cho tính năng Auto-save. Nếu người dùng gõ chữ "ABC", request lưu "A" phải hoàn thành trước khi lưu "AB" để tránh việc server nhận "AB" trước "A" do độ trễ mạng (Race condition).
+    - **Hiệu năng (Performance)**: `switchMap` giúp giải phóng tài nguyên server và network bằng cách hủy bỏ các request tìm kiếm/phân trang lỗi thời.
+    - **UX (Infinite Scroll)**: Kết hợp với `isLoading` và `hasMore` signals giúp UI hiển thị skeleton/spinner đúng lúc, tạo cảm giác mượt mà khi xử lý hàng ngàn ghi chú.
+    - **Optimistic UI**: Cho phép xóa ghi chú khỏi danh sách cục bộ ngay lập tức trước khi server phản hồi, tạo trải nghiệm "không độ trễ".

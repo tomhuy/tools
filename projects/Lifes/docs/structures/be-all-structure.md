@@ -123,6 +123,13 @@ src/
 │           │   │   ├── entry-editor/
 │           │   │   ├── content-explorer.service.ts # Isolated content data
 │           │   │   └── weekly-tracker.service.ts
+│           │   ├── laputa-notes/         # US-20.1, US-20.2 Laputa Notes
+│           │   │   ├── laputa-notes-page/
+│           │   │   ├── laputa-sidebar/
+│           │   │   ├── laputa-note-list/ # With infinite scroll
+│           │   │   ├── laputa-editor/    # Reactive Forms + Auto-save
+│           │   │   ├── services/         # LaputaNotesService, LaputaApiService
+│           │   │   └── models/           # (Moved to global models)
 │           │   └── ...
 │           └── models/
 │               ├── sprint-board.model.ts # US-11.2 data models
@@ -132,7 +139,8 @@ src/
 │               ├── selectable-month.model.ts # US-12.1
 │               ├── daily-timeline.model.ts   # US-16.1
 │               ├── yearly-stream.model.ts    # US-17.1
-│               └── weekly-tracker.model.ts   # US-18.1
+│               ├── weekly-tracker.model.ts   # US-18.1
+│               └── note.model.ts             # US-20.2 Laputa Notes models
 │
 ├── Lifes.Presentation.WPF/     # WPF UI
 │   ├── Constants/                  # US-5.1

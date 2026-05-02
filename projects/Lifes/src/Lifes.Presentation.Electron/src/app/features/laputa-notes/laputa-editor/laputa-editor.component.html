@@ -1,14 +1,14 @@
 <main class="editor-wrap" id="editor-wrap">
 
   <!-- Compact detail popup (grid mode) -->
-  <div class="detail-popup" id="detail-popup" [class.open]="noteService.viewMode() === 'grid' && noteService.currentNoteId() !== null">
+  <div class="detail-popup" id="detail-popup" [class.open]="noteService.viewMode() === 'grid' && noteService.currentNoteId() !== null" [formGroup]="noteForm">
     <div class="detail-popup-topbar" *ngIf="noteService.currentNote()">
       <span class="detail-popup-title">{{ noteService.currentNote()?.title }}</span>
       <button class="detail-popup-close" (click)="closeDetailPopup()" title="Đóng (Esc)">×</button>
     </div>
     <div class="detail-popup-scroll" id="dp-scroll" *ngIf="noteService.currentNote()">
       <textarea class="note-title-input" #dpNoteTitle placeholder="Tiêu đề..." rows="1"
-        [ngModel]="noteService.currentNote()?.title" (ngModelChange)="onTitleChange($event)"
+        formControlName="title"
         (input)="autoResize(dpNoteTitle)"></textarea>
       
       <div class="note-meta-row" *ngIf="noteService.currentNote() as note">
@@ -22,7 +22,7 @@
       </div>
 
       <textarea class="note-content" #dpNoteContent placeholder="Bắt đầu viết..."
-        [ngModel]="noteService.currentNote()?.content" (ngModelChange)="onContentChange($event)"
+        formControlName="content"
         (input)="autoResize(dpNoteContent)"></textarea>
     </div>
   </div>
@@ -40,12 +40,12 @@
   </div>
 
   <!-- Main Editor (for non-grid modes) -->
-  <div id="editor-main" *ngIf="noteService.viewMode() !== 'grid' && noteService.currentNoteId() !== null">
+  <div id="editor-main" *ngIf="noteService.viewMode() !== 'grid' && noteService.currentNoteId() !== null" [formGroup]="noteForm">
     <div class="editor-topbar">
       <div class="breadcrumb">
         <span>{{ noteService.currentSection() === 'all' ? 'Tất cả' : (noteService.currentSection() === 'inbox' ? 'Inbox' : noteService.currentSection()) }}</span>
         <span class="breadcrumb-sep">›</span>
-        <span class="breadcrumb-current">{{ noteService.currentNote()?.title || 'Không có tiêu đề' }}</span>
+        <span class="breadcrumb-current">{{ noteForm.value.title || 'Không có tiêu đề' }}</span>
       </div>
       <div class="editor-topbar-spacer"></div>
       
@@ -131,7 +131,7 @@
       <!-- Meta & Input area (only visible if NOT in preview) -->
       <ng-container *ngIf="!noteService.isPreview()">
         <textarea class="note-title-input" #noteTitle placeholder="Tiêu đề..." rows="1"
-          [ngModel]="noteService.currentNote()?.title" (ngModelChange)="onTitleChange($event)"
+          formControlName="title"
           (input)="autoResize(noteTitle)"></textarea>
         
         <div class="note-meta-row" *ngIf="noteService.currentNote() as note">
@@ -153,12 +153,12 @@
         </div>
 
         <textarea class="note-content" #noteContent placeholder="Bắt đầu viết... (Markdown được hỗ trợ)"
-          [ngModel]="noteService.currentNote()?.content" (ngModelChange)="onContentChange($event)"
+          formControlName="content"
           (input)="autoResize(noteContent)"></textarea>
       </ng-container>
 
       <!-- Markdown Preview area -->
-      <div class="md-preview" *ngIf="noteService.isPreview()" [innerHTML]="parseMarkdown(noteService.currentNote()?.content || '')"></div>
+      <div class="md-preview" *ngIf="noteService.isPreview()" [innerHTML]="parseMarkdown(noteForm.value.content || '')"></div>
     </div>
   </div>
 

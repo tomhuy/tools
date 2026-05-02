@@ -401,19 +401,20 @@ ETL Deployment Tools Suite cung cấp:
 
 ---
 
-### 18. Laputa Notes Interface (US-20.1)
-**Status**: ✅ Completed (UI Clone)
-**User Stories**: US-20.1
+### 18. Laputa Notes Interface (US-20.1, US-20.2)
+**Status**: ✅ Completed
+**User Stories**: US-20.1 (UI), US-20.2 (Service & Sync)
 **Documentation**: [fea-laputa-notes-structure.md](./docs/structures/fea-laputa-notes-structure.md)
 
-**Purpose**: Giao diện Note-taking tích hợp theo nguyên mẫu `sample.note.app.html`, hỗ trợ soạn thảo Markdown, tổ chức theo tag/section, cùng khả năng chuyển đổi 4 chế độ hiển thị (List, Card, Compact, Grid).
+**Purpose**: Giao diện Note-taking tích hợp hỗ trợ soạn thảo Markdown, tổ chức theo tag/section, cùng khả năng chuyển đổi 4 chế độ hiển thị. Đã tích hợp hệ thống đồng bộ hóa phản hồi (Reactive synchronization), tự động lưu với debounce và hàng đợi lưu tuần tự để đảm bảo toàn vẹn dữ liệu.
 
 **Key Components**:
 - **LaputaNotesPageComponent**: Container chính cho bố cục Layout.
 - **LaputaSidebarComponent**: Quản lý Section, Tags và Theme (Dark/Sepia).
-- **LaputaNoteListComponent**: Giao diện danh sách ghi chú với hỗ trợ Context Menu và thay đổi kích thước bằng Drag Handle.
-- **LaputaEditorComponent**: Trình soạn thảo Markdown chuyên dụng kết hợp với cơ chế Popup Detail Panel tự động kích hoạt ở chế độ Grid.
-- **LaputaNotesService**: Quản lý State cục bộ của component và dữ liệu Mock thông qua Angular Signals.
+- **LaputaNoteListComponent**: Giao diện danh sách ghi chú với hỗ trợ Infinite Scrolling và Context Menu.
+- **LaputaEditorComponent**: Trình soạn thảo Markdown sử dụng Reactive Forms với cơ chế Auto-save (1s debounce).
+- **LaputaNotesService**: Quản lý State tập trung bằng Angular Signals; triển khai `concatMap` cho hàng đợi Save/Delete và `switchMap` cho phân trang/tìm kiếm.
+- **LaputaApiService**: Endpoint trung gian kết nối với `${API_BASE_URL}/notes`.
 
 ---
 

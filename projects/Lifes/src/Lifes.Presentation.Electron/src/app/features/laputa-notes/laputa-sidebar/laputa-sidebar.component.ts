@@ -1,7 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { LaputaNotesService, NavItem, NavSection } from '../services/laputa-notes.service';
+import { LaputaNotesService } from '../services/laputa-notes.service';
+import { NavItem, NavSection } from '../models/note.model';
 
 @Component({
   selector: 'app-laputa-sidebar',

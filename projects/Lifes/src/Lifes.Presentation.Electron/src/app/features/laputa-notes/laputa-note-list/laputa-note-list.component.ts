@@ -1,6 +1,7 @@
 import { Component, Output, EventEmitter, inject, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LaputaNotesService, Note } from '../services/laputa-notes.service';
+import { LaputaNotesService } from '../services/laputa-notes.service';
+import { NavItem, NavSection, Note } from '../models/note.model';
 
 @Component({
   selector: 'app-laputa-note-list',
@@ -110,6 +111,13 @@ export class LaputaNoteListComponent {
     this.ctxMenuVisible = false;
   }
 
+  onScroll(e: any) {
+    const el = e.target;
+    if (el.scrollHeight - el.scrollTop - el.clientHeight < 100) {
+      this.noteService.fetchNotes();
+    }
+  }
+
   // Helpers for template formatting
   getPreview(content: string): string {
     return content.replace(/[#*`>_\-\d\.]/g, '').trim().substring(0, 110);
@@ -132,8 +140,9 @@ export class LaputaNoteListComponent {
     return sectionColors[section] || 'var(--text3)';
   }
 
-  relTime(d: Date): string {
-    const diff = Date.now() - d.getTime();
+  relTime(d: Date | string): string {
+    const date = typeof d === 'string' ? new Date(d) : d;
+    const diff = Date.now() - date.getTime();
     if (diff < 60000) return 'vừa xong';
     if (diff < 3600000) return Math.floor(diff / 60000) + ' phút trước';
     if (diff < 86400000) return Math.floor(diff / 3600000) + ' giờ trước';

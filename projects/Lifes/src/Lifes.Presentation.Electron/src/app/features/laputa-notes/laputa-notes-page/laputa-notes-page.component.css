@@ -28,6 +28,7 @@
   font-family: 'Geist', sans-serif;
   font-size: 13px;
   overflow: hidden;
+  position: relative;
 }
 
 /* ── SEPIA THEME ── */
@@ -186,4 +187,49 @@
 .laputa-host.sepia .modal-input {
   background: #DDD5C4;
   border-color: rgba(100, 75, 40, 0.16);
+}
+
+/* SIDEBAR TRIGGER */
+.sidebar-trigger {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 16px;
+  z-index: 100;
+  cursor: pointer;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 13px; /* Aligned with note-list header padding-top (14px) and icon height */
+}
+
+.trigger-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  color: var(--text2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: all .2s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar-trigger:hover .trigger-btn {
+  opacity: 1;
+  transform: translateX(6px);
+  pointer-events: auto;
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.laputa-host.sepia .trigger-btn {
+  background: #EAE3D5;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }

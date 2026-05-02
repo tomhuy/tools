@@ -5,6 +5,17 @@
     <app-laputa-editor></app-laputa-editor>
   </div>
 
+  <!-- Sidebar trigger (visible when sidebar is closed) -->
+  <div class="sidebar-trigger" *ngIf="!noteService.isSidebarOpen()" (click)="toggleSidebar()">
+    <button class="trigger-btn" title="Mở sidebar">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <rect x="1" y="2" width="12" height="1.5" rx=".75" fill="currentColor" />
+        <rect x="1" y="6" width="8" height="1.5" rx=".75" fill="currentColor" />
+        <rect x="1" y="10" width="10" height="1.5" rx=".75" fill="currentColor" />
+      </svg>
+    </button>
+  </div>
+
   <!-- New note modal -->
   <div class="modal-overlay" [class.show]="isNewNoteModalOpen" (click)="closeNewNoteModal()">
     <div class="modal" (click)="$event.stopPropagation()">

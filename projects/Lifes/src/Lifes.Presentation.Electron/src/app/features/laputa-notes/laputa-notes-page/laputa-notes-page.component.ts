@@ -52,4 +52,8 @@ export class LaputaNotesPageComponent {
     this.noteService.addNote(this.newNoteTitle, this.selectedTags);
     this.closeNewNoteModal();
   }
+
+  toggleSidebar() {
+    this.noteService.isSidebarOpen.set(!this.noteService.isSidebarOpen());
+  }
 }

@@ -9,7 +9,8 @@ import { YearlyStreamPageComponent } from './features/yearly-stream/yearly-strea
 import { WeeklyTrackerPageComponent } from './features/weekly-tracker/weekly-tracker-page/weekly-tracker-page.component';
 import { RangeTrackerPageComponent } from './features/weekly-tracker/range-tracker-page/range-tracker-page.component';
 import { ContentExplorerPageComponent } from './features/weekly-tracker/content-explorer-page/content-explorer-page.component';
-
+import { PdfReaderPageComponent } from './features/pdf-reader/pdf-reader-page/pdf-reader-page.component';
+import { LaputaNotesPageComponent } from './features/laputa-notes/laputa-notes-page/laputa-notes-page.component';
 export const routes: Routes = [
   { path: 'daily-timeline', component: DailyTimelinePageComponent },
   { path: 'yearly-stream', component: YearlyStreamPageComponent },
@@ -20,5 +21,7 @@ export const routes: Routes = [
   { path: 'monthly-calendar', component: MonthlyCalendarPageComponent },
   { path: 'memento-management', component: MementoManagementComponent },
   { path: 'view-chart', component: ViewChartPageComponent },
-  { path: '', redirectTo: 'daily-timeline', pathMatch: 'full' }
+  { path: 'pdf-reader', component: PdfReaderPageComponent },
+  { path: 'laputa-notes', component: LaputaNotesPageComponent },
+  { path: '', redirectTo: 'laputa-notes', pathMatch: 'full' }
 ];

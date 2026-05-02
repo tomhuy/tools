@@ -1,0 +1,276 @@
+<div class="pdf-reader-host" [class.dark]="isDark()">
+  <div class="layout-bar">
+    <span class="layout-bar-title">PDF Reader</span>
+    <button class="layout-btn" [class.active]="layout() === 1" (click)="setLayout(1)">
+      <span style="background:#1D9E75"></span>Classic
+    </button>
+    <button class="layout-btn" [class.active]="layout() === 2" (click)="setLayout(2)">
+      <span style="background:#7F77DD"></span>Focus
+    </button>
+    <button class="layout-btn" [class.active]="layout() === 3" (click)="setLayout(3)">
+      <span style="background:#EF9F27"></span>Contextual
+    </button>
+    <div class="bar-spacer"></div>
+
+    <!-- Zoom -->
+    <div class="zoom-group">
+      <button class="zoom-btn" (click)="changeZoom(-10)">−</button>
+      <span class="zoom-val">{{zoomLevel()}}%</span>
+      <button class="zoom-btn" (click)="changeZoom(10)">+</button>
+    </div>
+
+    <!-- Export CSV -->
+    <button class="dark-btn" (click)="exportCSV()" title="Xuất CSV" style="width:auto;padding:0 10px;gap:5px;font-size:11px;font-family:var(--font-sans);">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <path d="M6 1v7M3 5.5l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M1 10h10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+      </svg>
+      CSV
+    </button>
+
+    <!-- Dark mode toggle -->
+    <button class="dark-btn" (click)="toggleDark()" title="Chế độ tối">
+      <svg viewBox="0 0 14 14" fill="none">
+        <!-- Light mode sun icon when dark, moon icon when light. We handle it via CSS or ngIf. Let's use ngIf. -->
+        <path *ngIf="!isDark()" d="M7 1.5a5.5 5.5 0 1 0 5.5 5.5A5.5 5.5 0 0 0 7 1.5zm0 9.5a4 4 0 1 1 0-8 4 4 0 0 1 0 8z" fill="currentColor"/>
+        <path *ngIf="isDark()" d="M7 2.5a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-1.5 0v-.5A.75.75 0 0 1 7 2.5zm0 7a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zm4.5-2.5a.75.75 0 0 1 0 1.5h-.5a.75.75 0 0 1 0-1.5h.5zm-8.5 0a.75.75 0 0 1 0 1.5H2.5a.75.75 0 0 1 0-1.5H3zM7 10.5a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-1.5 0v-.5A.75.75 0 0 1 7 10.5zm3.54-7.04a.75.75 0 0 1 0 1.06l-.35.35a.75.75 0 0 1-1.06-1.06l.35-.35a.75.75 0 0 1 1.06 0zm-7.78 8.49a.75.75 0 0 1 1.06 0l.35.35a.75.75 0 0 1-1.06 1.06l-.35-.35a.75.75 0 0 1 0-1.06zm7.78.7a.75.75 0 0 1-1.06 0l-.35-.35a.75.75 0 0 1 1.06-1.06l.35.35a.75.75 0 0 1 0 1.06zM3.46 3.46a.75.75 0 0 1 1.06 0l.35.35A.75.75 0 0 1 3.81 4.87l-.35-.35a.75.75 0 0 1 0-1.06z" fill="currentColor"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="app-container">
+
+    <!-- ═══ LAYOUT 1 ═══ -->
+    <div id="layout1" [class.active]="layout() === 1">
+      <div class="l1-books">
+        <div class="panel-header"><div class="panel-header-label">Thư viện</div></div>
+        <div class="book-list">
+          <div *ngFor="let b of books(); let i = index" class="book-item" [class.active]="i === 0">
+            <div class="book-cover" [style.background]="b.coverColor">{{b.coverInitials}}</div>
+            <div class="book-meta">
+              <div class="book-title">{{b.title}}</div>
+              <div class="book-author">{{b.author}}</div>
+              <div class="book-prog-bar"><div class="book-prog-fill" [style.width]="b.progressPercent + '%'"></div></div>
+              <div class="book-pct">p.{{b.progressPage}} · {{b.progressPercent}}%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="l1-pdf">
+        <div class="pdf-toolbar">
+          <div class="pdf-tb-group">
+            <button class="pdf-tb-btn" (click)="changeZoom(-10)">−</button>
+            <button class="pdf-tb-btn" (click)="changeZoom(10)">+</button>
+          </div>
+          <div class="pdf-tb-spacer"></div>
+          <span class="pdf-tb-label">Atlas of the Heart</span>
+          <div class="pdf-tb-spacer"></div>
+          <div class="pdf-tb-group" style="align-items:center;gap:5px;">
+            <button class="pdf-tb-btn">‹</button>
+            <input class="pdf-page-input" value="47" type="number" (change)="onPageInputChange($event)">
+            <span class="pdf-page-total">/ 320</span>
+            <button class="pdf-tb-btn">›</button>
+          </div>
+        </div>
+        <div class="pdf-scroll-area">
+          <div class="pdf-page" [style.transform]="'scale(' + zoomLevel()/100 + ')'" [style.marginBottom]="(zoomLevel() < 100 ? (zoomLevel()/100 - 1) * 680 : (zoomLevel()/100 - 1) * 340) + 'px'">
+            <div class="pdf-chapter">Chapter 3 — Anguish, Despair & Hopelessness</div>
+            <div class="pdf-heading">The Language of Emotion</div>
+            <div class="pdf-para">Language shows us that <span class="pdf-highlight">the words we use to describe our emotional experiences are not just labels</span> — they are the scaffolding of meaning itself. Without precise language, we cannot communicate what we feel, and what we cannot communicate, we cannot fully understand.<span class="pdf-ann-dot" style="background:var(--amber)"></span></div>
+            <div class="pdf-para">Research by Lisa Feldman Barrett reveals that <span class="pdf-highlight purple">emotion granularity — the ability to construct finely differentiated emotional experiences</span> — is directly linked to resilience, lower rates of depression, and better physical health outcomes.<span class="pdf-ann-dot" style="background:var(--accent2)"></span></div>
+            <div class="pdf-para">When we don't have the words, we default to broad, undifferentiated states: "I feel bad," "I feel good." But this imprecision costs us. <span class="pdf-highlight">Naming an emotion activates the prefrontal cortex and reduces activity in the amygdala</span> — what neuroscientists call "affect labeling."</div>
+            <div class="pdf-para">The Zeigarnik Effect reminds us that <span class="pdf-highlight purple">incomplete emotional experiences linger in working memory</span>, demanding resolution. Language provides that closure.</div>
+            <div class="pdf-para">In the chapters that follow, we will move through 87 emotions and experiences — not as a dictionary, but as a map. A map that, I hope, will help you find your way back to yourself when the terrain feels unfamiliar.</div>
+          </div>
+        </div>
+        <div class="reading-progress"><div class="reading-progress-fill" style="width:15%"></div></div>
+      </div>
+
+      <div class="l1-notes">
+        <div class="panel-header"><div class="panel-header-label">Ghi chú · {{notes().length}}</div></div>
+        <div class="notes-list">
+          <div *ngFor="let n of notes()" class="note-item">
+            <div class="note-ref" [style.color]="n.colorHex">p.{{n.page}} · bôi đậm</div>
+            <div class="note-text">{{n.text}}</div>
+            <div class="note-quote" *ngIf="n.quote">"{{n.quote}}"</div>
+          </div>
+        </div>
+        <div class="note-input-area">
+          <textarea class="note-textarea" rows="3" placeholder="Ghi chú về trang này..."></textarea>
+          <button class="note-add-btn">Thêm ghi chú</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ LAYOUT 2 ═══ -->
+    <div id="layout2" [class.active]="layout() === 2">
+      <button class="l2-toggle-books" [class.active]="l2BooksOpen()" (click)="toggleL2Books()">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+          <rect x="1" y="2" width="11" height="1.4" rx=".7" fill="currentColor"/>
+          <rect x="1" y="5.8" width="7" height="1.4" rx=".7" fill="currentColor"/>
+          <rect x="1" y="9.6" width="9" height="1.4" rx=".7" fill="currentColor"/>
+        </svg>
+      </button>
+      <button class="l2-toggle-notes" [class.active]="l2NotesOpen()" (click)="toggleL2Notes()">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+          <rect x="1" y="1" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.2" fill="none"/>
+          <line x1="3.5" y1="4.5" x2="9.5" y2="4.5" stroke="currentColor" stroke-width="1.2"/>
+          <line x1="3.5" y1="7" x2="9.5" y2="7" stroke="currentColor" stroke-width="1.2"/>
+          <line x1="3.5" y1="9.5" x2="6.5" y2="9.5" stroke="currentColor" stroke-width="1.2"/>
+        </svg>
+      </button>
+      <div class="l2-menu-overlay" [class.open]="l2BooksOpen()">
+        <div class="l2-menu-inner">
+          <div class="panel-header" style="padding-top:50px;"><div class="panel-header-label">Thư viện</div></div>
+          <div class="book-list">
+            <div *ngFor="let b of books(); let i = index" class="book-item" [class.active]="i === 0">
+              <div class="book-cover" [style.background]="b.coverColor">{{b.coverInitials}}</div>
+              <div class="book-meta">
+                <div class="book-title">{{b.title}}</div>
+                <div class="book-author">{{b.author}}</div>
+                <div class="book-prog-bar"><div class="book-prog-fill" [style.width]="b.progressPercent + '%'"></div></div>
+                <div class="book-pct">p.{{b.progressPage}} · {{b.progressPercent}}%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="l2-pdf">
+        <div class="pdf-toolbar" style="padding-left:46px;padding-right:46px;">
+          <div class="pdf-tb-spacer"></div>
+          <span class="pdf-tb-label">Atlas of the Heart</span>
+          <div class="pdf-tb-spacer"></div>
+          <div class="pdf-tb-group" style="align-items:center;gap:5px;">
+            <button class="pdf-tb-btn">‹</button>
+            <input class="pdf-page-input" value="47" type="number">
+            <span class="pdf-page-total">/ 320</span>
+            <button class="pdf-tb-btn">›</button>
+          </div>
+        </div>
+        <div class="pdf-scroll-area">
+          <div class="pdf-page" [style.transform]="'scale(' + zoomLevel()/100 + ')'" [style.marginBottom]="(zoomLevel() < 100 ? (zoomLevel()/100 - 1) * 680 : (zoomLevel()/100 - 1) * 340) + 'px'">
+            <div class="pdf-chapter">Chapter 3 — Anguish, Despair & Hopelessness</div>
+            <div class="pdf-heading">The Language of Emotion</div>
+            <div class="pdf-para">Language shows us that <span class="pdf-highlight">the words we use to describe our emotional experiences are not just labels</span> — they are the scaffolding of meaning itself. Without precise language, we cannot communicate what we feel.</div>
+            <div class="pdf-para">Research by Lisa Feldman Barrett reveals that <span class="pdf-highlight purple">emotion granularity — the ability to construct finely differentiated emotional experiences</span> — is directly linked to resilience, lower rates of depression, and better physical health outcomes.</div>
+            <div class="pdf-para">When we don't have the words, we default to broad, undifferentiated states. But this imprecision costs us. <span class="pdf-highlight">Naming an emotion activates the prefrontal cortex and reduces activity in the amygdala</span> — what neuroscientists call "affect labeling."</div>
+            <div class="pdf-para">The Zeigarnik Effect reminds us that <span class="pdf-highlight purple">incomplete emotional experiences linger in working memory</span>, demanding resolution. Language provides that closure.</div>
+            <div class="pdf-para">In the chapters that follow, we will move through 87 emotions — not as a dictionary, but as a map back to yourself when the terrain feels unfamiliar.</div>
+          </div>
+        </div>
+        <div class="reading-progress"><div class="reading-progress-fill" style="width:15%"></div></div>
+      </div>
+      <div class="l2-panel" [class.open]="l2NotesOpen()">
+        <div class="l2-panel-inner">
+          <div class="panel-header" style="padding-top:50px;"><div class="panel-header-label">Ghi chú · {{notes().length}}</div></div>
+          <div class="notes-list">
+            <div *ngFor="let n of notes()" class="note-item">
+              <div class="note-ref" [style.color]="n.colorHex">p.{{n.page}}</div>
+              <div class="note-text">{{n.text}}</div>
+              <div class="note-quote" *ngIf="n.quote">"{{n.quote}}"</div>
+            </div>
+          </div>
+          <div class="note-input-area">
+            <textarea class="note-textarea" rows="3" placeholder="Ghi chú..."></textarea>
+            <button class="note-add-btn">Thêm</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ LAYOUT 3 ═══ -->
+    <div id="layout3" [class.active]="layout() === 3">
+      <div class="l3-toc">
+        <div class="panel-header"><div class="panel-header-label">Atlas of the Heart</div></div>
+        <div class="toc-list">
+          <div *ngFor="let t of tocItems()" class="toc-item" [class.sub]="t.isSub" [class.active]="t.isActive">
+            {{t.title}}
+          </div>
+        </div>
+      </div>
+      <div class="l3-pdf">
+        <div class="pdf-toolbar">
+          <span class="pdf-tb-label">Ch.3 · The Language of Emotion</span>
+          <div class="pdf-tb-spacer"></div>
+          <div class="pdf-tb-group" style="align-items:center;gap:5px;">
+            <button class="pdf-tb-btn">‹</button>
+            <input class="pdf-page-input" value="47" type="number" style="width:40px;">
+            <span class="pdf-page-total">/ 320</span>
+            <button class="pdf-tb-btn">›</button>
+          </div>
+          <div style="margin-left:8px;"><button class="pdf-tb-btn" style="width:auto;padding:0 10px;font-size:11px;">+ Ghi chú</button></div>
+        </div>
+        <div class="pdf-scroll-area" style="padding-right:230px;">
+          <div class="pdf-page" style="width:460px;max-width:460px;" [style.transform]="'scale(' + zoomLevel()/100 + ')'">
+            <div class="pdf-chapter">Chapter 3 — Anguish, Despair & Hopelessness</div>
+            <div class="pdf-heading">The Language of Emotion</div>
+            <div class="pdf-para">Language shows us that <span class="pdf-highlight">the words we use to describe our emotional experiences are not just labels</span> — they are the scaffolding of meaning itself.</div>
+            <div class="pdf-para">Research by Lisa Feldman Barrett reveals that <span class="pdf-highlight purple">emotion granularity — the ability to construct finely differentiated emotional experiences</span> — is directly linked to resilience, lower rates of depression, and better physical health.</div>
+            <div class="pdf-para">When we don't have the words, we default to broad states. But this imprecision costs us. <span class="pdf-highlight">Naming an emotion activates the prefrontal cortex and reduces activity in the amygdala</span> — what neuroscientists call "affect labeling."</div>
+            <div class="pdf-para">The Zeigarnik Effect reminds us that <span class="pdf-highlight purple">incomplete emotional experiences linger in working memory</span>, demanding resolution.</div>
+            <div class="pdf-para">In the chapters that follow, we will move through 87 emotions — not as a dictionary, but as a map back to yourself.</div>
+          </div>
+          <div class="ctx-note" style="right:8px;top:130px;">
+            <div class="ctx-note-ref" style="color:var(--amber)">p.47 · đoạn 1</div>
+            <div class="ctx-note-text">Ngôn ngữ là giàn giáo của ý nghĩa — không chỉ là nhãn dán cảm xúc</div>
+          </div>
+          <div class="ctx-note" style="right:8px;top:240px;">
+            <div class="ctx-note-ref" style="color:var(--accent2)">p.47 · đoạn 2</div>
+            <div class="ctx-note-text">Emotion granularity → resilience, sức khoẻ tốt hơn</div>
+          </div>
+          <div class="ctx-note" style="right:8px;top:350px;">
+            <div class="ctx-note-ref" style="color:var(--accent)">p.47 · đoạn 3</div>
+            <div class="ctx-note-text">Affect labeling: đặt tên cảm xúc → giảm amygdala</div>
+          </div>
+          <button class="ctx-note-add">+</button>
+        </div>
+        <div class="reading-progress"><div class="reading-progress-fill" style="width:15%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Selection toolbar -->
+  <div class="sel-toolbar" [class.show]="isToolbarVisible()" #selToolbar>
+    <div class="sel-bubble">
+      <button class="sel-btn sel-btn-hl" (click)="applyHL('amber')"><span class="hl-dot" style="background:#EF9F27"></span></button>
+      <button class="sel-btn sel-btn-hl" (click)="applyHL('purple')"><span class="hl-dot" style="background:#7F77DD"></span></button>
+      <button class="sel-btn sel-btn-hl" (click)="applyHL('green')"><span class="hl-dot" style="background:#1D9E75"></span></button>
+      <div class="sel-divider"></div>
+      <button class="sel-btn" (click)="openNotePopup()">+ Ghi chú</button>
+      <button class="sel-btn" (click)="copySelection()">
+        <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+          <rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.2" fill="none"/>
+          <path d="M1 8V2a1 1 0 0 1 1-1h6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+    <div class="sel-arrow"></div>
+  </div>
+
+  <!-- Note popup -->
+  <div class="sel-note-popup" [class.show]="isNotePopupVisible()" #selNotePopup>
+    <div class="snp-header">
+      <div class="snp-quote">{{snpQuoteText()}}</div>
+      <div class="snp-hl-row">
+        <span class="snp-hl-label">Highlight</span>
+        <button class="snp-hl-btn" [class.active]="noteHL() === 'amber'" style="background:#FFF3D6" (click)="setNoteHL('amber')"></button>
+        <button class="snp-hl-btn" [class.active]="noteHL() === 'purple'" style="background:#EDE9FF" (click)="setNoteHL('purple')"></button>
+        <button class="snp-hl-btn" [class.active]="noteHL() === 'green'" style="background:#E1F5EE" (click)="setNoteHL('green')"></button>
+        <button class="snp-hl-btn" [class.active]="noteHL() === 'none'" style="background:var(--surface2)" (click)="setNoteHL('none')">
+          <svg width="9" height="9" viewBox="0 0 9 9" style="display:block;margin:auto">
+            <line x1="1" y1="1" x2="8" y2="8" stroke="var(--text2)" stroke-width="1.3"/>
+            <line x1="8" y1="1" x2="1" y2="8" stroke="var(--text2)" stroke-width="1.3"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="snp-body">
+      <textarea class="snp-textarea" rows="3" placeholder="Ghi chú của bạn..." [(ngModel)]="newNoteText"></textarea>
+    </div>
+    <div class="snp-footer">
+      <button class="snp-cancel" (click)="closeNotePopup()">Huỷ</button>
+      <button class="snp-save" (click)="saveNote()">Lưu ghi chú</button>
+    </div>
+  </div>
+</div>

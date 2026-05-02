@@ -1,0 +1,119 @@
+<section class="note-list view-{{noteService.viewMode()}}" id="note-list-panel" [style.width.px]="panelWidth" #listPanel>
+  <div class="list-resize-handle" (mousedown)="startResize($event)"></div>
+  <div class="list-header">
+    <span class="list-title">{{ getSectionName() }}</span>
+    <div class="list-actions">
+      <div class="view-mode-bar">
+        <button class="vm-btn" [class.active]="noteService.viewMode() === 'list'" (click)="setViewMode('list')" title="List">
+          <svg viewBox="0 0 11 11" fill="none">
+            <line x1="1" y1="2.5" x2="10" y2="2.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+            <line x1="1" y1="5.5" x2="10" y2="5.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+            <line x1="1" y1="8.5" x2="10" y2="8.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+          </svg>
+        </button>
+        <button class="vm-btn" [class.active]="noteService.viewMode() === 'card'" (click)="setViewMode('card')" title="Card">
+          <svg viewBox="0 0 11 11" fill="none">
+            <rect x="1" y="1" width="9" height="4" rx="1.2" stroke="currentColor" stroke-width="1.1" fill="none" />
+            <rect x="1" y="6" width="9" height="4" rx="1.2" stroke="currentColor" stroke-width="1.1" fill="none" />
+          </svg>
+        </button>
+        <button class="vm-btn" [class.active]="noteService.viewMode() === 'compact'" (click)="setViewMode('compact')" title="Compact">
+          <svg viewBox="0 0 11 11" fill="none">
+            <line x1="1" y1="2" x2="10" y2="2" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" />
+            <line x1="1" y1="4.2" x2="10" y2="4.2" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" />
+            <line x1="1" y1="6.4" x2="10" y2="6.4" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" />
+            <line x1="1" y1="8.6" x2="10" y2="8.6" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" />
+          </svg>
+        </button>
+        <button class="vm-btn" [class.active]="noteService.viewMode() === 'grid'" (click)="setViewMode('grid')" title="Grid">
+          <svg viewBox="0 0 11 11" fill="none">
+            <rect x="1" y="1" width="4" height="4" rx="1" stroke="currentColor" stroke-width="1.1" fill="none" />
+            <rect x="6" y="1" width="4" height="4" rx="1" stroke="currentColor" stroke-width="1.1" fill="none" />
+            <rect x="1" y="6" width="4" height="4" rx="1" stroke="currentColor" stroke-width="1.1" fill="none" />
+            <rect x="6" y="6" width="4" height="4" rx="1" stroke="currentColor" stroke-width="1.1" fill="none" />
+          </svg>
+        </button>
+      </div>
+      <button class="list-btn" title="Sắp xếp" (click)="toggleSort()">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+          <line x1="1" y1="3" x2="12" y2="3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+          <line x1="3" y1="6.5" x2="10" y2="6.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+          <line x1="5" y1="10" x2="8" y2="10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+        </svg>
+      </button>
+      <button class="list-btn primary" title="Ghi chú mới" (click)="openNewNote.emit()">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+          <line x1="6.5" y1="1" x2="6.5" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+          <line x1="1" y1="6.5" x2="12" y2="6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+        </svg>
+      </button>
+    </div>
+  </div>
+  
+  <div class="list-scroll">
+    <div *ngIf="noteService.filteredNotes().length === 0" style="padding:24px 16px;text-align:center;color:var(--text3);font-size:12px;">
+      Không có ghi chú nào
+    </div>
+
+    <div *ngFor="let note of noteService.filteredNotes()" 
+         class="note-card" 
+         [class.active]="noteService.currentNoteId() === note.id"
+         (click)="openNote(note.id)"
+         (contextmenu)="showCtxMenu($event, note.id)">
+      
+      <div class="card-accent-bar" [style.background]="getAccentColor(note.section)"></div>
+      <div class="card-top">
+        <svg *ngIf="note.starred" width="10" height="10" viewBox="0 0 10 10" fill="var(--accent)" style="flex-shrink:0;margin-top:2px">
+          <path d="M5 1l1 3h3l-2.5 1.8 1 3L5 7.2 2.5 8.8l1-3L1 4h3z" stroke="none"/>
+        </svg>
+        <span class="card-title">{{ note.title }}</span>
+        <svg class="card-edit-icon" width="11" height="11" viewBox="0 0 11 11" fill="none">
+          <path d="M7.5 1.5l2 2L3 10H1V8L7.5 1.5z" stroke="currentColor" stroke-width="1.1" fill="none"/>
+        </svg>
+      </div>
+      
+      <div class="card-preview">{{ getPreview(note.content) }}</div>
+      
+      <div class="card-excerpt-bullets">
+        <div class="ceb-item" *ngFor="let line of getBullets(note.content)">
+          <div class="ceb-dot"></div>
+          <span>{{ line }}</span>
+        </div>
+      </div>
+      
+      <div class="card-meta">
+        <div class="card-tags">
+          <span class="card-tag" *ngFor="let t of note.tags | slice:0:(noteService.viewMode() === 'card' ? 3 : 2)">{{ t }}</span>
+        </div>
+        <span class="card-time">{{ relTime(note.modified) }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Context Menu rendered inside the list host but positioned fixed -->
+  <div class="ctx-menu" [class.show]="ctxMenuVisible" [style.left.px]="ctxMenuX" [style.top.px]="ctxMenuY">
+    <div class="ctx-item" (click)="ctxAction('open')">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <rect x="1" y="2" width="10" height="8" rx="1.5" stroke="currentColor" stroke-width="1.2" fill="none" />
+        <line x1="4" y1="5" x2="8" y2="5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+      </svg>Mở
+    </div>
+    <div class="ctx-item" (click)="ctxAction('rename')">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <path d="M8.5 1.5l2 2L4 10H2V8L8.5 1.5z" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linejoin="round" />
+      </svg>Đổi tên
+    </div>
+    <div class="ctx-item" (click)="ctxAction('duplicate')">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <rect x="4" y="4" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.2" fill="none" />
+        <path d="M1 8V2a1 1 0 0 1 1-1h6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+      </svg>Nhân bản
+    </div>
+    <div class="ctx-sep"></div>
+    <div class="ctx-item danger" (click)="ctxAction('delete')">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <path d="M2 3.5h8M4.5 3.5v-1a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5v1M5 5v3.5M7 5v3.5M2.5 3.5l.6 5.5a1 1 0 0 0 1 .9h3.8a1 1 0 0 0 1-.9l.6-5.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+      </svg>Xóa
+    </div>
+  </div>
+</section>

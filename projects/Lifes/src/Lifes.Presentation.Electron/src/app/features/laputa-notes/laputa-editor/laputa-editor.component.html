@@ -1,0 +1,174 @@
+<main class="editor-wrap" id="editor-wrap">
+
+  <!-- Compact detail popup (grid mode) -->
+  <div class="detail-popup" id="detail-popup" [class.open]="noteService.viewMode() === 'grid' && noteService.currentNoteId() !== null">
+    <div class="detail-popup-topbar" *ngIf="noteService.currentNote()">
+      <span class="detail-popup-title">{{ noteService.currentNote()?.title }}</span>
+      <button class="detail-popup-close" (click)="closeDetailPopup()" title="Đóng (Esc)">×</button>
+    </div>
+    <div class="detail-popup-scroll" id="dp-scroll" *ngIf="noteService.currentNote()">
+      <textarea class="note-title-input" #dpNoteTitle placeholder="Tiêu đề..." rows="1"
+        [ngModel]="noteService.currentNote()?.title" (ngModelChange)="onTitleChange($event)"
+        (input)="autoResize(dpNoteTitle)"></textarea>
+      
+      <div class="note-meta-row" *ngIf="noteService.currentNote() as note">
+        <div class="meta-chip">
+          <svg viewBox="0 0 11 11" fill="none"><circle cx="5.5" cy="5.5" r="4" stroke="currentColor" stroke-width="1.1"/><path d="M5.5 3v3l1.5 1.5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>
+          <span>{{ relTime(note.modified) }}</span>
+        </div>
+        <div>
+          <span *ngFor="let t of note.tags" style="font-size:11px;padding:2px 8px;border-radius:4px;background:var(--bg3);color:var(--text3);margin-right:4px;font-family:'Geist Mono',monospace">{{ t }}</span>
+        </div>
+      </div>
+
+      <textarea class="note-content" #dpNoteContent placeholder="Bắt đầu viết..."
+        [ngModel]="noteService.currentNote()?.content" (ngModelChange)="onContentChange($event)"
+        (input)="autoResize(dpNoteContent)"></textarea>
+    </div>
+  </div>
+
+  <!-- Empty state for non-grid modes -->
+  <div id="empty-state" class="empty-state" *ngIf="noteService.viewMode() !== 'grid' && noteService.currentNoteId() === null">
+    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+      <rect x="6" y="4" width="28" height="32" rx="4" stroke="currentColor" stroke-width="1.5" fill="none" />
+      <line x1="12" y1="13" x2="28" y2="13" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+      <line x1="12" y1="19" x2="28" y2="19" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+      <line x1="12" y1="25" x2="20" y2="25" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+    </svg>
+    <span class="empty-title">Chọn một ghi chú</span>
+    <span class="empty-sub">Hoặc tạo mới bằng nút + phía trên</span>
+  </div>
+
+  <!-- Main Editor (for non-grid modes) -->
+  <div id="editor-main" *ngIf="noteService.viewMode() !== 'grid' && noteService.currentNoteId() !== null">
+    <div class="editor-topbar">
+      <div class="breadcrumb">
+        <span>{{ noteService.currentSection() === 'all' ? 'Tất cả' : (noteService.currentSection() === 'inbox' ? 'Inbox' : noteService.currentSection()) }}</span>
+        <span class="breadcrumb-sep">›</span>
+        <span class="breadcrumb-current">{{ noteService.currentNote()?.title || 'Không có tiêu đề' }}</span>
+      </div>
+      <div class="editor-topbar-spacer"></div>
+      
+      <button class="topbar-btn" [class.active]="noteService.isPreview()" title="Preview" (click)="togglePreview()">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+          <circle cx="6.5" cy="6.5" r="2" stroke="currentColor" stroke-width="1.2" fill="none" />
+          <path d="M1 6.5C2.5 3.5 4.5 2 6.5 2s4 1.5 5.5 4.5C10.5 9.5 8.5 11 6.5 11S2.5 9.5 1 6.5z" stroke="currentColor" stroke-width="1.2" fill="none" />
+        </svg>
+      </button>
+      
+      <button class="topbar-btn" title="Xuất" (click)="exportNote()">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+          <path d="M6.5 1v7M4 5.5l2.5 2.5L9 5.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M1.5 10.5h10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+        </svg>
+      </button>
+      
+      <button class="topbar-btn" title="Xóa" (click)="deleteCurrentNote()" style="color:var(--red)">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+          <path d="M2 3.5h9M5 3.5V2.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5v1M5.5 5.5v4M7.5 5.5v4M3 3.5l.7 6.5a1 1 0 0 0 1 .9h3.6a1 1 0 0 0 1-.9L10 3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+        </svg>
+      </button>
+      
+      <div style="width:1px;height:14px;background:var(--border2);margin:0 2px"></div>
+      
+      <button class="topbar-btn" title="Đóng (Esc)" (click)="closeEditor()" style="font-size:16px;color:var(--text3);">×</button>
+    </div>
+
+    <!-- Markdown Toolbar -->
+    <div class="md-toolbar">
+      <button class="md-btn" (click)="mdCmd('h1')" title="Heading 1"><b>H1</b></button>
+      <button class="md-btn" (click)="mdCmd('h2')" title="Heading 2"><b>H2</b></button>
+      <button class="md-btn" (click)="mdCmd('h3')" title="Heading 3"><b>H3</b></button>
+      <div class="md-sep"></div>
+      <button class="md-btn" (click)="mdCmd('bold')" title="Bold (Ctrl+B)">
+        <svg viewBox="0 0 12 12" fill="none">
+          <path d="M3 2h4a2 2 0 0 1 0 4H3V2zM3 6h4.5a2 2 0 0 1 0 4H3V6z" stroke="currentColor" stroke-width="1.2" fill="none" />
+        </svg>
+      </button>
+      <button class="md-btn" (click)="mdCmd('italic')" title="Italic (Ctrl+I)">
+        <svg viewBox="0 0 12 12" fill="none">
+          <line x1="7" y1="2" x2="5" y2="10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+          <line x1="4" y1="2" x2="8" y2="2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+          <line x1="4" y1="10" x2="8" y2="10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+        </svg>
+      </button>
+      <button class="md-btn" (click)="mdCmd('code')" title="Inline code">
+        <svg viewBox="0 0 12 12" fill="none">
+          <polyline points="4,3 1,6 4,9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+          <polyline points="8,3 11,6 8,9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+        </svg>
+      </button>
+      <div class="md-sep"></div>
+      <button class="md-btn" (click)="mdCmd('ul')" title="Bullet list">
+        <svg viewBox="0 0 12 12" fill="none">
+          <circle cx="2" cy="4" r="1" fill="currentColor" />
+          <circle cx="2" cy="8" r="1" fill="currentColor" />
+          <line x1="5" y1="4" x2="11" y2="4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+          <line x1="5" y1="8" x2="11" y2="8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+        </svg>
+      </button>
+      <button class="md-btn" (click)="mdCmd('ol')" title="Numbered list">
+        <svg viewBox="0 0 12 12" fill="none">
+          <text x="0" y="5" font-size="4" fill="currentColor" font-family="monospace">1.</text>
+          <text x="0" y="10" font-size="4" fill="currentColor" font-family="monospace">2.</text>
+          <line x1="5" y1="3.5" x2="11" y2="3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+          <line x1="5" y1="8.5" x2="11" y2="8.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+        </svg>
+      </button>
+      <button class="md-btn" (click)="mdCmd('quote')" title="Blockquote">
+        <svg viewBox="0 0 12 12" fill="none">
+          <rect x="1" y="2" width="2" height="8" rx="1" fill="currentColor" />
+          <line x1="5" y1="4" x2="11" y2="4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+          <line x1="5" y1="7" x2="11" y2="7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+        </svg>
+      </button>
+      <button class="md-btn" (click)="mdCmd('hr')" title="Divider">—</button>
+    </div>
+
+    <!-- Editor Scroll Area -->
+    <div class="editor-scroll">
+      
+      <!-- Meta & Input area (only visible if NOT in preview) -->
+      <ng-container *ngIf="!noteService.isPreview()">
+        <textarea class="note-title-input" #noteTitle placeholder="Tiêu đề..." rows="1"
+          [ngModel]="noteService.currentNote()?.title" (ngModelChange)="onTitleChange($event)"
+          (input)="autoResize(noteTitle)"></textarea>
+        
+        <div class="note-meta-row" *ngIf="noteService.currentNote() as note">
+          <div class="meta-chip">
+            <svg viewBox="0 0 11 11" fill="none"><rect x="1" y="1" width="9" height="9" rx="2" stroke="currentColor" stroke-width="1.1" fill="none"/><line x1="3.5" y1="4" x2="7.5" y2="4" stroke="currentColor" stroke-width="1" stroke-linecap="round"/><line x1="3.5" y1="6.5" x2="6" y2="6.5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>
+            <span>{{ note.section || 'inbox' }}</span>
+          </div>
+          <div class="meta-chip">
+            <svg viewBox="0 0 11 11" fill="none"><circle cx="5.5" cy="5.5" r="4" stroke="currentColor" stroke-width="1.1"/><path d="M5.5 3v3l1.5 1.5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>
+            <span>{{ relTime(note.modified) }}</span>
+          </div>
+          <div>
+            <span *ngFor="let t of note.tags" style="font-size:11px;padding:2px 8px;border-radius:4px;background:var(--bg3);color:var(--text3);margin-right:4px;font-family:'Geist Mono',monospace">{{ t }}</span>
+          </div>
+          <div class="meta-chip" (click)="toggleStar()" style="margin-left:auto">
+            <svg viewBox="0 0 11 11" fill="none"><path d="M5.5 1l1.2 3h3.2l-2.6 1.9 1 3L5.5 7.2 3.2 8.9l1-3L1.6 4h3.2z" stroke="currentColor" stroke-width="1.1" [attr.fill]="note.starred ? 'var(--accent)' : 'none'" stroke-linejoin="round"/></svg>
+            <span [style.color]="note.starred ? 'var(--accent)' : 'var(--text3)'">Đánh dấu</span>
+          </div>
+        </div>
+
+        <textarea class="note-content" #noteContent placeholder="Bắt đầu viết... (Markdown được hỗ trợ)"
+          [ngModel]="noteService.currentNote()?.content" (ngModelChange)="onContentChange($event)"
+          (input)="autoResize(noteContent)"></textarea>
+      </ng-container>
+
+      <!-- Markdown Preview area -->
+      <div class="md-preview" *ngIf="noteService.isPreview()" [innerHTML]="parseMarkdown(noteService.currentNote()?.content || '')"></div>
+    </div>
+  </div>
+
+  <!-- Status bar -->
+  <div class="statusbar" *ngIf="noteService.viewMode() !== 'grid' && noteService.currentNoteId() !== null">
+    <div class="status-item">
+      <div class="status-dot"></div>Đã lưu
+    </div>
+    <div class="status-item">{{ wordCount }} từ</div>
+    <div class="status-item">{{ charCount }} ký tự</div>
+  </div>
+
+</main>

@@ -355,6 +355,68 @@ ETL Deployment Tools Suite cung cấp:
 
 ---
 
+### 15. Yearly Stream View (US-17.1)
+**Status**: ✅ Completed (UI Prototype)
+**User Stories**: US-17.1
+**Documentation**: [fea-yearly-stream-structure.md](./docs/structures/fea-yearly-stream-structure.md)
+
+**Purpose**: Cung cấp cái nhìn tổng quan toàn năm (12 tháng x 31 ngày) dưới dạng ma trận. Hỗ trợ theo dõi thói quen đọc sách và các hoạt động khác thông qua giao diện trực quan và bộ lọc Signal-based.
+
+**Key Components**:
+- **YearlyStreamPageComponent**: Hiển thị lưới ma trận 12x31 với khả năng tối ưu hóa cho màn hình 4K.
+- **YearlyStreamService**: Quản lý dữ liệu mock và logic lọc bài viết/sách.
+- **Mailbox Style Reader**: Popup đọc bài viết với bố cục 2 cột (List - Detail) chuyên nghiệp.
+- **Future Muting**: Tự động ẩn màu sắc và làm mờ các ô ngày trong tương lai.
+
+---
+
+### 16. Weekly Mood & Activity Tracker (US-18.1)
+**Status**: ✅ Completed (UI Prototype)
+**User Stories**: US-18.1
+**Documentation**: [fea-weekly-tracker-structure.md](./docs/structures/fea-weekly-tracker-structure.md)
+
+**Purpose**: Cung cấp giao diện theo dõi tâm trạng và hoạt động theo từng khung giờ trong tuần (7 ngày x 24 giờ). Tích hợp chế độ **Content Explorer** chuyên dụng cho nội dung văn bản.
+
+**Key Components**:
+- **WeeklyTrackerPageComponent**: Hiển thị lưới ma trận 7x24 với thanh điều hướng tuần.
+- **ContentExplorerPageComponent**: Chế độ xem nội dung chuyên sâu với bộ lọc danh mục và CSS Isolation.
+- **WeeklyTrackerService**: Quản lý trạng thái Tracker tối giản.
+- **ContentExplorerService**: Quản lý dữ liệu tin tức/nội dung độc lập (Tech News).
+- **WeeklyEntryEditorComponent**: Modal glassmorphism cho việc nhập liệu.
+
+---
+
+### 17. PDF Reader Interface (US-19.1)
+**Status**: ✅ Completed (UI Clone)
+**User Stories**: US-19.1
+**Documentation**: [fea-pdf-reader-structure.md](./docs/structures/fea-pdf-reader-structure.md)
+
+**Purpose**: Trình đọc PDF tích hợp với khả năng chuyển đổi linh hoạt giữa các bố cục khác nhau (Classic, Focus, Contextual) để cá nhân hóa trải nghiệm đọc và ghi chú.
+
+**Key Components**:
+- **PdfReaderPageComponent**: Giao diện chính chứa các 패n/Panel hiển thị thư viện sách, nội dung PDF, và danh sách ghi chú.
+- **Layout Management**: Hỗ trợ 3 chế độ xem khác nhau giúp tối ưu hóa không gian cho từng mục đích (Đọc tập trung, tra cứu ngữ cảnh, v.v.).
+- **Reading Tools**: Tích hợp thanh công cụ nổi (Floating Toolbar) khi bôi đen văn bản để highlight hoặc thêm ghi chú nhanh.
+- **Theme & Zoom**: Hỗ trợ Dark Mode và khả năng thu phóng nội dung linh hoạt.
+
+---
+
+### 18. Laputa Notes Interface (US-20.1)
+**Status**: ✅ Completed (UI Clone)
+**User Stories**: US-20.1
+**Documentation**: [fea-laputa-notes-structure.md](./docs/structures/fea-laputa-notes-structure.md)
+
+**Purpose**: Giao diện Note-taking tích hợp theo nguyên mẫu `sample.note.app.html`, hỗ trợ soạn thảo Markdown, tổ chức theo tag/section, cùng khả năng chuyển đổi 4 chế độ hiển thị (List, Card, Compact, Grid).
+
+**Key Components**:
+- **LaputaNotesPageComponent**: Container chính cho bố cục Layout.
+- **LaputaSidebarComponent**: Quản lý Section, Tags và Theme (Dark/Sepia).
+- **LaputaNoteListComponent**: Giao diện danh sách ghi chú với hỗ trợ Context Menu và thay đổi kích thước bằng Drag Handle.
+- **LaputaEditorComponent**: Trình soạn thảo Markdown chuyên dụng kết hợp với cơ chế Popup Detail Panel tự động kích hoạt ở chế độ Grid.
+- **LaputaNotesService**: Quản lý State cục bộ của component và dữ liệu Mock thông qua Angular Signals.
+
+---
+
 **Why Feature-based Organization?**
 - ✅ **High Cohesion**: Code liên quan đến một feature nằm gần nhau
 - ✅ **Easy Navigation**: Tìm code nhanh hơn - nhìn feature thay vì tìm trong nhiều layer folders

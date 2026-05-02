@@ -1,0 +1,189 @@
+:host {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.laputa-host {
+  --bg: #141414;
+  --bg2: #1A1A1A;
+  --bg3: #202020;
+  --bg4: #272727;
+  --bg-hover: #2A2A2A;
+  --border: rgba(255, 255, 255, 0.06);
+  --border2: rgba(255, 255, 255, 0.10);
+  --text: #E8E4DD;
+  --text2: #8A8580;
+  --text3: #504E4A;
+  --accent: #C9B06A;
+  --accent2: #7F77DD;
+  --red: #D4537E;
+  --green: #1D9E75;
+  --sidebar-w: 210px;
+  --list-w: 290px;
+
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Geist', sans-serif;
+  font-size: 13px;
+  overflow: hidden;
+}
+
+/* ── SEPIA THEME ── */
+.laputa-host.sepia {
+  --bg: #F0EBE1;
+  --bg2: #EAE3D7;
+  --bg3: #E2D9CB;
+  --bg4: #D8CEBD;
+  --bg-hover: #DDD4C4;
+  --border: rgba(100, 75, 40, 0.10);
+  --border2: rgba(100, 75, 40, 0.18);
+  --text: #2C2015;
+  --text2: #6B5A44;
+  --text3: #9C876A;
+  --accent: #8B6914;
+  --accent2: #5B52AA;
+  --red: #AA3056;
+  --green: #1A7A55;
+}
+
+/* LAYOUT */
+.app {
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Global Reset (local scope) */
+* {
+  box-sizing: border-box;
+}
+
+/* MODALS */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .6);
+  z-index: 200;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-overlay.show {
+  display: flex;
+}
+
+.modal {
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: 14px;
+  padding: 20px;
+  width: 340px;
+}
+
+.modal-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 14px;
+}
+
+.modal-input {
+  width: 100%;
+  padding: 8px 12px;
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  font-family: 'Geist', sans-serif;
+  font-size: 13px;
+  color: var(--text);
+  outline: none;
+  margin-bottom: 10px;
+  transition: border-color .15s;
+}
+
+.modal-input:focus {
+  border-color: var(--accent);
+}
+
+.modal-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.modal-tag-opt {
+  padding: 4px 10px;
+  font-size: 11px;
+  border-radius: 20px;
+  border: 1px solid var(--border2);
+  background: none;
+  color: var(--text3);
+  cursor: pointer;
+  font-family: 'Geist Mono', monospace;
+  transition: all .12s;
+}
+
+.modal-tag-opt:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.modal-tag-opt.sel {
+  background: rgba(201, 176, 106, .1);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.modal-footer {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+.modal-cancel {
+  padding: 7px 14px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text2);
+  font-family: 'Geist', sans-serif;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all .12s;
+}
+
+.modal-cancel:hover {
+  background: var(--bg4);
+}
+
+.modal-create {
+  padding: 7px 14px;
+  background: var(--accent);
+  color: #141414;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Geist', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity .12s;
+}
+
+.modal-create:hover {
+  opacity: .85;
+}
+
+/* SEPia adjustments for Modals */
+.laputa-host.sepia .modal {
+  background: #EAE3D5;
+}
+
+.laputa-host.sepia .modal-input {
+  background: #DDD5C4;
+  border-color: rgba(100, 75, 40, 0.16);
+}

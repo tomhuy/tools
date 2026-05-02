@@ -1,0 +1,2413 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laputa Notes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #141414;
+            --bg2: #1A1A1A;
+            --bg3: #202020;
+            --bg4: #272727;
+            --bg-hover: #2A2A2A;
+            --border: rgba(255, 255, 255, 0.06);
+            --border2: rgba(255, 255, 255, 0.10);
+            --text: #E8E4DD;
+            --text2: #8A8580;
+            --text3: #504E4A;
+            --accent: #C9B06A;
+            --accent2: #7F77DD;
+            --red: #D4537E;
+            --green: #1D9E75;
+            --sidebar-w: 210px;
+            --list-w: 290px;
+        }
+
+        /* ── SEPIA THEME ── */
+        html.sepia {
+            --bg: #F0EBE1;
+            --bg2: #EAE3D7;
+            --bg3: #E2D9CB;
+            --bg4: #D8CEBD;
+            --bg-hover: #DDD4C4;
+            --border: rgba(100, 75, 40, 0.10);
+            --border2: rgba(100, 75, 40, 0.18);
+            --text: #2C2015;
+            --text2: #6B5A44;
+            --text3: #9C876A;
+            --accent: #8B6914;
+            --accent2: #5B52AA;
+            --red: #AA3056;
+            --green: #1A7A55;
+        }
+
+        html.sepia body {
+            background: var(--bg);
+        }
+
+        html.sepia .note-title-input {
+            caret-color: var(--accent);
+        }
+
+        html.sepia .note-content {
+            caret-color: var(--accent);
+        }
+
+        html.sepia .note-card.active::after {
+            background: var(--accent);
+        }
+
+        html.sepia .nav-item.active::before {
+            background: var(--accent);
+        }
+
+        html.sepia .md-preview blockquote {
+            border-left-color: var(--accent);
+        }
+
+        html.sepia .card-tag {
+            background: rgba(100, 75, 40, 0.08);
+            color: var(--text3);
+        }
+
+        html.sepia .note-list.view-card .note-card {
+            background: #EDE5D5;
+            border-color: rgba(100, 75, 40, 0.14);
+        }
+
+        html.sepia .note-list.view-card .note-card:hover {
+            background: #E7DDC8;
+            border-color: rgba(100, 75, 40, 0.22);
+        }
+
+        html.sepia .note-list.view-card .note-card.active {
+            border-color: var(--accent);
+        }
+
+        html.sepia .ctx-menu {
+            background: #E8DFCF;
+            border-color: rgba(100, 75, 40, 0.18);
+        }
+
+        html.sepia .modal {
+            background: #EAE3D5;
+        }
+
+        html.sepia .modal-input {
+            background: #DDD5C4;
+            border-color: rgba(100, 75, 40, 0.16);
+        }
+
+        /* Theme switcher dots */
+        .theme-switcher {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 0 14px 10px;
+        }
+
+        .theme-dot {
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border-color .15s, transform .12s;
+            flex-shrink: 0;
+        }
+
+        .theme-dot:hover {
+            transform: scale(1.15);
+        }
+
+        .theme-dot.active {
+            border-color: var(--text2);
+        }
+
+        .theme-dot-dark {
+            background: #2A2A2A;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .15);
+        }
+
+        .theme-dot-sepia {
+            background: #D4C5A5;
+            box-shadow: inset 0 0 0 1px rgba(100, 75, 40, .25);
+        }
+
+        .theme-label {
+            font-size: 10px;
+            color: var(--text3);
+            margin-right: 4px;
+            letter-spacing: .04em;
+            text-transform: uppercase;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Geist', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 13px
+        }
+
+        /* ── LAYOUT ── */
+        .app {
+            display: flex;
+            height: 100vh;
+            overflow: hidden
+        }
+
+        /* ── SIDEBAR ── */
+        .sidebar {
+            width: var(--sidebar-w);
+            flex-shrink: 0;
+            background: var(--bg);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        .sidebar-top {
+            padding: 16px 14px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .app-name {
+            font-family: 'Instrument Serif', serif;
+            font-size: 16px;
+            color: var(--text);
+            letter-spacing: .01em;
+        }
+
+        .sidebar-icon-btn {
+            width: 26px;
+            height: 26px;
+            border: none;
+            background: none;
+            color: var(--text3);
+            cursor: pointer;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .15s;
+        }
+
+        .sidebar-icon-btn:hover {
+            background: var(--bg4);
+            color: var(--text2)
+        }
+
+        .sidebar-search {
+            margin: 0 10px 8px;
+            position: relative;
+        }
+
+        .sidebar-search input {
+            width: 100%;
+            padding: 6px 10px 6px 30px;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: 'Geist', sans-serif;
+            font-size: 12px;
+            color: var(--text);
+            outline: none;
+            transition: border-color .15s;
+        }
+
+        .sidebar-search input::placeholder {
+            color: var(--text3)
+        }
+
+        .sidebar-search input:focus {
+            border-color: var(--border2)
+        }
+
+        .sidebar-search svg {
+            position: absolute;
+            left: 9px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text3);
+            pointer-events: none
+        }
+
+        .sidebar-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 16px
+        }
+
+        .sidebar-scroll::-webkit-scrollbar {
+            width: 3px
+        }
+
+        .sidebar-scroll::-webkit-scrollbar-thumb {
+            background: var(--bg4);
+            border-radius: 2px
+        }
+
+        .nav-section {
+            margin-top: 4px
+        }
+
+        .nav-section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px 14px 3px;
+        }
+
+        .nav-section-label {
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: var(--text3);
+        }
+
+        .nav-add {
+            color: var(--text3);
+            cursor: pointer;
+            transition: color .15s;
+            background: none;
+            border: none;
+            font-size: 14px;
+            line-height: 1
+        }
+
+        .nav-add:hover {
+            color: var(--text2)
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            cursor: pointer;
+            border-radius: 0;
+            transition: background .1s;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-hover)
+        }
+
+        .nav-item.active {
+            background: var(--bg3)
+        }
+
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 2px;
+            height: 14px;
+            background: var(--accent);
+            border-radius: 0 2px 2px 0;
+        }
+
+        .nav-icon {
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
+            color: var(--text3)
+        }
+
+        .nav-item.active .nav-icon {
+            color: var(--accent)
+        }
+
+        .nav-label {
+            flex: 1;
+            font-size: 12px;
+            color: var(--text2)
+        }
+
+        .nav-item.active .nav-label {
+            color: var(--text)
+        }
+
+        .nav-count {
+            font-size: 11px;
+            color: var(--text3);
+            font-family: 'Geist Mono', monospace
+        }
+
+        .nav-badge {
+            font-size: 10px;
+            font-weight: 600;
+            background: var(--accent);
+            color: #141414;
+            width: 17px;
+            height: 17px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ── NOTE LIST ── */
+        .note-list {
+            width: var(--list-w);
+            min-width: 220px;
+            max-width: 90vw;
+            background: var(--bg2);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            flex-shrink: 0;
+            transition: none;
+        }
+
+        /* Resize handle */
+        .list-resize-handle {
+            position: absolute;
+            right: -3px;
+            top: 0;
+            bottom: 0;
+            width: 6px;
+            cursor: col-resize;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .list-resize-handle::after {
+            content: '';
+            width: 2px;
+            height: 32px;
+            background: var(--border2);
+            border-radius: 1px;
+            opacity: 0;
+            transition: opacity .15s;
+        }
+
+        .list-resize-handle:hover::after,
+        .list-resize-handle.dragging::after {
+            opacity: 1;
+        }
+
+        /* Grid view — multiple columns */
+        .note-list.view-grid .list-scroll {
+            padding: 10px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 6px;
+            align-content: start;
+            overflow-y: auto;
+        }
+
+        .note-list.view-grid .note-card {
+            border: none;
+            border-bottom: none;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px;
+            background: var(--bg3);
+            transition: border-color .15s, background .15s, transform .12s;
+        }
+
+        .note-list.view-grid .note-card:hover {
+            border-color: var(--border2);
+            background: var(--bg4);
+            transform: translateY(-1px);
+        }
+
+        .note-list.view-grid .note-card.active {
+            border-color: var(--accent);
+            background: var(--bg4);
+        }
+
+        .note-list.view-grid .note-card.active::after {
+            display: none;
+        }
+
+        .note-list.view-grid .card-accent-bar {
+            display: block;
+            margin: -2px -2px 8px -2px;
+            height: 3px;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .note-list.view-grid .card-title {
+            font-size: 12px;
+            font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: 5px;
+        }
+
+        .note-list.view-grid .card-preview {
+            display: block;
+            font-size: 11px;
+            color: var(--text3);
+            -webkit-line-clamp: 3;
+            line-height: 1.45;
+            margin-bottom: 7px;
+        }
+
+        .note-list.view-grid .card-excerpt-bullets {
+            display: none;
+        }
+
+        .note-list.view-grid .card-meta {
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .note-list.view-grid .card-tags {
+            flex-wrap: wrap;
+        }
+
+        .note-list.view-grid .card-time {
+            font-size: 10px;
+            margin-top: 2px;
+        }
+
+        /* Compact detail popup — slides in over editor area */
+        .detail-popup {
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 340px;
+            max-width: 50vw;
+            background: var(--bg);
+            border-left: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transform: translateX(100%);
+            transition: transform .2s ease;
+            z-index: 5;
+            flex-shrink: 0;
+        }
+
+        .detail-popup.open {
+            transform: translateX(0);
+        }
+
+        .detail-popup-topbar {
+            height: 40px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 14px;
+            gap: 8px;
+            flex-shrink: 0;
+            background: var(--bg2);
+        }
+
+        .detail-popup-title {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text);
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .detail-popup-close {
+            width: 26px;
+            height: 26px;
+            border: none;
+            background: none;
+            color: var(--text3);
+            cursor: pointer;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 17px;
+            transition: all .15s;
+            flex-shrink: 0;
+        }
+
+        .detail-popup-close:hover {
+            background: var(--bg4);
+            color: var(--text);
+        }
+
+        .detail-popup-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding: 28px 20px 60px;
+        }
+
+        .detail-popup-scroll::-webkit-scrollbar {
+            width: 3px
+        }
+
+        .detail-popup-scroll::-webkit-scrollbar-thumb {
+            background: var(--bg4);
+            border-radius: 2px
+        }
+
+        .detail-popup-scroll .note-title-input {
+            font-size: 22px;
+        }
+
+        .detail-popup-scroll .editor-scroll {
+            padding: 0;
+        }
+
+        /* editor-wrap relative for popup */
+        .editor-wrap {
+            position: relative;
+        }
+
+        .list-header {
+            padding: 14px 16px 10px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .list-btn {
+            width: 26px;
+            height: 26px;
+            border: none;
+            background: none;
+            color: var(--text3);
+            cursor: pointer;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .15s;
+        }
+
+        .list-btn:hover {
+            background: var(--bg4);
+            color: var(--text2)
+        }
+
+        .list-btn.primary {
+            background: none;
+            color: var(--accent)
+        }
+
+        .list-btn.primary:hover {
+            background: rgba(201, 176, 106, .1)
+        }
+
+        .list-scroll {
+            flex: 1;
+            overflow-y: auto
+        }
+
+        .list-scroll::-webkit-scrollbar {
+            width: 3px
+        }
+
+        .list-scroll::-webkit-scrollbar-thumb {
+            background: var(--bg4);
+            border-radius: 2px
+        }
+
+        .note-card {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: background .1s;
+            position: relative;
+        }
+
+        .note-card:hover {
+            background: var(--bg3)
+        }
+
+        .note-card.active {
+            background: var(--bg3)
+        }
+
+        .note-card.active::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--accent);
+        }
+
+        .card-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 4px
+        }
+
+        .card-icon {
+            font-size: 11px;
+            margin-top: 1px;
+            flex-shrink: 0
+        }
+
+        .card-title {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text);
+            line-height: 1.3;
+            flex: 1
+        }
+
+        .card-edit-icon {
+            color: var(--text3);
+            opacity: 0;
+            transition: opacity .15s;
+            flex-shrink: 0;
+            margin-top: 2px
+        }
+
+        .note-card:hover .card-edit-icon {
+            opacity: 1
+        }
+
+        .card-preview {
+            font-size: 11px;
+            color: var(--text3);
+            line-height: 1.5;
+            margin-bottom: 6px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden
+        }
+
+        .card-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px
+        }
+
+        .card-tags {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap
+        }
+
+        .card-tag {
+            font-size: 10px;
+            padding: 1px 7px;
+            border-radius: 20px;
+            background: var(--bg4);
+            color: var(--text3);
+            font-family: 'Geist Mono', monospace;
+        }
+
+        .card-time {
+            font-size: 10px;
+            color: var(--text3)
+        }
+
+        /* ── VIEW MODE TOGGLE ── */
+        .view-mode-bar {
+            display: flex;
+            gap: 1px;
+            background: var(--bg3);
+            border-radius: 6px;
+            padding: 2px;
+        }
+
+        .vm-btn {
+            width: 24px;
+            height: 22px;
+            border: none;
+            background: none;
+            color: var(--text3);
+            cursor: pointer;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .12s;
+        }
+
+        .vm-btn:hover {
+            color: var(--text2);
+        }
+
+        .vm-btn.active {
+            background: var(--bg4);
+            color: var(--text);
+        }
+
+        .vm-btn svg {
+            width: 11px;
+            height: 11px;
+        }
+
+        /* ── CARD VIEW ── */
+        .note-list.view-card {
+            --list-w: 320px;
+        }
+
+        .note-list.view-card .list-scroll {
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .note-list.view-card .note-card {
+            border-bottom: none;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px;
+            background: var(--bg3);
+            transition: border-color .15s, background .15s, transform .12s;
+        }
+
+        .note-list.view-card .note-card:hover {
+            border-color: var(--border2);
+            background: var(--bg4);
+            transform: translateY(-1px);
+        }
+
+        .note-list.view-card .note-card.active {
+            border-color: var(--accent);
+            background: var(--bg4);
+        }
+
+        .note-list.view-card .note-card.active::after {
+            display: none;
+        }
+
+        .note-list.view-card .card-title {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .note-list.view-card .card-preview {
+            -webkit-line-clamp: 3;
+            color: var(--text2);
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        /* accent top bar on card view */
+        .note-list.view-card .note-card .card-accent-bar {
+            display: block;
+            height: 2px;
+            border-radius: 1px;
+            margin-bottom: 10px;
+            margin-top: -4px;
+            margin-left: -4px;
+            margin-right: -4px;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .note-list:not(.view-card) .card-accent-bar {
+            display: none;
+        }
+
+        /* section color accent */
+        .note-list.view-card .note-card[data-section='psychology'] .card-accent-bar {
+            background: var(--red);
+        }
+
+        .note-list.view-card .note-card[data-section='ideas'] .card-accent-bar {
+            background: var(--accent2);
+        }
+
+        .note-list.view-card .note-card[data-section='resources'] .card-accent-bar {
+            background: var(--green);
+        }
+
+        .note-list.view-card .note-card[data-section='journal'] .card-accent-bar {
+            background: var(--accent);
+        }
+
+        .note-list.view-card .note-card[data-section='tasks'] .card-accent-bar {
+            background: var(--blue);
+        }
+
+        .note-list.view-card .note-card .card-accent-bar {
+            background: var(--text3);
+        }
+
+        /* card view: first line of content as excerpt blocks */
+        .card-excerpt-bullets {
+            display: none;
+            flex-direction: column;
+            gap: 3px;
+            margin-bottom: 10px;
+        }
+
+        .note-list.view-card .card-excerpt-bullets {
+            display: flex;
+        }
+
+        .note-list.view-card .card-preview {
+            display: none;
+        }
+
+        /* replaced by bullets */
+        .ceb-item {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+            font-size: 11px;
+            color: var(--text2);
+            line-height: 1.4;
+        }
+
+        .ceb-dot {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--text3);
+            flex-shrink: 0;
+            margin-top: 5px;
+        }
+
+        /* ── COMPACT VIEW ── */
+        .note-list.view-compact .list-scroll {}
+
+        .note-list.view-compact .note-card {
+            padding: 7px 14px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .note-list.view-compact .card-preview {
+            display: none;
+        }
+
+        .note-list.view-compact .card-top {
+            margin-bottom: 0;
+        }
+
+        .note-list.view-compact .card-meta {
+            margin-top: 2px;
+        }
+
+        .note-list.view-compact .card-title {
+            font-size: 12px;
+        }
+
+        .note-list.view-compact .card-accent-bar {
+            display: none;
+        }
+
+        .note-list.view-compact .card-excerpt-bullets {
+            display: none;
+        }
+
+        /* ── EDITOR ── */
+        .editor-wrap {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: var(--bg);
+        }
+
+        .editor-topbar {
+            height: 40px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            color: var(--text3)
+        }
+
+        .breadcrumb-sep {
+            color: var(--text3);
+            opacity: .4
+        }
+
+        .breadcrumb-current {
+            color: var(--text2)
+        }
+
+        .editor-topbar-spacer {
+            flex: 1
+        }
+
+        .topbar-btn {
+            width: 28px;
+            height: 28px;
+            border: none;
+            background: none;
+            color: var(--text3);
+            cursor: pointer;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .15s;
+        }
+
+        .topbar-btn:hover {
+            background: var(--bg3);
+            color: var(--text2)
+        }
+
+        /* Markdown toolbar */
+        .md-toolbar {
+            height: 34px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            gap: 2px;
+            flex-shrink: 0;
+            background: var(--bg2);
+        }
+
+        .md-btn {
+            height: 24px;
+            padding: 0 7px;
+            border: none;
+            background: none;
+            font-family: 'Geist', sans-serif;
+            font-size: 12px;
+            color: var(--text3);
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all .12s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .md-btn:hover {
+            background: var(--bg4);
+            color: var(--text2)
+        }
+
+        .md-btn.active {
+            background: var(--bg4);
+            color: var(--text)
+        }
+
+        .md-sep {
+            width: 1px;
+            height: 14px;
+            background: var(--border2);
+            margin: 0 3px
+        }
+
+        .md-btn svg {
+            width: 12px;
+            height: 12px
+        }
+
+        .editor-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding: 48px 20% 80px
+        }
+
+        .editor-scroll::-webkit-scrollbar {
+            width: 4px
+        }
+
+        .editor-scroll::-webkit-scrollbar-thumb {
+            background: var(--bg4);
+            border-radius: 2px
+        }
+
+        /* Title input */
+        .note-title-input {
+            width: 100%;
+            background: none;
+            border: none;
+            outline: none;
+            font-family: 'Instrument Serif', serif;
+            font-size: 32px;
+            line-height: 1.2;
+            color: var(--text);
+            margin-bottom: 24px;
+            resize: none;
+            overflow: hidden;
+            caret-color: var(--accent);
+        }
+
+        .note-title-input::placeholder {
+            color: var(--text3)
+        }
+
+        /* Metadata row */
+        .note-meta-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 28px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .meta-chip {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11px;
+            color: var(--text3);
+            cursor: pointer;
+            padding: 3px 8px;
+            border-radius: 6px;
+            transition: background .12s;
+        }
+
+        .meta-chip:hover {
+            background: var(--bg3)
+        }
+
+        .meta-chip svg {
+            width: 11px;
+            height: 11px;
+            flex-shrink: 0
+        }
+
+        .meta-chip span {
+            font-family: 'Geist Mono', monospace
+        }
+
+        /* Content area */
+        .note-content {
+            width: 100%;
+            min-height: 400px;
+            background: none;
+            border: none;
+            outline: none;
+            font-family: 'Geist', sans-serif;
+            font-size: 14px;
+            line-height: 1.75;
+            color: var(--text2);
+            resize: none;
+            caret-color: var(--accent);
+        }
+
+        .note-content::placeholder {
+            color: var(--text3)
+        }
+
+        /* Rendered markdown preview */
+        .md-preview {
+            font-size: 14px;
+            line-height: 1.75;
+            color: var(--text2);
+            display: none;
+        }
+
+        .md-preview h1,
+        .md-preview h2,
+        .md-preview h3 {
+            font-family: 'Instrument Serif', serif;
+            color: var(--text);
+            margin: 1.2em 0 .5em;
+        }
+
+        .md-preview h1 {
+            font-size: 26px
+        }
+
+        .md-preview h2 {
+            font-size: 20px
+        }
+
+        .md-preview h3 {
+            font-size: 16px
+        }
+
+        .md-preview p {
+            margin-bottom: .9em
+        }
+
+        .md-preview strong {
+            color: var(--text);
+            font-weight: 600
+        }
+
+        .md-preview em {
+            color: var(--text);
+            font-style: italic;
+            font-family: 'Instrument Serif', serif
+        }
+
+        .md-preview ul,
+        .md-preview ol {
+            padding-left: 20px;
+            margin-bottom: .9em
+        }
+
+        .md-preview li {
+            margin-bottom: .3em
+        }
+
+        .md-preview code {
+            font-family: 'Geist Mono', monospace;
+            font-size: 12px;
+            background: var(--bg3);
+            color: var(--accent);
+            padding: 1px 5px;
+            border-radius: 4px;
+        }
+
+        .md-preview pre {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin-bottom: .9em;
+            overflow-x: auto;
+        }
+
+        .md-preview pre code {
+            background: none;
+            padding: 0;
+            color: var(--text2)
+        }
+
+        .md-preview blockquote {
+            border-left: 2px solid var(--accent);
+            padding-left: 14px;
+            color: var(--text3);
+            font-style: italic;
+            margin-bottom: .9em;
+        }
+
+        .md-preview a {
+            color: var(--accent);
+            text-decoration: none
+        }
+
+        .md-preview a:hover {
+            text-decoration: underline
+        }
+
+        .md-preview hr {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 1.5em 0
+        }
+
+        /* Empty state */
+        .empty-state {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            color: var(--text3);
+        }
+
+        .empty-state svg {
+            opacity: .3
+        }
+
+        .empty-title {
+            font-size: 14px;
+            color: var(--text2)
+        }
+
+        .empty-sub {
+            font-size: 12px;
+            max-width: 200px;
+            text-align: center;
+            line-height: 1.5
+        }
+
+        /* status bar */
+        .statusbar {
+            height: 24px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            gap: 12px;
+            flex-shrink: 0;
+            background: var(--bg);
+        }
+
+        .status-item {
+            font-size: 11px;
+            color: var(--text3);
+            font-family: 'Geist Mono', monospace;
+            display: flex;
+            align-items: center;
+            gap: 4px
+        }
+
+        .status-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--green)
+        }
+
+        /* Context menu */
+        .ctx-menu {
+            position: fixed;
+            z-index: 999;
+            background: var(--bg3);
+            border: 1px solid var(--border2);
+            border-radius: 10px;
+            padding: 4px;
+            min-width: 160px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, .4);
+            display: none;
+        }
+
+        .ctx-menu.show {
+            display: block
+        }
+
+        .ctx-item {
+            padding: 7px 10px;
+            font-size: 12px;
+            color: var(--text2);
+            cursor: pointer;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background .1s;
+        }
+
+        .ctx-item:hover {
+            background: var(--bg4);
+            color: var(--text)
+        }
+
+        .ctx-item.danger {
+            color: var(--red)
+        }
+
+        .ctx-item.danger:hover {
+            background: rgba(212, 83, 126, .1)
+        }
+
+        .ctx-sep {
+            height: 1px;
+            background: var(--border);
+            margin: 3px 4px
+        }
+
+        /* Tooltip */
+        [data-tip] {
+            position: relative
+        }
+
+        [data-tip]::after {
+            content: attr(data-tip);
+            position: absolute;
+            bottom: calc(100% + 5px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg4);
+            color: var(--text2);
+            font-size: 10px;
+            padding: 3px 7px;
+            border-radius: 5px;
+            white-space: nowrap;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity .15s;
+            z-index: 100;
+        }
+
+        [data-tip]:hover::after {
+            opacity: 1
+        }
+
+        /* New note modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .6);
+            z-index: 200;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.show {
+            display: flex
+        }
+
+        .modal {
+            background: var(--bg3);
+            border: 1px solid var(--border2);
+            border-radius: 14px;
+            padding: 20px;
+            width: 340px;
+        }
+
+        .modal-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 14px
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 8px 12px;
+            background: var(--bg2);
+            border: 1px solid var(--border2);
+            border-radius: 8px;
+            font-family: 'Geist', sans-serif;
+            font-size: 13px;
+            color: var(--text);
+            outline: none;
+            margin-bottom: 10px;
+            transition: border-color .15s;
+        }
+
+        .modal-input:focus {
+            border-color: var(--accent)
+        }
+
+        .modal-row {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 12px;
+            flex-wrap: wrap
+        }
+
+        .modal-tag-opt {
+            padding: 4px 10px;
+            font-size: 11px;
+            border-radius: 20px;
+            border: 1px solid var(--border2);
+            background: none;
+            color: var(--text3);
+            cursor: pointer;
+            font-family: 'Geist Mono', monospace;
+            transition: all .12s;
+        }
+
+        .modal-tag-opt:hover {
+            border-color: var(--accent);
+            color: var(--accent)
+        }
+
+        .modal-tag-opt.sel {
+            background: rgba(201, 176, 106, .1);
+            border-color: var(--accent);
+            color: var(--accent)
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 6px;
+            justify-content: flex-end;
+            margin-top: 4px
+        }
+
+        .modal-cancel {
+            padding: 7px 14px;
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text2);
+            font-family: 'Geist', sans-serif;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all .12s
+        }
+
+        .modal-cancel:hover {
+            background: var(--bg4)
+        }
+
+        .modal-create {
+            padding: 7px 14px;
+            background: var(--accent);
+            color: #141414;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Geist', sans-serif;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: opacity .12s
+        }
+
+        .modal-create:hover {
+            opacity: .85
+        }
+
+        /* Rename inline */
+        .nav-item input.nav-rename {
+            background: var(--bg3);
+            border: 1px solid var(--accent);
+            border-radius: 4px;
+            outline: none;
+            font-family: 'Geist', sans-serif;
+            font-size: 12px;
+            color: var(--text);
+            padding: 1px 5px;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app">
+
+        <!-- ── SIDEBAR ── -->
+        <aside class="sidebar">
+            <div class="sidebar-top">
+                <span class="app-name">Laputa</span>
+                <button class="sidebar-icon-btn" data-tip="Ẩn sidebar" onclick="toggleSidebar()">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                        <rect x="1" y="2" width="12" height="1.5" rx=".75" fill="currentColor" />
+                        <rect x="1" y="6" width="8" height="1.5" rx=".75" fill="currentColor" />
+                        <rect x="1" y="10" width="10" height="1.5" rx=".75" fill="currentColor" />
+                    </svg>
+                </button>
+            </div>
+            <div class="sidebar-search">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <circle cx="5.5" cy="5.5" r="4" stroke="currentColor" stroke-width="1.3" />
+                    <line x1="8.5" y1="8.5" x2="11" y2="11" stroke="currentColor" stroke-width="1.3"
+                        stroke-linecap="round" />
+                </svg>
+                <input type="text" placeholder="Tìm kiếm..." id="search-input" oninput="filterNotes(this.value)">
+            </div>
+            <div class="theme-switcher">
+                <span class="theme-label">Theme</span>
+                <div class="theme-dot theme-dot-dark active" id="td-dark" onclick="setTheme('dark')" title="Dark"></div>
+                <div class="theme-dot theme-dot-sepia" id="td-sepia" onclick="setTheme('sepia')" title="Warm Sepia">
+                </div>
+            </div>
+            <div class="sidebar-scroll" id="sidebar-nav"></div>
+        </aside>
+
+        <!-- ── NOTE LIST ── -->
+        <section class="note-list" id="note-list-panel">
+            <div class="list-resize-handle" id="list-resize-handle"></div>
+            <div class="list-header">
+                <span class="list-title" id="list-title">Tất cả</span>
+                <div class="list-actions">
+                    <div class="view-mode-bar">
+                        <button class="vm-btn active" id="vm-list" onclick="setViewMode('list')" title="List">
+                            <svg viewBox="0 0 11 11" fill="none">
+                                <line x1="1" y1="2.5" x2="10" y2="2.5" stroke="currentColor" stroke-width="1.2"
+                                    stroke-linecap="round" />
+                                <line x1="1" y1="5.5" x2="10" y2="5.5" stroke="currentColor" stroke-width="1.2"
+                                    stroke-linecap="round" />
+                                <line x1="1" y1="8.5" x2="10" y2="8.5" stroke="currentColor" stroke-width="1.2"
+                                    stroke-linecap="round" />
+                            </svg>
+                        </button>
+                        <button class="vm-btn" id="vm-card" onclick="setViewMode('card')" title="Card">
+                            <svg viewBox="0 0 11 11" fill="none">
+                                <rect x="1" y="1" width="9" height="4" rx="1.2" stroke="currentColor" stroke-width="1.1"
+                                    fill="none" />
+                                <rect x="1" y="6" width="9" height="4" rx="1.2" stroke="currentColor" stroke-width="1.1"
+                                    fill="none" />
+                            </svg>
+                        </button>
+                        <button class="vm-btn" id="vm-compact" onclick="setViewMode('compact')" title="Compact">
+                            <svg viewBox="0 0 11 11" fill="none">
+                                <line x1="1" y1="2" x2="10" y2="2" stroke="currentColor" stroke-width="1.1"
+                                    stroke-linecap="round" />
+                                <line x1="1" y1="4.2" x2="10" y2="4.2" stroke="currentColor" stroke-width="1.1"
+                                    stroke-linecap="round" />
+                                <line x1="1" y1="6.4" x2="10" y2="6.4" stroke="currentColor" stroke-width="1.1"
+                                    stroke-linecap="round" />
+                                <line x1="1" y1="8.6" x2="10" y2="8.6" stroke="currentColor" stroke-width="1.1"
+                                    stroke-linecap="round" />
+                            </svg>
+                        </button>
+                        <button class="vm-btn" id="vm-grid" onclick="setViewMode('grid')" title="Grid">
+                            <svg viewBox="0 0 11 11" fill="none">
+                                <rect x="1" y="1" width="4" height="4" rx="1" stroke="currentColor" stroke-width="1.1"
+                                    fill="none" />
+                                <rect x="6" y="1" width="4" height="4" rx="1" stroke="currentColor" stroke-width="1.1"
+                                    fill="none" />
+                                <rect x="1" y="6" width="4" height="4" rx="1" stroke="currentColor" stroke-width="1.1"
+                                    fill="none" />
+                                <rect x="6" y="6" width="4" height="4" rx="1" stroke="currentColor" stroke-width="1.1"
+                                    fill="none" />
+                            </svg>
+                        </button>
+                    </div>
+                    <button class="list-btn" data-tip="Sắp xếp" onclick="toggleSort()">
+                        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                            <line x1="1" y1="3" x2="12" y2="3" stroke="currentColor" stroke-width="1.2"
+                                stroke-linecap="round" />
+                            <line x1="3" y1="6.5" x2="10" y2="6.5" stroke="currentColor" stroke-width="1.2"
+                                stroke-linecap="round" />
+                            <line x1="5" y1="10" x2="8" y2="10" stroke="currentColor" stroke-width="1.2"
+                                stroke-linecap="round" />
+                        </svg>
+                    </button>
+                    <button class="list-btn primary" data-tip="Ghi chú mới" onclick="openNewNoteModal()">
+                        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                            <line x1="6.5" y1="1" x2="6.5" y2="12" stroke="currentColor" stroke-width="1.5"
+                                stroke-linecap="round" />
+                            <line x1="1" y1="6.5" x2="12" y2="6.5" stroke="currentColor" stroke-width="1.5"
+                                stroke-linecap="round" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="list-scroll" id="notes-list"></div>
+        </section>
+
+        <!-- ── EDITOR ── -->
+        <main class="editor-wrap" id="editor-wrap">
+
+            <!-- Compact detail popup (grid mode) -->
+            <div class="detail-popup" id="detail-popup">
+                <div class="detail-popup-topbar">
+                    <span class="detail-popup-title" id="dp-title"></span>
+                    <button class="detail-popup-close" onclick="closeDetailPopup()" title="Đóng (Esc)">×</button>
+                </div>
+                <div class="detail-popup-scroll" id="dp-scroll">
+                    <textarea class="note-title-input" id="dp-note-title" placeholder="Tiêu đề..." rows="1"
+                        oninput="autoResizeTA(this);onDpTitleChange()"></textarea>
+                    <div class="note-meta-row" id="dp-meta-row"></div>
+                    <textarea class="note-content" id="dp-note-content" placeholder="Bắt đầu viết..."
+                        oninput="autoResizeTA(this);onDpContentChange()"></textarea>
+                </div>
+            </div>
+            <div id="empty-state" class="empty-state" style="flex:1;display:flex">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                    <rect x="6" y="4" width="28" height="32" rx="4" stroke="currentColor" stroke-width="1.5"
+                        fill="none" />
+                    <line x1="12" y1="13" x2="28" y2="13" stroke="currentColor" stroke-width="1.3"
+                        stroke-linecap="round" />
+                    <line x1="12" y1="19" x2="28" y2="19" stroke="currentColor" stroke-width="1.3"
+                        stroke-linecap="round" />
+                    <line x1="12" y1="25" x2="20" y2="25" stroke="currentColor" stroke-width="1.3"
+                        stroke-linecap="round" />
+                </svg>
+                <span class="empty-title">Chọn một ghi chú</span>
+                <span class="empty-sub">Hoặc tạo mới bằng nút + phía trên</span>
+            </div>
+            <div id="editor-main" style="display:none;flex:1;flex-direction:column;overflow:hidden;">
+                <div class="editor-topbar">
+                    <div class="breadcrumb">
+                        <span id="bc-section">Tất cả</span>
+                        <span class="breadcrumb-sep">›</span>
+                        <span class="breadcrumb-current" id="bc-title">...</span>
+                    </div>
+                    <div class="editor-topbar-spacer"></div>
+                    <button class="topbar-btn" data-tip="Preview" onclick="togglePreview()" id="preview-btn">
+                        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                            <circle cx="6.5" cy="6.5" r="2" stroke="currentColor" stroke-width="1.2" fill="none" />
+                            <path d="M1 6.5C2.5 3.5 4.5 2 6.5 2s4 1.5 5.5 4.5C10.5 9.5 8.5 11 6.5 11S2.5 9.5 1 6.5z"
+                                stroke="currentColor" stroke-width="1.2" fill="none" />
+                        </svg>
+                    </button>
+                    <button class="topbar-btn" data-tip="Xuất" onclick="exportNote()">
+                        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                            <path d="M6.5 1v7M4 5.5l2.5 2.5L9 5.5" stroke="currentColor" stroke-width="1.2"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M1.5 10.5h10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+                        </svg>
+                    </button>
+                    <button class="topbar-btn" data-tip="Xóa" onclick="deleteCurrentNote()" style="color:var(--red)">
+                        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                            <path
+                                d="M2 3.5h9M5 3.5V2.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5v1M5.5 5.5v4M7.5 5.5v4M3 3.5l.7 6.5a1 1 0 0 0 1 .9h3.6a1 1 0 0 0 1-.9L10 3.5"
+                                stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+                        </svg>
+                    </button>
+                    <div style="width:1px;height:14px;background:var(--border2);margin:0 2px"></div>
+                    <button class="topbar-btn" data-tip="Đóng (Esc)" onclick="closeEditor()"
+                        style="font-size:16px;color:var(--text3);">×</button>
+                </div>
+                <div class="md-toolbar" id="md-toolbar">
+                    <button class="md-btn" onclick="mdCmd('h1')" data-tip="Heading 1"><b>H1</b></button>
+                    <button class="md-btn" onclick="mdCmd('h2')" data-tip="Heading 2"><b>H2</b></button>
+                    <button class="md-btn" onclick="mdCmd('h3')" data-tip="Heading 3"><b>H3</b></button>
+                    <div class="md-sep"></div>
+                    <button class="md-btn" onclick="mdCmd('bold')" data-tip="Bold (Ctrl+B)">
+                        <svg viewBox="0 0 12 12" fill="none">
+                            <path d="M3 2h4a2 2 0 0 1 0 4H3V2zM3 6h4.5a2 2 0 0 1 0 4H3V6z" stroke="currentColor"
+                                stroke-width="1.2" fill="none" />
+                        </svg>
+                    </button>
+                    <button class="md-btn" onclick="mdCmd('italic')" data-tip="Italic (Ctrl+I)">
+                        <svg viewBox="0 0 12 12" fill="none">
+                            <line x1="7" y1="2" x2="5" y2="10" stroke="currentColor" stroke-width="1.3"
+                                stroke-linecap="round" />
+                            <line x1="4" y1="2" x2="8" y2="2" stroke="currentColor" stroke-width="1.2"
+                                stroke-linecap="round" />
+                            <line x1="4" y1="10" x2="8" y2="10" stroke="currentColor" stroke-width="1.2"
+                                stroke-linecap="round" />
+                        </svg>
+                    </button>
+                    <button class="md-btn" onclick="mdCmd('code')" data-tip="Inline code">
+                        <svg viewBox="0 0 12 12" fill="none">
+                            <polyline points="4,3 1,6 4,9" stroke="currentColor" stroke-width="1.2"
+                                stroke-linecap="round" stroke-linejoin="round" fill="none" />
+                            <polyline points="8,3 11,6 8,9" stroke="currentColor" stroke-width="1.2"
+                                stroke-linecap="round" stroke-linejoin="round" fill="none" />
+                        </svg>
+                    </button>
+                    <div class="md-sep"></div>
+                    <button class="md-btn" onclick="mdCmd('ul')" data-tip="Bullet list">
+                        <svg viewBox="0 0 12 12" fill="none">
+                            <circle cx="2" cy="4" r="1" fill="currentColor" />
+                            <circle cx="2" cy="8" r="1" fill="currentColor" />
+                            <line x1="5" y1="4" x2="11" y2="4" stroke="currentColor" stroke-width="1.2"
+                                stroke-linecap="round" />
+                            <line x1="5" y1="8" x2="11" y2="8" stroke="currentColor" stroke-width="1.2"
+                                stroke-linecap="round" />
+                        </svg>
+                    </button>
+                    <button class="md-btn" onclick="mdCmd('ol')" data-tip="Numbered list">
+                        <svg viewBox="0 0 12 12" fill="none"><text x="0" y="5" font-size="4" fill="currentColor"
+                                font-family="monospace">1.</text><text x="0" y="10" font-size="4" fill="currentColor"
+                                font-family="monospace">2.</text>
+                            <line x1="5" y1="3.5" x2="11" y2="3.5" stroke="currentColor" stroke-width="1.2"
+                                stroke-linecap="round" />
+                            <line x1="5" y1="8.5" x2="11" y2="8.5" stroke="currentColor" stroke-width="1.2"
+                                stroke-linecap="round" />
+                        </svg>
+                    </button>
+                    <button class="md-btn" onclick="mdCmd('quote')" data-tip="Blockquote">
+                        <svg viewBox="0 0 12 12" fill="none">
+                            <rect x="1" y="2" width="2" height="8" rx="1" fill="currentColor" />
+                            <line x1="5" y1="4" x2="11" y2="4" stroke="currentColor" stroke-width="1.2"
+                                stroke-linecap="round" />
+                            <line x1="5" y1="7" x2="11" y2="7" stroke="currentColor" stroke-width="1.2"
+                                stroke-linecap="round" />
+                        </svg>
+                    </button>
+                    <button class="md-btn" onclick="mdCmd('hr')" data-tip="Divider">—</button>
+                </div>
+                <div class="editor-scroll" id="editor-scroll">
+                    <textarea class="note-title-input" id="note-title" placeholder="Tiêu đề..." rows="1"
+                        oninput="autoResizeTA(this);onTitleChange()"></textarea>
+                    <div class="note-meta-row" id="meta-row"></div>
+                    <textarea class="note-content" id="note-content"
+                        placeholder="Bắt đầu viết... (Markdown được hỗ trợ)"
+                        oninput="autoResizeTA(this);onContentChange()"></textarea>
+                    <div class="md-preview" id="md-preview"></div>
+                </div>
+            </div>
+            <div class="statusbar" id="statusbar" style="display:none">
+                <div class="status-item">
+                    <div class="status-dot"></div>Đã lưu
+                </div>
+                <div class="status-item" id="word-count">0 từ</div>
+                <div class="status-item" id="char-count">0 ký tự</div>
+            </div>
+        </main>
+
+    </div><!-- .app -->
+
+    <!-- Context menu -->
+    <div class="ctx-menu" id="ctx-menu">
+        <div class="ctx-item" onclick="ctxAction('open')">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <rect x="1" y="2" width="10" height="8" rx="1.5" stroke="currentColor" stroke-width="1.2" fill="none" />
+                <line x1="4" y1="5" x2="8" y2="5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+            </svg>Mở
+        </div>
+        <div class="ctx-item" onclick="ctxAction('rename')">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <path d="M8.5 1.5l2 2L4 10H2V8L8.5 1.5z" stroke="currentColor" stroke-width="1.2" fill="none"
+                    stroke-linejoin="round" />
+            </svg>Đổi tên
+        </div>
+        <div class="ctx-item" onclick="ctxAction('duplicate')">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <rect x="4" y="4" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.2" fill="none" />
+                <path d="M1 8V2a1 1 0 0 1 1-1h6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+            </svg>Nhân bản
+        </div>
+        <div class="ctx-sep"></div>
+        <div class="ctx-item danger" onclick="ctxAction('delete')">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <path
+                    d="M2 3.5h8M4.5 3.5v-1a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5v1M5 5v3.5M7 5v3.5M2.5 3.5l.6 5.5a1 1 0 0 0 1 .9h3.8a1 1 0 0 0 1-.9l.6-5.5"
+                    stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+            </svg>Xóa
+        </div>
+    </div>
+
+    <!-- New note modal -->
+    <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal-title">Ghi chú mới</div>
+            <input class="modal-input" id="modal-note-title" placeholder="Tiêu đề ghi chú..."
+                onkeydown="if(event.key==='Enter')createNote()">
+            <div style="font-size:11px;color:var(--text3);margin-bottom:6px">Tags</div>
+            <div class="modal-row" id="modal-tags"></div>
+            <div class="modal-footer">
+                <button class="modal-cancel" onclick="closeNewNoteModal()">Huỷ</button>
+                <button class="modal-create" onclick="createNote()">Tạo</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ── DATA ──
+        const COLORS = {
+            amber: '#C9B06A', purple: '#7F77DD', teal: '#1D9E75',
+            red: '#D4537E', blue: '#378ADD'
+        };
+
+        let navConfig = {
+            pinned: [
+                { id: 'inbox', label: 'Inbox', icon: 'inbox', badge: 3 },
+                { id: 'all', label: 'Tất cả', icon: 'all' },
+                { id: 'starred', label: 'Đánh dấu sao', icon: 'star' },
+            ],
+            sections: [
+                {
+                    id: 'types', label: 'Types', items: [
+                        { id: 'journal', label: 'Journal', icon: '📓', color: 'amber' },
+                        { id: 'ideas', label: 'Ý tưởng', icon: '💡', color: 'purple' },
+                        { id: 'resources', label: 'Tài nguyên', icon: '📚', color: 'teal' },
+                        { id: 'tasks', label: 'Nhiệm vụ', icon: '✅', color: 'blue' },
+                        { id: 'psychology', label: 'Tâm lý học', icon: '🧠', color: 'red' },
+                    ]
+                },
+                {
+                    id: 'folders', label: 'Folders', items: [
+                        { id: 'personal', label: 'Cá nhân', icon: '📁', color: 'amber' },
+                        { id: 'work', label: 'Công việc', icon: '📁', color: 'blue' },
+                        { id: 'learning', label: 'Học tập', icon: '📁', color: 'purple' },
+                    ]
+                }
+            ]
+        };
+
+        let notes = [
+            { id: 1, title: 'Zeigarnik Effect & 15 phút cuối ngày', content: `# Zeigarnik Effect & 15 phút cuối ngày\n\nNão bộ **không cần bạn hoàn thành 100% việc** — nó chỉ cần một tín hiệu đủ thuyết phục rằng việc đó "đã được xử lý".\n\n## Cơ chế hoạt động\n\nKhi một nhiệm vụ còn dở dang, não bộ giữ một "loop" mở trong working memory. Loop này:\n\n- Tiêu thụ cognitive resources liên tục\n- Gây cảm giác bồn chồn, khó tập trung\n- Tự động kích hoạt lại khi có liên kết bất kỳ\n\n## Giải pháp\n\n15 phút đọc trước khi ngủ không phải "hoàn thành việc" — mà là *tín hiệu đủ để não bộ coi việc đó là "đã xử lý"* và cho phép buông.\n\n> "Capturing" trong GTD của David Allen hoạt động theo nguyên lý này.\n\n## Ứng dụng cá nhân\n\n1. Review note ngắn cuối ngày\n2. Viết 1–2 câu về việc còn dở\n3. Não sẽ cho phép ngủ ngon hơn`, tags: ['tâm lý học', 'GTD'], section: 'psychology', starred: true, modified: new Date(Date.now() - 3600000 * 2) },
+            { id: 2, title: 'Self-compassion — Kristin Neff', content: `# Self-Compassion theo Kristin Neff\n\n## Ba thành phần cốt lõi\n\n1. **Self-kindness** — đối xử với bản thân như với người bạn\n2. **Common humanity** — nhận ra rằng đau khổ là phần của trải nghiệm con người\n3. **Mindfulness** — quan sát cảm xúc không phán xét\n\n## Phân biệt với self-esteem\n\nSelf-esteem thường phụ thuộc vào kết quả bên ngoài. Self-compassion thì không — nó ổn định hơn và bền vững hơn.\n\n*Đọc: Self-Compassion — The Proven Power of Being Kind to Yourself*`, tags: ['tâm lý học', 'đọc sách'], section: 'psychology', starred: false, modified: new Date(Date.now() - 86400000) },
+            { id: 3, title: 'Hệ thống màu sắc cho emotion tracker', content: `# Hệ thống màu sắc — Emotion Tracker\n\n## Nguyên tắc\n\nMàu sắc nên encode **ý nghĩa tâm lý**, không phải danh mục.\n\n## Ramp cảm xúc\n\n| Level | Màu | Hex |\n|-------|-----|-----|\n| A — Flow | Teal | #1D9E75 |\n| B+ — Thả lỏng | Teal nhạt | #5DCAA5 |\n| B — Ổn định | Xanh lá | #97C459 |\n| B- — Chưa mãn | Amber | #EF9F27 |\n| C+ — Mệt | Coral | #D85A30 |\n\n## Lý do dùng ramp đơn\n\nNão bộ xử lý gradient màu tự nhiên theo thang nhiệt độ. Một ramp liên tục giúp đọc pattern ngay lập tức mà không cần đọc legend.`, tags: ['design', 'color'], section: 'ideas', starred: true, modified: new Date(Date.now() - 86400000 * 2) },
+            { id: 4, title: 'Flow — Csikszentmihalyi', content: `# Flow: The Psychology of Optimal Experience\n\n## Điều kiện để đạt Flow\n\n- **Challenge–skill balance**: thách thức vừa đủ, không quá dễ cũng không quá khó\n- Clear goals, immediate feedback\n- Deep concentration — không bị ngắt\n\n## Mô hình 8 trạng thái\n\nTừ Boredom đến Anxiety, Flow nằm ở điểm cân bằng giữa kỹ năng cao và thách thức cao.\n\n## Ứng dụng cá nhân\n\n- Coding với AI: thường đạt flow khi bài toán vừa sức\n- Đọc sách: cần môi trường yên tĩnh`, tags: ['đọc sách', 'psychology'], section: 'resources', starred: false, modified: new Date(Date.now() - 86400000 * 3) },
+            { id: 5, title: 'Morning routine — thử nghiệm', content: `# Morning Routine — Thử nghiệm Q2 2026\n\n## Cấu trúc hiện tại\n\n- 6:00 — Thức dậy, uống nước\n- 6:15 — 15 phút đọc sách (không điện thoại)\n- 6:30 — Ghi chú ngắn: 3 điều cần làm hôm nay\n- 7:00 — Bắt đầu deep work block đầu tiên\n\n## Nhận xét sau 2 tuần\n\nNhững buổi sáng theo routine này thường có **mood B+** trong suốt buổi sáng. Cảm giác kiểm soát cao hơn.\n\n> Không check điện thoại trước 8h là yếu tố quan trọng nhất.`, tags: ['habit', 'journal'], section: 'journal', starred: false, modified: new Date(Date.now() - 86400000 * 5) },
+        ];
+
+        let currentSection = 'all';
+        let currentNoteId = null;
+        let isPreview = false;
+        let sortAsc = false;
+        let ctxTargetId = null;
+        let selectedTags = [];
+        let saveTimer = null;
+        let nextId = notes.length + 1;
+        let viewMode = 'list'; // 'list' | 'card' | 'compact'
+
+        function setViewMode(mode) {
+            viewMode = mode;
+            const panel = document.getElementById('note-list-panel');
+            panel.classList.remove('view-card', 'view-compact', 'view-grid');
+            if (mode === 'card') panel.classList.add('view-card');
+            if (mode === 'compact') panel.classList.add('view-compact');
+            if (mode === 'grid') panel.classList.add('view-grid');
+            document.querySelectorAll('.vm-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('vm-' + mode).classList.add('active');
+            // Grid mode: close full editor, use popup instead
+            if (mode !== 'grid' && currentNoteId) {
+                document.getElementById('editor-main').style.display = 'flex';
+                document.getElementById('empty-state').style.display = 'none';
+            }
+            if (mode === 'grid') {
+                document.getElementById('editor-main').style.display = 'none';
+                document.getElementById('empty-state').style.display = 'flex';
+            }
+            renderNoteList(document.getElementById('search-input').value);
+        }
+
+        // ── RESIZE HANDLE ──
+        (function () {
+            const handle = document.getElementById('list-resize-handle');
+            const panel = document.getElementById('note-list-panel');
+            let isResizing = false;
+            let startX = 0;
+            let startW = 0;
+
+            handle.addEventListener('mousedown', e => {
+                isResizing = true;
+                startX = e.clientX;
+                startW = panel.offsetWidth;
+                handle.classList.add('dragging');
+                document.body.style.cursor = 'col-resize';
+                document.body.style.userSelect = 'none';
+                e.preventDefault();
+            });
+
+            document.addEventListener('mousemove', e => {
+                if (!isResizing) return;
+                const dx = e.clientX - startX;
+                const newW = Math.max(220, Math.min(window.innerWidth * 0.7, startW + dx));
+                panel.style.width = newW + 'px';
+                // Update grid columns based on width
+                if (viewMode === 'grid') {
+                    const cols = newW < 340 ? 1 : newW < 520 ? 2 : newW < 720 ? 3 : 4;
+                    panel.querySelector('.list-scroll').style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+                }
+            });
+
+            document.addEventListener('mouseup', () => {
+                if (!isResizing) return;
+                isResizing = false;
+                handle.classList.remove('dragging');
+                document.body.style.cursor = '';
+                document.body.style.userSelect = '';
+            });
+        })();
+
+        // ── DETAIL POPUP (grid mode) ──
+        function openDetailPopup(noteId) {
+            const note = notes.find(n => n.id === noteId);
+            if (!note) return;
+            currentNoteId = noteId;
+
+            document.getElementById('dp-title').textContent = note.title;
+            document.getElementById('dp-note-title').value = note.title;
+            autoResizeTA(document.getElementById('dp-note-title'));
+            document.getElementById('dp-note-content').value = note.content;
+            autoResizeTA(document.getElementById('dp-note-content'));
+            renderDpMeta(note);
+
+            document.getElementById('detail-popup').classList.add('open');
+            document.querySelectorAll('.note-card').forEach(el => el.classList.toggle('active', +el.dataset.id === noteId));
+        }
+
+        function closeDetailPopup() {
+            document.getElementById('detail-popup').classList.remove('open');
+            currentNoteId = null;
+            document.querySelectorAll('.note-card').forEach(el => el.classList.remove('active'));
+        }
+
+        function renderDpMeta(note) {
+            const row = document.getElementById('dp-meta-row');
+            const tags = (note.tags || []).map(t =>
+                `<span style="font-size:11px;padding:2px 8px;border-radius:4px;background:var(--bg3);color:var(--text3);margin-right:4px;font-family:'Geist Mono',monospace">${t}</span>`
+            ).join('');
+            row.innerHTML = `
+    <div class="meta-chip"><svg viewBox="0 0 11 11" fill="none"><circle cx="5.5" cy="5.5" r="4" stroke="currentColor" stroke-width="1.1"/><path d="M5.5 3v3l1.5 1.5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg><span>${relTime(note.modified)}</span></div>
+    <div>${tags}</div>`;
+        }
+
+        function onDpTitleChange() {
+            const note = notes.find(n => n.id === currentNoteId);
+            if (!note) return;
+            note.title = document.getElementById('dp-note-title').value;
+            note.modified = new Date();
+            document.getElementById('dp-title').textContent = note.title;
+            renderNoteList(document.getElementById('search-input').value);
+        }
+
+        function onDpContentChange() {
+            const note = notes.find(n => n.id === currentNoteId);
+            if (!note) return;
+            note.content = document.getElementById('dp-note-content').value;
+            note.modified = new Date();
+            renderNoteList(document.getElementById('search-input').value);
+        }
+
+        // ── RENDER SIDEBAR ──
+        function renderSidebar() {
+            const nav = document.getElementById('sidebar-nav');
+            nav.innerHTML = '';
+
+            // Pinned
+            navConfig.pinned.forEach(item => {
+                nav.appendChild(makeNavItem(item, null));
+            });
+
+            // Sections
+            navConfig.sections.forEach(sec => {
+                const header = document.createElement('div');
+                header.className = 'nav-section';
+                const h = document.createElement('div');
+                h.className = 'nav-section-header';
+                h.innerHTML = `<span class="nav-section-label">${sec.label}</span>`
+                    + `<button class="nav-add" onclick="addNavItem('${sec.id}')" title="Thêm">+</button>`;
+                header.appendChild(h);
+                sec.items.forEach(item => header.appendChild(makeNavItem(item, sec.id)));
+                nav.appendChild(header);
+            });
+        }
+
+        function makeNavItem(item, secId) {
+            const el = document.createElement('div');
+            el.className = 'nav-item' + (currentSection === item.id ? ' active' : '');
+            el.dataset.id = item.id;
+            el.dataset.sec = secId || '';
+
+            const color = item.color ? COLORS[item.color] : null;
+            const iconEl = item.icon && item.icon.length > 2
+                ? `<span class="nav-icon" style="${color ? 'color:' + color : ''}">${item.icon}</span>`
+                : `<svg class="nav-icon" viewBox="0 0 14 14" fill="none">${getNavSvg(item.icon)}</svg>`;
+
+            const count = getCountForSection(item.id);
+            const countEl = count > 0 ? `<span class="nav-count">${count}</span>` : '';
+            const badgeEl = item.badge ? `<span class="nav-badge">${item.badge}</span>` : '';
+
+            el.innerHTML = iconEl
+                + `<span class="nav-label">${item.label}</span>`
+                + countEl + badgeEl;
+
+            el.addEventListener('click', () => selectSection(item.id, item.label));
+            el.addEventListener('contextmenu', e => showCtxMenuForNav(e, item, secId));
+            return el;
+        }
+
+        function getNavSvg(icon) {
+            const svgs = {
+                inbox: '<path d="M1 8h3l1.5 2h3L10 8h3V11a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V8z" stroke="currentColor" stroke-width="1.2" fill="none"/><path d="M1 8l2-5h8l2 5" stroke="currentColor" stroke-width="1.2" fill="none"/>',
+                all: '<rect x="1" y="1" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="8" y="1" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="1" y="8" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="8" y="8" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2" fill="none"/>',
+                star: '<path d="M7 1l1.5 4H13l-3.5 2.5 1.5 4L7 9l-4 2.5 1.5-4L1 5h4.5z" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linejoin="round"/>',
+            };
+            return svgs[icon] || svgs.all;
+        }
+
+        function getCountForSection(id) {
+            if (id === 'all') return notes.length;
+            if (id === 'starred') return notes.filter(n => n.starred).length;
+            if (id === 'inbox') return notes.filter(n => !n.section).length;
+            return notes.filter(n => n.section === id).length;
+        }
+
+        function selectSection(id, label) {
+            currentSection = id;
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.toggle('active', el.dataset.id === id));
+            document.getElementById('list-title').textContent = label || id;
+            document.getElementById('bc-section').textContent = label || id;
+            renderNoteList();
+        }
+
+        // ── NOTE LIST ──
+        function renderNoteList(filter = '') {
+            const list = document.getElementById('notes-list');
+            list.innerHTML = '';
+            let filtered = notes.filter(n => {
+                if (currentSection === 'starred') return n.starred;
+                if (currentSection === 'inbox') return !n.section;
+                if (currentSection !== 'all') return n.section === currentSection;
+                return true;
+            });
+            if (filter) {
+                const q = filter.toLowerCase();
+                filtered = filtered.filter(n => n.title.toLowerCase().includes(q) || n.content.toLowerCase().includes(q));
+            }
+            filtered.sort((a, b) => sortAsc ? a.modified - b.modified : b.modified - a.modified);
+
+            if (!filtered.length) {
+                list.innerHTML = '<div style="padding:24px 16px;text-align:center;color:var(--text3);font-size:12px;">Không có ghi chú nào</div>';
+                return;
+            }
+
+            filtered.forEach(note => {
+                const el = document.createElement('div');
+                el.className = 'note-card' + (note.id === currentNoteId ? ' active' : '');
+                el.dataset.id = note.id;
+                el.dataset.section = note.section || '';
+
+                const rawText = note.content.replace(/[#*`>_\-\d\.]/g, '').trim();
+                const preview = rawText.slice(0, 110);
+                const time = relTime(note.modified);
+                const tagsHtml = (note.tags || []).slice(0, viewMode === 'card' ? 3 : 2)
+                    .map(t => `<span class="card-tag">${t}</span>`).join('');
+                const starHtml = note.starred
+                    ? `<svg width="10" height="10" viewBox="0 0 10 10" fill="var(--accent)" style="flex-shrink:0;margin-top:2px"><path d="M5 1l1 3h3l-2.5 1.8 1 3L5 7.2 2.5 8.8l1-3L1 4h3z" stroke="none"/></svg>`
+                    : '';
+
+                // Extract meaningful lines for bullet preview (card mode)
+                const meaningfulLines = note.content
+                    .split('\n')
+                    .map(l => l.replace(/^[#\-\*\d\.>\s]+/, '').replace(/\*\*/g, '').replace(/\*/g, '').trim())
+                    .filter(l => l.length > 8 && l.length < 80)
+                    .slice(0, 3);
+
+                const bulletsHtml = meaningfulLines.map(l =>
+                    `<div class="ceb-item"><div class="ceb-dot"></div><span>${l}</span></div>`
+                ).join('');
+
+                // Section color label
+                const sectionColors = {
+                    psychology: 'var(--red)', ideas: 'var(--accent2)', resources: 'var(--green)',
+                    journal: 'var(--accent)', tasks: 'var(--blue)', work: 'var(--blue)',
+                    learning: 'var(--accent2)', personal: 'var(--accent)'
+                };
+                const accentColor = sectionColors[note.section] || 'var(--text3)';
+
+                el.innerHTML = `
+      <div class="card-accent-bar" style="background:${accentColor}"></div>
+      <div class="card-top">
+        ${starHtml}
+        <span class="card-title">${note.title}</span>
+        <svg class="card-edit-icon" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M7.5 1.5l2 2L3 10H1V8L7.5 1.5z" stroke="currentColor" stroke-width="1.1" fill="none"/></svg>
+      </div>
+      <div class="card-preview">${preview}</div>
+      <div class="card-excerpt-bullets">${bulletsHtml}</div>
+      <div class="card-meta">
+        <div class="card-tags">${tagsHtml}</div>
+        <span class="card-time">${time}</span>
+      </div>`;
+
+                el.addEventListener('click', () => openNote(note.id));
+                el.addEventListener('contextmenu', e => showCtxMenu(e, note.id));
+                list.appendChild(el);
+            });
+        }
+
+        function relTime(d) {
+            const diff = Date.now() - d.getTime();
+            if (diff < 60000) return 'vừa xong';
+            if (diff < 3600000) return Math.floor(diff / 60000) + ' phút trước';
+            if (diff < 86400000) return Math.floor(diff / 3600000) + ' giờ trước';
+            return Math.floor(diff / 86400000) + ' ngày trước';
+        }
+
+        // ── EDITOR ──
+        function openNote(id) {
+            if (viewMode === 'grid') { openDetailPopup(id); return; }
+            const note = notes.find(n => n.id === id);
+            if (!note) return;
+            currentNoteId = id;
+            isPreview = false;
+
+            document.getElementById('empty-state').style.display = 'none';
+            const em = document.getElementById('editor-main');
+            em.style.display = 'flex';
+            document.getElementById('statusbar').style.display = 'flex';
+
+            document.getElementById('note-title').value = note.title;
+            autoResizeTA(document.getElementById('note-title'));
+            document.getElementById('note-content').value = note.content;
+            autoResizeTA(document.getElementById('note-content'));
+            document.getElementById('note-content').style.display = 'block';
+            document.getElementById('md-preview').style.display = 'none';
+            document.getElementById('preview-btn').classList.remove('active');
+
+            document.getElementById('bc-title').textContent = note.title || 'Không có tiêu đề';
+            renderMeta(note);
+            updateWordCount();
+
+            document.querySelectorAll('.note-card').forEach(el => el.classList.toggle('active', +el.dataset.id === id));
+        }
+
+        function renderMeta(note) {
+            const row = document.getElementById('meta-row');
+            const tags = (note.tags || []).map(t => `<span style="font-size:11px;padding:2px 8px;border-radius:4px;background:var(--bg3);color:var(--text3);margin-right:4px;font-family:'Geist Mono',monospace">${t}</span>`).join('');
+            row.innerHTML = `
+    <div class="meta-chip">
+      <svg viewBox="0 0 11 11" fill="none"><rect x="1" y="1" width="9" height="9" rx="2" stroke="currentColor" stroke-width="1.1" fill="none"/><line x1="3.5" y1="4" x2="7.5" y2="4" stroke="currentColor" stroke-width="1" stroke-linecap="round"/><line x1="3.5" y1="6.5" x2="6" y2="6.5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>
+      <span>${note.section || 'inbox'}</span>
+    </div>
+    <div class="meta-chip">
+      <svg viewBox="0 0 11 11" fill="none"><circle cx="5.5" cy="5.5" r="4" stroke="currentColor" stroke-width="1.1"/><path d="M5.5 3v3l1.5 1.5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>
+      <span>${relTime(note.modified)}</span>
+    </div>
+    <div>${tags}</div>
+    <div class="meta-chip" onclick="toggleStar()" style="margin-left:auto">
+      <svg viewBox="0 0 11 11" fill="none"><path d="M5.5 1l1.2 3h3.2l-2.6 1.9 1 3L5.5 7.2 3.2 8.9l1-3L1.6 4h3.2z" stroke="currentColor" stroke-width="1.1" fill="${note.starred ? 'var(--accent)' : 'none'}" stroke-linejoin="round"/></svg>
+      <span style="color:${note.starred ? 'var(--accent)' : 'var(--text3)'}">Đánh dấu</span>
+    </div>`;
+        }
+
+        function toggleStar() {
+            const note = notes.find(n => n.id === currentNoteId);
+            if (note) { note.starred = !note.starred; renderMeta(note); renderNoteList(); renderSidebar(); }
+        }
+
+        function onTitleChange() {
+            const note = notes.find(n => n.id === currentNoteId);
+            if (!note) return;
+            note.title = document.getElementById('note-title').value;
+            note.modified = new Date();
+            document.getElementById('bc-title').textContent = note.title || 'Không có tiêu đề';
+            scheduleSave();
+        }
+
+        function onContentChange() {
+            const note = notes.find(n => n.id === currentNoteId);
+            if (!note) return;
+            note.content = document.getElementById('note-content').value;
+            note.modified = new Date();
+            updateWordCount();
+            scheduleSave();
+        }
+
+        function scheduleSave() {
+            clearTimeout(saveTimer);
+            document.querySelector('.status-item')?.setAttribute('style', '');
+            saveTimer = setTimeout(() => { renderNoteList(); }, 1500);
+        }
+
+        function updateWordCount() {
+            const txt = document.getElementById('note-content').value;
+            const words = txt.trim() ? txt.trim().split(/\s+/).length : 0;
+            document.getElementById('word-count').textContent = words + ' từ';
+            document.getElementById('char-count').textContent = txt.length + ' ký tự';
+        }
+
+        function autoResizeTA(el) {
+            el.style.height = 'auto';
+            el.style.height = el.scrollHeight + 'px';
+        }
+
+        // ── PREVIEW ──
+        function togglePreview() {
+            isPreview = !isPreview;
+            const content = document.getElementById('note-content');
+            const preview = document.getElementById('md-preview');
+            const btn = document.getElementById('preview-btn');
+            if (isPreview) {
+                preview.innerHTML = parseMarkdown(content.value);
+                content.style.display = 'none';
+                preview.style.display = 'block';
+                btn.classList.add('active');
+            } else {
+                content.style.display = 'block';
+                preview.style.display = 'none';
+                btn.classList.remove('active');
+            }
+        }
+
+        function parseMarkdown(md) {
+            return md
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+                .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+                .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+                .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.+?)\*/g, '<em>$1</em>')
+                .replace(/`([^`]+)`/g, '<code>$1</code>')
+                .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
+                .replace(/^---$/gm, '<hr>')
+                .replace(/^\d+\. (.+)$/gm, (m, p) => `<li>${p}</li>`)
+                .replace(/^[-*] (.+)$/gm, (m, p) => `<li>${p}</li>`)
+                .replace(/(<li>.*<\/li>\n?)+/g, s => `<ul>${s}</ul>`)
+                .replace(/\n\n/g, '</p><p>')
+                .replace(/^(?!<[hbuolp])(.+)$/gm, '<p>$1</p>')
+                .replace(/<p><\/p>/g, '');
+        }
+
+        // ── MARKDOWN COMMANDS ──
+        function mdCmd(cmd) {
+            if (isPreview) { togglePreview(); }
+            const ta = document.getElementById('note-content');
+            const start = ta.selectionStart;
+            const end = ta.selectionEnd;
+            const sel = ta.value.slice(start, end);
+            const lineStart = ta.value.lastIndexOf('\n', start - 1) + 1;
+            let replacement = '';
+            let offset = 0;
+
+            switch (cmd) {
+                case 'bold': replacement = `**${sel || 'text'}**`; offset = sel ? 0 : 2; break;
+                case 'italic': replacement = `*${sel || 'text'}*`; offset = sel ? 0 : 1; break;
+                case 'code': replacement = `\`${sel || 'code'}\``; offset = sel ? 0 : 1; break;
+                case 'h1': { const line = ta.value.slice(lineStart, end || lineStart + 1); ta.value = ta.value.slice(0, lineStart) + '# ' + line.replace(/^#+\s?/, '') + ta.value.slice(end || lineStart + line.length); ta.focus(); onContentChange(); return; }
+                case 'h2': { const line = ta.value.slice(lineStart, end || lineStart + 1); ta.value = ta.value.slice(0, lineStart) + '## ' + line.replace(/^#+\s?/, '') + ta.value.slice(end || lineStart + line.length); ta.focus(); onContentChange(); return; }
+                case 'h3': { const line = ta.value.slice(lineStart, end || lineStart + 1); ta.value = ta.value.slice(0, lineStart) + '### ' + line.replace(/^#+\s?/, '') + ta.value.slice(end || lineStart + line.length); ta.focus(); onContentChange(); return; }
+                case 'ul': replacement = `\n- ${sel || 'item'}`; offset = sel ? 0 : 2; break;
+                case 'ol': replacement = `\n1. ${sel || 'item'}`; offset = sel ? 0 : 3; break;
+                case 'quote': replacement = `\n> ${sel || 'quote'}`; offset = sel ? 0 : 2; break;
+                case 'hr': replacement = '\n---\n'; offset = 0; break;
+            }
+            ta.setRangeText(replacement, start, end, 'end');
+            if (!sel) { ta.selectionStart = ta.selectionEnd = start + offset + (replacement.length - (sel.length || 0) - offset * 2); }
+            ta.focus();
+            autoResizeTA(ta);
+            onContentChange();
+        }
+
+        function closeEditor() {
+            currentNoteId = null;
+            document.getElementById('editor-main').style.display = 'none';
+            document.getElementById('empty-state').style.display = 'flex';
+            document.getElementById('statusbar').style.display = 'none';
+            document.querySelectorAll('.note-card').forEach(el => el.classList.remove('active'));
+        }
+
+        // ── KEYBOARD SHORTCUTS ──
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') {
+                if (document.getElementById('modal-overlay').classList.contains('show')) { closeNewNoteModal(); return; }
+                if (document.getElementById('detail-popup').classList.contains('open')) { closeDetailPopup(); return; }
+                if (currentNoteId) { closeEditor(); return; }
+            }
+            if ((e.ctrlKey || e.metaKey)) {
+                if (e.key === 'b') { e.preventDefault(); mdCmd('bold'); }
+                if (e.key === 'i') { e.preventDefault(); mdCmd('italic'); }
+                if (e.key === 'e') { e.preventDefault(); mdCmd('code'); }
+                if (e.key === 'n') { e.preventDefault(); openNewNoteModal(); }
+                if (e.key === 'p') { e.preventDefault(); togglePreview(); }
+            }
+        });
+
+        // ── CONTEXT MENU ──
+        function showCtxMenu(e, id) {
+            e.preventDefault();
+            ctxTargetId = id;
+            const menu = document.getElementById('ctx-menu');
+            menu.classList.add('show');
+            menu.style.left = Math.min(e.clientX, window.innerWidth - 180) + 'px';
+            menu.style.top = Math.min(e.clientY, window.innerHeight - 160) + 'px';
+        }
+
+        function showCtxMenuForNav(e, item, secId) {
+            e.preventDefault();
+            // nav rename on double click only
+        }
+
+        document.addEventListener('click', () => document.getElementById('ctx-menu').classList.remove('show'));
+
+        function ctxAction(action) {
+            const note = notes.find(n => n.id === ctxTargetId);
+            if (!note) return;
+            if (action === 'open') openNote(note.id);
+            if (action === 'duplicate') {
+                const dup = { ...note, id: nextId++, title: note.title + ' (copy)', modified: new Date() };
+                notes.unshift(dup);
+                renderNoteList(); renderSidebar();
+            }
+            if (action === 'delete') {
+                notes = notes.filter(n => n.id !== ctxTargetId);
+                if (currentNoteId === ctxTargetId) {
+                    currentNoteId = null;
+                    document.getElementById('editor-main').style.display = 'none';
+                    document.getElementById('empty-state').style.display = 'flex';
+                    document.getElementById('statusbar').style.display = 'none';
+                }
+                renderNoteList(); renderSidebar();
+            }
+            if (action === 'rename') {
+                const card = document.querySelector(`.note-card[data-id="${ctxTargetId}"]`);
+                if (card) { openNote(note.id); setTimeout(() => { const t = document.getElementById('note-title'); t.focus(); t.select(); }, 100); }
+            }
+        }
+
+        function deleteCurrentNote() {
+            if (!currentNoteId) return;
+            ctxTargetId = currentNoteId;
+            ctxAction('delete');
+        }
+
+        // ── NEW NOTE ──
+        const ALL_TAGS = ['tâm lý học', 'design', 'journal', 'ideas', 'GTD', 'habit', 'đọc sách', 'coding'];
+
+        function openNewNoteModal() {
+            selectedTags = [];
+            document.getElementById('modal-note-title').value = '';
+            const tagsEl = document.getElementById('modal-tags');
+            tagsEl.innerHTML = ALL_TAGS.map(t => `<button class="modal-tag-opt" onclick="toggleModalTag(this,'${t}')">${t}</button>`).join('');
+            document.getElementById('modal-overlay').classList.add('show');
+            setTimeout(() => document.getElementById('modal-note-title').focus(), 100);
+        }
+
+        function toggleModalTag(btn, tag) {
+            btn.classList.toggle('sel');
+            if (btn.classList.contains('sel')) selectedTags.push(tag);
+            else selectedTags = selectedTags.filter(t => t !== tag);
+        }
+
+        function closeNewNoteModal() { document.getElementById('modal-overlay').classList.remove('show'); }
+        function closeModal(e) { if (e.target === document.getElementById('modal-overlay')) closeNewNoteModal(); }
+
+        function createNote() {
+            const title = document.getElementById('modal-note-title').value.trim() || 'Ghi chú mới';
+            const note = {
+                id: nextId++,
+                title,
+                content: `# ${title}\n\n`,
+                tags: [...selectedTags],
+                section: currentSection === 'all' || currentSection === 'inbox' ? null : currentSection,
+                starred: false,
+                modified: new Date(),
+            };
+            notes.unshift(note);
+            closeNewNoteModal();
+            renderNoteList(); renderSidebar();
+            openNote(note.id);
+            setTimeout(() => { const ta = document.getElementById('note-content'); ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); }, 100);
+        }
+
+        // ── ADD NAV ITEM ──
+        function addNavItem(secId) {
+            const label = prompt('Tên mục mới:');
+            if (!label) return;
+            const sec = navConfig.sections.find(s => s.id === secId);
+            if (sec) {
+                sec.items.push({ id: label.toLowerCase().replace(/\s+/g, '-'), label, icon: '📁', color: 'amber' });
+                renderSidebar();
+            }
+        }
+
+        // ── FILTER & SORT ──
+        function filterNotes(q) { renderNoteList(q); }
+        function toggleSort() { sortAsc = !sortAsc; renderNoteList(); }
+
+        // ── EXPORT ──
+        function exportNote() {
+            const note = notes.find(n => n.id === currentNoteId);
+            if (!note) return;
+            const blob = new Blob([note.content], { type: 'text/markdown' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = note.title.replace(/[^a-z0-9\u00C0-\u024F\s]/gi, '_') + '.md';
+            a.click();
+        }
+
+        // ── THEME ──
+        function setTheme(theme) {
+            document.documentElement.classList.remove('sepia');
+            if (theme === 'sepia') document.documentElement.classList.add('sepia');
+            document.querySelectorAll('.theme-dot').forEach(d => d.classList.remove('active'));
+            document.getElementById('td-' + theme).classList.add('active');
+        }
+
+        // ── SIDEBAR TOGGLE ──
+        function toggleSidebar() {
+            const sb = document.querySelector('.sidebar');
+            sb.style.display = sb.style.display === 'none' ? '' : 'none';
+        }
+
+        // ── INIT ──
+        renderSidebar();
+        selectSection('all', 'Tất cả');
+    </script>
+</body>
+
+</html>

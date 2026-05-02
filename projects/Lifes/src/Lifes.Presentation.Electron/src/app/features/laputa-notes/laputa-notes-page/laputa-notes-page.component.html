@@ -1,0 +1,27 @@
+<div class="laputa-host" [class.sepia]="isSepia">
+  <div class="app">
+    <app-laputa-sidebar *ngIf="noteService.isSidebarOpen()"></app-laputa-sidebar>
+    <app-laputa-note-list (openNewNote)="openNewNoteModal()"></app-laputa-note-list>
+    <app-laputa-editor></app-laputa-editor>
+  </div>
+
+  <!-- New note modal -->
+  <div class="modal-overlay" [class.show]="isNewNoteModalOpen" (click)="closeNewNoteModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-title">Ghi chú mới</div>
+      <input class="modal-input" [(ngModel)]="newNoteTitle" placeholder="Tiêu đề ghi chú..."
+        (keydown.enter)="createNote()">
+      <div style="font-size:11px;color:var(--text3);margin-bottom:6px">Tags</div>
+      <div class="modal-row">
+        <button *ngFor="let tag of noteService.ALL_TAGS" class="modal-tag-opt"
+          [class.sel]="selectedTags.includes(tag)" (click)="toggleModalTag(tag)">
+          {{ tag }}
+        </button>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-cancel" (click)="closeNewNoteModal()">Huỷ</button>
+        <button class="modal-create" (click)="createNote()">Tạo</button>
+      </div>
+    </div>
+  </div>
+</div>

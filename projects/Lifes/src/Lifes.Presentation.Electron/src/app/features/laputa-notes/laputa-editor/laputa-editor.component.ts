@@ -16,11 +16,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     '[class.has-note]': 'noteService.currentNoteId() !== null'
   }
 })
-export class LaputaEditorComponent implements AfterViewChecked {
+export class LaputaEditorComponent {
   public noteService = inject(LaputaNotesService);
   private fb = inject(FormBuilder);
   private destroyRef = inject(DestroyRef);
-  
+
   @ViewChild('noteTitle') noteTitleInput!: ElementRef<HTMLTextAreaElement>;
   @ViewChild('noteContent') noteContentInput!: ElementRef<HTMLTextAreaElement>;
   @ViewChild('dpNoteTitle') dpNoteTitleInput!: ElementRef<HTMLTextAreaElement>;
@@ -37,8 +37,8 @@ export class LaputaEditorComponent implements AfterViewChecked {
 
     // Handle auto-save with debounce
     this.noteForm.valueChanges.pipe(
-      debounceTime(1000),
-      distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)),
+      debounceTime(200),
+      distinctUntilChanged((prev, curr) => prev.title === curr.title && prev.content === curr.content),
       tap(value => {
         if (this.isPatching) return;
         const note = this.noteService.currentNote();
@@ -53,18 +53,24 @@ export class LaputaEditorComponent implements AfterViewChecked {
     effect(() => {
       const note = this.noteService.currentNote();
       if (note) {
-        this.isPatching = true;
-        this.noteForm.patchValue({
-          title: note.title,
-          content: note.content
-        }, { emitEvent: false });
-        this.isPatching = false;
-        
-        // Also trigger auto-resize after patch
-        setTimeout(() => {
-          if (this.noteContentInput?.nativeElement) this.autoResize(this.noteContentInput.nativeElement);
-          if (this.dpNoteContentInput?.nativeElement) this.autoResize(this.dpNoteContentInput.nativeElement);
-        }, 0);
+        // Only patch if values are actually different to prevent scroll reset
+        const currentValues = this.noteForm.getRawValue();
+        if (currentValues.title !== note.title || currentValues.content !== note.content) {
+          this.isPatching = true;
+          this.noteForm.patchValue({
+            title: note.title,
+            content: note.content
+          }, { emitEvent: false });
+          this.isPatching = false;
+
+          // Trigger auto-resize after patch
+          setTimeout(() => {
+            if (this.noteContentInput?.nativeElement) this.autoResize(this.noteContentInput.nativeElement);
+            if (this.noteTitleInput?.nativeElement) this.autoResize(this.noteTitleInput.nativeElement);
+            if (this.dpNoteContentInput?.nativeElement) this.autoResize(this.dpNoteContentInput.nativeElement);
+            if (this.dpNoteTitleInput?.nativeElement) this.autoResize(this.dpNoteTitleInput.nativeElement);
+          }, 0);
+        }
       }
     });
   }
@@ -85,15 +91,6 @@ export class LaputaEditorComponent implements AfterViewChecked {
     if (!textarea) return;
     textarea.style.height = 'auto';
     textarea.style.height = textarea.scrollHeight + 'px';
-  }
-
-  ngAfterViewChecked() {
-    if (this.noteContentInput?.nativeElement) {
-      this.autoResize(this.noteContentInput.nativeElement);
-    }
-    if (this.dpNoteContentInput?.nativeElement) {
-      this.autoResize(this.dpNoteContentInput.nativeElement);
-    }
   }
 
   togglePreview() {
@@ -136,8 +133,8 @@ export class LaputaEditorComponent implements AfterViewChecked {
     if (this.noteService.isPreview()) {
       this.togglePreview();
     }
-    const ta = this.noteService.viewMode() === 'grid' 
-      ? this.dpNoteContentInput.nativeElement 
+    const ta = this.noteService.viewMode() === 'grid'
+      ? this.dpNoteContentInput.nativeElement
       : this.noteContentInput.nativeElement;
 
     if (!ta) return;

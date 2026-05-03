@@ -2,11 +2,12 @@ import { Component, ElementRef, HostListener, ViewChild, inject, signal } from '
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PdfReaderService } from '../services/pdf-reader.service';
+import { LaputaPdfViewerComponent } from '../../../shared/components/laputa-pdf-viewer/laputa-pdf-viewer.component';
 
 @Component({
   selector: 'app-pdf-reader-page',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LaputaPdfViewerComponent],
   templateUrl: './pdf-reader-page.component.html',
   styleUrls: ['./pdf-reader-page.component.css']
 })
@@ -24,6 +25,8 @@ export class PdfReaderPageComponent {
   books = this.pdfReaderService.books;
   notes = this.pdfReaderService.notes;
   tocItems = this.pdfReaderService.tocItems;
+  samplePdfSrc = 'https://pdfobject.com/pdf/sample.pdf';
+  pdfQuoteText: string = ''; // Temporary storage for PDF text selection
 
   // New Note State
   newNoteText = signal<string>('');
@@ -124,6 +127,34 @@ export class PdfReaderPageComponent {
         this.selToolbarRef.nativeElement.style.top = top + 'px';
       }, 0);
     }, 10);
+  }
+
+  onPdfTextSelected(event: { text: string, rect: DOMRect }) {
+    // Handling selection from the actual PDF viewer
+    this.selAnchorX.set(event.rect.left + event.rect.width / 2);
+    this.selAnchorY.set(event.rect.top);
+    this.isToolbarVisible.set(true);
+    
+    // We mock savedRange here so the rest of the popup logic still opens, 
+    // though actual highlighting requires calling the Editor API of the library.
+    const mockRange = document.createRange();
+    this.savedRange = mockRange as any;
+    // Store text for note quote
+    this.pdfQuoteText = event.text;
+    this.snpQuoteText.set('"' + event.text.slice(0, 80) + (event.text.length > 80 ? '…' : '') + '"');
+
+    setTimeout(() => {
+      if (!this.selToolbarRef) return;
+      const tbw = this.selToolbarRef.nativeElement.offsetWidth;
+      const tbh = this.selToolbarRef.nativeElement.offsetHeight;
+      let left = this.selAnchorX() - tbw / 2;
+      let top = this.selAnchorY() - tbh - 8;
+      left = Math.max(8, Math.min(window.innerWidth - tbw - 8, left));
+      top = Math.max(52, top);
+      
+      this.selToolbarRef.nativeElement.style.left = left + 'px';
+      this.selToolbarRef.nativeElement.style.top = top + 'px';
+    }, 0);
   }
 
   @HostListener('document:mousedown', ['$event'])
@@ -230,17 +261,20 @@ export class PdfReaderPageComponent {
 
   saveNote() {
     const noteText = this.newNoteText().trim();
-    if (!this.savedRange) { this.closeNotePopup(); return; }
+    if (!this.savedRange && !this.pdfQuoteText) { this.closeNotePopup(); return; }
     
-    if (this.noteHL() !== 'none') {
+    const quote = this.pdfQuoteText || this.savedRange?.toString() || '';
+
+    if (this.noteHL() !== 'none' && this.savedRange && !this.pdfQuoteText) {
       this.wrapRangeWithHL(this.savedRange, this.noteHL(), noteText);
-    } else if (noteText) {
-      this.addNoteToPanel(this.savedRange.toString(), noteText, 'amber');
+    } else if (noteText || this.noteHL() !== 'none') {
+      this.addNoteToPanel(quote, noteText, this.noteHL() === 'none' ? 'amber' : this.noteHL());
     }
     
     this.closeNotePopup();
     window.getSelection()?.removeAllRanges();
     this.savedRange = null;
+    this.pdfQuoteText = '';
   }
 
   copySelection() {

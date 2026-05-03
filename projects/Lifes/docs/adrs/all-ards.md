@@ -322,3 +322,22 @@ Khắc phục lỗi Editor tự động nhảy scroll về đầu trang khi ngư
 - **Lý do**: 
     - **Nguyên nhân gốc rễ**: Lỗi xảy ra do việc gán `textarea.style.height = 'auto'` trong chu kỳ Change Detection (AfterViewChecked) làm chiều cao bị flick nhẹ, khiến container scroll bị reset vị trí.
     - **Giải pháp**: Chuyển logic `autoResize` sang sự kiện `(input)` của người dùng và chỉ gọi sau khi `patchValue` thực sự thay đổi nội dung (sử dụng deep comparison trong Angular `effect`). Kết hợp với `setTimeout(..., 0)` giúp đảm bảo DOM đã render xong trước khi tính toán lại chiều cao, triệt tiêu hoàn toàn hiện tượng nhảy scroll.
+
+## ADR 17: Dumb Component Pattern for PDF Viewer (US-19.2)
+**Ngày ra quyết định: 2026-05-03**
+**Người viết: AI, huy**
+
+**1. Vấn đề/Concern/Feature đang cần ra quyết định:**
+Lựa chọn kiến trúc cho `LaputaPdfViewerComponent`. Nên để component này tự xử lý logic nghiệp vụ (gọi API, quản lý ghi chú) hay thiết kế nó thành một component thuần túy (Dumb Component).
+
+**2. Các phương án đã được gợi ý:**
+- **Phương án 1 (Smart/Integrated)**: Component tự inject services và xử lý logic lưu trữ ghi chú bên trong nó.
+- **Phương án 2 (Dumb/Pure Component)**: Component chỉ chịu trách nhiệm hiển thị PDF, bôi đen văn bản và bắn ra các tọa độ/dữ liệu selection. Logic hiển thị Popup và lưu trữ ghi chú sẽ do Smart Component cha (ví dụ `PdfReaderPageComponent`) quản lý.
+
+**3. Lựa chọn và lý do lựa chọn:**
+- **Lựa chọn**: **Phương án 2 (Dumb/Pure Component)**.
+- **Lý do**: 
+    - **Tính tái sử dụng cao**: PDF Viewer có thể được dùng ở nhiều nơi khác nhau (trong Memento Viewer, Task Detail, hoặc Dashboard). Mỗi nơi có cách xử lý ghi chú khác nhau.
+    - **Dễ bảo trì**: Tách biệt hoàn toàn phần UI Library (ngx-extended-pdf-viewer) khỏi Business Logic của Laputa. Nếu sau này cần thay đổi thư viện PDF, ta chỉ cần sửa ở component shared này mà không làm ảnh hưởng đến logic lưu trữ.
+    - **Phân tách trách nhiệm (SoC)**: Tuân thủ ADR 1 và ADR 2 về việc tách biệt Presenter và Container.
+

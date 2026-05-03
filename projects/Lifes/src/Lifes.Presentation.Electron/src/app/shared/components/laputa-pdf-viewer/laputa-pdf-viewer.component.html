@@ -1,0 +1,24 @@
+<div class="laputa-pdf-container" [class.theme-dark]="theme === 'dark'" [class.theme-sepia]="theme === 'light'">
+  <!-- The pdfSrc can be a URL string or Uint8Array. 
+       If it is empty, ngx-extended-pdf-viewer might show a default UI, 
+       so we only render it if there is a valid src. -->
+  <ngx-extended-pdf-viewer
+    *ngIf="pdfSrc"
+    [src]="pdfSrc"
+    [theme]="theme"
+    [showToolbar]="showToolbar"
+    [showSidebarButton]="showSidebar"
+    [showFindButton]="showToolbar"
+    [showSecondaryToolbarButton]="showToolbar"
+    [showZoomButtons]="showToolbar"
+    [zoom]="'auto'"
+    [textLayer]="true"
+    [pageViewMode]="'single'"
+    (pdfLoaded)="onPdfLoaded()"
+    (annotationEditorLayerRendered)="onAnnotationEditorSave($event)"
+  ></ngx-extended-pdf-viewer>
+
+  <div class="empty-state" *ngIf="!pdfSrc">
+    <p>No PDF document selected.</p>
+  </div>
+</div>

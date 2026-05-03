@@ -10,6 +10,9 @@
     <button class="layout-btn" [class.active]="layout() === 3" (click)="setLayout(3)">
       <span style="background:#EF9F27"></span>Contextual
     </button>
+    <button class="layout-btn" [class.active]="layout() === 4" (click)="setLayout(4)">
+      <span style="background:#378ADD"></span>Read
+    </button>
     <div class="bar-spacer"></div>
 
     <!-- Zoom -->
@@ -226,6 +229,35 @@
           <button class="ctx-note-add">+</button>
         </div>
         <div class="reading-progress"><div class="reading-progress-fill" style="width:15%"></div></div>
+      </div>
+    </div>
+
+    <!-- ═══ LAYOUT 4 (Real PDF Component) ═══ -->
+    <div id="layout4" [class.active]="layout() === 4">
+      <div class="l4-pdf">
+        <app-laputa-pdf-viewer 
+          [pdfSrc]="samplePdfSrc"
+          [showToolbar]="true"
+          [showSidebar]="false"
+          [theme]="isDark() ? 'dark' : 'light'"
+          (onTextSelected)="onPdfTextSelected($event)"
+        ></app-laputa-pdf-viewer>
+      </div>
+
+      <!-- Notes Panel (Shared style from Layout 1) -->
+      <div class="l1-notes">
+        <div class="panel-header"><div class="panel-header-label">Ghi chú · {{notes().length}}</div></div>
+        <div class="notes-list">
+          <div *ngFor="let n of notes()" class="note-item">
+            <div class="note-ref" [style.color]="n.colorHex">p.{{n.page}} · bôi đậm</div>
+            <div class="note-text">{{n.text}}</div>
+            <div class="note-quote" *ngIf="n.quote">"{{n.quote}}"</div>
+          </div>
+        </div>
+        <div class="note-input-area">
+          <textarea class="note-textarea" rows="3" placeholder="Ghi chú về trang này..."></textarea>
+          <button class="note-add-btn">Thêm ghi chú</button>
+        </div>
       </div>
     </div>
   </div>

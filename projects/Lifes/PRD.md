@@ -386,18 +386,18 @@ ETL Deployment Tools Suite cung cấp:
 
 ---
 
-### 17. PDF Reader Interface (US-19.1)
-**Status**: ✅ Completed (UI Clone)
-**User Stories**: US-19.1
+### 17. PDF Reader Interface (US-19.1, US-19.2)
+**Status**: ✅ Completed (Real Viewer Integrated)
+**User Stories**: US-19.1 (Layouts), US-19.2 (ngx-extended-pdf-viewer Integration)
 **Documentation**: [fea-pdf-reader-structure.md](./docs/structures/fea-pdf-reader-structure.md)
 
-**Purpose**: Trình đọc PDF tích hợp với khả năng chuyển đổi linh hoạt giữa các bố cục khác nhau (Classic, Focus, Contextual) để cá nhân hóa trải nghiệm đọc và ghi chú.
+**Purpose**: Trình đọc PDF tích hợp với khả năng chuyển đổi linh hoạt giữa các bố cục khác nhau và tích hợp thư viện PDF Viewer chuyên nghiệp hỗ trợ bôi đen, ghi chú và annotation.
 
 **Key Components**:
-- **PdfReaderPageComponent**: Giao diện chính chứa các 패n/Panel hiển thị thư viện sách, nội dung PDF, và danh sách ghi chú.
-- **Layout Management**: Hỗ trợ 3 chế độ xem khác nhau giúp tối ưu hóa không gian cho từng mục đích (Đọc tập trung, tra cứu ngữ cảnh, v.v.).
-- **Reading Tools**: Tích hợp thanh công cụ nổi (Floating Toolbar) khi bôi đen văn bản để highlight hoặc thêm ghi chú nhanh.
-- **Theme & Zoom**: Hỗ trợ Dark Mode và khả năng thu phóng nội dung linh hoạt.
+- **LaputaPdfViewerComponent (US-19.2)**: Dumb component dùng chung, tích hợp `ngx-extended-pdf-viewer`, hỗ trợ Dark Mode và Text Selection coordinates.
+- **PdfReaderPageComponent**: Giao diện chính quản lý 4 bố cục (Layout 4 là Real PDF mode).
+- **Selection Handling**: Tự động hiển thị Note Popup tại vị trí bôi đen trên PDF.
+- **Theme & Zoom**: Hỗ trợ đồng bộ màu sắc với Laputa Design System.
 
 ---
 

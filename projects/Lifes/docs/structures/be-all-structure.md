@@ -145,6 +145,8 @@ src/
 │           │   │   ├── laputa-note-list/ # Infinite scroll, Context Menu, View Modes
 │           │   │   ├── laputa-editor/    # Reactive Forms + Auto-save
 │           │   │   └── services/         # LaputaNotesService, LaputaApiService
+│           │   ├── laputa-pdf-viewer/    # US-19.2 Generic PDF Viewer Component
+│           │   │   ├── laputa-pdf-viewer.component.[ts|html|css]
 │           │   └── ...
 │           └── models/
 │               ├── sprint-board.model.ts # US-11.2 data models

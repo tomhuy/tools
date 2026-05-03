@@ -401,19 +401,19 @@ ETL Deployment Tools Suite cung cấp:
 
 ---
 
-### 18. Laputa Notes Interface (US-20.1, US-20.2, US-20.3)
+### 18. Laputa Notes Interface (US-20.1, US-20.2, US-20.3, US-20.4)
 **Status**: ✅ Completed
-**User Stories**: US-20.1 (UI Clone), US-20.2 (API Integration), US-20.3 (UI Refinement & Pixel-perfect)
+**User Stories**: US-20.1 (UI Clone), US-20.2 (API Integration), US-20.3 (UI Refinement), US-20.4 (Design System Redesign)
 **Documentation**: [fea-laputa-notes-structure.md](./docs/structures/fea-laputa-notes-structure.md)
 
-**Purpose**: Giao diện Note-taking tích hợp hỗ trợ soạn thảo Markdown, tổ chức theo tag/section, cùng khả năng chuyển đổi 4 chế độ hiển thị (List, Card, Compact, Grid). Đã được tinh chỉnh đạt độ chính xác pixel-perfect so với nguyên mẫu.
+**Purpose**: Giao diện Note-taking tích hợp hỗ trợ soạn thảo Markdown, tổ chức theo tag/section, cùng khả năng chuyển đổi 4 chế độ hiển thị (List, Card, Compact, Grid). Đã được tinh chỉnh đạt độ chính xác pixel-perfect và áp dụng hệ thống Design System (Geist fonts, token-based colors) cho trải nghiệm cao cấp.
 
 **Key Components**:
-- **LaputaNotesPageComponent**: Layout container chính.
-- **LaputaSidebarComponent**: Sidebar với Section, Tags và Theme Switcher (Dark/Sepia).
-- **LaputaNoteListComponent**: Danh sách ghi chú với hỗ trợ Infinite Scroll, Context Menu và 4 View Modes.
-- **LaputaEditorComponent**: Trình soạn thảo Markdown với cơ chế Auto-save và Reactive Forms.
-- **LaputaNotesService**: Quản lý State tập trung bằng Angular Signals và RxJS (ID đồng bộ kiểu `string`).
+- **Design System (US-20.4)**: Tích hợp hệ thống màu sắc và typography đồng bộ (Geist, Instrument Serif).
+- **Sidebar Sidebar (US-20.3)**: Hỗ trợ auto-hide và hover-to-show icon mở rộng.
+- **Editor Stability**: Khắc phục triệt để lỗi nhảy scroll khi gõ phím hoặc auto-save.
+- **Grid & Card Redesign**: Giao diện thẻ hiện đại với các chỉ số spacing, bo góc và hiệu ứng micro-interaction chuyên nghiệp.
+- **LaputaNotesService**: Quản lý State tập trung bằng Signals và RxJS, điều phối logic Auto-save và phân trang Infinite Scroll.
 - **LaputaApiService**: Kết nối REST API backend.
 
 ---

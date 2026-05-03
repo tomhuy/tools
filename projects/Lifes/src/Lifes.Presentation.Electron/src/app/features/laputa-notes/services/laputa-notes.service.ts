@@ -31,7 +31,7 @@ export class LaputaNotesService {
 
   // Pagination State
   public currentPage = signal<number>(1);
-  public pageSize = signal<number>(20);
+  public pageSize = signal<number>(100);
   public hasMore = signal<boolean>(true);
   public isLoading = signal<boolean>(false);
 
@@ -66,7 +66,7 @@ export class LaputaNotesService {
 
   // Sequential Save Queue
   private saveSubject = new Subject<{ id: string, title: string, content: string }>();
-  
+
   // Reactive Fetch Trigger
   private fetchSubject = new Subject<{ reset: boolean }>();
 
@@ -123,13 +123,13 @@ export class LaputaNotesService {
       if (notes.length < this.pageSize()) {
         this.hasMore.set(false);
       }
-      
+
       if (reset) {
         this.notes.set(notes);
       } else {
         this.notes.update(current => [...current, ...notes]);
       }
-      
+
       this.currentPage.update(p => p + 1);
       this.isLoading.set(false);
     });
@@ -155,7 +155,7 @@ export class LaputaNotesService {
       this.searchQuery();
       this.currentSection();
       this.sortAsc();
-      
+
       // Reset and fetch - use untracked to avoid tracking signals inside fetchNotes
       untracked(() => this.fetchNotes(true));
     }, { allowSignalWrites: true });
@@ -176,7 +176,7 @@ export class LaputaNotesService {
   public fetchNotes(reset: boolean = false) {
     // If not reset, guard against redundant calls (e.g. scroll)
     if (!reset && (!this.hasMore() || this.isLoading())) return;
-    
+
     // Trigger the reactive stream
     this.fetchSubject.next({ reset });
   }
@@ -195,7 +195,7 @@ export class LaputaNotesService {
     };
     this.notes.update(n => [newNote, ...n]);
     this.currentNoteId.set(newNote.id);
-    
+
     // Trigger initial save to server
     this.saveNote(newNote.id, newNote.title, newNote.content);
   }
@@ -214,7 +214,7 @@ export class LaputaNotesService {
     if (this.currentNoteId() === id) {
       this.currentNoteId.set(null);
     }
-    
+
     // Trigger the sequential delete stream
     this.deleteSubject.next(id);
   }

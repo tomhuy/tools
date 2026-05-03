@@ -287,3 +287,38 @@ Lựa chọn kiểu dữ liệu cho định danh (ID) của Note trong Laputa No
     - **Tương thích Obsidian**: Hệ thống Laputa Notes đang được thiết kế để tích hợp hoặc mô phỏng Obsidian. Trong Obsidian API, ghi chú thường được định danh bằng đường dẫn file (`path`) hoặc UUID kiểu chuỗi. Sử dụng `string` giúp việc mapping dữ liệu từ các hệ thống bên ngoài trở nên dễ dàng và không cần bảng ánh xạ trung gian.
     - **Tính linh hoạt**: Cho phép sử dụng nhiều loại định danh khác nhau (Slug, Hash, GUID, Path) mà không cần thay đổi cấu trúc Database hay API Contract.
     - **Tính duy nhất (Globally Unique)**: Sử dụng chuỗi UUID giúp đảm bảo tính duy nhất khi đồng bộ hóa dữ liệu giữa các thiết bị hoặc các kho ghi chú (vaults) khác nhau.
+
+## ADR 15: Design System Tokenization & Aesthetics Strategy (US-20.4)
+**Ngày ra quyết định: 2026-05-03**
+**Người viết: AI, huy**
+
+**1. Vấn đề/Concern/Feature đang cần ra quyết định:**
+Làm thế nào để duy trì tính nhất quán về thẩm mỹ và cảm giác "Premium" giữa các chế độ xem (List, Card, Grid) và các chủ đề (Dark/Sepia) trong Laputa Notes.
+
+**2. Các phương án đã được gợi ý:**
+- **Phương án 1**: Fix cứng mã màu Hex trong CSS cho từng component.
+- **Phương án 2 (Lựa chọn)**: Xây dựng hệ thống Design System Document kết hợp CSS Variables (Tokens).
+
+**3. Lựa chọn và lý do lựa chọn:**
+- **Lựa chọn**: **Phương án 2 (Design System Tokens)**.
+- **Lý do**: 
+    - **Nguồn sự thật duy nhất (Single Source of Truth)**: Tập trung toàn bộ quy tắc thiết kế (màu sắc, khoảng cách, typography) vào file `laputa-design-system.md` giúp AI và developer luôn đồng bộ.
+    - **Linh hoạt (Agility)**: Sử dụng các biến CSS (`--bg3`, `--sp-2`, v.v.) giúp chuyển đổi chủ đề (Dark/Sepia) tức thì mà không cần ghi đè quá nhiều logic CSS phức tạp.
+    - **Thẩm mỹ cao cấp**: Việc quy định chặt chẽ các font chữ chuyên dụng (Geist, Instrument Serif) giúp ứng dụng thoát khỏi vẻ ngoài "web-standard" bình thường.
+
+## ADR 16: Solving Editor Scroll-to-Top Regression
+**Ngày ra quyết định: 2026-05-03**
+**Người viết: AI, huy**
+
+**1. Vấn đề/Concern/Feature đang cần ra quyết định:**
+Khắc phục lỗi Editor tự động nhảy scroll về đầu trang khi người dùng đang gõ phím hoặc khi hệ thống kích hoạt Auto-save (patchValue).
+
+**2. Các phương án đã được gợi ý:**
+- **Phương án 1**: Sử dụng `AfterViewChecked` để liên tục tính toán lại chiều cao (autoResize).
+- **Phương án 2 (Lựa chọn)**: Loại bỏ `AfterViewChecked` và sử dụng Deep Value Comparison trong `effect`.
+
+**3. Lựa chọn và lý do lựa chọn:**
+- **Lựa chọn**: **Phương án 2 (Optimized Resize & Effect)**.
+- **Lý do**: 
+    - **Nguyên nhân gốc rễ**: Lỗi xảy ra do việc gán `textarea.style.height = 'auto'` trong chu kỳ Change Detection (AfterViewChecked) làm chiều cao bị flick nhẹ, khiến container scroll bị reset vị trí.
+    - **Giải pháp**: Chuyển logic `autoResize` sang sự kiện `(input)` của người dùng và chỉ gọi sau khi `patchValue` thực sự thay đổi nội dung (sử dụng deep comparison trong Angular `effect`). Kết hợp với `setTimeout(..., 0)` giúp đảm bảo DOM đã render xong trước khi tính toán lại chiều cao, triệt tiêu hoàn toàn hiện tượng nhảy scroll.

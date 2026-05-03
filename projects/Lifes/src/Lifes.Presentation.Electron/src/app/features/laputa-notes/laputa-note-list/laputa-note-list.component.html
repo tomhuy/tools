@@ -68,9 +68,9 @@
           <svg *ngIf="note.starred" class="star-icon" viewBox="0 0 11 11" width="10" height="10" fill="var(--accent)"><path d="M5.5 1l1.2 3h3.2l-2.6 1.9 1 3L5.5 7.2 3.2 8.9l1-3L1.6 4h3.2z"/></svg>
         </div>
         
-        <div class="card-preview" *ngIf="noteService.viewMode() === 'card'">{{ getPreview(note.content) }}</div>
+        <div class="card-preview" *ngIf="noteService.viewMode() === 'list' || noteService.viewMode() === 'grid'">{{ getPreview(note.content) }}</div>
         
-        <div class="card-excerpt-bullets" *ngIf="noteService.viewMode() === 'list' || noteService.viewMode() === 'grid'">
+        <div class="card-excerpt-bullets" *ngIf="noteService.viewMode() === 'card'">
           <div *ngFor="let b of getBullets(note.content)" class="ceb-item">
             <span class="ceb-dot"></span>
             <span class="ceb-text">{{ b }}</span>

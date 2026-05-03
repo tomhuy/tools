@@ -456,19 +456,19 @@ src/
 
 ---
 
-### 18. Laputa Notes Interface (US-20.1)
-**Status**: ✅ Completed (UI Clone)
-**User Stories**: US-20.1
+### 18. Laputa Notes Interface (US-20.1, US-20.2, US-20.3, US-20.4)
+**Status**: ✅ Completed
+**User Stories**: US-20.1, US-20.2, US-20.3, US-20.4
 **Documentation**: [fea-laputa-notes-structure.md](./fea-laputa-notes-structure.md)
 
-**Purpose**: Giao diện Note-taking tích hợp theo nguyên mẫu `sample.note.app.html`, hỗ trợ soạn thảo Markdown, tổ chức theo tag/section, cùng khả năng chuyển đổi 4 chế độ hiển thị (List, Card, Compact, Grid).
+**Purpose**: Giao diện Note-taking tích hợp hỗ trợ soạn thảo Markdown, tổ chức theo tag/section, cùng khả năng chuyển đổi 4 chế độ hiển thị (List, Card, Compact, Grid). Đã tích hợp Design System cao cấp và xử lý ổn định editor.
 
 **Key Components**:
-- **LaputaNotesPageComponent**: Container chính cho bố cục Layout.
-- **LaputaSidebarComponent**: Quản lý Section, Tags và Theme (Dark/Sepia).
-- **LaputaNoteListComponent**: Giao diện danh sách ghi chú với hỗ trợ Context Menu và thay đổi kích thước bằng Drag Handle.
-- **LaputaEditorComponent**: Trình soạn thảo Markdown chuyên dụng kết hợp với cơ chế Popup Detail Panel tự động kích hoạt ở chế độ Grid.
-- **LaputaNotesService**: Quản lý State cục bộ của component và dữ liệu Mock thông qua Angular Signals.
+- **Design System Integration**: Token-based colors & Geist fonts.
+- **Sidebar Auto-hide**: Hover trigger sát lề trái.
+- **Editor Stability**: Scroll persistence logic.
+- **Reactive State**: Angular Signals + RxJS Auto-save.
+
 
 ## Shared Components
 

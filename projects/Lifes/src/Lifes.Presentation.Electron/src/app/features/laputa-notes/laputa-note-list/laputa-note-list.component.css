@@ -249,11 +249,12 @@
 .note-list.view-card .note-card {
   border-bottom: none;
   border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 14px 12px 12px;
+  border-radius: 10px;
+  padding: 14px;
   background: var(--bg3);
-  transition: all .2s ease;
+  transition: all .12s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
+  overflow: hidden;
 }
 
 .note-list.view-card .note-card:hover {
@@ -265,7 +266,7 @@
 .note-list.view-card .note-card.active {
   border-color: var(--accent);
   background: var(--bg4);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .note-list.view-card .note-card.active::after {
@@ -275,16 +276,21 @@
 .note-list.view-card .note-card .card-accent-bar {
   display: block;
   position: absolute;
-  top: 6px;
-  left: 10px;
-  right: 10px;
+  top: 0;
+  left: 0;
+  right: 0;
   height: 2px;
-  border-radius: 1px;
+  border-radius: 8px 8px 0 0;
   margin: 0;
 }
 
 .note-list:not(.view-card):not(.view-grid) .card-accent-bar {
   display: none;
+}
+
+.note-list.view-card .card-title {
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .card-excerpt-bullets {
@@ -351,25 +357,25 @@
 }
 
 .note-list.view-grid .list-scroll {
-  padding: 8px 10px;
+  padding: var(--sp-2) var(--sp-3);
 }
 
 .note-list.view-grid .note-items {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 6px;
+  gap: var(--sp-2);
   align-content: start;
 }
 
 .note-list.view-grid .note-card {
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  border-radius: 8px;
-  padding: 10px 12px;
-  background: #161616;
-  transition: all .2s ease;
-  height: 105px;
-  min-height: 105px;
-  max-height: 105px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 12px 10px;
+  background: var(--bg3);
+  transition: all .12s cubic-bezier(0.16, 1, 0.3, 1);
+  height: 120px;
+  min-height: 120px;
+  max-height: 120px;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -377,14 +383,14 @@
 }
 
 .note-list.view-grid .note-card:hover {
-  background: #1e1e1e;
-  border-color: rgba(255, 255, 255, 0.1);
+  background: var(--bg4);
+  border-color: var(--border2);
+  transform: translateY(-1px);
 }
 
 .note-list.view-grid .note-card.active {
   border-color: var(--accent);
-  background: #1e1e1e;
-  box-shadow: 0 0 0 1px var(--accent);
+  background: var(--bg4);
 }
 
 .note-list.view-grid .note-card.active::after {
@@ -392,23 +398,22 @@
 }
 
 .note-list.view-grid .card-accent-bar {
-  display: block;
+  display: none;
   position: absolute;
   top: 0;
-  left: 10px;
-  right: 10px;
-  height: 2px;
-  border-radius: 0 0 2px 2px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  border-radius: 3px 3px 0 0;
   margin: 0;
-  background: var(--text3);
 }
 
 .note-list.view-grid .card-title {
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 600;
-  color: var(--accent);
-  line-height: 1.3;
-  margin-bottom: 4px;
+  color: var(--text);
+  line-height: 1.35;
+  margin-bottom: 6px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -417,15 +422,15 @@
 
 .note-list.view-grid .card-preview {
   display: -webkit-box;
-  font-size: 11px;
+  font-size: 10px;
   color: var(--text2);
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
-  line-height: 1.4;
+  line-height: 1.5;
   margin-bottom: 8px;
   flex: 1;
   overflow: hidden;
-  opacity: 0.6;
+  opacity: 1;
 }
 
 .note-list.view-grid .card-excerpt-bullets {
@@ -441,8 +446,14 @@
   flex-wrap: wrap;
 }
 
+.note-list.view-grid .card-tag {
+  font-size: 9px;
+  padding: 1px 5px;
+}
+
 .note-list.view-grid .card-time {
-  font-size: 10px;
+  font-size: 9px;
+  font-family: 'Geist Mono', monospace;
   margin-top: 2px;
 }
 
@@ -502,19 +513,20 @@
 
 :host-context(.sepia) .note-list.view-card .note-card,
 :host-context(.sepia) .note-list.view-grid .note-card {
-  background: #EDE5D5;
-  border-color: rgba(100, 75, 40, 0.14);
+  background: var(--bg3);
+  border-color: var(--border);
 }
 
 :host-context(.sepia) .note-list.view-card .note-card:hover,
 :host-context(.sepia) .note-list.view-grid .note-card:hover {
-  background: #E7DDC8;
-  border-color: rgba(100, 75, 40, 0.22);
+  background: var(--bg4);
+  border-color: var(--border2);
 }
 
 :host-context(.sepia) .note-list.view-card .note-card.active,
 :host-context(.sepia) .note-list.view-grid .note-card.active {
   border-color: var(--accent);
+  background: var(--bg4);
 }
 
 :host-context(.sepia) .ctx-menu {

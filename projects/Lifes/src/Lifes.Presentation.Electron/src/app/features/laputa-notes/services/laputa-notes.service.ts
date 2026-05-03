@@ -21,7 +21,7 @@ export class LaputaNotesService {
 
   // State Signals
   public viewMode = signal<'list' | 'card' | 'compact' | 'grid'>('grid');
-  public theme = signal<'dark' | 'sepia'>('dark');
+  public theme = signal<'dark' | 'sepia'>('sepia');
   public currentSection = signal<string>('all');
   public currentNoteId = signal<string | null>(null);
   public isPreview = signal<boolean>(false);

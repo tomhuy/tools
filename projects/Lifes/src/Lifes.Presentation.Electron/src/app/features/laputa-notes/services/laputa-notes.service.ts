@@ -20,7 +20,7 @@ export class LaputaNotesService {
   public readonly ALL_TAGS = ['tâm lý học', 'design', 'journal', 'ideas', 'GTD', 'habit', 'đọc sách', 'coding'];
 
   // State Signals
-  public viewMode = signal<'list' | 'card' | 'compact' | 'grid'>('card');
+  public viewMode = signal<'list' | 'card' | 'compact' | 'grid'>('grid');
   public theme = signal<'dark' | 'sepia'>('dark');
   public currentSection = signal<string>('all');
   public currentNoteId = signal<string | null>(null);

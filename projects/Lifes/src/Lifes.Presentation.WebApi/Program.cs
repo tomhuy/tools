@@ -65,6 +65,9 @@ try
     builder.Services.AddSingleton<INoteRepository, ObsidianNoteRepository>();
     builder.Services.AddSingleton<NoteQueryStrategyFactory>();
 
+    // Mood Tracker Services
+    builder.Services.AddSingleton<IMoodEntryRepository, Lifes.Infrastructure.Features.MoodTracker.Repositories.JsonMoodEntryRepository>();
+
     builder.Services.AddTransient<IScanProjectsCommand, ScanProjectsCommand>();
     builder.Services.AddTransient<IUpdateVersionsCommand, UpdateVersionsCommand>();
 

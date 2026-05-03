@@ -341,3 +341,39 @@ Lựa chọn kiến trúc cho `LaputaPdfViewerComponent`. Nên để component n
     - **Dễ bảo trì**: Tách biệt hoàn toàn phần UI Library (ngx-extended-pdf-viewer) khỏi Business Logic của Laputa. Nếu sau này cần thay đổi thư viện PDF, ta chỉ cần sửa ở component shared này mà không làm ảnh hưởng đến logic lưu trữ.
     - **Phân tách trách nhiệm (SoC)**: Tuân thủ ADR 1 và ADR 2 về việc tách biệt Presenter và Container.
 
+
+## ADR 18: Repository Implementation for Mood Tracker (US-18.2)
+**Ngày ra quyết định: 2026-05-03**
+**Người viết: AI, huy**
+
+**1. Vấn đề/Concern/Feature đang cần ra quyết định:**
+Lựa chọn phương thức lưu trữ dữ liệu (Repository Implementation) cho tính năng Mood Tracker.
+
+**2. Các phương án đã được gợi ý:**
+- **Phương án 1 (SQL Database)**: Sử dụng SQLite hoặc SQL Server.
+- **Phương án 2 (JSON Repository - Lựa chọn)**: Sử dụng file JSON làm persistence storage.
+
+**3. Lựa chọn và lý do lựa chọn:**
+- **Lựa chọn**: **Phương án 2 (JsonMoodEntryRepository)**.
+- **Lý do**: 
+    - **Tính đơn giản**: Dữ liệu mood entry có cấu trúc phẳng và khối lượng không quá lớn, JSON file giúp triển khai nhanh, dễ backup và không cần cài đặt database engine.
+    - **Phù hợp với Desktop App**: Giảm thiểu sự phức tạp của Infrastructure layer trong môi trường desktop cá nhân.
+    - **Clean Architecture**: Interface `IMoodEntryRepository` cho phép dễ dàng chuyển đổi sang SQL Database trong tương lai nếu cần mà không thay đổi Domain hay Application layer.
+
+## ADR 19: Date Handling for Mood Entries (Local vs. ISO)
+**Ngày ra quyết định: 2026-05-03**
+**Người viết: AI, huy**
+
+**1. Vấn đề/Concern/Feature đang cần ra quyết định:**
+Xác định quy chuẩn định dạng ngày tháng khi gửi dữ liệu từ Frontend lên Backend.
+
+**2. Các phương án đã được gợi ý:**
+- **Phương án 1**: Gửi ngày tháng theo giờ địa phương (Local Time).
+- **Phương án 2**: Chuẩn hóa thành ISO 8601 string trước khi gửi.
+
+**3. Lựa chọn và lý do lựa chọn:**
+- **Lựa chọn**: **Phương án 2 (ISO 8601 Strings)**.
+- **Lý do**: 
+    - **Tính nhất quán**: Tránh các lỗi liên quan đến lệch múi giờ (timezone offset) khi server và client ở các môi trường khác nhau.
+    - **Dễ parse**: .NET Core và JavaScript đều hỗ trợ cực tốt việc parse/serialize chuỗi ISO 8601.
+    - **Business logic**: Người dùng yêu cầu "date không cần care giờ local time, cứ ghép thành dạng ISO rồi gửi lên server".

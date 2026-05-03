@@ -12,7 +12,7 @@ export interface ActivityTag {
   icon?: string;
 }
 
-export interface WeeklyEntry {
+export interface MoodEntry {
   id: string;
   date: Date; // Specific hour
   moodId: string;

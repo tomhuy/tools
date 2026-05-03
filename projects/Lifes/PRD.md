@@ -370,19 +370,20 @@ ETL Deployment Tools Suite cung cấp:
 
 ---
 
-### 16. Weekly Mood & Activity Tracker (US-18.1)
-**Status**: ✅ Completed (UI Prototype)
-**User Stories**: US-18.1
-**Documentation**: [fea-weekly-tracker-structure.md](./docs/structures/fea-weekly-tracker-structure.md)
+### 16. Mood & Activity Tracker (US-18.1, US-18.2)
+**Status**: ✅ Completed
+**User Stories**: US-18.1 (UI), US-18.2 (API Integration)
+**Documentation**: [fea-mood-tracker-structure.md](./docs/structures/fea-mood-tracker-structure.md)
 
-**Purpose**: Cung cấp giao diện theo dõi tâm trạng và hoạt động theo từng khung giờ trong tuần (7 ngày x 24 giờ). Tích hợp chế độ **Content Explorer** chuyên dụng cho nội dung văn bản.
+**Purpose**: Giao diện theo dõi tâm trạng và hoạt động theo từng khung giờ (Range Tracker). Tích hợp chế độ **Content Explorer** chuyên dụng cho nội dung văn bản. Đã chuyển đổi hoàn toàn từ mock data sang backend API thực tế.
 
 **Key Components**:
-- **WeeklyTrackerPageComponent**: Hiển thị lưới ma trận 7x24 với thanh điều hướng tuần.
+- **MoodTrackerService**: Quản lý trạng thái và đồng bộ dữ liệu với Backend.
+- **MoodApiService**: Service giao tiếp REST API với Backend .NET.
+- **RangeTrackerPageComponent**: Hiển thị lưới ma trận đa dạng số ngày (7, 14, 21...) với thanh điều hướng.
 - **ContentExplorerPageComponent**: Chế độ xem nội dung chuyên sâu với bộ lọc danh mục và CSS Isolation.
-- **WeeklyTrackerService**: Quản lý trạng thái Tracker tối giản.
-- **ContentExplorerService**: Quản lý dữ liệu tin tức/nội dung độc lập (Tech News).
-- **WeeklyEntryEditorComponent**: Modal glassmorphism cho việc nhập liệu.
+- **MoodEntryEditorComponent**: Modal glassmorphism cho việc nhập liệu/chỉnh sửa tâm trạng.
+- **JsonMoodEntryRepository**: Backend repository lưu trữ dữ liệu dưới dạng JSON.
 
 ---
 

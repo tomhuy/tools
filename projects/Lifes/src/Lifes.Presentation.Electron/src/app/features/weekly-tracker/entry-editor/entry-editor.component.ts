@@ -1,8 +1,8 @@
 import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { WeeklyEntry, MOODS, ACTIVITY_TAGS, MoodConfig } from '../../../models/weekly-tracker.model';
-import { WeeklyTrackerService } from '../weekly-tracker.service';
+import { MoodEntry, MOODS, ACTIVITY_TAGS, MoodConfig } from '../../../models/weekly-tracker.model';
+import { MoodTrackerService } from '../weekly-tracker.service';
 import { format } from 'date-fns';
 import { vi } from 'date-fns/locale';
 
@@ -13,13 +13,13 @@ import { vi } from 'date-fns/locale';
   templateUrl: './entry-editor.component.html',
   styleUrl: './entry-editor.component.css'
 })
-export class WeeklyEntryEditorComponent {
-  @Input({ required: true }) entry!: WeeklyEntry;
+export class MoodEntryEditorComponent {
+  @Input({ required: true }) entry!: MoodEntry;
   @Output() close = new EventEmitter<void>();
-  @Output() save = new EventEmitter<WeeklyEntry>();
+  @Output() save = new EventEmitter<MoodEntry>();
   @Output() delete = new EventEmitter<string>();
 
-  trackerService = inject(WeeklyTrackerService);
+  trackerService = inject(MoodTrackerService);
   
   moods = MOODS;
   tags = ACTIVITY_TAGS;

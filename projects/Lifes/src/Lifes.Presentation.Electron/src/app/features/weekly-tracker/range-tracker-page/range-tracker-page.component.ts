@@ -1,26 +1,26 @@
 import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { WeeklyTrackerService } from '../weekly-tracker.service';
-import { WeeklyEntryEditorComponent } from '../entry-editor/entry-editor.component';
-import { MOODS, WeeklyEntry, DisplayMode, MoodConfig, FilterMode } from '../../../models/weekly-tracker.model';
+import { MoodTrackerService } from '../weekly-tracker.service';
+import { MoodEntryEditorComponent } from '../entry-editor/entry-editor.component';
+import { MOODS, MoodEntry, DisplayMode, MoodConfig, FilterMode } from '../../../models/weekly-tracker.model';
 import { format, addHours, startOfDay, isAfter } from 'date-fns';
 import { vi } from 'date-fns/locale';
 
 @Component({
   selector: 'app-range-tracker-page',
   standalone: true,
-  imports: [CommonModule, WeeklyEntryEditorComponent],
+  imports: [CommonModule, MoodEntryEditorComponent],
   templateUrl: './range-tracker-page.component.html',
   styleUrl: './range-tracker-page.component.css'
 })
 export class RangeTrackerPageComponent implements OnInit, OnDestroy {
-  trackerService = inject(WeeklyTrackerService);
+  trackerService = inject(MoodTrackerService);
 
   hours = Array.from({ length: 24 }, (_, i) => i);
   ranges = [7, 10, 14, 21, 30];
 
   // Modal state
-  selectedEntry = signal<WeeklyEntry | null>(null);
+  selectedEntry = signal<MoodEntry | null>(null);
   isEditorOpen = signal(false);
 
   // Filter dropdown state
@@ -77,7 +77,7 @@ export class RangeTrackerPageComponent implements OnInit, OnDestroy {
     return MOODS.find((m: MoodConfig) => m.id === moodId)?.label || '';
   }
 
-  getEntry(day: Date, hour: number): WeeklyEntry | undefined {
+  getEntry(day: Date, hour: number): MoodEntry | undefined {
     const date = addHours(startOfDay(day), hour);
     return this.trackerService.getEntryAt(date);
   }

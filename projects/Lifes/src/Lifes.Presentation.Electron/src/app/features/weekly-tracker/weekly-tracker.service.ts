@@ -1,13 +1,16 @@
-import { Injectable, signal, computed } from '@angular/core';
-import { WeeklyEntry, DaySummary, MOODS, DisplayMode, MoodConfig, FilterMode } from '../../models/weekly-tracker.model';
-import { startOfWeek, endOfWeek, eachDayOfInterval, addWeeks, subWeeks, isSameDay, format, startOfDay, addHours, isAfter } from 'date-fns';
+import { Injectable, signal, computed, inject } from '@angular/core';
+import { MoodEntry, DaySummary, MOODS, DisplayMode, MoodConfig, FilterMode } from '../../models/weekly-tracker.model';
+import { startOfWeek, eachDayOfInterval, addWeeks, subWeeks, isSameDay, format, addHours } from 'date-fns';
 import { vi } from 'date-fns/locale';
+import { MoodApiService } from './services/mood-api.service';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class WeeklyTrackerService {
-  private entries = signal<WeeklyEntry[]>([]);
+export class MoodTrackerService {
+  private api = inject(MoodApiService);
+  private entries = signal<MoodEntry[]>([]);
   
   // State for navigation
   currentDate = signal<Date>(new Date());
@@ -38,11 +41,11 @@ export class WeeklyTrackerService {
     const today = new Date();
 
     return days.map((day: Date) => {
-      const dayEntries = this.entries().filter((e: WeeklyEntry) => isSameDay(e.date, day));
+      const dayEntries = this.entries().filter((e: MoodEntry) => isSameDay(new Date(e.date), day));
       // Take top 5 moods for dots
       const dots = dayEntries
         .slice(0, 5)
-        .map((e: WeeklyEntry) => MOODS.find((m: MoodConfig) => m.id === e.moodId)?.color || '#555');
+        .map((e: MoodEntry) => MOODS.find((m: MoodConfig) => m.id === e.moodId)?.color || '#555');
 
       return {
         date: day,
@@ -55,7 +58,17 @@ export class WeeklyTrackerService {
   });
 
   constructor() {
-    this.generateMockData();
+    this.loadEntries();
+  }
+
+  async loadEntries() {
+    try {
+      const data = await firstValueFrom(this.api.getAll());
+      // Convert string dates to Date objects if needed, though ISO strings work for comparison with date-fns
+      this.entries.set(data);
+    } catch (err) {
+      console.error('Failed to load mood entries', err);
+    }
   }
 
   // Navigation actions
@@ -72,63 +85,35 @@ export class WeeklyTrackerService {
   }
 
   // Entry actions
-  getEntryAt(date: Date): WeeklyEntry | undefined {
+  getEntryAt(date: Date): MoodEntry | undefined {
     return this.entries().find(e => 
-      e.date.getTime() === date.getTime()
+      new Date(e.date).getTime() === date.getTime()
     );
   }
 
-  saveEntry(entry: WeeklyEntry) {
-    this.entries.update(list => {
-      const idx = list.findIndex(e => e.id === entry.id || e.date.getTime() === entry.date.getTime());
-      if (idx !== -1) {
-        const newList = [...list];
-        newList[idx] = entry;
-        return newList;
-      }
-      return [...list, entry];
-    });
-  }
-
-  deleteEntry(id: string) {
-    this.entries.update(list => list.filter(e => e.id !== id));
-  }
-
-  private generateMockData() {
-    const today = startOfDay(new Date());
-    const data: WeeklyEntry[] = [];
-    const activities = ['Coding', 'Họp Team', 'Đọc sách', 'Tập thể dục', 'Ăn uống', 'Di chuyển', 'Nghỉ ngơi', 'Xem phim'];
-    const reasons = ['Hoàn thành task', 'Căng thẳng', 'Cafe ngon', 'Trời mưa', 'Kẹt xe', 'Ngủ đủ giấc'];
-    const categories = ['Công việc', 'Học tập', 'Giải trí', 'Sức khỏe', 'Cá nhân'];
-
-    for (let i = 0; i < 14; i++) {
-      const date = new Date(today);
-      date.setDate(today.getDate() - i);
-      
-      for (let h = 8; h < 23; h++) {
-        if (Math.random() > 0.4) {
-          const hourDate = new Date(date);
-          hourDate.setHours(h, 0, 0, 0);
-          
-          if (isAfter(hourDate, new Date())) continue;
-
-          const moodIdx = Math.floor(Math.random() * MOODS.length);
-          const act = activities[Math.floor(Math.random() * activities.length)];
-          const res = reasons[Math.floor(Math.random() * reasons.length)];
-          const cat = categories[Math.floor(Math.random() * categories.length)];
-          
-          data.push({
-            id: Math.random().toString(36).substr(2, 9),
-            date: hourDate,
-            moodId: MOODS[moodIdx].id,
-            note: 'Hoạt động: ' + act,
-            reason: 'Lý do: ' + res,
-            tags: [act, cat]
-          });
+  async saveEntry(entry: MoodEntry) {
+    try {
+      const saved = await firstValueFrom(this.api.save(entry));
+      this.entries.update(list => {
+        const idx = list.findIndex(e => e.id === saved.id || new Date(e.date).getTime() === new Date(saved.date).getTime());
+        if (idx !== -1) {
+          const newList = [...list];
+          newList[idx] = saved;
+          return newList;
         }
-      }
+        return [...list, saved];
+      });
+    } catch (err) {
+      console.error('Failed to save mood entry', err);
     }
+  }
 
-    this.entries.set(data);
+  async deleteEntry(id: string) {
+    try {
+      await firstValueFrom(this.api.delete(id));
+      this.entries.update(list => list.filter(e => e.id !== id));
+    } catch (err) {
+      console.error('Failed to delete mood entry', err);
+    }
   }
 }

@@ -21,7 +21,8 @@ src/
 │   │   ├── ICalendarService.cs     # US-9.1
 │   │   ├── IMementoRepository.cs   # US-9.2
 │   │   ├── ITagRepository.cs       # US-9.2
-│   │   └── INoteRepository.cs      # US-20.3
+│   │   ├── INoteRepository.cs      # US-20.3
+│   │   └── IMoodEntryRepository.cs # US-18.2
 │   └── Models/
 │       ├── Result.cs               # Result<T> pattern
 │       ├── ToolDefinition.cs       # US-5.1 — tool metadata
@@ -30,7 +31,8 @@ src/
 │       ├── CalendarEventPhaseModel.cs # US-8.4 — event phase detail
 │       ├── MementoModel.cs         # US-9.1 — Recursive hierarchy (TagIds, IsAchieved support)
 │       ├── TagModel.cs             # US-9.2 — Tagging system
-│       └── MementoQueryModel.cs    # US-9.2 — Filtering model (ShowAchieved support - US-15.1)
+│       ├── MementoQueryModel.cs    # US-9.2 — Filtering model (ShowAchieved support - US-15.1)
+│       └── MoodEntry.cs            # US-18.2 — Mood tracker entity
 │
 ├── Lifes.Domain/                # Business logic and entities
 │   ├── Common/                     # US-1.2.1
@@ -47,6 +49,9 @@ src/
 │       └── LaputaNotes/            # US-20.3
 │           └── Entities/
 │               └── Note.cs         # String-based ID note entity
+│       └── MoodTracker/            # US-18.2
+│           └── Entities/
+│               └── MoodEntry.cs    # Mood tracker domain entity
 │
 ├── Lifes.Infrastructure/        # External services
 │   ├── Common/                     # US-1.2.1
@@ -71,6 +76,9 @@ src/
 │       └── LaputaNotes/            # US-20.3
 │           └── Repositories/
 │               └── ObsidianNoteRepository.cs # Markdown-based storage
+│       └── MoodTracker/            # US-18.2
+│           └── Repositories/
+│               └── JsonMoodEntryRepository.cs # JSON-based storage
 │
 ├── Lifes.Application/           # Use cases and commands
 │   ├── Common/                     # US-1.2.1
@@ -105,7 +113,8 @@ src/
 │
 ├── Lifes.Presentation.WebApi/    # C# Local API Server (US-11.1)
 │   ├── Controllers/                # REST endpoints routing to Application Commands
-│   │   └── NotesController.cs      # US-20.3
+│   │   ├── NotesController.cs      # US-20.3
+│   │   └── MoodController.cs       # US-18.2
 │   └── Program.cs                  # WebAPI Bootstrap
 │
 ├── Lifes.Presentation.Electron/  # Electron UI (US-11.1)
@@ -133,12 +142,12 @@ src/
 │           │   ├── yearly-stream/        # US-17.1 Yearly Stream feature
 │           │   │   ├── yearly-stream-page/
 │           │   │   └── yearly-stream.service.ts
-│           │   ├── weekly-tracker/       # US-18.1 Weekly Tracker feature
-│           │   │   ├── weekly-tracker-page/
+│           │   ├── mood-tracker/         # US-18.1, US-18.2 Mood Tracker feature
+│           │   │   ├── range-tracker-page/
 │           │   │   ├── content-explorer-page/ # Refinement (Content Mode)
 │           │   │   ├── entry-editor/
-│           │   │   ├── content-explorer.service.ts # Isolated content data
-│           │   │   └── weekly-tracker.service.ts
+│           │   │   ├── services/         # MoodApiService
+│           │   │   └── mood-tracker.service.ts
 │           │   ├── laputa-notes/         # US-20.1, US-20.2, US-20.3 Laputa Notes
 │           │   │   ├── laputa-notes-page/
 │           │   │   ├── laputa-sidebar/
@@ -156,7 +165,7 @@ src/
 │               ├── selectable-month.model.ts # US-12.1
 │               ├── daily-timeline.model.ts   # US-16.1
 │               ├── yearly-stream.model.ts    # US-17.1
-│               ├── weekly-tracker.model.ts   # US-18.1
+│               ├── weekly-tracker.model.ts   # US-18.1 (MoodEntry interface)
 │               └── note.model.ts             # US-20.2 Laputa Notes models
 │
 ├── Lifes.Presentation.WPF/     # WPF UI
@@ -427,19 +436,17 @@ src/
 
 ---
 
-### 16. Weekly Mood & Activity Tracker (US-18.1)
-**Status**: ✅ Completed (UI Prototype)
-**User Stories**: US-18.1
-**Documentation**: [fea-weekly-tracker-structure.md](./fea-weekly-tracker-structure.md)
+### 16. Mood & Activity Tracker (US-18.1, US-18.2)
+**Status**: ✅ Completed
+**User Stories**: US-18.1 (UI), US-18.2 (API)
+**Documentation**: [fea-mood-tracker-structure.md](./fea-mood-tracker-structure.md)
 
-**Purpose**: Cung cấp giao diện theo dõi tâm trạng và hoạt động theo từng khung giờ trong tuần (7 ngày x 24 giờ). Tích hợp chế độ **Content Explorer** chuyên dụng cho nội dung văn bản.
-
+**Purpose**: Theo dõi tâm trạng và hoạt động theo từng khung giờ (Range Tracker). Đồng bộ hóa API Backend.
 **Key Components**:
-- **WeeklyTrackerPageComponent**: Hiển thị lưới ma trận 7x24 với thanh điều hướng tuần.
-- **ContentExplorerPageComponent**: Chế độ xem nội dung chuyên sâu với bộ lọc danh mục và CSS Isolation.
-- **WeeklyTrackerService**: Quản lý trạng thái Tracker tối giản.
-- **ContentExplorerService**: Quản lý dữ liệu tin tức/nội dung độc lập (Tech News).
-- **WeeklyEntryEditorComponent**: Modal glassmorphism cho việc nhập liệu.
+- **MoodTrackerService**: Reactive state management.
+- **MoodApiService**: REST Client.
+- **JsonMoodEntryRepository**: Backend JSON storage.
+- **MoodController**: API Endpoints.
 
 ---
 

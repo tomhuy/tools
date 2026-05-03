@@ -1,7 +1,7 @@
 import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ContentExplorerService } from './content-explorer.service';
-import { MOODS, WeeklyEntry, MoodConfig, FilterMode } from '../../../models/weekly-tracker.model';
+import { MOODS, MoodEntry, MoodConfig, FilterMode } from '../../../models/weekly-tracker.model';
 import { format, addHours, startOfDay, isAfter } from 'date-fns';
 
 @Component({
@@ -18,7 +18,7 @@ export class ContentExplorerPageComponent implements OnInit, OnDestroy {
   ranges = [7, 10, 14];
   
   // Detail View state
-  viewingEntry = signal<WeeklyEntry | null>(null);
+  viewingEntry = signal<MoodEntry | null>(null);
   isDetailOpen = signal(false);
 
   // Filter dropdown state
@@ -74,7 +74,7 @@ export class ContentExplorerPageComponent implements OnInit, OnDestroy {
     return MOODS.find((m: MoodConfig) => m.id === moodId)?.label || '';
   }
 
-  getEntry(day: Date, hour: number): WeeklyEntry | undefined {
+  getEntry(day: Date, hour: number): MoodEntry | undefined {
     const date = addHours(startOfDay(day), hour);
     return this.explorerService.getEntryAt(date);
   }
@@ -84,7 +84,7 @@ export class ContentExplorerPageComponent implements OnInit, OnDestroy {
     return isAfter(date, new Date());
   }
 
-  matchesFilter(entry: WeeklyEntry | undefined): boolean {
+  matchesFilter(entry: MoodEntry | undefined): boolean {
     if (!entry) return false;
     const moodId = entry.moodId;
     const mode = this.explorerService.filterMode();
@@ -146,7 +146,7 @@ export class ContentExplorerPageComponent implements OnInit, OnDestroy {
     this.isRangeDropdownOpen.update(v => !v);
   }
 
-  openDetail(entry: WeeklyEntry) {
+  openDetail(entry: MoodEntry) {
     this.viewingEntry.set(entry);
     this.isDetailOpen.set(true);
   }

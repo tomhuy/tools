@@ -1,5 +1,5 @@
 import { Injectable, signal, computed } from '@angular/core';
-import { WeeklyEntry, DaySummary, MOODS, MoodConfig, DisplayMode, FilterMode } from '../../../models/weekly-tracker.model';
+import { MoodEntry, DaySummary, MOODS, MoodConfig, DisplayMode, FilterMode } from '../../../models/weekly-tracker.model';
 import { startOfWeek, eachDayOfInterval, addWeeks, subWeeks, isSameDay, format, startOfDay, addHours, isAfter } from 'date-fns';
 import { vi } from 'date-fns/locale';
 
@@ -7,7 +7,7 @@ import { vi } from 'date-fns/locale';
   providedIn: 'root'
 })
 export class ContentExplorerService {
-  private entries = signal<WeeklyEntry[]>([]);
+  private entries = signal<MoodEntry[]>([]);
   
   // Isolated state
   currentDate = signal<Date>(new Date());
@@ -50,7 +50,7 @@ export class ContentExplorerService {
     return this.entries;
   }
 
-  getEntryAt(date: Date): WeeklyEntry | undefined {
+  getEntryAt(date: Date): MoodEntry | undefined {
     return this.entries().find(e => e.date.getTime() === date.getTime());
   }
 
@@ -60,7 +60,7 @@ export class ContentExplorerService {
 
   private generateTechMockData() {
     const today = startOfDay(new Date());
-    const data: WeeklyEntry[] = [];
+    const data: MoodEntry[] = [];
     
     const techNews = [
       { tag: 'Show', note: 'Goodbye Tim Apple - daily.dev show (S1E1)', reason: 'Giải trí cuối ngày', cat: 'Giải trí' },

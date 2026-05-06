@@ -7,6 +7,8 @@ using Lifes.Infrastructure.Features.AnnualCalendar.Services;
 using Lifes.Core.Models;
 using Lifes.Infrastructure.Features.LaputaNotes.Repositories;
 using Lifes.Application.Features.LaputaNotes.Strategies;
+using Lifes.Infrastructure.Features.Users.Repositories;
+using Lifes.Infrastructure.Features.SprintBoard.Repositories;
 using Serilog;
 
 // Đảm bảo thư mục làm việc (Working Directory) luôn là thư mục chứa file exe
@@ -67,6 +69,10 @@ try
 
     // Mood Tracker Services
     builder.Services.AddSingleton<IMoodEntryRepository, Lifes.Infrastructure.Features.MoodTracker.Repositories.JsonMoodEntryRepository>();
+
+    // Sprint Board & Users Services
+    builder.Services.AddSingleton<IUserRepository, JsonUserRepository>();
+    builder.Services.AddSingleton<ISprintBoardRepository, JsonSprintBoardRepository>();
 
     builder.Services.AddTransient<IScanProjectsCommand, ScanProjectsCommand>();
     builder.Services.AddTransient<IUpdateVersionsCommand, UpdateVersionsCommand>();

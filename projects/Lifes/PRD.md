@@ -292,16 +292,17 @@ ETL Deployment Tools Suite cung cấp:
 
 ---
 
-### 6. Sprint Board Matrix (US-10.1, US-11.2)
-**Status**: ✅ Completed
-**User Stories**: US-10.1 (WPF), US-11.2 (Electron)
+### 6. Sprint Board Matrix (US-10.1, US-11.2, US-11.4)
+**Status**: ✅ Completed (API Integrated)
+**User Stories**: US-10.1 (WPF), US-11.2 (Electron), US-11.4 (API & Management)
 **Documentation**: [fea-sprint-board-structure.md](./docs/structures/fea-sprint-board-structure.md)
 
-**Purpose**: Giao diện ma trận Agile Sprint Board cho phép drag-and-drop task của team members trên cả hai nền tảng (WPF và Electron).
+**Purpose**: Giao diện ma trận Agile Sprint Board cho phép quản lý task của team members. Đã hoàn thiện việc tích hợp API Backend thực tế, hỗ trợ quản lý Epic, Subtask và User.
 **Key Components**:
-- **WPF**: `SprintBoardView.xaml` (UniformGrid matrix), code-behind Drag & Drop.
-- **Electron/Angular**: `SprintBoardComponent` sử dụng Angular Signals và native HTML5 Drag & Drop.
-- **Service**: `SprintBoardService` quản lý trạng thái local và đồng bộ dữ liệu (trong tương lai).
+- **Backend API**: `SprintBoardController` & `UsersController` với persistence JSON.
+- **Epic Management**: Modal quản lý Epic nâng cao với subtask CRUD và "cycle" assignee selection.
+- **User Management**: Hệ thống quản lý thành viên Board (màu sắc, initials).
+- **Drag & Drop**: Hỗ trợ chuyển đổi task giữa các thành viên hoặc cột "Làm trước".
 
 ---
 
@@ -1549,6 +1550,7 @@ private string GetLevelColor(string level)
 ### Phase 12: Electron Migration & API Integration - v2.2.0 (Completed)
 - ✅ **Setup Electron & Angular**: Initial setup and build/deploy pipeline (US-11.1, US-11.3).
 - ✅ **Monthly Calendar Migration**: Pixel-perfect port from WPF to Angular with Signal-based state (US-12.1).
+- ✅ **Sprint Board API (US-11.4)**: Chuyển đổi từ dữ liệu Mock sang API Backend hoàn chỉnh, thêm tính năng quản lý Epic/Subtask chuyên sâu và User management.
 - ✅ **REST API Integration**: Connection to .NET backend with `ApiResponse` envelope (US-12.1.1).
 - ✅ **Color Palette Port**: Migration of WPF brand colors and contrast logic to TypeScript utilities.
 - ✅ **US-15.1: IsAchieved Topic Filtering**: Cho phép đánh dấu topic đã hoàn thành và cung cấp toggle "Show Completed" để ẩn/hiện các topic này trên Board và Management.

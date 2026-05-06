@@ -1,38 +1,52 @@
 # Feature: Sprint Board
 
 ## Overview
-The Sprint Board feature visualizes features and assignee task allocation in a matrix Kanban board UI. It supports tracking status, assignee colors, and feature dependencies in a highly stylized layout. This feature is implemented as a cross-platform component available in both WPF and Electron (Angular).
+The Sprint Board feature visualizes features and assignee task allocation in a matrix Kanban board UI. It supports tracking status, assignee colors, and feature dependencies in a highly stylized layout. US-11.4 enhanced this feature by migrating from mock data to a full Backend API and adding advanced management capabilities.
 
 ## Architecture
 
-### 1. WPF Presentation Layer (Legacy)
-- `SprintBoardView.xaml` - Main grid interface defining the top header, an avatar column mapping, and the core dynamic matrix for Kanban tasks.
-- `SprintBoardViewModel.cs` - Mock data state providing bindings for Assignees and FeatureRows.
-- `Models/SprintBoardModels.cs` - Contains `BoardAssigneeModel`, `BoardTaskModel`, `BoardFeatureModel`, and `FeatureRowViewModel` defining the mock database states.
+### 1. Backend (Clean Architecture)
+- **Core Layer** (Shared):
+    - `SprintTask`, `Epic`: Entities representing the board structure, located in `Lifes.Core.Models`.
+    - `User`: Global entity for team members, located in `Lifes.Core.Models`.
+- **Application Layer**: 
+    - Commands and Queries for fetching and saving board/user data.
+- **Infrastructure Layer**:
+    - `JsonUserRepository`, `JsonSprintBoardRepository`: JSON persistence in the `database/` directory.
+- **Presentation Layer**:
+    - `UsersController`, `SprintBoardController`: REST endpoints for frontend communication.
 
-### 2. Electron/Angular Presentation Layer (Modern)
-- `SprintBoardComponent` (`.ts`, `.html`, `.css`) - Angular component managing the board matrix.
-- `SprintBoardService` - Reactive service using **Angular Signals** for state management and local data mock.
-- `SprintBoardData`, `SprintFeature`, `SprintTask` - TypeScript interfaces defining the board data structure.
+### 2. Frontend (Angular 19)
+- **Components**:
+    - `SprintBoardComponent`: Main matrix UI with Modals for Epic and User management.
+- **Services**:
+    - `UserService`: Manages global user state using Signals.
+    - `SprintBoardService`: Manages Epic/Task state and API synchronization.
+- **Models**:
+    - `SprintTask`, `SprintFeature`, `User`, `ApiResponse`.
 
 ## UI/UX Implementation Details
 
-### Vertical Accent Borders
-- The board uses custom accent borders (3px solid) on the left of each feature block to indicate the current category.
-- A controlled gap is maintained between feature blocks by applying the accent border only to the feature cells (`.feat-td`) and omitting it from the "Add task" spacer row (`.feat-td-spacer`).
+### Matrix Layout
+- **Dynamic Columns**: Columns are generated based on the list of active users.
+- **Special Columns**: A dedicated "Làm trước" (Pre) column for unassigned or high-priority tasks.
+- **Vertical Accent Borders**: Left-side color coding for Epics.
+
+### Advanced Features
+- **Epic Editor**: Full CRUD for Epics and nested subtasks.
+- **Top Priority**: Sorting logic that keeps starred tasks at the top.
+- **Archive Section**: Collapsible list for completed/archived epics.
+- **Summary Bar**: Real-time calculation of workload (Done/Active) per user.
 
 ### Drag & Drop
-- **WPF**: Utilizes native WPF `DoDragDrop` commands with code-behind handlers.
-- **Electron**: Utilizes native **HTML5 Drag & Drop API**. Tasks include `draggable="true"` and the matrix cells handle `dragover` and `drop` events to reassign tasks via the `SprintBoardService`.
-
-### Layout & Scrolling
-- To prevent redundant scrollbars in Electron, the main shell's overflow is disabled, and scrolling is delegated to the `SprintBoardComponent`'s host element.
-- The Matrix uses `position: sticky` for both the header and the Feature column to maintain context during large sprint reviews.
+- **Native HTML5 Drag & Drop**: Used for reassigning tasks between users or the "Pre" column. State is instantly updated via Signals and persisted via API.
 
 ## Data Flow
-- **WPF**: Static Initializer -> `SprintBoardViewModel` -> Two-way bounded to XAML.
-- **Electron**: `SprintBoardService` (Signals) -> `SprintBoardComponent` template. State changes (like Drag & Drop or Toggling Done) update the Signals, triggering automated UI refresh.
+1. **Load**: `OnInit` -> `userService.loadUsers()` & `boardService.loadBoard()`.
+2. **Interact**: User drags task -> Signal updates locally -> `saveBoard()` API call.
+3. **Manage**: Edit Epic -> Modal updates local copy -> Save -> `saveBoard()` API call -> Refresh Signals.
 
 ## Key Decisions
-- **Native HTML5 Drag & Drop over CDK**: For US-11.2, native HTML5 D&D was chosen to maintain maximum control over the table-row/cell drag behavior without introducing additional heavy dependencies, ensuring high-fidelity reproduction of the raw prototype's feel.
-- **Strict Content Security Policy (CSP)**: Implemented in `index.html` to allow loading Google Fonts (Google Sans) while satisfying Electron's security requirements.
+- **Separated Users API**: Users are now a standalone entity to support future cross-feature integration.
+- **Full State Persistence**: For a local tool, saving the full list of Epics is efficient and ensures data consistency across the matrix.
+- **Google Sans Typography**: Used for a premium, modern feel matching the Google ecosystem.

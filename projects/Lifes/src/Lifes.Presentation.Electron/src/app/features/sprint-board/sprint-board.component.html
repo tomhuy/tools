@@ -1,207 +1,279 @@
-<div 
-  class="vars"
-  [class.hide-done]="!showDone()">
+<div class="vars" [class.hide-done]="!showDone()">
   
+  <!-- TOP BAR -->
   <div class="topbar">
     <div class="topbar-left">
       <span class="page-title">Sprint Board</span>
-      <span class="sprint-chip">Sprint 12</span>
+      <span class="sprint-chip">Current Sprint</span>
     </div>
     <div class="topbar-right">
       <label class="toggle-label">
-        <input 
-          type="checkbox" 
-          id="showDone" 
-          [checked]="showDone()"
-          (change)="toggleDone($event)">
+        <input type="checkbox" [checked]="showDone()" (change)="toggleDone()">
         Hiện task done
       </label>
-      <button 
-        class="btn" 
-        (click)="onAddFeature()">
-        <svg 
-          viewBox="0 0 24 24" 
-          fill="none" 
-          stroke="currentColor" 
-          stroke-width="2.5">
-          <line x1="12" y1="5" x2="12" y2="19"></line>
-          <line x1="5" y1="12" x2="19" y2="12"></line>
-        </svg>
-        Feature
+      <button class="btn" (click)="openUserModal()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Quản lý người dùng
+      </button>
+      <button class="btn" [class.on]="showArchived()" (click)="toggleArchivedView()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8v13H3V8"/><path d="M1 3h22v5H1z"/><path d="M10 12h4"/></svg>
+        Archived ({{ archivedEpics().length }})
+      </button>
+      <button class="btn filled" (click)="openAddEpic()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Epic
       </button>
     </div>
   </div>
 
+  <!-- SUMMARY BAR -->
   <div class="summary-bar">
-    @for (p of summaryData(); track p.id) {
-      <div 
-        class="summary-pill"
-        [class.pill-blue]="p.color === 'blue'"
-        [class.pill-green]="p.color === 'green'"
-        [class.pill-orange]="p.color === 'orange'"
-        [class.pill-purple]="p.color === 'purple'"
-        [class.dimmed]="activeHighlight() !== null && activeHighlight() !== p.id"
-        (click)="toggleHighlight(p.id)">
-        <div 
-          class="av"
-          [style.background]="'var(--' + p.color + '-bg)'"
-          [style.color]="'var(--' + p.color + ')'">
-          {{ p.initials }}
-        </div>
-        <span class="pill-count">{{ p.total }}</span>
+    @for (u of summaryData(); track u.id) {
+      <div class="summary-pill" 
+           [style.background]="'var(--' + u.color + '-bg)'" 
+           [style.color]="'var(--' + u.color + ')'"
+           [style.borderColor]="'var(--' + u.color + '-bd)'"
+           [class.dimmed]="activeHighlight() && activeHighlight() !== u.id"
+           (click)="toggleHighlight(u.id)">
+        <div class="av" style="background:white">{{ u.initials }}</div>
+        <span class="pill-count">{{ u.total }}</span>
         <div>
-          <div class="pill-name">{{ p.label }}</div>
-          <div class="pill-sub">{{ p.done }} done · {{ p.active }} active</div>
+          <div class="pill-name">{{ u.name }}</div>
+          <div class="pill-sub">{{ u.done }} done · {{ u.active }} active</div>
         </div>
       </div>
     }
   </div>
 
-  <div class="board-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th style="min-width: 136px; width: 136px;">
-            <div class="th-in">Feature</div>
-          </th>
-          <th style="min-width: 160px; width: 160px;">
-            <div class="th-in">
-              <svg 
-                width="10" 
-                height="10" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                stroke-width="2.5" 
-                style="vertical-align: middle; margin-right: 4px;">
-                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-              </svg>
-              Làm trước
-            </div>
-          </th>
-          @for (p of people(); track p.id) {
-            <th style="min-width: 160px; width: 160px;">
-              <div class="th-in th-person">
-                <div 
-                  class="av"
-                  [style.background]="'var(--' + p.color + '-bg)'"
-                  [style.color]="'var(--' + p.color + ')'">
-                  {{ p.initials }}
-                </div>
-                {{ p.label }}
-              </div>
-            </th>
-          }
-        </tr>
-      </thead>
-      <tbody>
-        @for (feat of boardData().features; track feat.id) {
-          @for (task of feat.tasks; track task.id; let ti = $index) {
-            <tr 
-              [class.done-row]="task.done"
-              [class.feat-boundary]="ti === feat.tasks.length - 1"
-              [class.task-row-even]="ti % 2 === 1"
-              [class]="'ab-' + feat.accent">
-              
-              <!-- Feature cell (rowspan) -->
-              @if (ti === 0) {
-                <td 
-                  class="feat-td"
-                  [rowSpan]="feat.tasks.length">
-                  <div class="feat-inner">
-                    <div 
-                      class="feat-dot"
-                      [style.background]="'var(--' + feat.accent + ')'">
-                    </div>
-                    <span class="feat-name">{{ feat.name }}</span>
-                    <span class="feat-count">
-                      {{ feat.tasks.length }} task{{ feat.tasks.length !== 1 ? 's' : '' }}
-                    </span>
-                  </div>
-                </td>
-              }
-
-              <!-- Content columns (pre + people) -->
-              @let columns = ['pre', 'huy', 'tuan', 'bang', 'hoa'];
-              @for (col of columns; track col) {
-                <td 
-                  class="content-cell"
-                  [class.person-col]="col !== 'pre'"
-                  (dragover)="onDragOver($event)"
-                  (dragleave)="onDragLeave($event)"
-                  (drop)="onDrop($event, feat.id, col)">
-                  
-                  @if (task.person === col) {
-                    <div 
-                      class="task-card"
-                      [draggable]="true"
-                      [class.done]="task.done"
-                      [class.faded]="activeHighlight() !== null && task.person !== activeHighlight()"
-                      [class]="'card-' + task.person"
-                      (click)="onTaskClick(feat.id, task.id)"
-                      (dragstart)="onDragStart($event, feat.id, task.id, task.person)"
-                      (dragend)="onDragEnd($event)">
-                      <span class="task-id">#{{ task.label }}</span>
-                      <span class="task-name">{{ task.name }}</span>
-                      @if (task.done) {
-                        <span class="done-check">✓</span>
-                      }
-                    </div>
-                  } @else {
-                    <div 
-                      class="empty-hint"
-                      (click)="onMoveHintClick(feat.id, task.id, col)">
-                      <svg 
-                        width="9" 
-                        height="9" 
-                        viewBox="0 0 24 24" 
-                        fill="none" 
-                        stroke="currentColor" 
-                        stroke-width="3">
-                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                      </svg> 
-                      thêm
-                    </div>
-                  }
-                </td>
-              }
-            </tr>
-          }
-
-          <!-- Add task hint row -->
-          <tr 
-            class="add-row-hint"
-            [class]="'ab-' + feat.accent">
-            <td class="feat-td-spacer"></td>
-            @for (col of ['pre', 'huy', 'tuan', 'bang', 'hoa']; track col) {
-              <td 
-                class="content-cell"
-                (dragover)="onDragOver($event)"
-                (dragleave)="onDragLeave($event)"
-                (drop)="onDrop($event, feat.id, col)">
-                @if (col === 'pre') {
-                  <div 
-                    class="add-row-btn"
-                    (click)="onAddTask(feat.id)">
-                    <svg 
-                      width="10" 
-                      height="10" 
-                      viewBox="0 0 24 24" 
-                      fill="none" 
-                      stroke="currentColor" 
-                      stroke-width="2.5">
-                      <line x1="12" y1="5" x2="12" y2="19"></line>
-                      <line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg>
-                    Thêm task
-                  </div>
-                }
-              </td>
+  <!-- IN PROGRESS SECTION -->
+  <div class="section">
+    <div class="sec-head">
+      <span class="sec-title">In progress</span>
+      <span class="sec-count">{{ activeEpics().length }}</span>
+    </div>
+    <div class="board-wrap">
+      <table class="board">
+        <thead>
+          <tr>
+            <th class="col-feature">Epic</th>
+            <th class="col-pre">Làm trước</th>
+            @for (u of users(); track u.id) {
+              <th class="th-person">
+                <div class="av" [style.background]="'var(--' + u.color + '-bg)'" [style.color]="'var(--' + u.color + ')'">{{ u.initials }}</div>
+                {{ u.name }}
+              </th>
             }
           </tr>
-        }
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          @for (epic of activeEpics(); track epic.id) {
+            @let tasks = getSortedTasks(epic.tasks);
+            @if (tasks.length === 0) {
+              <tr class="feat-boundary" [class]="'ab-' + epic.color">
+                <td class="feat-td" (click)="openEditEpic(epic)">
+                  <div class="feat-inner">
+                    <div class="feat-dot" [style.background]="'var(--' + epic.color + ')'"></div>
+                    <span class="feat-name">{{ epic.name }}</span>
+                  </div>
+                </td>
+                <td [attr.colspan]="users().length + 1">
+                  <div class="empty-state">Chưa có task. Click Epic để thêm.</div>
+                </td>
+              </tr>
+            } @else {
+              @for (task of tasks; track task.id; let ti = $index) {
+                <tr [class]="'ab-' + epic.color" 
+                    [class.done-row]="task.done" 
+                    [class.feat-boundary]="ti === tasks.length - 1"
+                    [class.task-row-even]="ti % 2 === 1"
+                    [class.priority-row]="task.isTopPriority">
+                  @if (ti === 0) {
+                    <td class="feat-td" [rowSpan]="tasks.length" (click)="openEditEpic(epic)">
+                      <div class="feat-inner">
+                        <div class="feat-dot" [style.background]="'var(--' + epic.color + ')'"></div>
+                        <span class="feat-name">{{ epic.name }}</span>
+                        <span class="feat-count">{{ tasks.length }} tasks</span>
+                      </div>
+                      <div class="feat-edit-hint">✎ edit</div>
+                    </td>
+                  }
+                  
+                  @for (col of boardColumns(); track col.id) {
+                    <td class="content-cell" 
+                        (dragover)="onDragOver($event)" 
+                        (dragleave)="onDragLeave($event)" 
+                        (drop)="onDrop($event, epic.id, col.id)">
+                      @if (task.assigneeId === col.id) {
+                        <div class="task-card" 
+                             [draggable]="true" 
+                             [class.done]="task.done"
+                             [class.faded]="activeHighlight() && task.assigneeId !== activeHighlight()"
+                             [style.background]="!col.isUser ? 'var(--red-bg)' : 'var(--' + col.color + '-bg)'"
+                             [style.color]="!col.isUser ? 'var(--red)' : 'var(--' + col.color + ')'"
+                             [style.borderColor]="!col.isUser ? 'var(--red-bd)' : 'var(--' + col.color + '-bd)'"
+                             (click)="onTaskClick(epic.id, task.id)"
+                             (dragstart)="onDragStart($event, epic.id, task.id)"
+                             (dragend)="onDragEnd($event)">
+                          @if (task.isTopPriority) { <span class="task-priority">★</span> }
+                          <span class="task-id">#{{ task.label }}</span>
+                          <span class="task-name">{{ task.name }}</span>
+                          @if (task.done) { <span class="done-check">✓</span> }
+                        </div>
+                      } @else {
+                        <div class="empty-hint" (click)="onReassign(epic.id, task.id, col.id)">
+                          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> assign
+                        </div>
+                      }
+                    </td>
+                  }
+                </tr>
+              }
+            }
+          }
+        </tbody>
+      </table>
+    </div>
   </div>
+
+  <!-- BACKLOG SECTION -->
+  <div class="section sec-backlog">
+    <div class="sec-head">
+      <span class="sec-title">Backlog</span>
+      <span class="sec-count">{{ backlogEpics().length }}</span>
+    </div>
+    <div class="board-wrap">
+      <table class="board">
+        <tbody>
+          @for (epic of backlogEpics(); track epic.id) {
+            <tr class="feat-boundary" [class]="'ab-' + epic.color">
+              <td class="feat-td" (click)="openEditEpic(epic)">
+                <div class="feat-inner">
+                  <div class="feat-dot" [style.background]="'var(--' + epic.color + ')'"></div>
+                  <span class="feat-name">{{ epic.name }}</span>
+                </div>
+              </td>
+              <td [attr.colspan]="users().length + 1">
+                <div class="empty-state" style="padding: 10px">Backlog epic. Click để edit/move to progress.</div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ARCHIVED SECTION -->
+  @if (showArchived()) {
+    <div class="section sec-archived">
+      <div class="sec-head">
+        <span class="sec-title">Archived Epics</span>
+      </div>
+      <div class="archived-list">
+        @for (epic of archivedEpics(); track epic.id) {
+          <div class="archived-row" (click)="openEditEpic(epic)">
+            <div class="feat-dot" [style.background]="'var(--' + epic.color + ')'"></div>
+            <span class="a-name">{{ epic.name }}</span>
+            <span class="feat-count">{{ epic.tasks.length }} tasks</span>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- EPIC MODAL -->
+  <div class="modal-bg" [class.open]="isEpicModalOpen()">
+    <div class="modal" *ngIf="editingEpic() as epic">
+      <div class="modal-head">
+        <span class="modal-title">{{ epic.id.startsWith('e') && epic.id.length > 10 ? 'Add Epic' : 'Edit Epic' }}</span>
+        <button class="modal-close" (click)="closeEpicModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="field">
+          <label class="field-label">Tên Epic</label>
+          <textarea class="field-textarea" [(ngModel)]="epic.name"></textarea>
+        </div>
+        <div class="field">
+          <label class="field-label">Màu sắc</label>
+          <div class="color-picker">
+            @for (c of colors; track c) {
+              <div class="swatch" [style.background]="'var(--' + c + ')'" [class.sel]="epic.color === c" (click)="epic.color = c"></div>
+            }
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Trạng thái</label>
+          <div style="display:flex; gap: 10px">
+            <label class="check-row"><input type="radio" name="status" value="progress" [(ngModel)]="epic.status"> In Progress</label>
+            <label class="check-row"><input type="radio" name="status" value="backlog" [(ngModel)]="epic.status"> Backlog</label>
+            <label class="check-row"><input type="checkbox" [(ngModel)]="epic.archived"> Archived</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Tasks ({{ epic.tasks.length }})</label>
+          <div class="subtask-list">
+            @for (t of epic.tasks; track t.id) {
+              <div class="subtask-row" [class.done]="t.done">
+                <div class="st-check" [class.done]="t.done" (click)="t.done = !t.done">✓</div>
+                <span class="st-id">#{{ t.label }}</span>
+                <input class="st-name" [(ngModel)]="t.name" style="border:none; background:transparent">
+                <div class="st-priority" [class.on]="t.isTopPriority" (click)="toggleSubtaskPriority(t)">★</div>
+                
+                <span class="st-person" 
+                      (click)="cycleAssignee(t)"
+                      [style.background]="t.assigneeId === 'pre' ? 'var(--red-bg)' : 'var(--' + getAssigneeColor(t.assigneeId) + '-bg)'"
+                      [style.color]="t.assigneeId === 'pre' ? 'var(--red)' : 'var(--' + getAssigneeColor(t.assigneeId) + ')'"
+                      [style.borderColor]="t.assigneeId === 'pre' ? 'var(--red-bd)' : 'var(--' + getAssigneeColor(t.assigneeId) + '-bd)'">
+                  {{ t.assigneeId === 'pre' ? 'Làm trước' : getAssigneeName(t.assigneeId) }}
+                </span>
+
+                <button class="st-del" (click)="removeSubtask(t.id)">×</button>
+              </div>
+            }
+            <div class="add-subtask-row">
+              <input type="text" placeholder="Thêm task mới..." [(ngModel)]="newSubtaskName" (keyup.enter)="addSubtask()">
+              <button class="btn" (click)="addSubtask()">Add</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn" style="color:var(--red)" (click)="deleteEpic(epic.id)">Delete Epic</button>
+        <div style="flex:1"></div>
+        <button class="btn" (click)="closeEpicModal()">Cancel</button>
+        <button class="btn filled" (click)="saveEpic()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- USER MODAL -->
+  <div class="modal-bg" [class.open]="isUserModalOpen()">
+    <div class="modal">
+      <div class="modal-head">
+        <span class="modal-title">Quản lý người dùng</span>
+        <button class="modal-close" (click)="closeUserModal()">×</button>
+      </div>
+      <div class="modal-body">
+        @for (u of users(); track u.id) {
+          <div class="user-row">
+            <div class="av" [style.background]="'var(--' + u.color + '-bg)'" [style.color]="'var(--' + u.color + ')'">{{ u.initials }}</div>
+            <div class="u-info">
+              <input class="field-input" [(ngModel)]="u.name" (blur)="updateUser(u)" style="font-weight:600; margin-bottom:4px">
+              <input class="field-input" [(ngModel)]="u.initials" (blur)="updateUser(u)" style="width: 50px; font-size:11px">
+            </div>
+            <div class="color-picker" style="gap:4px">
+              @for (c of colors; track c) {
+                <div class="swatch" style="width:16px; height:16px" [style.background]="'var(--' + c + ')'" [class.sel]="u.color === c" (click)="u.color = c; updateUser(u)"></div>
+              }
+            </div>
+            <button class="btn ghost" (click)="removeUser(u.id)">×</button>
+          </div>
+        }
+        <button class="btn" (click)="addUser()" style="width:100%; margin-top:10px">
+          + Thêm thành viên
+        </button>
+      </div>
+    </div>
+  </div>
+
 </div>

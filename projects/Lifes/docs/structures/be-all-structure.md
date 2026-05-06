@@ -22,7 +22,9 @@ src/
 │   │   ├── IMementoRepository.cs   # US-9.2
 │   │   ├── ITagRepository.cs       # US-9.2
 │   │   ├── INoteRepository.cs      # US-20.3
-│   │   └── IMoodEntryRepository.cs # US-18.2
+│   │   ├── IMoodEntryRepository.cs # US-18.2
+│   │   ├── IUserRepository.cs      # US-11.4
+│   │   └── ISprintBoardRepository.cs # US-11.4
 │   └── Models/
 │       ├── Result.cs               # Result<T> pattern
 │       ├── ToolDefinition.cs       # US-5.1 — tool metadata
@@ -32,7 +34,10 @@ src/
 │       ├── MementoModel.cs         # US-9.1 — Recursive hierarchy (TagIds, IsAchieved support)
 │       ├── TagModel.cs             # US-9.2 — Tagging system
 │       ├── MementoQueryModel.cs    # US-9.2 — Filtering model (ShowAchieved support - US-15.1)
-│       └── MoodEntry.cs            # US-18.2 — Mood tracker entity
+│       ├── MoodEntry.cs            # US-18.2 — Mood tracker entity
+│       ├── User.cs                 # US-11.4 — Global team member
+│       ├── Epic.cs                 # US-11.4 — Sprint Board epic
+│       └── SprintTask.cs           # US-11.4 — Sprint Board subtask
 │
 ├── Lifes.Domain/                # Business logic and entities
 │   ├── Common/                     # US-1.2.1
@@ -79,6 +84,10 @@ src/
 │       └── MoodTracker/            # US-18.2
 │           └── Repositories/
 │               └── JsonMoodEntryRepository.cs # JSON-based storage
+│       ├── SprintBoard/             # US-11.4
+│       │   └── Repositories/
+│       │       ├── JsonUserRepository.cs
+│       │       └── JsonSprintBoardRepository.cs
 │
 ├── Lifes.Application/           # Use cases and commands
 │   ├── Common/                     # US-1.2.1
@@ -114,7 +123,9 @@ src/
 ├── Lifes.Presentation.WebApi/    # C# Local API Server (US-11.1)
 │   ├── Controllers/                # REST endpoints routing to Application Commands
 │   │   ├── NotesController.cs      # US-20.3
-│   │   └── MoodController.cs       # US-18.2
+│   │   ├── MoodController.cs       # US-18.2
+│   │   ├── UsersController.cs      # US-11.4
+│   │   └── SprintBoardController.cs # US-11.4
 │   └── Program.cs                  # WebAPI Bootstrap
 │
 ├── Lifes.Presentation.Electron/  # Electron UI (US-11.1)

@@ -377,3 +377,21 @@ Xác định quy chuẩn định dạng ngày tháng khi gửi dữ liệu từ 
     - **Tính nhất quán**: Tránh các lỗi liên quan đến lệch múi giờ (timezone offset) khi server và client ở các môi trường khác nhau.
     - **Dễ parse**: .NET Core và JavaScript đều hỗ trợ cực tốt việc parse/serialize chuỗi ISO 8601.
     - **Business logic**: Người dùng yêu cầu "date không cần care giờ local time, cứ ghép thành dạng ISO rồi gửi lên server".
+
+## ADR 20: Centralizing Domain Models in Core Layer (Sprint Board - US-11.4)
+**Ngày ra quyết định: 2026-05-06**
+**Người viết: AI, huy**
+
+**1. Vấn đề/Concern/Feature đang cần ra quyết định:**
+Lựa chọn vị trí đặt các thực thể Domain (`User`, `Epic`, `SprintTask`) cho tính năng Sprint Board. Ban đầu các thực thể này nằm ở `Lifes.Domain`, nhưng phát sinh vấn đề khi các Interface trong `Lifes.Core` cần tham chiếu đến chúng, dẫn đến nguy cơ circular dependency nếu `Core` phụ thuộc vào `Domain`.
+
+**2. Các phương án đã được gợi ý:**
+- **Phương án 1**: Giữ thực thể ở `Lifes.Domain`. Các Interface trong `Lifes.Core` sẽ sử dụng kiểu dữ liệu nguyên thủy hoặc DTO đơn giản để tránh phụ thuộc ngược.
+- **Phương án 2 (Lựa chọn)**: Di chuyển các thực thể Domain cơ bản sang `Lifes.Core/Models`.
+
+**3. Lựa chọn và lý do lựa chọn:**
+- **Lựa chọn**: **Phương án 2 (Move to Core)**.
+- **Lý do**: 
+    - **Tính thực tế**: Với các thực thể mang tính chất "Data Container" hoặc "Shared Model" như `User` hay `Epic` (vốn được dùng xuyên suốt các layer), việc đặt chúng ở `Core` giúp đơn giản hóa việc tham chiếu từ Repository Interfaces (`ICore`) và Controllers (`Presentation`).
+    - **Tránh Circular Dependency**: `Core` là layer thấp nhất, không phụ thuộc vào layer nào khác. Việc đặt Models ở đây đảm bảo mọi layer khác (Domain, Application, Infrastructure, Presentation) đều có thể sử dụng chung một định nghĩa dữ liệu mà không gây lỗi vòng lặp.
+    - **Phù hợp với Local Tool**: Đối với một ứng dụng desktop/local tool, việc duy trì sự phân tách cực kỳ khắt khe giữa Domain Entity và DTO đôi khi gây ra sự cồng kềnh không cần thiết. Việc gom nhóm vào `Core.Models` giúp codebase gọn gàng và dễ bảo trì hơn.

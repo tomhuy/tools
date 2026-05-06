@@ -2,24 +2,20 @@ export interface SprintTask {
   id: string;
   label: string;
   name: string;
-  person: string; // 'pre' | 'huy' | 'tuan' | 'bang' | 'hoa'
+  assigneeId: string; // 'pre' | userId
   done: boolean;
+  isTopPriority?: boolean;
 }
 
-export interface SprintFeature {
+export interface SprintFeature { // Epic in Backend
   id: string;
   name: string;
-  accent: string; // 'blue' | 'green' | 'orange' | 'purple'
+  color: string;
+  archived: boolean;
+  status: 'progress' | 'backlog';
   tasks: SprintTask[];
 }
 
 export interface SprintBoardData {
   features: SprintFeature[];
-}
-
-export interface Person {
-  id: string;
-  label: string;
-  initials: string;
-  color: string;
 }

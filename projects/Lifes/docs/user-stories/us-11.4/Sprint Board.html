@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sprint Board</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Google+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue:      #1a73e8;  --blue-bg:   #e8f0fe;  --blue-bd:#aecbfa;
+    --green:     #1e8e3e;  --green-bg:  #e6f4ea;  --green-bd:#a8d5b5;
+    --orange:    #e37400;  --orange-bg: #fef7e0;  --orange-bd:#f6d280;
+    --purple:    #9334e6;  --purple-bg: #f3e8fd;  --purple-bd:#d7aefb;
+    --red:       #d93025;  --red-bg:    #fce8e6;  --red-bd:#f5c6c2;
+    --pink:      #c2185b;  --pink-bg:   #fce4ec;  --pink-bd:#f4b6cd;
+    --teal:      #00897b;  --teal-bg:   #e0f2f1;  --teal-bd:#a3d4ce;
+    --indigo:    #3f51b5;  --indigo-bg: #e8eaf6;  --indigo-bd:#b4bce4;
+    --gray:      #5f6368;  --gray-bg:   #f1f3f4;  --gray-bd:#dadce0;
+
+    --border:       #dadce0;
+    --border-light: #f1f3f4;
+    --on-surface:   #202124;
+    --on-variant:   #5f6368;
+    --bg:           #f8f9fa;
+    --font: 'Google Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--on-surface);
+    min-height: 100vh;
+    padding: 18px 24px 60px;
+  }
+
+  /* TOP BAR */
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px; flex-wrap: wrap; gap: 10px;
+  }
+  .topbar-left  { display: flex; align-items: center; gap: 10px; }
+  .topbar-right { display: flex; align-items: center; gap: 8px; flex-wrap:wrap; }
+  .page-title  { font-size: 20px; font-weight: 600; letter-spacing: -.3px; }
+  .sprint-chip {
+    font-size: 11px; font-weight: 600;
+    background: var(--blue-bg); color: var(--blue);
+    padding: 3px 10px; border-radius: 20px;
+  }
+
+  .toggle-label {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 13px; color: var(--on-variant); cursor: pointer;
+    user-select: none; padding: 6px 12px; border-radius: 20px;
+    border: 1px solid var(--border); background: white;
+  }
+  .toggle-label:hover { background: var(--bg); }
+  .toggle-label input { accent-color: var(--blue); width: 14px; height: 14px; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 7px 14px; border-radius: 20px;
+    border: 1px solid var(--border); background: white;
+    color: var(--on-surface); font-size: 13px;
+    font-family: var(--font); font-weight: 500;
+    cursor: pointer;
+  }
+  .btn:hover { background: var(--bg); }
+  .btn.filled { background: var(--blue); color: white; border-color: var(--blue); }
+  .btn.filled:hover { background: #1557b0; }
+  .btn.ghost { border: none; padding: 6px 10px; color: var(--on-variant); }
+  .btn.ghost:hover { background: var(--gray-bg); }
+  .btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  /* PEOPLE BAR */
+  .summary-bar { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; align-items: center;}
+  .summary-pill {
+    display: flex; align-items: center; gap: 7px;
+    padding: 6px 14px 6px 8px; border-radius: 24px; border: 1.5px solid;
+    cursor: pointer; user-select: none;
+    background: white;
+  }
+  .summary-pill:hover { transform: translateY(-1px); }
+  .summary-pill.dimmed { opacity: .25; }
+  .av {
+    width: 26px; height: 26px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700; flex-shrink: 0;
+  }
+  .av.lg { width: 32px; height: 32px; font-size: 12px; }
+  .pill-count { font-size: 20px; font-weight: 700; line-height: 1; }
+  .pill-name  { font-size: 13px; font-weight: 600; }
+  .pill-sub   { font-size: 10px; opacity: .7; }
+  .add-user-btn {
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 1.5px dashed var(--border); background: white;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: var(--on-variant);
+  }
+  .add-user-btn:hover { background: var(--blue-bg); border-color: var(--blue); color: var(--blue); }
+
+  /* SECTIONS */
+  .section {
+    background: white; border: 1px solid var(--border);
+    border-radius: 12px; margin-bottom: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.04);
+    overflow: hidden;
+  }
+  .sec-head {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 16px; border-bottom: 1px solid var(--border-light);
+    cursor: pointer; user-select: none;
+  }
+  .sec-head:hover { background: var(--bg); }
+  .sec-caret {
+    width: 18px; height: 18px; transition: transform .15s;
+    color: var(--on-variant);
+  }
+  .section.collapsed .sec-caret { transform: rotate(-90deg); }
+  .section.collapsed .sec-body { display: none; }
+  .sec-title { font-size: 14px; font-weight: 600; }
+  .sec-count {
+    font-size: 11px; font-weight: 600;
+    padding: 2px 8px; border-radius: 12px;
+    background: var(--gray-bg); color: var(--on-variant);
+  }
+  .sec-section-bg-backlog .sec-head { background: #fafbfc; }
+  .sec-actions { margin-left: auto; display: flex; gap: 6px; }
+
+  /* BOARD */
+  .board-wrap { overflow-x: auto; }
+  table.board {
+    border-collapse: collapse; min-width: max-content; width: 100%;
+    table-layout: fixed;
+  }
+
+  .board col.col-feature { width: 180px; }
+  .board col.col-pre     { width: 180px; }
+  .board col.col-person  { width: 200px; }
+
+  thead th {
+    padding: 11px 12px;
+    font-size: 11px; font-weight: 600; color: var(--on-variant);
+    text-transform: uppercase; letter-spacing: .6px;
+    border-bottom: 1px solid var(--border);
+    border-right: 1px solid var(--border-light);
+    background: white;
+    text-align: left;
+  }
+  thead th:last-child { border-right: none; }
+  .th-person { text-align: center; text-transform: none; font-size: 13px; letter-spacing: 0; }
+  .th-person .av { margin: 0 auto 4px; }
+  .th-person .av-wrap {
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    cursor: pointer;
+  }
+  .th-person .av-wrap:hover .person-x { opacity: 1; }
+  .person-x {
+    opacity: 0; font-size: 9px; color: var(--red);
+    transition: opacity .15s;
+  }
+
+  tbody td {
+    vertical-align: middle;
+    border-bottom: 1px solid var(--border-light);
+    border-right: 1px solid var(--border-light);
+    height: 44px;
+    padding: 0;
+  }
+  tbody td:last-child { border-right: none; }
+
+  tr.feat-boundary td { border-bottom: 2px solid var(--border); }
+  tr.task-row-even td.content-cell { background: #fafafa; }
+  tr.priority-row td.feat-td { box-shadow: inset 4px 0 0 #fbbc04; }
+
+  /* Feature cell */
+  td.feat-td {
+    background: white;
+    padding: 0; vertical-align: middle;
+    cursor: pointer;
+    position: relative;
+  }
+  td.feat-td:hover { background: var(--bg); }
+  .feat-inner {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center; padding: 12px 10px; gap: 4px;
+    height: 100%;
+  }
+  .feat-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .feat-name { font-size: 12px; font-weight: 600; line-height: 1.4; white-space: pre-line; }
+  .feat-count{ font-size: 10px; color: var(--on-variant); }
+  .feat-edit-hint {
+    position: absolute; top: 6px; right: 6px;
+    opacity: 0; font-size: 10px; color: var(--on-variant);
+  }
+  td.feat-td:hover .feat-edit-hint { opacity: 1; }
+
+  .ab-blue   td.feat-td { border-left: 3px solid var(--blue); }
+  .ab-green  td.feat-td { border-left: 3px solid var(--green); }
+  .ab-orange td.feat-td { border-left: 3px solid var(--orange); }
+  .ab-purple td.feat-td { border-left: 3px solid var(--purple); }
+  .ab-pink   td.feat-td { border-left: 3px solid var(--pink); }
+  .ab-teal   td.feat-td { border-left: 3px solid var(--teal); }
+  .ab-indigo td.feat-td { border-left: 3px solid var(--indigo); }
+  .ab-red    td.feat-td { border-left: 3px solid var(--red); }
+
+  /* Content cell */
+  td.content-cell { padding: 5px 8px; }
+  td.content-cell:hover .empty-hint { opacity: 1; }
+  .empty-hint {
+    opacity: 0;
+    display: flex; align-items: center; justify-content: center; gap: 3px;
+    font-size: 11px; color: var(--on-variant);
+    padding: 4px 8px; border-radius: 5px;
+    border: 1.5px dashed var(--border);
+    cursor: pointer; user-select: none;
+    width: 100%;
+  }
+  td.drag-over { background: var(--blue-bg) !important; outline: 2px dashed var(--blue); outline-offset: -3px; }
+
+  /* Task card */
+  .task-card {
+    display: flex; align-items: center; gap: 7px;
+    padding: 6px 10px; border-radius: 7px;
+    border: 1.5px solid transparent;
+    font-size: 12px; font-weight: 500; line-height: 1.35;
+    cursor: grab; width: 100%;
+    transition: transform .1s, box-shadow .1s, opacity .15s;
+    position: relative;
+  }
+  .task-card:hover { transform: translateY(-1px); box-shadow: 0 2px 8px rgba(0,0,0,.12); }
+  .task-card:active { cursor: grabbing; }
+  .task-id {
+    font-size: 9px; font-family: 'Google Sans Mono', monospace;
+    font-weight: 600; opacity: .6; flex-shrink: 0;
+  }
+  .task-name { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .task-priority { font-size: 11px; flex-shrink: 0; }
+  .task-card.done { opacity: .45; }
+  .task-card.done .task-name { text-decoration: line-through; }
+  .done-check {
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--green); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 8px; font-weight: 800; flex-shrink: 0;
+  }
+  .task-card.dragging { opacity: .15; }
+  .task-card.faded { opacity: .12 !important; }
+
+  /* Card color variants - dynamically generated based on user color */
+  .card-pre { background: var(--red-bg); color: var(--red); border-color: var(--red-bd); }
+
+  /* archived */
+  .archived-list {
+    padding: 12px 16px;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .archived-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 12px; border-radius: 8px;
+    background: var(--gray-bg);
+    font-size: 13px;
+  }
+  .archived-row .feat-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .archived-row .a-name { flex: 1; font-weight: 500; }
+
+  body.hide-done tr.done-row { display: none; }
+
+  /* MODAL */
+  .modal-bg {
+    position: fixed; inset: 0; background: rgba(32,33,36,.5);
+    display: none; align-items: center; justify-content: center; z-index: 100;
+    padding: 24px;
+  }
+  .modal-bg.open { display: flex; }
+  .modal {
+    background: white; border-radius: 16px;
+    box-shadow: 0 12px 40px rgba(0,0,0,.2);
+    width: 100%; max-width: 580px;
+    max-height: 90vh; overflow-y: auto;
+  }
+  .modal-head {
+    display: flex; align-items: center; gap: 10px;
+    padding: 18px 20px 14px; border-bottom: 1px solid var(--border-light);
+  }
+  .modal-title { font-size: 16px; font-weight: 600; flex: 1; }
+  .modal-close {
+    border: none; background: none; font-size: 20px;
+    color: var(--on-variant); cursor: pointer;
+    width: 30px; height: 30px; border-radius: 50%;
+  }
+  .modal-close:hover { background: var(--gray-bg); }
+  .modal-body { padding: 16px 20px; }
+  .modal-foot {
+    padding: 14px 20px; border-top: 1px solid var(--border-light);
+    display: flex; justify-content: flex-end; gap: 8px;
+  }
+
+  .field { margin-bottom: 14px; }
+  .field-label {
+    display: block; font-size: 11px; font-weight: 600;
+    color: var(--on-variant); margin-bottom: 6px;
+    text-transform: uppercase; letter-spacing: .5px;
+  }
+  .field-input, .field-textarea {
+    width: 100%; padding: 9px 12px;
+    border: 1px solid var(--border); border-radius: 8px;
+    font-family: var(--font); font-size: 13px;
+    background: white; color: var(--on-surface);
+  }
+  .field-input:focus, .field-textarea:focus {
+    outline: none; border-color: var(--blue);
+    box-shadow: 0 0 0 3px var(--blue-bg);
+  }
+  .field-textarea { resize: vertical; min-height: 60px; }
+  .check-row {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: var(--on-surface); cursor: pointer;
+  }
+  .check-row input { accent-color: var(--blue); width: 16px; height: 16px; }
+
+  /* Color picker */
+  .color-picker { display: flex; gap: 8px; flex-wrap: wrap; }
+  .swatch {
+    width: 28px; height: 28px; border-radius: 50%;
+    cursor: pointer; border: 2px solid transparent;
+    transition: transform .1s;
+  }
+  .swatch:hover { transform: scale(1.1); }
+  .swatch.sel {
+    border-color: var(--on-surface);
+    box-shadow: 0 0 0 2px white inset;
+  }
+
+  /* Subtask list inside epic edit */
+  .subtask-list {
+    border: 1px solid var(--border-light); border-radius: 8px;
+    overflow: hidden;
+  }
+  .subtask-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 12px; border-bottom: 1px solid var(--border-light);
+    background: white;
+  }
+  .subtask-row:last-child { border-bottom: none; }
+  .subtask-row.done .st-name { text-decoration: line-through; opacity: .5; }
+  .st-check {
+    width: 18px; height: 18px; border-radius: 4px;
+    border: 1.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; cursor: pointer; background: white;
+  }
+  .st-check.done { background: var(--green); border-color: var(--green); color: white; }
+  .st-id { font-size: 10px; font-family: 'Google Sans Mono', monospace; color: var(--on-variant); width: 32px; flex-shrink:0; }
+  .st-name { flex: 1; font-size: 13px; cursor: text; }
+  .st-name:focus { outline: 1px solid var(--blue); border-radius: 4px; padding: 0 3px; margin: 0 -3px; }
+  .st-priority {
+    width: 22px; height: 22px; border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; flex-shrink: 0; font-size: 12px;
+    border: 1.5px solid transparent; color: #c0c0c0;
+  }
+  .st-priority:hover { background: var(--orange-bg); color: var(--orange); }
+  .st-priority.on { color: #fbbc04; }
+  .st-person {
+    font-size: 10px; font-weight: 600; padding: 3px 7px;
+    border-radius: 10px; border: 1px solid;
+    cursor: pointer; flex-shrink: 0;
+  }
+  .st-del {
+    border: none; background: none; cursor: pointer;
+    color: var(--on-variant); padding: 4px;
+    border-radius: 4px; flex-shrink: 0; font-size: 13px;
+  }
+  .st-del:hover { color: var(--red); background: var(--red-bg); }
+
+  .add-subtask-row {
+    display: flex; gap: 8px; padding: 8px 12px;
+    background: var(--bg);
+  }
+  .add-subtask-row input { flex: 1; }
+
+  /* User mgmt */
+  .user-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 12px;
+    border: 1px solid var(--border-light);
+    border-radius: 8px; margin-bottom: 8px;
+    background: white;
+  }
+  .user-row .av { width: 36px; height: 36px; font-size: 12px; }
+  .user-row .u-info { flex: 1; }
+  .user-row .u-name { font-size: 14px; font-weight: 600; }
+  .user-row .u-init { font-size: 11px; color: var(--on-variant); }
+
+  /* Tag colors */
+  .ab-pink   { color: var(--pink); }
+  .ab-teal   { color: var(--teal); }
+  .ab-indigo { color: var(--indigo); }
+
+  /* Sprint board top right when archived shown */
+  .archive-toggle.on { background: var(--blue-bg); color: var(--blue); border-color: var(--blue-bd); }
+
+  /* Empty state */
+  .empty-state {
+    padding: 32px 16px; text-align: center;
+    color: var(--on-variant); font-size: 13px;
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <span class="page-title">Sprint Board</span>
+    <span class="sprint-chip">Sprint 12</span>
+  </div>
+  <div class="topbar-right">
+    <label class="toggle-label">
+      <input type="checkbox" id="showDone" checked>
+      Hiện task done
+    </label>
+    <button class="btn" id="manageUsersBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Quản lý người dùng
+    </button>
+    <button class="btn archive-toggle" id="archiveToggleBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8v13H3V8"/><path d="M1 3h22v5H1z"/><path d="M10 12h4"/></svg>
+      Archived (<span id="archiveCount">0</span>)
+    </button>
+    <button class="btn filled" id="addEpicBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Epic
+    </button>
+  </div>
+</div>
+
+<div class="summary-bar" id="summaryBar"></div>
+
+<!-- IN PROGRESS -->
+<div class="section" id="sec-progress">
+  <div class="sec-head" data-target="sec-progress">
+    <svg class="sec-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+    <span class="sec-title">In progress</span>
+    <span class="sec-count" id="cnt-progress">0</span>
+    <div class="sec-actions"></div>
+  </div>
+  <div class="sec-body">
+    <div class="board-wrap">
+      <table class="board">
+        <colgroup id="cg-progress"></colgroup>
+        <thead id="th-progress"></thead>
+        <tbody id="tb-progress"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- BACKLOG -->
+<div class="section sec-section-bg-backlog" id="sec-backlog">
+  <div class="sec-head" data-target="sec-backlog">
+    <svg class="sec-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+    <span class="sec-title">Backlog</span>
+    <span class="sec-count" id="cnt-backlog">0</span>
+    <div class="sec-actions"></div>
+  </div>
+  <div class="sec-body">
+    <div class="board-wrap">
+      <table class="board">
+        <colgroup id="cg-backlog"></colgroup>
+        <thead id="th-backlog"></thead>
+        <tbody id="tb-backlog"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ARCHIVED -->
+<div class="section collapsed" id="sec-archived" style="display:none">
+  <div class="sec-head" data-target="sec-archived">
+    <svg class="sec-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+    <span class="sec-title">Archived epics</span>
+    <span class="sec-count" id="cnt-archived">0</span>
+  </div>
+  <div class="sec-body">
+    <div class="archived-list" id="archived-list"></div>
+  </div>
+</div>
+
+<!-- MODAL ROOT -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal" id="modal"></div>
+</div>
+
+<script>
+// ─── DATA MODEL ────────────────────────────────────────────────────
+// users: { id, name, initials, color }
+// epics: { id, name, color, archived, status:'progress'|'backlog', tasks:[...] }
+// task:  { id, label, name, assignee:userId|'pre'|null, done, isTopPriority }
+//
+// Logic:
+// - If a task has isTopPriority, it shows on top of its epic.
+// - New tasks default → epic.status = 'backlog' on creation.
+// - Hide-done toggle hides done rows.
+// - Archived epics are hidden from boards, shown in Archived section.
+// ───────────────────────────────────────────────────────────────────
+
+const COLORS = ['blue','green','orange','purple','pink','teal','indigo','red'];
+const COLOR_HEX = {
+  blue:'#1a73e8', green:'#1e8e3e', orange:'#e37400', purple:'#9334e6',
+  pink:'#c2185b', teal:'#00897b', indigo:'#3f51b5', red:'#d93025'
+};
+
+let db = {
+  users: [
+    { id:'u1', name:'Huy',  initials:'HY', color:'blue'   },
+    { id:'u2', name:'Tuấn', initials:'TN', color:'green'  },
+    { id:'u3', name:'Bằng', initials:'BG', color:'orange' },
+    { id:'u4', name:'Hòa',  initials:'HÒ', color:'purple' },
+  ],
+  epics: [
+    { id:'e1', name:'Refactor\nPS Mode', color:'blue', archived:false, status:'progress',
+      tasks: [
+        { id:'t1', label:'1.1', name:'Check the feedback and split item', assignee:'u1', done:true,  isTopPriority:false },
+        { id:'t2', label:'2.1', name:'Code review',  assignee:'u1', done:true,  isTopPriority:false },
+        { id:'t3', label:'3.1', name:'investigate',  assignee:'u1', done:true,  isTopPriority:true  },
+        { id:'t4', label:'3.2', name:'discuss with huy', assignee:'u1', done:true, isTopPriority:false },
+        { id:'t5', label:'01',  name:'lấy file cho design', assignee:'pre', done:false, isTopPriority:false },
+      ]
+    },
+    { id:'e2', name:'Custom text', color:'orange', archived:false, status:'progress',
+      tasks: [
+        { id:'t6', label:'2.1', name:'implement',   assignee:'u4', done:true,  isTopPriority:false },
+        { id:'t7', label:'3.3', name:'implement',   assignee:'pre', done:false, isTopPriority:true  },
+        { id:'t8', label:'02',  name:'investigate', assignee:'u3', done:false, isTopPriority:false },
+      ]
+    },
+    { id:'e3', name:'IXL Time spent', color:'purple', archived:false, status:'progress',
+      tasks: [
+        { id:'t9',  label:'2.2', name:'Code review', assignee:'pre', done:false, isTopPriority:false },
+      ]
+    },
+    { id:'e4', name:'Mobile responsive', color:'teal', archived:false, status:'backlog',
+      tasks: [
+        { id:'t10', label:'01', name:'Audit current breakpoints', assignee:'pre', done:false, isTopPriority:false },
+        { id:'t11', label:'02', name:'Tablet layout for board',   assignee:'u2',  done:false, isTopPriority:true  },
+      ]
+    },
+    { id:'e5', name:'Notifications v2', color:'pink', archived:false, status:'backlog',
+      tasks: [
+        { id:'t12', label:'01', name:'Spec digest emails', assignee:'pre', done:false, isTopPriority:false },
+      ]
+    },
+    { id:'e6', name:'Old onboarding flow', color:'gray', archived:true, status:'backlog',
+      tasks: []
+    },
+  ]
+};
+
+let uid = 1000;
+const newId = (prefix='x') => prefix + (++uid);
+
+const userById = id => db.users.find(u => u.id === id);
+const epicById = id => db.epics.find(e => e.id === id);
+const taskById = (eid, tid) => epicById(eid)?.tasks.find(t => t.id === tid);
+
+// sort tasks: priority first, then keep original order
+function sortedTasks(epic) {
+  const arr = [...epic.tasks];
+  arr.sort((a,b) => (b.isTopPriority?1:0) - (a.isTopPriority?1:0));
+  return arr;
+}
+
+// ─── RENDER ────────────────────────────────────────────────────────
+function render() {
+  renderSummary();
+  renderSection('progress');
+  renderSection('backlog');
+  renderArchived();
+}
+
+function renderSummary() {
+  const bar = document.getElementById('summaryBar');
+  bar.innerHTML = '';
+  db.users.forEach(u => {
+    const tasks = db.epics.filter(e=>!e.archived).flatMap(e => e.tasks).filter(t => t.assignee === u.id);
+    const done  = tasks.filter(t => t.done).length;
+    const total = tasks.length;
+    const pill  = document.createElement('div');
+    pill.className = `summary-pill`;
+    pill.style.background = `var(--${u.color}-bg)`;
+    pill.style.color      = `var(--${u.color})`;
+    pill.style.borderColor= `var(--${u.color}-bd)`;
+    if (activeHL && activeHL !== u.id) pill.classList.add('dimmed');
+    pill.innerHTML = `
+      <div class="av" style="background:white;color:var(--${u.color})">${u.initials}</div>
+      <span class="pill-count">${total}</span>
+      <div>
+        <div class="pill-name">${u.name}</div>
+        <div class="pill-sub">${done} done · ${total-done} active</div>
+      </div>`;
+    pill.addEventListener('click', () => {
+      activeHL = activeHL === u.id ? null : u.id;
+      render();
+    });
+    bar.appendChild(pill);
+  });
+  // add user button
+  const add = document.createElement('button');
+  add.className = 'add-user-btn';
+  add.title = 'Thêm người dùng';
+  add.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`;
+  add.addEventListener('click', () => openUserModal());
+  bar.appendChild(add);
+}
+
+function buildColgroup(cg) {
+  cg.innerHTML = `<col class="col-feature"><col class="col-pre">` +
+    db.users.map(()=>`<col class="col-person">`).join('');
+}
+
+function buildHeader(thead) {
+  thead.innerHTML = `<tr>
+    <th><div class="th-in">Epic</div></th>
+    <th><div class="th-in">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:4px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      Làm trước
+    </div></th>
+    ${db.users.map(u => `
+      <th class="th-person">
+        <div class="av-wrap" data-uid="${u.id}">
+          <div class="av lg" style="background:var(--${u.color}-bg);color:var(--${u.color})">${u.initials}</div>
+          <div>${u.name}</div>
+          <div class="person-x" data-act="del-user" data-uid="${u.id}">remove</div>
+        </div>
+      </th>`).join('')}
+  </tr>`;
+  thead.querySelectorAll('[data-act="del-user"]').forEach(el => {
+    el.addEventListener('click', e => {
+      e.stopPropagation();
+      const uid = el.dataset.uid;
+      if (confirm('Xóa người dùng này? Các task của họ sẽ chuyển về "Làm trước".')) {
+        deleteUser(uid);
+      }
+    });
+  });
+}
+
+function renderSection(status) {
+  const epics = db.epics.filter(e => !e.archived && e.status === status);
+  buildColgroup(document.getElementById('cg-' + status));
+  buildHeader(document.getElementById('th-' + status));
+  const tbody = document.getElementById('tb-' + status);
+  tbody.innerHTML = '';
+
+  let visibleCount = 0;
+
+  if (epics.length === 0) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td colspan="${2+db.users.length}"><div class="empty-state">Chưa có epic nào trong ${status==='progress'?'In progress':'Backlog'}.</div></td>`;
+    tbody.appendChild(tr);
+  }
+
+  epics.forEach(epic => {
+    const tasks = sortedTasks(epic);
+    const rowCount = Math.max(tasks.length, 1);
+    visibleCount += tasks.length;
+
+    if (tasks.length === 0) {
+      // empty epic row
+      const tr = document.createElement('tr');
+      tr.className = `ab-${epic.color} feat-boundary`;
+      tr.appendChild(buildFeatTd(epic, 1));
+      const td = document.createElement('td');
+      td.colSpan = 1 + db.users.length;
+      td.innerHTML = `<div class="empty-state" style="padding:14px">Chưa có task. Click epic để thêm.</div>`;
+      tr.appendChild(td);
+      tbody.appendChild(tr);
+      return;
+    }
+
+    tasks.forEach((task, ti) => {
+      const isFirst = ti === 0;
+      const isLast  = ti === tasks.length - 1;
+      const cols = ['pre', ...db.users.map(u=>u.id)];
+
+      const tr = document.createElement('tr');
+      const trClasses = [`ab-${epic.color}`];
+      if (task.done) trClasses.push('done-row');
+      if (isLast) trClasses.push('feat-boundary');
+      if (ti % 2 === 1) trClasses.push('task-row-even');
+      if (task.isTopPriority) trClasses.push('priority-row');
+      tr.className = trClasses.join(' ');
+
+      if (isFirst) tr.appendChild(buildFeatTd(epic, rowCount));
+
+      cols.forEach(col => {
+        const td = document.createElement('td');
+        td.className = 'content-cell';
+        td.dataset.eid = epic.id;
+        td.dataset.tid = task.id;
+        td.dataset.col = col;
+
+        if (task.assignee === col || (col==='pre' && task.assignee==='pre')) {
+          td.appendChild(makeCard(task, epic));
+        } else {
+          const hint = document.createElement('div');
+          hint.className = 'empty-hint';
+          hint.innerHTML = `<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> assign`;
+          hint.addEventListener('click', () => {
+            task.assignee = col;
+            render();
+          });
+          td.appendChild(hint);
+        }
+
+        td.addEventListener('dragover', e => { e.preventDefault(); td.classList.add('drag-over'); });
+        td.addEventListener('dragleave', () => td.classList.remove('drag-over'));
+        td.addEventListener('drop', e => onDrop(e, epic.id, task.id, col));
+
+        tr.appendChild(td);
+      });
+
+      tbody.appendChild(tr);
+    });
+  });
+
+  document.getElementById('cnt-' + status).textContent = visibleCount;
+}
+
+function buildFeatTd(epic, rowSpan) {
+  const td = document.createElement('td');
+  td.className = 'feat-td';
+  td.rowSpan = rowSpan;
+  td.dataset.eid = epic.id;
+  const color = epic.color;
+  td.innerHTML = `
+    <div class="feat-inner">
+      <div class="feat-dot" style="background:${COLOR_HEX[color]||'#5f6368'}"></div>
+      <span class="feat-name">${escapeHtml(epic.name)}</span>
+      <span class="feat-count">${epic.tasks.length} task${epic.tasks.length!==1?'s':''}</span>
+    </div>
+    <div class="feat-edit-hint">✎ edit</div>`;
+  td.addEventListener('click', () => openEpicModal(epic.id));
+  return td;
+}
+
+function makeCard(task, epic) {
+  const card = document.createElement('div');
+  const owner = task.assignee === 'pre' ? null : userById(task.assignee);
+  card.className = `task-card`;
+  if (task.done) card.classList.add('done');
+  if (activeHL && task.assignee !== activeHL) card.classList.add('faded');
+
+  if (task.assignee === 'pre') {
+    card.style.background  = `var(--red-bg)`;
+    card.style.color       = `var(--red)`;
+    card.style.borderColor = `var(--red-bd)`;
+  } else if (owner) {
+    card.style.background  = `var(--${owner.color}-bg)`;
+    card.style.color       = `var(--${owner.color})`;
+    card.style.borderColor = `var(--${owner.color}-bd)`;
+  }
+  card.draggable = true;
+  card.dataset.eid = epic.id;
+  card.dataset.tid = task.id;
+  card.title = 'Click → done/undone, drag → assign';
+  card.innerHTML = `
+    ${task.isTopPriority ? '<span class="task-priority" title="Top priority">★</span>':''}
+    <span class="task-id">#${escapeHtml(task.label)}</span>
+    <span class="task-name">${escapeHtml(task.name)}</span>
+    ${task.done ? '<span class="done-check">✓</span>' : ''}
+  `;
+  card.addEventListener('click', e => {
+    e.stopPropagation();
+    task.done = !task.done;
+    render();
+  });
+  card.addEventListener('dragstart', e => {
+    drag = { eid: epic.id, tid: task.id };
+    setTimeout(() => card.classList.add('dragging'), 0);
+    e.dataTransfer.effectAllowed = 'move';
+  });
+  card.addEventListener('dragend', () => card.classList.remove('dragging'));
+  return card;
+}
+
+function renderArchived() {
+  const archived = db.epics.filter(e => e.archived);
+  document.getElementById('cnt-archived').textContent = archived.length;
+  document.getElementById('archiveCount').textContent = archived.length;
+  const sec = document.getElementById('sec-archived');
+  sec.style.display = archived.length ? '' : 'none';
+  const list = document.getElementById('archived-list');
+  list.innerHTML = '';
+  archived.forEach(e => {
+    const row = document.createElement('div');
+    row.className = 'archived-row';
+    row.innerHTML = `
+      <div class="feat-dot" style="background:${COLOR_HEX[e.color]||'#5f6368'}"></div>
+      <div class="a-name">${escapeHtml(e.name.replace('\n',' '))}</div>
+      <div style="font-size:11px;color:var(--on-variant)">${e.tasks.length} task${e.tasks.length!==1?'s':''}</div>
+      <button class="btn ghost" data-act="restore">Khôi phục</button>
+      <button class="btn ghost" data-act="delete" style="color:var(--red)">Xóa</button>
+    `;
+    row.querySelector('[data-act="restore"]').addEventListener('click', () => {
+      e.archived = false; render();
+    });
+    row.querySelector('[data-act="delete"]').addEventListener('click', () => {
+      if (confirm(`Xóa vĩnh viễn epic "${e.name.replace('\n',' ')}"?`)) {
+        db.epics = db.epics.filter(x => x.id !== e.id);
+        render();
+      }
+    });
+    list.appendChild(row);
+  });
+}
+
+// ─── DRAG & DROP ───────────────────────────────────────────────────
+let drag = null;
+function onDrop(e, toEid, toTid, toCol) {
+  e.preventDefault();
+  document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+  if (!drag) return;
+  const fromEpic = epicById(drag.eid);
+  const fromTask = fromEpic?.tasks.find(t => t.id === drag.tid);
+  if (!fromTask) return;
+
+  if (drag.eid === toEid && drag.tid === toTid) {
+    fromTask.assignee = toCol;
+  } else {
+    fromEpic.tasks = fromEpic.tasks.filter(t => t.id !== drag.tid);
+    const toEpic = epicById(toEid);
+    const idx = toEpic.tasks.findIndex(t => t.id === toTid);
+    fromTask.assignee = toCol;
+    toEpic.tasks.splice(idx + 1, 0, fromTask);
+  }
+  drag = null;
+  render();
+}
+
+// ─── HIGHLIGHT ─────────────────────────────────────────────────────
+let activeHL = null;
+
+// ─── ESCAPE ────────────────────────────────────────────────────────
+function escapeHtml(s) {
+  return String(s||'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+}
+
+// ─── MODALS ────────────────────────────────────────────────────────
+function openModal(html) {
+  const bg = document.getElementById('modalBg');
+  document.getElementById('modal').innerHTML = html;
+  bg.classList.add('open');
+  bg.querySelectorAll('[data-close]').forEach(el => el.addEventListener('click', closeModal));
+}
+function closeModal() {
+  document.getElementById('modalBg').classList.remove('open');
+}
+document.getElementById('modalBg').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeModal();
+});
+
+// ── Epic create / edit ──
+function openEpicModal(eid) {
+  const isNew = !eid;
+  const epic = isNew ? { id:'__new', name:'', color: COLORS[db.epics.filter(e=>!e.archived).length % COLORS.length], archived:false, status:'backlog', tasks: [] } : epicById(eid);
+
+  const colorPicker = COLORS.map(c => `
+    <div class="swatch ${c===epic.color?'sel':''}" data-color="${c}" style="background:${COLOR_HEX[c]}"></div>
+  `).join('');
+
+  const subtaskRows = epic.tasks.map(t => subtaskRowHtml(t)).join('');
+
+  openModal(`
+    <div class="modal-head">
+      <span class="modal-title">${isNew ? 'Thêm Epic mới' : 'Sửa Epic'}</span>
+      <button class="modal-close" data-close>×</button>
+    </div>
+    <div class="modal-body">
+      <div class="field">
+        <label class="field-label">Tên Epic</label>
+        <textarea class="field-textarea" id="ep-name" placeholder="VD: Refactor PS Mode">${escapeHtml(epic.name)}</textarea>
+      </div>
+      <div class="field">
+        <label class="field-label">Màu</label>
+        <div class="color-picker" id="ep-colors">${colorPicker}</div>
+      </div>
+      <div class="field">
+        <label class="field-label">Trạng thái</label>
+        <select class="field-input" id="ep-status">
+          <option value="backlog" ${epic.status==='backlog'?'selected':''}>Backlog</option>
+          <option value="progress" ${epic.status==='progress'?'selected':''}>In progress</option>
+        </select>
+      </div>
+      ${isNew ? '' : `
+      <div class="field">
+        <label class="field-label">Subtasks (${epic.tasks.length})</label>
+        <div class="subtask-list" id="st-list">
+          ${subtaskRows || '<div class="empty-state" style="padding:16px">Chưa có subtask.</div>'}
+          <div class="add-subtask-row">
+            <input class="field-input" id="st-new-name" placeholder="Subtask mới…">
+            <button class="btn filled" id="st-add">Thêm</button>
+          </div>
+        </div>
+      </div>`}
+    </div>
+    <div class="modal-foot">
+      ${isNew ? '' : `<button class="btn" id="ep-archive" style="margin-right:auto">${epic.archived?'Bỏ archive':'Archive'}</button>`}
+      <button class="btn" data-close>Huỷ</button>
+      <button class="btn filled" id="ep-save">${isNew?'Tạo Epic':'Lưu'}</button>
+    </div>
+  `);
+
+  // wire color picker
+  document.getElementById('ep-colors').addEventListener('click', e => {
+    const sw = e.target.closest('.swatch');
+    if (!sw) return;
+    document.querySelectorAll('#ep-colors .swatch').forEach(s => s.classList.remove('sel'));
+    sw.classList.add('sel');
+  });
+
+  document.getElementById('ep-save').addEventListener('click', () => {
+    const name = document.getElementById('ep-name').value.trim();
+    if (!name) { alert('Vui lòng nhập tên Epic.'); return; }
+    const color = document.querySelector('#ep-colors .swatch.sel')?.dataset.color || epic.color;
+    const status = document.getElementById('ep-status').value;
+    if (isNew) {
+      db.epics.push({ id: newId('e'), name, color, archived:false, status, tasks: [] });
+    } else {
+      epic.name = name; epic.color = color; epic.status = status;
+    }
+    closeModal(); render();
+  });
+
+  if (!isNew) {
+    document.getElementById('ep-archive').addEventListener('click', () => {
+      epic.archived = !epic.archived;
+      closeModal(); render();
+    });
+
+    // wire subtask interactions (event delegation)
+    const list = document.getElementById('st-list');
+    if (list) {
+      list.addEventListener('click', e => {
+        const row = e.target.closest('.subtask-row');
+        if (!row) return;
+        const tid = row.dataset.tid;
+        const task = epic.tasks.find(t => t.id === tid);
+        if (!task) return;
+        if (e.target.closest('[data-act="check"]')) {
+          task.done = !task.done; refreshSubtaskList(epic);
+        } else if (e.target.closest('[data-act="prio"]')) {
+          task.isTopPriority = !task.isTopPriority; refreshSubtaskList(epic);
+        } else if (e.target.closest('[data-act="del"]')) {
+          if (confirm('Xóa subtask này?')) {
+            epic.tasks = epic.tasks.filter(t => t.id !== tid);
+            refreshSubtaskList(epic);
+          }
+        } else if (e.target.closest('[data-act="cycle-person"]')) {
+          // cycle: pre → users → pre
+          const order = ['pre', ...db.users.map(u=>u.id)];
+          const i = order.indexOf(task.assignee);
+          task.assignee = order[(i+1) % order.length];
+          refreshSubtaskList(epic);
+        }
+      });
+      list.addEventListener('blur', e => {
+        if (e.target.matches('.st-name')) {
+          const tid = e.target.closest('.subtask-row').dataset.tid;
+          const task = epic.tasks.find(t => t.id === tid);
+          if (task) task.name = e.target.textContent.trim();
+        }
+      }, true);
+      list.addEventListener('keydown', e => {
+        if (e.target.matches('.st-name') && e.key === 'Enter') {
+          e.preventDefault();
+          e.target.blur();
+        }
+      });
+      document.getElementById('st-add').addEventListener('click', () => {
+        addSubtask(epic);
+      });
+      document.getElementById('st-new-name').addEventListener('keydown', e => {
+        if (e.key === 'Enter') addSubtask(epic);
+      });
+    }
+  }
+}
+
+function addSubtask(epic) {
+  const inp = document.getElementById('st-new-name');
+  const name = inp.value.trim();
+  if (!name) return;
+  const nextNum = epic.tasks.length + 1;
+  epic.tasks.push({
+    id: newId('t'), label: String(nextNum).padStart(2,'0'),
+    name, assignee:'pre', done:false, isTopPriority:false
+  });
+  // creating a task in an epic doesn't change epic.status,
+  // but per spec: 'When add a new task, default section is backlog'
+  // Interpreting: a fresh epic starts in backlog (handled at epic creation).
+  inp.value = '';
+  refreshSubtaskList(epic);
+}
+
+function refreshSubtaskList(epic) {
+  const list = document.getElementById('st-list');
+  if (!list) { render(); return; }
+  // rebuild rows but preserve add row + listeners (delegation)
+  const rows = epic.tasks.map(subtaskRowHtml).join('') ||
+    '<div class="empty-state" style="padding:16px">Chưa có subtask.</div>';
+  list.innerHTML = rows + `
+    <div class="add-subtask-row">
+      <input class="field-input" id="st-new-name" placeholder="Subtask mới…">
+      <button class="btn filled" id="st-add">Thêm</button>
+    </div>`;
+  document.getElementById('st-add').addEventListener('click', () => addSubtask(epic));
+  document.getElementById('st-new-name').addEventListener('keydown', e => {
+    if (e.key === 'Enter') addSubtask(epic);
+  });
+  render(); // also keep board in sync
+}
+
+function subtaskRowHtml(t) {
+  const owner = t.assignee === 'pre' ? null : userById(t.assignee);
+  const personLabel = t.assignee === 'pre' ? 'Làm trước' : (owner?owner.name:'?');
+  const personColor = t.assignee === 'pre' ? 'red' : (owner?owner.color:'gray');
+  return `<div class="subtask-row ${t.done?'done':''}" data-tid="${t.id}">
+    <div class="st-check ${t.done?'done':''}" data-act="check">${t.done?'✓':''}</div>
+    <span class="st-id">#${escapeHtml(t.label)}</span>
+    <span class="st-name" contenteditable="true">${escapeHtml(t.name)}</span>
+    <div class="st-priority ${t.isTopPriority?'on':''}" data-act="prio" title="Top priority">★</div>
+    <span class="st-person" data-act="cycle-person"
+      style="background:var(--${personColor}-bg);color:var(--${personColor});border-color:var(--${personColor}-bd)">${escapeHtml(personLabel)}</span>
+    <button class="st-del" data-act="del">×</button>
+  </div>`;
+}
+
+// ── User mgmt ──
+function openUserModal() {
+  const rows = db.users.map(u => `
+    <div class="user-row" data-uid="${u.id}">
+      <div class="av lg" style="background:var(--${u.color}-bg);color:var(--${u.color})">${u.initials}</div>
+      <div class="u-info">
+        <div class="u-name">${escapeHtml(u.name)}</div>
+        <div class="u-init">Initials: ${escapeHtml(u.initials)} · Màu: ${u.color}</div>
+      </div>
+      <button class="btn ghost" data-act="edit">Sửa</button>
+      <button class="btn ghost" data-act="del" style="color:var(--red)">Xóa</button>
+    </div>
+  `).join('');
+
+  const colorPicker = COLORS.map(c => `
+    <div class="swatch" data-color="${c}" style="background:${COLOR_HEX[c]}"></div>
+  `).join('');
+
+  openModal(`
+    <div class="modal-head">
+      <span class="modal-title">Quản lý người dùng</span>
+      <button class="modal-close" data-close>×</button>
+    </div>
+    <div class="modal-body">
+      <div id="user-list">${rows || '<div class="empty-state">Chưa có người dùng.</div>'}</div>
+
+      <div style="margin-top:18px;padding:14px;background:var(--bg);border-radius:10px">
+        <div style="font-size:12px;font-weight:600;margin-bottom:10px">Thêm người dùng mới</div>
+        <div class="field">
+          <label class="field-label">Tên</label>
+          <input class="field-input" id="nu-name" placeholder="VD: Minh">
+        </div>
+        <div class="field">
+          <label class="field-label">Initials (2 ký tự)</label>
+          <input class="field-input" id="nu-init" maxlength="2" placeholder="MN">
+        </div>
+        <div class="field">
+          <label class="field-label">Màu</label>
+          <div class="color-picker" id="nu-colors">${colorPicker}</div>
+        </div>
+        <button class="btn filled" id="nu-add">Thêm</button>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn filled" data-close>Xong</button>
+    </div>
+  `);
+
+  document.getElementById('nu-colors').addEventListener('click', e => {
+    const sw = e.target.closest('.swatch');
+    if (!sw) return;
+    document.querySelectorAll('#nu-colors .swatch').forEach(s => s.classList.remove('sel'));
+    sw.classList.add('sel');
+  });
+  // pre-select first available color
+  const usedColors = new Set(db.users.map(u => u.color));
+  const firstFree = COLORS.find(c => !usedColors.has(c)) || COLORS[0];
+  document.querySelector(`#nu-colors .swatch[data-color="${firstFree}"]`)?.classList.add('sel');
+
+  document.getElementById('nu-add').addEventListener('click', () => {
+    const name = document.getElementById('nu-name').value.trim();
+    const initRaw = document.getElementById('nu-init').value.trim();
+    const initials = (initRaw || name.slice(0,2)).toUpperCase().slice(0,2);
+    const color = document.querySelector('#nu-colors .swatch.sel')?.dataset.color || COLORS[0];
+    if (!name) { alert('Vui lòng nhập tên.'); return; }
+    db.users.push({ id: newId('u'), name, initials, color });
+    closeModal(); render(); openUserModal();
+  });
+
+  document.getElementById('user-list').addEventListener('click', e => {
+    const row = e.target.closest('.user-row');
+    if (!row) return;
+    const uid = row.dataset.uid;
+    if (e.target.closest('[data-act="del"]')) {
+      if (confirm('Xóa người dùng này? Task của họ sẽ chuyển về "Làm trước".')) {
+        deleteUser(uid); closeModal(); render(); openUserModal();
+      }
+    } else if (e.target.closest('[data-act="edit"]')) {
+      const u = userById(uid);
+      const newName = prompt('Tên mới:', u.name);
+      if (newName !== null && newName.trim()) u.name = newName.trim();
+      const newInit = prompt('Initials mới:', u.initials);
+      if (newInit !== null && newInit.trim()) u.initials = newInit.trim().toUpperCase().slice(0,2);
+      closeModal(); render(); openUserModal();
+    }
+  });
+}
+
+function deleteUser(uid) {
+  db.epics.forEach(e => e.tasks.forEach(t => {
+    if (t.assignee === uid) t.assignee = 'pre';
+  }));
+  db.users = db.users.filter(u => u.id !== uid);
+}
+
+// ─── EVENTS ────────────────────────────────────────────────────────
+document.getElementById('addEpicBtn').addEventListener('click', () => openEpicModal());
+document.getElementById('manageUsersBtn').addEventListener('click', () => openUserModal());
+document.getElementById('archiveToggleBtn').addEventListener('click', () => {
+  const sec = document.getElementById('sec-archived');
+  sec.classList.toggle('collapsed');
+  document.getElementById('archiveToggleBtn').classList.toggle('on', !sec.classList.contains('collapsed'));
+  if (sec.style.display === 'none') sec.style.display = '';
+  sec.scrollIntoView({behavior:'smooth', block:'nearest'});
+});
+
+document.querySelectorAll('.sec-head').forEach(h => {
+  h.addEventListener('click', e => {
+    if (e.target.closest('.sec-actions')) return;
+    document.getElementById(h.dataset.target).classList.toggle('collapsed');
+  });
+});
+
+document.getElementById('showDone').addEventListener('change', e => {
+  document.body.classList.toggle('hide-done', !e.target.checked);
+});
+
+// init
+render();
+</script>
+</body>
+</html>

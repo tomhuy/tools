@@ -173,3 +173,47 @@
 
 **Reference**
 Refer to Angular's official documentation for components, services, and modules to ensure best practices and maintain code quality and maintainability.
+
+
+### Những bổ xung
+
+## 6. Date Handling Convention
+
+### 6.1 Nguyên tắc: UTC as Source of Truth
+
+| Layer | Type | Format |
+|-------|------|--------|
+| HTTP payload (gửi lên) | `string` | ISO 8601 UTC — `"2026-05-10T01:00:00.000Z"` |
+| HTTP response (nhận về) | `string` | ISO 8601 UTC |
+| In-memory Angular state | `Date` | JS Date object (UTC internally) |
+| Display | `string` | Local format — `toLocaleDateString()` / `toLocaleTimeString()` |
+
+### 6.2 Quy tắc bắt buộc
+
+- **Không bao giờ** lưu local time vào state hoặc gửi lên API — timezone rules thay đổi theo chính trị, dữ liệu local sẽ sai.
+- **Normalize tại điểm nhận (deserialization boundary)**: Mọi `date: string` từ HTTP response phải được convert thành `Date` object ngay trong API service, trước khi đưa vào state.
+- **Không normalize tại điểm gửi**: Hàm `save()` được quyền tin tưởng rằng `entry.date` luôn là `Date` object — không cần kiểm tra `instanceof`.
+
+### 6.3 Pattern chuẩn cho API Service
+
+```typescript
+// ✅ Normalize ngay tại deserialization
+getAll(): Observable<MoodEntry[]> {
+  return this.http.get<ApiResponse<MoodEntry[]>>(this.base)
+    .pipe(map(r => this.unwrap(r).map(e => this.toEntry(e))));
+}
+
+save(entry: MoodEntry): Observable<MoodEntry> {
+  const payload = { ...entry, date: entry.date.toISOString() }; // Date → ISO
+  return this.http.post<ApiResponse<MoodEntry>>(this.base, payload)
+    .pipe(map(r => this.toEntry(this.unwrap(r))));
+}
+
+private toEntry(raw: SomeEntry): SomeEntry {
+  return { ...raw, date: new Date(raw.date) }; // ISO string → Date
+}
+```
+
+### 6.4 Lý do
+
+Local time rất khó quản lý trong distributed system vì không có timezone context. ISO UTC là điểm thời gian tuyệt đối, không mơ hồ. Display layer mới là nơi duy nhất được phép interpret UTC thành local time dựa trên OS/user preference — đảm bảo không bao giờ có timezone mismatch.

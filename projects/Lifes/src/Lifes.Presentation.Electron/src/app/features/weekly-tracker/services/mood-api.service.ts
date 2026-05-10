@@ -14,31 +14,31 @@ export class MoodApiService {
 
   getAll(): Observable<MoodEntry[]> {
     return this.http.get<ApiResponse<MoodEntry[]>>(this.base)
-      .pipe(map(r => this.unwrap(r)));
+      .pipe(map(r => this.unwrap(r).map(e => this.toEntry(e))));
   }
 
   getByRange(start: Date, end: Date): Observable<MoodEntry[]> {
     const params = new HttpParams()
       .set('start', start.toISOString())
       .set('end', end.toISOString());
-    
+
     return this.http.get<ApiResponse<MoodEntry[]>>(`${this.base}/range`, { params })
-      .pipe(map(r => this.unwrap(r)));
+      .pipe(map(r => this.unwrap(r).map(e => this.toEntry(e))));
   }
 
   save(entry: MoodEntry): Observable<MoodEntry> {
-    // Convert date to ISO string before sending
-    const payload = {
-      ...entry,
-      date: entry.date.toISOString()
-    };
+    const payload = { ...entry, date: entry.date.toISOString() };
     return this.http.post<ApiResponse<MoodEntry>>(this.base, payload)
-      .pipe(map(r => this.unwrap(r)));
+      .pipe(map(r => this.toEntry(this.unwrap(r))));
   }
 
   delete(id: string): Observable<void> {
     return this.http.delete<ApiResponse<null>>(`${this.base}/${id}`)
       .pipe(map(r => { this.unwrap(r); }));
+  }
+
+  private toEntry(raw: MoodEntry): MoodEntry {
+    return { ...raw, date: new Date(raw.date) };
   }
 
   private unwrap<T>(r: ApiResponse<T>): T {

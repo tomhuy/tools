@@ -378,6 +378,25 @@ Xác định quy chuẩn định dạng ngày tháng khi gửi dữ liệu từ 
     - **Dễ parse**: .NET Core và JavaScript đều hỗ trợ cực tốt việc parse/serialize chuỗi ISO 8601.
     - **Business logic**: Người dùng yêu cầu "date không cần care giờ local time, cứ ghép thành dạng ISO rồi gửi lên server".
 
+## ADR 21: Date Deserialization Boundary in MoodApiService (Bug Fix - US-18.2)
+**Ngày ra quyết định: 2026-05-10**
+**Người viết: AI, huy**
+
+**1. Vấn đề/Concern/Feature đang cần ra quyết định:**
+Khi thực hiện thao tác `save` (update) một Mood Entry, lỗi runtime xảy ra vì `entry.date.toISOString is not a function`. Nguyên nhân: `HttpClient` deserialize JSON response trả về `date` dưới dạng `string`, nhưng code gọi `.toISOString()` trực tiếp mà không convert, dẫn đến các entry lấy từ API có `date: string` thay vì `date: Date`.
+
+**2. Các phương án đã được gợi ý:**
+- **Phương án 1 (Defensive Coercion tại save)**: Trong hàm `save`, kiểm tra `instanceof Date` và tự convert nếu là string. Áp dụng Postel's Law — service chấp nhận cả hai kiểu.
+- **Phương án 2 (Normalize tại điểm nhận - Lựa chọn)**: Thêm hàm `toEntry()` private, normalize `date: string → Date` ngay sau khi unwrap API response (`getAll`, `getByRange`, `save`). Toàn bộ Angular state luôn giữ `Date` object.
+
+**3. Lựa chọn và lý do lựa chọn:**
+- **Lựa chọn**: **Phương án 2 (Normalize at deserialization boundary)**.
+- **Lý do**:
+    - **Root cause đúng chỗ**: String date đi vào hệ thống từ HTTP response, không phải từ caller. Fix ở điểm nhập là fix đúng gốc, không che giấu lỗi.
+    - **Fail Fast + Strong Contract**: `MoodEntry.date` là `Date` — đây là contract. Caller không cần biết đến việc normalize, service enforce contract từ đầu.
+    - **Single Source of Truth**: Chỉ một nơi duy nhất (`toEntry()`) chịu trách nhiệm convert. Không có logic phòng thủ rải rác ở nhiều nơi.
+    - **UTC as source of truth**: API luôn trả về ISO UTC string. Normalize thành `Date` object (UTC internally trong JS) giúp display layer tự do convert về local time theo OS/user preference mà không mismatch timezone.
+
 ## ADR 20: Centralizing Domain Models in Core Layer (Sprint Board - US-11.4)
 **Ngày ra quyết định: 2026-05-06**
 **Người viết: AI, huy**

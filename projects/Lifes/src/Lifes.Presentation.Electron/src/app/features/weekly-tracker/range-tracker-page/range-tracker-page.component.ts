@@ -134,7 +134,9 @@ export class RangeTrackerPageComponent implements OnInit, OnDestroy {
   onCellClick(day: Date, hour: number) {
     if (this.isFuture(day, hour)) return;
     const date = addHours(startOfDay(day), hour);
+    console.log('date', date);
     let entry = this.trackerService.getEntryAt(date);
+    console.log('entry', entry);
     if (!entry) {
       entry = { id: '', date: date, moodId: 'B', tags: [] };
     }

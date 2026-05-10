@@ -74,6 +74,20 @@ export class IntensityBlocksGridComponent {
     return this.currentPalette().fg[Math.max(0, idx)] ?? 'transparent';
   }
 
+  protected matchesFilter(moodId: string): boolean {
+    const mode = this.service.filterMode();
+    const targetId = this.service.filterMoodId();
+    if (mode === 'all' || !targetId) return true;
+    const w = MOODS.find(m => m.id === moodId)?.weight ?? 0;
+    const tw = MOODS.find(m => m.id === targetId)?.weight ?? 0;
+    switch (mode) {
+      case 'equal': return moodId === targetId;
+      case 'above': return w >= tw;
+      case 'below': return w <= tw;
+      default: return true;
+    }
+  }
+
   protected getBlockText(entry: MoodEntry): string {
     switch (this.service.displayMode()) {
       case 'action': return entry.note ?? '';

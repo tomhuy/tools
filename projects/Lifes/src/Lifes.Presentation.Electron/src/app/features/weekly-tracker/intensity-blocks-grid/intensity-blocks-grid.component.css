@@ -196,6 +196,11 @@
   min-width: 0;
 }
 
+.block-fill.dimmed {
+  opacity: 0.12;
+  filter: grayscale(1);
+}
+
 .block-cell:not(.future):hover {
   background: rgba(255, 255, 255, 0.07);
 }

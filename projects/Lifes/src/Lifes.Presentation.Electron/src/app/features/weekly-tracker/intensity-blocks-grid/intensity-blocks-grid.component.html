@@ -45,7 +45,9 @@
           (mouseenter)="onCellEnter(ri, ci)" (mouseleave)="onCellLeave()">
           @if (entry) {
           @let blockText = getBlockText(entry);
-          <div class="block-fill" [style.background]="getCellBg(entry.moodId)"
+          <div class="block-fill"
+            [class.dimmed]="!matchesFilter(entry.moodId)"
+            [style.background]="getCellBg(entry.moodId)"
             [style.border-left-color]="getCellFg(entry.moodId)">
             <span class="mood-letter" [style.color]="getCellFg(entry.moodId)">{{ entry.moodId }}</span>
             @if (blockText) { <span class="block-action-text">{{ blockText }}</span> }

@@ -447,15 +447,17 @@ src/
 
 ---
 
-### 16. Mood & Activity Tracker (US-18.1, US-18.2)
-**Status**: ✅ Completed
-**User Stories**: US-18.1 (UI), US-18.2 (API)
+### 16. Mood & Activity Tracker (US-18.1, US-18.2, US-18.3)
+**Status**: 🔄 In Progress (US-18.3 Phase 1 completed)
+**User Stories**: US-18.1 (UI), US-18.2 (API), US-18.3 (Pluggable View & Content Filter)
 **Documentation**: [fea-mood-tracker-structure.md](./fea-mood-tracker-structure.md)
 
 **Purpose**: Theo dõi tâm trạng và hoạt động theo từng khung giờ (Range Tracker). Đồng bộ hóa API Backend.
 **Key Components**:
-- **MoodTrackerService**: Reactive state management.
-- **MoodApiService**: REST Client.
+- **MoodTrackerService**: Reactive state management (signals: entries, displayMode, filterMode...).
+- **MoodApiService**: REST Client — normalize `date: string → Date` tại `toEntry()`.
+- **RangeTrackerPageComponent**: Container — navigation, filter dropdowns, editor modal.
+- **MoodMatrixGridComponent** *(US-18.3)*: Presenter — grid 24h × N ngày, emit `cellClick`.
 - **JsonMoodEntryRepository**: Backend JSON storage.
 - **MoodController**: API Endpoints.
 

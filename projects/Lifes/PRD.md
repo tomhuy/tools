@@ -371,17 +371,18 @@ ETL Deployment Tools Suite cung cấp:
 
 ---
 
-### 16. Mood & Activity Tracker (US-18.1, US-18.2)
-**Status**: ✅ Completed
-**User Stories**: US-18.1 (UI), US-18.2 (API Integration)
+### 16. Mood & Activity Tracker (US-18.1, US-18.2, US-18.3)
+**Status**: 🔄 In Progress (US-18.3 Phase 1 completed)
+**User Stories**: US-18.1 (UI), US-18.2 (API Integration), US-18.3 (Pluggable View & Content Filter)
 **Documentation**: [fea-mood-tracker-structure.md](./docs/structures/fea-mood-tracker-structure.md)
 
-**Purpose**: Giao diện theo dõi tâm trạng và hoạt động theo từng khung giờ (Range Tracker). Tích hợp chế độ **Content Explorer** chuyên dụng cho nội dung văn bản. Đã chuyển đổi hoàn toàn từ mock data sang backend API thực tế.
+**Purpose**: Giao diện theo dõi tâm trạng và hoạt động theo từng khung giờ (Range Tracker). Tích hợp chế độ **Content Explorer** chuyên dụng cho nội dung văn bản. Đã chuyển đổi hoàn toàn từ mock data sang backend API thực tế. US-18.3 đang bổ sung hệ thống hiển thị linh hoạt (content filter) và tối ưu text truncation.
 
 **Key Components**:
 - **MoodTrackerService**: Quản lý trạng thái và đồng bộ dữ liệu với Backend.
 - **MoodApiService**: Service giao tiếp REST API với Backend .NET.
-- **RangeTrackerPageComponent**: Hiển thị lưới ma trận đa dạng số ngày (7, 14, 21...) với thanh điều hướng.
+- **RangeTrackerPageComponent**: Container — quản lý navigation, filter state, editor state.
+- **MoodMatrixGridComponent**: Grid component độc lập (extracted từ US-18.3), nhận display mode qua service, emit cellClick.
 - **ContentExplorerPageComponent**: Chế độ xem nội dung chuyên sâu với bộ lọc danh mục và CSS Isolation.
 - **MoodEntryEditorComponent**: Modal glassmorphism cho việc nhập liệu/chỉnh sửa tâm trạng.
 - **JsonMoodEntryRepository**: Backend repository lưu trữ dữ liệu dưới dạng JSON.
@@ -1565,6 +1566,12 @@ private string GetLevelColor(string level)
 - ✅ **Content Explorer Mode**: Chế độ xem chuyên dụng cho nội dung tin tức/bài viết với giao diện Segmented Control cao cấp.
 - ✅ **Service Isolation**: Tách biệt hoàn toàn `ContentExplorerService` để quản lý dữ liệu phong phú (Tech News) mà không ảnh hưởng đến `Range Tracker`.
 - ✅ **CSS Isolation**: Kiến trúc CSS độc lập giúp ngăn chặn xung đột giao diện và đảm bảo tính pixel-perfect cho lưới nội dung.
+
+### Phase 17: Pluggable View System & Content Filter - v2.3.2 (In Progress)
+- ✅ **MoodMatrixGrid Extraction (US-18.3 Phase 1)**: Tách grid render logic thành `MoodMatrixGridComponent` độc lập — `RangeTrackerPageComponent` chỉ còn là container. Tuân thủ Container/Presenter pattern.
+- ✅ **Date Bug Fix**: Normalize `date: string → Date` tại deserialization boundary trong `MoodApiService.toEntry()`. Áp dụng UTC-as-source-of-truth pattern.
+- 🔄 **Content Filter Bar (US-18.3 Phase 2)**: Segmented control (Cả hai / Mood / Hoạt động / Lý do) — state persist trong service.
+- 🔄 **Text Truncation (US-18.3 Phase 3)**: CSS `text-overflow: ellipsis` cho tất cả cell text.
 
 ---
 

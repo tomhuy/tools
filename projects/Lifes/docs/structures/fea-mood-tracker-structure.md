@@ -1,4 +1,4 @@
-# Feature Structure: Mood & Activity Tracker (US-18.1, US-18.2)
+# Feature Structure: Mood & Activity Tracker (US-18.1, US-18.2, US-18.3)
 
 ## Overview
 
@@ -7,6 +7,7 @@ Tính năng Mood Tracker cho phép người dùng ghi chép chi tiết trạng t
 ## User Stories
 - ✅ **US-18.1**: Triển khai UI Mood Tracker (Matrix Grid), tích hợp trình chỉnh sửa entry dạng modal glassmorphism.
 - ✅ **US-18.2**: Tích hợp Backend API, chuyển đổi từ mock data sang persistence storage (JSON Repository).
+- 🔄 **US-18.3**: Pluggable View System & Content Filter — extract grid thành component, content filter bar, text truncation.
 
 ## Architecture
 
@@ -20,20 +21,31 @@ Tính năng Mood Tracker cho phép người dùng ghi chép chi tiết trạng t
     - `getByRange(start, end)`: Lấy dữ liệu theo khoảng thời gian.
     - `save(entry)`: Lưu mới hoặc cập nhật entry.
     - `delete(id)`: Xóa entry.
+- **Note**: `toEntry()` private method normalize `date: string → Date` tại deserialization boundary — UTC-as-source-of-truth pattern.
 
 #### 2. MoodTrackerService
 - **Path**: `src/app/features/weekly-tracker/weekly-tracker.service.ts`
 - **Role**: Quản lý State tập trung bằng Angular Signals.
+- **Key Signals**: `entries`, `currentDate`, `rangeDays`, `displayMode`, `filterMode`, `filterMoodId`.
 - **Key Features**:
     - **API Integration**: Tự động load dữ liệu khi khởi tạo và đồng bộ hóa sau mỗi thao tác CRUD.
     - **Reactive Navigation**: Tính toán `rangeInterval` và `dayHeaders` tự động khi `currentDate` hoặc `rangeDays` thay đổi.
+    - **displayMode**: Signal persist display preference qua navigation (vì là UI state cần persist, đặt trong service có chủ ý — xem ADR 22).
 
 #### 3. RangeTrackerPageComponent
 - **Path**: `src/app/features/weekly-tracker/range-tracker-page/`
-- **Role**: Giao diện ma trận linh hoạt (7, 14, 21 ngày).
-- **Styles**: `range-tracker-page.component.css` được thiết kế độc lập, tối ưu cho việc hiển thị lưới mật độ cao.
+- **Role**: **Container** — quản lý navigation state, filter dropdowns, editor modal. Không chứa grid markup.
+- **Hosts**: `MoodMatrixGridComponent`, `MoodEntryEditorComponent`.
+- **Pattern**: Container/Presenter (ADR 1). Page lắng nghe `cellClick` từ grid, mở editor.
 
-#### 4. MoodEntryEditorComponent
+#### 4. MoodMatrixGridComponent *(US-18.3)*
+- **Path**: `src/app/features/weekly-tracker/mood-matrix-grid/`
+- **Role**: **Presenter** — render lưới 24h × N ngày. Inject `MoodTrackerService` chỉ để đọc signals.
+- **Output**: `cellClick: { day: Date, hour: number }` — page xử lý việc mở editor.
+- **Display modes**: `both` (mood label + note), `mood` (label only), `action` (note only), `reason` (reason only).
+- **Text truncation**: `overflow: hidden; text-overflow: ellipsis; white-space: nowrap` trên tất cả cell text.
+
+#### 5. MoodEntryEditorComponent
 - **Path**: `src/app/features/weekly-tracker/entry-editor/`
 - **Role**: Modal nhập liệu tâm trạng và hoạt động.
 

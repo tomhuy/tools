@@ -378,6 +378,32 @@ Xác định quy chuẩn định dạng ngày tháng khi gửi dữ liệu từ 
     - **Dễ parse**: .NET Core và JavaScript đều hỗ trợ cực tốt việc parse/serialize chuỗi ISO 8601.
     - **Business logic**: Người dùng yêu cầu "date không cần care giờ local time, cứ ghép thành dạng ISO rồi gửi lên server".
 
+## ADR 22: MoodMatrixGrid Extraction & Content Filter Placement (US-18.3)
+**Ngày ra quyết định: 2026-05-10**
+**Người viết: AI, huy**
+
+**1. Vấn đề/Concern/Feature đang cần ra quyết định:**
+Khi extract `MoodMatrixGridComponent` ra khỏi `RangeTrackerPageComponent`, cần quyết định hai vấn đề:
+- (A) Content filter bar (mood/action/reason) nên nằm ở **Page** hay **Grid Component**?
+- (B) `displayMode` signal (UI state) nên nằm trong **Service** hay **Local Component State**?
+
+**2. Các phương án đã được gợi ý:**
+- **Vấn đề A — Phương án 1 (Filter trong Grid)**: Grid tự quản lý content filter state.
+- **Vấn đề A — Phương án 2 (Filter tại Page - Lựa chọn)**: Page owns filter state, truyền xuống grid qua service hoặc Input.
+- **Vấn đề B — Phương án 1 (Local State)**: `displayMode` là local signal trong Page component.
+- **Vấn đề B — Phương án 2 (Service State - Lựa chọn)**: `displayMode` signal nằm trong `MoodTrackerService`.
+
+**3. Lựa chọn và lý do lựa chọn:**
+- **Vấn đề A — Lựa chọn: Filter tại Page Level**.
+    - Content filter là **display preference** — không ảnh hưởng API call, chỉ thay đổi cách render.
+    - Có ý nghĩa với mọi view hiện tại và tương lai. Đặt tại page level giúp cả `MoodMatrixGrid` lẫn các view sau này dùng chung một filter state mà không cần duplicate.
+    - Grid component luôn "dumb" — chỉ đọc `displayMode` từ service, không tự quản lý.
+    - Tuân thủ Container/Presenter pattern (ADR 1).
+- **Vấn đề B — Lựa chọn: Service State (exception có chủ ý)**.
+    - `displayMode` về bản chất là UI state, lẽ ra là local component state.
+    - Tuy nhiên, yêu cầu **persist qua navigation** (navigate đi rồi quay lại vẫn giữ filter) buộc phải đưa lên service.
+    - **Đây là exception có chủ ý** — không phải mọi UI state đều nên vào service. Chỉ khi cần persistence mà không muốn dùng localStorage.
+
 ## ADR 21: Date Deserialization Boundary in MoodApiService (Bug Fix - US-18.2)
 **Ngày ra quyết định: 2026-05-10**
 **Người viết: AI, huy**

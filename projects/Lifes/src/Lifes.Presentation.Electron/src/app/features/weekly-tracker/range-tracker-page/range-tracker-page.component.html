@@ -124,63 +124,7 @@
   </div>
 
   <!-- Grid Section -->
-  <div class="grid-scroll-container">
-    <div class="matrix-grid">
-      <!-- Grid Header -->
-      <div class="grid-header-row" [style.grid-template-columns]="'42px repeat(' + trackerService.rangeDays() + ', 1fr)'">
-        <div class="time-column-header"></div>
-        @for (day of trackerService.dayHeaders(); track day.date) {
-          <div class="day-column-header" [class.is-today]="day.isToday">
-            <span class="day-label">{{ day.dayLabel }}</span>
-            <span class="day-number">{{ day.dayNumber }}</span>
-            <div class="day-dots">
-              @for (dot of day.dots; track $index) {
-                <span class="summary-dot" [style.background-color]="dot"></span>
-              }
-            </div>
-          </div>
-        }
-      </div>
-
-      <!-- Grid Body -->
-      <div class="grid-body">
-        @for (hour of hours; track hour) {
-          <div class="hour-row" [style.grid-template-columns]="'42px repeat(' + trackerService.rangeDays() + ', 1fr)'">
-            <div class="time-cell" [class.marker]="hour === 6 || hour === 12 || hour === 18">
-              @if (hour === 6) { <span>SÁNG</span> }
-              @else if (hour === 12) { <span>TRƯA</span> }
-              @else if (hour === 18) { <span>TỐI</span> }
-              @else { {{ hour.toString().padStart(2, '0') }} }
-            </div>
-
-            @for (day of trackerService.dayHeaders(); track day.date) {
-              <div class="entry-cell" 
-                   [class.future]="isFuture(day.date, hour)"
-                   (click)="onCellClick(day.date, hour)">
-                @let entry = getEntry(day.date, hour);
-                @if (entry) {
-                  <div class="entry-content" 
-                       [class.dimmed]="!matchesFilter(entry.moodId)"
-                       [style.--mood-color]="getMoodColor(entry.moodId)">
-                    <span class="mood-text" [style.color]="getMoodColor(entry.moodId)">{{ getMoodLabel(entry.moodId) }}</span>
-                    
-                    @if (trackerService.displayMode() === 'action' && entry.note) {
-                      <span class="entry-note">{{ entry.note }}</span>
-                    } @else if (trackerService.displayMode() === 'reason' && entry.reason) {
-                      <span class="entry-note reason-text">{{ entry.reason }}</span>
-                    } @else if (trackerService.displayMode() === 'both') {
-                      @if (entry.note) { <span class="entry-note">{{ entry.note }}</span> }
-                      @if (entry.reason) { <div class="reason-indicator"></div> }
-                    }
-                  </div>
-                }
-              </div>
-            }
-          </div>
-        }
-      </div>
-    </div>
-  </div>
+  <app-mood-matrix-grid (cellClick)="onGridCellClick($event)"></app-mood-matrix-grid>
 </div>
 
 @if (isEditorOpen()) {

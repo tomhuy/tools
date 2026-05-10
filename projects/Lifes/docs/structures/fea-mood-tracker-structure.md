@@ -7,7 +7,8 @@ Tính năng Mood Tracker cho phép người dùng ghi chép chi tiết trạng t
 ## User Stories
 - ✅ **US-18.1**: Triển khai UI Mood Tracker (Matrix Grid), tích hợp trình chỉnh sửa entry dạng modal glassmorphism.
 - ✅ **US-18.2**: Tích hợp Backend API, chuyển đổi từ mock data sang persistence storage (JSON Repository).
-- 🔄 **US-18.3**: Pluggable View System & Content Filter — extract grid thành component, content filter bar, text truncation.
+- ✅ **US-18.3**: Pluggable View System & Content Filter — extract grid thành component, content filter bar, text truncation.
+- ✅ **US-18.4**: Intensity Blocks View & Settings Panel — new heatmap view, palette system, pattern aids, settings panel.
 
 ## Architecture
 
@@ -26,11 +27,12 @@ Tính năng Mood Tracker cho phép người dùng ghi chép chi tiết trạng t
 #### 2. MoodTrackerService
 - **Path**: `src/app/features/weekly-tracker/weekly-tracker.service.ts`
 - **Role**: Quản lý State tập trung bằng Angular Signals.
-- **Key Signals**: `entries`, `currentDate`, `rangeDays`, `displayMode`, `filterMode`, `filterMoodId`.
+- **Key Signals**: `entries`, `currentDate`, `rangeDays`, `displayMode`, `filterMode`, `filterMoodId`, `viewMode`, `palette`, `patternAids`, `compactRows`.
 - **Key Features**:
     - **API Integration**: Tự động load dữ liệu khi khởi tạo và đồng bộ hóa sau mỗi thao tác CRUD.
     - **Reactive Navigation**: Tính toán `rangeInterval` và `dayHeaders` tự động khi `currentDate` hoặc `rangeDays` thay đổi.
     - **displayMode**: Signal persist display preference qua navigation (vì là UI state cần persist, đặt trong service có chủ ý — xem ADR 22).
+    - **viewMode**, **palette**, **patternAids**, **compactRows**: Signals persist display preferences qua navigation (exception có chủ ý — ADR 22).
 
 #### 3. RangeTrackerPageComponent
 - **Path**: `src/app/features/weekly-tracker/range-tracker-page/`
@@ -45,7 +47,25 @@ Tính năng Mood Tracker cho phép người dùng ghi chép chi tiết trạng t
 - **Display modes**: `both` (mood label + note), `mood` (label only), `action` (note only), `reason` (reason only).
 - **Text truncation**: `overflow: hidden; text-overflow: ellipsis; white-space: nowrap` trên tất cả cell text.
 
-#### 5. MoodEntryEditorComponent
+#### 5. IntensityBlocksGridComponent *(US-18.4)*
+- **Path**: `src/app/features/weekly-tracker/intensity-blocks-grid/`
+- **Role**: **Presenter** — render heatmap grid 24h × N ngày theo intensity (màu sắc). Inject `MoodTrackerService` chỉ để đọc signals.
+- **Output**: `cellClick: { day: Date, hour: number }` — page xử lý mở editor.
+- **Cell Design**: Flex row — 3px left border (palette FG) + mood letter (FG) + action text truncated (ellipsis). Background = palette BG (translucent).
+- **Row Height**: Default = `flex: 1` (24 rows fill available height). Compact = 28px fixed.
+- **Pattern Aids**: hourlyAvgRibbon (computed avg per hour), dayMiniSummary (dots in header), alignmentGuidesOnHover (hover signals), highlightRecurringSlump (≥3 days weight≤3).
+- **Content Filter**: Reads `displayMode` from service. `getBlockText(entry)` returns '' (mood), note (action), reason (reason), or note·reason joined (both).
+
+#### 6. ViewSelectorBarComponent *(US-18.4)*
+- **Path**: `src/app/features/weekly-tracker/view-selector-bar/`
+- **Role**: Segmented control để switch `viewMode` (cards / intensity) trong service.
+
+#### 7. RangeTrackerSettingsPanelComponent *(US-18.4)*
+- **Path**: `src/app/features/weekly-tracker/range-tracker-settings-panel/`
+- **Role**: Settings panel (absolute positioned) với 4 sections: VIEW MODE, COLOR PALETTE, PATTERN AIDS, DENSITY.
+- **Controls**: View mode selector, palette picker (fg color swatches), 4 pattern aid toggles, compact rows toggle.
+
+#### 8. MoodEntryEditorComponent
 - **Path**: `src/app/features/weekly-tracker/entry-editor/`
 - **Role**: Modal nhập liệu tâm trạng và hoạt động.
 
@@ -72,6 +92,13 @@ Tính năng Mood Tracker cho phép người dùng ghi chép chi tiết trạng t
 - `tags: string[]`
 - `note: string`
 - `reason: string`
+
+### ColorPalette
+- `id: string`
+- `label: string`
+- `fg: string[]` — 8 màu saturated (index 0 = weight 1 = D/worst, index 7 = weight 8 = A/best). Dùng cho border trái và mood letter.
+- `bg: string[]` — 8 màu translucent tương ứng. Dùng cho fill background của cell.
+- **Palettes có sẵn**: `default` (green→red), `sky-ghibli` (Ghibli-inspired blue→red với oklch BG colors).
 
 ## Technical Decisions (ADR)
 - **JSON Storage**: Sử dụng file JSON để lưu trữ đơn giản, dễ backup và không cần database server phức tạp.

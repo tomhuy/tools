@@ -440,3 +440,29 @@ Lựa chọn vị trí đặt các thực thể Domain (`User`, `Epic`, `SprintT
     - **Tính thực tế**: Với các thực thể mang tính chất "Data Container" hoặc "Shared Model" như `User` hay `Epic` (vốn được dùng xuyên suốt các layer), việc đặt chúng ở `Core` giúp đơn giản hóa việc tham chiếu từ Repository Interfaces (`ICore`) và Controllers (`Presentation`).
     - **Tránh Circular Dependency**: `Core` là layer thấp nhất, không phụ thuộc vào layer nào khác. Việc đặt Models ở đây đảm bảo mọi layer khác (Domain, Application, Infrastructure, Presentation) đều có thể sử dụng chung một định nghĩa dữ liệu mà không gây lỗi vòng lặp.
     - **Phù hợp với Local Tool**: Đối với một ứng dụng desktop/local tool, việc duy trì sự phân tách cực kỳ khắt khe giữa Domain Entity và DTO đôi khi gây ra sự cồng kềnh không cần thiết. Việc gom nhóm vào `Core.Models` giúp codebase gọn gàng và dễ bảo trì hơn.
+
+## ADR 23: ColorPalette FG/BG Split & Intensity Blocks Cell Design (US-18.4)
+**Ngày ra quyết định: 2026-05-10**
+**Người viết: AI, huy**
+
+**1. Vấn đề/Concern/Feature đang cần ra quyết định:**
+Trong Intensity Blocks View, mỗi cell cần thể hiện cả mood intensity (qua màu sắc) lẫn text content (mood label + action text). Cần quyết định:
+- (A) Palette nên có 1 mảng màu (`colors[]`) hay 2 mảng tách biệt (`fg[]` + `bg[]`)?
+- (B) Layout bên trong mỗi block cell nên là gì để đọc được cả màu lẫn text?
+
+**2. Các phương án đã được gợi ý:**
+- **Vấn đề A — Phương án 1 (Single colors[])**: Dùng một màu duy nhất cho cả fill và label. Label dùng màu trắng fixed.
+- **Vấn đề A — Phương án 2 (FG+BG split - Lựa chọn)**: Tách riêng `fg[]` (saturated, dùng cho border + mood letter) và `bg[]` (translucent, dùng cho cell fill).
+- **Vấn đề B — Phương án 1 (Absolute overlay)**: Text đặt absolute-positioned overlay lên màu fill, 7px, text-shadow.
+- **Vấn đề B — Phương án 2 (Flex row - Lựa chọn)**: Cell là flex row: `[3px left border FG | mood letter FG | action text truncated]`. Background = BG color.
+
+**3. Lựa chọn và lý do lựa chọn:**
+- **Vấn đề A — Lựa chọn: FG+BG split**.
+    - **Tương phản đọc được**: FG màu bão hòa đủ sáng để dùng làm text label (10px/600) và border (3px). BG alpha thấp hơn tạo nền mờ không lấn át text.
+    - **Sky-Ghibli palette**: Màu FG và BG có ý nghĩa khác nhau về hue và lightness (ví dụ A: FG=#aacde8 pale blue, BG=oklch(0.55 0.10 230/0.45) deeper translucent). Không thể biểu diễn bằng 1 màu duy nhất.
+    - **Palette-aware mini-summary**: Có thể dùng BG cho mini-dots (màu nhẹ hơn), FG cho avg ribbon (màu đậm hơn) mà không phải hack.
+- **Vấn đề B — Lựa chọn: Flex row**.
+    - **Legibility**: Absolute overlay 7px text trên màu nền phức tạp khó đọc, cần text-shadow hack. Flex row với text area tách biệt khỏi colored zone dễ đọc hơn.
+    - **Alignment**: Flex row đảm bảo mood letter và action text luôn căn trái, không bị đè lên nhau.
+    - **Truncation tự nhiên**: `flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis` trên action text span — không cần position tricks.
+    - **Scalability**: Khi thêm content mode mới (ví dụ hiện tag), chỉ cần thêm span vào flex row, không cần tính toán position.

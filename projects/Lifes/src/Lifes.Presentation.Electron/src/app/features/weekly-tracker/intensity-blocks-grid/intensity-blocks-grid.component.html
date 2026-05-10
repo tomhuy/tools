@@ -1,0 +1,62 @@
+<div class="grid-scroll-container" [class.compact]="service.compactRows()">
+  <div class="matrix-grid">
+
+    <!-- Header row -->
+    <div class="grid-header-row" [style.grid-template-columns]="'36px repeat(' + service.rangeDays() + ', 1fr)'">
+      <div class="time-col-header"></div>
+      @for (day of service.dayHeaders(); track day.date; let ci = $index) {
+      <div class="day-header" [class.is-today]="day.isToday" [class.col-guide]="hoveredCol() === ci">
+        <span class="day-label">{{ day.dayLabel }}</span>
+        <span class="day-number">{{ day.dayNumber }}</span>
+        @if (service.patternAids().dayMiniSummary) {
+        <div class="mini-summary">
+          @for (dot of day.dots; track $index) {
+          <span class="mini-dot" [style.background]="dot"></span>
+          }
+        </div>
+        }
+      </div>
+      }
+    </div>
+
+    <!-- Body -->
+    <div class="grid-body">
+      @for (hour of hours; track hour; let ri = $index) {
+      <div class="hour-row" [class.slump-row]="service.patternAids().highlightRecurringSlump && slumpHours().has(hour)"
+        [class.row-guide]="hoveredRow() === ri"
+        [style.grid-template-columns]="'36px repeat(' + service.rangeDays() + ', 1fr)'">
+
+        <!-- Time cell + avg ribbon -->
+        <div class="time-cell" [class.marker]="hour === 6 || hour === 12 || hour === 18">
+          @if (service.patternAids().hourlyAvgRibbon && hourlyAvg()[ri] > 0) {
+          <div class="avg-ribbon" [style.background]="getAvgColor(hourlyAvg()[ri])"></div>
+          }
+          @if (hour === 6) { <span>SÁNG</span> }
+          @else if (hour === 12) { <span>TRƯA</span> }
+          @else if (hour === 18) { <span>TỐI</span> }
+          @else { {{ hour.toString().padStart(2, '0') }} }
+        </div>
+
+        <!-- Entry cells -->
+        @for (day of service.dayHeaders(); track day.date; let ci = $index) {
+        @let entry = getEntry(day.date, hour);
+        <div class="block-cell" [class.future]="isFuture(day.date, hour)" [class.col-guide]="hoveredCol() === ci"
+          (click)="onCellClick(day.date, hour)"
+          (mouseenter)="onCellEnter(ri, ci)" (mouseleave)="onCellLeave()">
+          @if (entry) {
+          @let blockText = getBlockText(entry);
+          <div class="block-fill" [style.background]="getCellBg(entry.moodId)"
+            [style.border-left-color]="getCellFg(entry.moodId)">
+            <span class="mood-letter" [style.color]="getCellFg(entry.moodId)">{{ entry.moodId }}</span>
+            @if (blockText) { <span class="block-action-text">{{ blockText }}</span> }
+          </div>
+          }
+        </div>
+        }
+
+      </div>
+      }
+    </div>
+
+  </div>
+</div>

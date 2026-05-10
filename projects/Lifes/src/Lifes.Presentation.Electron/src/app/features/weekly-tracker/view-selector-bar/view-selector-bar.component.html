@@ -1,0 +1,19 @@
+<div class="view-selector">
+  <button [class.active]="service.viewMode() === 'cards'" (click)="setView('cards')">
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+      <rect x="0.5" y="0.5" width="4" height="4" rx="0.5" stroke="currentColor"/>
+      <rect x="7.5" y="0.5" width="4" height="4" rx="0.5" stroke="currentColor"/>
+      <rect x="0.5" y="7.5" width="4" height="4" rx="0.5" stroke="currentColor"/>
+      <rect x="7.5" y="7.5" width="4" height="4" rx="0.5" stroke="currentColor"/>
+    </svg>
+    Cards
+  </button>
+  <button [class.active]="service.viewMode() === 'intensity'" (click)="setView('intensity')">
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+      <rect x="0.5" y="0.5" width="11" height="2.5" rx="0.5" fill="currentColor" opacity="0.8"/>
+      <rect x="0.5" y="4.75" width="11" height="2.5" rx="0.5" fill="currentColor" opacity="0.5"/>
+      <rect x="0.5" y="9" width="11" height="2.5" rx="0.5" fill="currentColor" opacity="0.25"/>
+    </svg>
+    Intensity
+  </button>
+</div>

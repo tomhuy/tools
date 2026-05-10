@@ -1,0 +1,83 @@
+<div class="panel-backdrop" (click)="close.emit()"></div>
+
+<div class="settings-panel">
+  <div class="panel-header">
+    <span class="panel-title">Range Tracker</span>
+    <button class="close-btn" (click)="close.emit()">×</button>
+  </div>
+
+  <!-- VIEW MODE -->
+  <div class="section">
+    <div class="section-label">VIEW MODE</div>
+    <div class="field-label">Display</div>
+    <div class="select-group">
+      @for (p of [{ id: 'cards', label: 'Cards (default)' }, { id: 'intensity', label: 'Intensity blocks (recommended)' }]; track p.id) {
+        <div class="select-option" [class.active]="service.viewMode() === p.id" (click)="service.viewMode.set($any(p.id))">
+          {{ p.label }}
+          @if (service.viewMode() === p.id) { <span class="check">✓</span> }
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- COLOR PALETTE (only for intensity view) -->
+  @if (service.viewMode() === 'intensity') {
+    <div class="section">
+      <div class="section-label">COLOR PALETTE</div>
+      <div class="field-label">Palette</div>
+      <div class="select-group">
+        @for (palette of palettes; track palette.id) {
+          <div class="select-option" [class.active]="service.palette() === palette.id" (click)="setPalette(palette.id)">
+            <div class="palette-preview">
+              @for (color of palette.fg; track $index) {
+                <div class="palette-swatch" [style.background]="color"></div>
+              }
+            </div>
+            <span class="palette-label">{{ palette.label }}</span>
+            @if (service.palette() === palette.id) { <span class="check">✓</span> }
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- PATTERN AIDS -->
+    <div class="section">
+      <div class="section-label">PATTERN AIDS</div>
+      <div class="toggle-row" (click)="toggleAid('hourlyAvgRibbon')">
+        <span>Hourly avg ribbon</span>
+        <div class="toggle" [class.on]="service.patternAids().hourlyAvgRibbon">
+          <div class="thumb"></div>
+        </div>
+      </div>
+      <div class="toggle-row" (click)="toggleAid('dayMiniSummary')">
+        <span>Day mini-summary</span>
+        <div class="toggle" [class.on]="service.patternAids().dayMiniSummary">
+          <div class="thumb"></div>
+        </div>
+      </div>
+      <div class="toggle-row" (click)="toggleAid('alignmentGuidesOnHover')">
+        <span>Alignment guides on hover</span>
+        <div class="toggle" [class.on]="service.patternAids().alignmentGuidesOnHover">
+          <div class="thumb"></div>
+        </div>
+      </div>
+      <div class="toggle-row" (click)="toggleAid('highlightRecurringSlump')">
+        <span>Highlight recurring slump</span>
+        <div class="toggle" [class.on]="service.patternAids().highlightRecurringSlump">
+          <div class="thumb"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DENSITY -->
+    <div class="section">
+      <div class="section-label">DENSITY</div>
+      <div class="toggle-row" (click)="toggleCompact()">
+        <span>Compact rows</span>
+        <div class="toggle" [class.on]="service.compactRows()">
+          <div class="thumb"></div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

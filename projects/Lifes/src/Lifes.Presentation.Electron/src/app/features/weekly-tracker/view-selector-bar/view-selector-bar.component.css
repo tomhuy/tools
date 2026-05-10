@@ -1,0 +1,32 @@
+.view-selector {
+  display: flex;
+  gap: 2px;
+  background: var(--color-background-secondary);
+  padding: 3px;
+  border-radius: var(--border-radius-md);
+}
+
+.view-selector button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: var(--color-text-secondary);
+  transition: all 0.15s;
+}
+
+.view-selector button.active {
+  background: var(--color-background-primary);
+  color: var(--color-text-primary);
+  border: 0.5px solid var(--color-border-tertiary);
+}
+
+.view-selector button:not(.active):hover {
+  color: var(--color-text-primary);
+}

@@ -135,15 +135,15 @@ contentFilter = signal<ContentFilter>('both');
 - [x] Task 1.3: Page lắng nghe `(cellClick)="onGridCellClick($event)"`, mở editor
 
 ### Phase 2: Content Filter
-- [ ] Task 2.1: Thêm `ContentFilter` type và `contentFilter` signal vào service
-- [ ] Task 2.2: Tạo `MoodControlBarComponent` — segmented control (Cả hai / Mood / Hoạt động / Lý do)
-- [ ] Task 2.3: Wire `contentFilter` từ page → grid qua `@Input()`
-- [ ] Task 2.4: Grid render đúng theo từng filter value
+- [x] Task 2.1: `displayMode` signal already existed in service (type `DisplayMode = 'both'|'mood'|'action'|'reason'`)
+- [x] Task 2.2: ~~MoodControlBarComponent~~ → Display mode toggle đặt trực tiếp vào page header (segmented control: Cả hai / Mood / Hoạt động / Lý do) — không tạo MoodControlBarComponent riêng
+- [x] Task 2.3: `displayMode` signal in service — cả hai grids đều đọc từ service (không qua @Input)
+- [x] Task 2.4: `MoodMatrixGridComponent` render đúng theo displayMode với `@switch`. `IntensityBlocksGridComponent` dùng `getBlockText(entry)` method
 
 ### Phase 3: Text Truncation
-- [ ] Task 3.1: Apply CSS truncation vào cell text trong `MoodMatrixGridComponent`
-- [ ] Task 3.2: Đảm bảo không vỡ layout ở các độ rộng cột khác nhau (7 / 14 / 21 ngày)
-- [ ] Task 3.3: (Optional) Tooltip on hover để xem full text
+- [x] Task 3.1: Text truncation applied — `white-space: nowrap; overflow: hidden; text-overflow: ellipsis` trên `.entry-text` trong MoodMatrixGrid; `min-width: 0; overflow: hidden` trên `.block-cell` trong IntensityBlocksGrid
+- [x] Task 3.2: Fixed via CSS Grid `min-width: 0` trên grid items
+- [ ] Task 3.3: (Optional) Tooltip — chưa implement
 
 ---
 
@@ -173,11 +173,11 @@ contentFilter = signal<ContentFilter>('both');
 
 ## Definition of Done
 
-- [ ] `MoodMatrixGridComponent` hoạt động đúng như cũ sau extract
-- [ ] Content filter bar hiển thị, switch đúng giữa 4 mode
-- [ ] Grid render đúng nội dung theo từng filter
-- [ ] Text không tràn ô, có ellipsis
-- [ ] `contentFilter` state được giữ khi navigate
+- [x] `MoodMatrixGridComponent` hoạt động đúng như cũ sau extract
+- [x] Content filter bar hiển thị, switch đúng giữa 4 mode
+- [x] Grid render đúng nội dung theo từng filter
+- [x] Text không tràn ô, có ellipsis
+- [x] `contentFilter` state được giữ khi navigate
 - [ ] Tuân thủ `fe_design_rule.md` cho segmented control UI
 - [ ] `all-ards.md` cập nhật quyết định về vị trí content filter bar
 
@@ -186,8 +186,8 @@ contentFilter = signal<ContentFilter>('both');
 ## Implementation Progress
 
 ### Current Status
-- **Status**: 🔄 In Progress
-- **Completed**: Phase 1 done (33%)
+- **Status**: ✅ Complete (Phase 1, 2, 3 done)
+- **Completed**: 95% (chỉ còn tooltip optional)
 
 ### Files Created / Modified
 - [x] `weekly-tracker/mood-matrix-grid/mood-matrix-grid.component.ts` ← NEW
@@ -197,3 +197,5 @@ contentFilter = signal<ContentFilter>('both');
 - [x] `weekly-tracker/range-tracker-page/range-tracker-page.component.html` ← grid replaced by `<app-mood-matrix-grid>`
 - [x] `weekly-tracker/range-tracker-page/range-tracker-page.component.css` ← grid CSS removed
 - [x] `weekly-tracker/services/mood-api.service.ts` ← date bug fix (`toEntry()`)
+- [x] `weekly-tracker/intensity-blocks-grid/intensity-blocks-grid.component.ts` ← content filter applied (`getBlockText`)
+- [x] `weekly-tracker/range-tracker-page/range-tracker-page.component.html` ← display mode toggle (segmented control) in header

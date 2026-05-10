@@ -27,6 +27,17 @@
           <div class="dot reason"></div> Lý do
         </button>
       </div>
+
+      <app-view-selector-bar></app-view-selector-bar>
+
+      <div class="settings-wrap">
+        <button class="settings-btn" [class.active]="isSettingsOpen()" (click)="toggleSettings()">
+          <i class="fas fa-sliders-h"></i>
+        </button>
+        @if (isSettingsOpen()) {
+          <app-range-tracker-settings-panel (close)="isSettingsOpen.set(false)"></app-range-tracker-settings-panel>
+        }
+      </div>
     </div>
   </header>
 
@@ -124,7 +135,11 @@
   </div>
 
   <!-- Grid Section -->
-  <app-mood-matrix-grid (cellClick)="onGridCellClick($event)"></app-mood-matrix-grid>
+  @if (trackerService.viewMode() === 'cards') {
+    <app-mood-matrix-grid (cellClick)="onGridCellClick($event)"></app-mood-matrix-grid>
+  } @else {
+    <app-intensity-blocks-grid (cellClick)="onGridCellClick($event)"></app-intensity-blocks-grid>
+  }
 </div>
 
 @if (isEditorOpen()) {

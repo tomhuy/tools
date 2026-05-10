@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 import { MoodTrackerService } from '../weekly-tracker.service';
 import { MoodEntryEditorComponent } from '../entry-editor/entry-editor.component';
 import { MoodMatrixGridComponent } from '../mood-matrix-grid/mood-matrix-grid.component';
+import { IntensityBlocksGridComponent } from '../intensity-blocks-grid/intensity-blocks-grid.component';
+import { ViewSelectorBarComponent } from '../view-selector-bar/view-selector-bar.component';
+import { RangeTrackerSettingsPanelComponent } from '../range-tracker-settings-panel/range-tracker-settings-panel.component';
 import { MOODS, MoodEntry, DisplayMode, FilterMode } from '../../../models/weekly-tracker.model';
 import { format, addHours, startOfDay } from 'date-fns';
 import { vi } from 'date-fns/locale';
@@ -10,7 +13,7 @@ import { vi } from 'date-fns/locale';
 @Component({
   selector: 'app-range-tracker-page',
   standalone: true,
-  imports: [CommonModule, MoodEntryEditorComponent, MoodMatrixGridComponent],
+  imports: [CommonModule, MoodEntryEditorComponent, MoodMatrixGridComponent, IntensityBlocksGridComponent, ViewSelectorBarComponent, RangeTrackerSettingsPanelComponent],
   templateUrl: './range-tracker-page.component.html',
   styleUrl: './range-tracker-page.component.css'
 })
@@ -24,6 +27,7 @@ export class RangeTrackerPageComponent implements OnInit, OnDestroy {
   isEditorOpen = signal(false);
   isFilterDropdownOpen = signal(false);
   isRangeDropdownOpen = signal(false);
+  isSettingsOpen = signal(false);
 
   ngOnInit() {
     this.trackerService.rangeDays.set(7);
@@ -64,6 +68,7 @@ export class RangeTrackerPageComponent implements OnInit, OnDestroy {
   clearFilter() { this.trackerService.filterMode.set('all'); this.trackerService.filterMoodId.set(null); }
   toggleFilterDropdown() { this.isFilterDropdownOpen.update(v => !v); }
   toggleRangeDropdown() { this.isRangeDropdownOpen.update(v => !v); }
+  toggleSettings() { this.isSettingsOpen.update(v => !v); }
   setDisplayMode(mode: DisplayMode) { this.trackerService.displayMode.set(mode); }
 
   onGridCellClick({ day, hour }: { day: Date; hour: number }) {

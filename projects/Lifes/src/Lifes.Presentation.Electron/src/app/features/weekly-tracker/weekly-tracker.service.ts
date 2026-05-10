@@ -1,5 +1,5 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
-import { MoodEntry, DaySummary, MOODS, DisplayMode, MoodConfig, FilterMode } from '../../models/weekly-tracker.model';
+import { MoodEntry, DaySummary, MOODS, DisplayMode, MoodConfig, FilterMode, ViewMode, PatternAidSettings } from '../../models/weekly-tracker.model';
 import { startOfWeek, eachDayOfInterval, addWeeks, subWeeks, isSameDay, format, addHours } from 'date-fns';
 import { vi } from 'date-fns/locale';
 import { MoodApiService } from './services/mood-api.service';
@@ -11,17 +11,28 @@ import { firstValueFrom } from 'rxjs';
 export class MoodTrackerService {
   private api = inject(MoodApiService);
   private entries = signal<MoodEntry[]>([]);
-  
+
   // State for navigation
   currentDate = signal<Date>(new Date());
   rangeDays = signal<number>(7); // Default to 7 days
-  
+
   // Filters
   displayMode = signal<DisplayMode>('both');
   filterMode = signal<FilterMode>('all');
   filterMoodId = signal<string | null>(null);
   moodThreshold = signal<string | null>(null);
   filterCategory = signal<string | null>(null);
+
+  // View preferences (persist in service — navigation-safe)
+  viewMode = signal<ViewMode>('cards');
+  palette = signal<string>('default');
+  compactRows = signal<boolean>(false);
+  patternAids = signal<PatternAidSettings>({
+    hourlyAvgRibbon: true,
+    dayMiniSummary: true,
+    alignmentGuidesOnHover: true,
+    highlightRecurringSlump: true,
+  });
 
   categories = signal<string[]>(['Tất cả', 'Công việc', 'Học tập', 'Giải trí', 'Sức khỏe', 'Cá nhân']);
 
@@ -86,7 +97,7 @@ export class MoodTrackerService {
 
   // Entry actions
   getEntryAt(date: Date): MoodEntry | undefined {
-    return this.entries().find(e => 
+    return this.entries().find(e =>
       new Date(e.date).getTime() === date.getTime()
     );
   }

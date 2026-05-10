@@ -24,7 +24,7 @@ export class MoodTrackerService {
   filterCategory = signal<string | null>(null);
 
   // View preferences (persist in service — navigation-safe)
-  viewMode = signal<ViewMode>('cards');
+  viewMode = signal<ViewMode>('intensity');
   palette = signal<string>('default');
   compactRows = signal<boolean>(false);
   patternAids = signal<PatternAidSettings>({

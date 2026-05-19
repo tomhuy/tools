@@ -167,6 +167,14 @@ src/
 │           │   │   └── services/         # LaputaNotesService, LaputaApiService
 │           │   ├── laputa-pdf-viewer/    # US-19.2 Generic PDF Viewer Component
 │           │   │   ├── laputa-pdf-viewer.component.[ts|html|css]
+│           │   ├── activity-value-matrix/ # US-21.1 Activity Value Matrix
+│           │   │   ├── models/
+│           │   │   │   └── activity-value-matrix.model.ts  # ActivityItem, ActivityMetrics interfaces
+│           │   │   ├── bubble-area/
+│           │   │   │   └── bubble-area.component.[ts|html|css]  # Passive presenter
+│           │   │   ├── activity-value-matrix-page/
+│           │   │   │   └── activity-value-matrix-page.component.[ts|html|css]  # Smart page
+│           │   │   └── activity-value-matrix.service.ts    # Signals state + static data
 │           │   └── ...
 │           └── models/
 │               ├── sprint-board.model.ts # US-11.2 data models
@@ -475,6 +483,21 @@ src/
 - **Layout Management**: Hỗ trợ 3 chế độ xem khác nhau giúp tối ưu hóa không gian cho từng mục đích (Đọc tập trung, tra cứu ngữ cảnh, v.v.).
 - **Reading Tools**: Tích hợp thanh công cụ nổi (Floating Toolbar) khi bôi đen văn bản để highlight hoặc thêm ghi chú nhanh.
 - **Theme & Zoom**: Hỗ trợ Dark Mode và khả năng thu phóng nội dung linh hoạt.
+
+---
+
+### 19. Activity Value Matrix (US-21.1)
+**Status**: ✅ Completed — 2026-05-13
+**User Stories**: US-21.1
+**Documentation**: [fea-activity-value-matrix-structure.md](./fea-activity-value-matrix-structure.md)
+
+**Purpose**: Ma trận 2×2 tương tác phân tích 4 hoạt động (Ghi chép, Học kiến thức, Áp dụng, Build app) theo trục Giá trị dài hạn × Thời gian đầu tư. Hỗ trợ xem compound effect theo mốc 1/3/5/10 năm với interactive bubbles và detail card.
+
+**Key Components**:
+- `ActivityValueMatrixService` — Angular Signals state: `currentYear`, `selectedId`, `selectedActivity` (computed), static `ACTIVITY_DATA`
+- `BubbleAreaComponent` — Passive presenter render bubbles trong từng quadrant
+- `ActivityValueMatrixPageComponent` — Smart page: year selector, quad grid 2×2, detail card
+- Route: `/activity-value-matrix`
 
 ---
 
@@ -873,6 +896,6 @@ reportgenerator -reports:**/coverage.cobertura.xml -targetdir:coverage-report -r
 
 ---
 
-**Document Version**: 1.6.0  
-**Last Updated**: 2026-05-01  
-**Status**: ✅ Active (100% Complete - Phase 16 Finalized with Content Explorer)
+**Document Version**: 1.7.0  
+**Last Updated**: 2026-05-13  
+**Status**: ✅ Active (Phase 18 Completed - Activity Value Matrix US-21.1)

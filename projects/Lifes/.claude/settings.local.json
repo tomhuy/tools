@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(dotnet add package:*)",
-      "Bash(dotnet build:*)"
+      "Bash(dotnet build:*)",
+      "Bash(powershell -Command \"Select-String -Path 'c:/Users/bmhuy/OneDrive/Desktop/14 days/learns/this-is-my-life/tools/projects/Lifes/PRD.md' -Pattern 'Roadmap|Phase|US-20|## Feature' | Select-Object LineNumber, Line\")"
     ]
   }
 }

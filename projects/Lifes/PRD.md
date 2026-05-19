@@ -1573,6 +1573,9 @@ private string GetLevelColor(string level)
 - 🔄 **Content Filter Bar (US-18.3 Phase 2)**: Segmented control (Cả hai / Mood / Hoạt động / Lý do) — state persist trong service.
 - 🔄 **Text Truncation (US-18.3 Phase 3)**: CSS `text-overflow: ellipsis` cho tất cả cell text.
 
+### Phase 18: Activity Value Matrix - v2.4.0 (Completed)
+- ✅ **Activity Value Matrix (US-21.1)**: Ma trận 2×2 phân tích 4 hoạt động cốt lõi (Ghi chép, Học kiến thức, Áp dụng, Build app) theo trục Giá trị dài hạn × Thời gian đầu tư. Interactive bubble chart với compound effect theo mốc 1/3/5/10 năm.
+
 ---
 
 ## 🧪 Testing Strategy (Optimized)
@@ -1615,6 +1618,6 @@ private string GetLevelColor(string level)
 
 ---
 
-**Document Version**: 2.3.1  
-**Last Updated**: 2026-05-01  
-**Status**: ✅ Active (100% Complete - Phase 16 Finalized with Content Explorer & Service Isolation)
+**Document Version**: 2.4.0  
+**Last Updated**: 2026-05-13  
+**Status**: ✅ Active (Phase 18 Completed - Activity Value Matrix)

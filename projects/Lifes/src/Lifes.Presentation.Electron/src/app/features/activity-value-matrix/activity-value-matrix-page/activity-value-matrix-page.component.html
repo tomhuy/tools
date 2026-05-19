@@ -1,0 +1,108 @@
+<div class="page-root">
+
+  <!-- Year selector -->
+  <div class="controls">
+    <span class="ctrl-label">Xem sau</span>
+    @for (y of years; track y) {
+      <button
+        type="button"
+        class="year-btn"
+        [class.active]="currentYear() === y"
+        (click)="setYear(y)">
+        {{ y }} năm
+      </button>
+    }
+  </div>
+
+  <!-- Matrix -->
+  <div class="matrix-wrap">
+    <div class="axis-label-y">Giá trị dài hạn</div>
+
+    <div class="matrix-inner">
+      <div class="quad-grid">
+        @for (q of quadrants; track trackByKey($index, q)) {
+          <div
+            class="quad"
+            [style.background]="q.bg">
+            <div
+              class="quad-label"
+              [style.color]="q.labelColor">
+              {{ q.label }}
+            </div>
+            <app-bubble-area
+              [activities]="activitiesByQuad()[q.key]"
+              [selectedId]="selectedId()"
+              (bubbleClick)="onBubbleClick($event)">
+            </app-bubble-area>
+          </div>
+        }
+      </div>
+      <div class="axis-label-x">Thời gian đầu tư</div>
+    </div>
+  </div>
+
+  <!-- Detail card -->
+  @if (selectedActivity() && detailMetrics(); as dm) {
+    <div class="detail-card">
+      <div class="dc-top">
+        <span class="dc-icon">{{ selectedActivity()!.icon }}</span>
+        <div>
+          <div class="dc-name">{{ selectedActivity()!.name }}</div>
+          <div class="dc-subtitle">{{ selectedActivity()!.desc }}</div>
+        </div>
+      </div>
+
+      <div class="dc-metrics">
+        <div class="dcm">
+          <div
+            class="dcm-val"
+            [style.color]="selectedActivity()!.color">
+            {{ dm.compound.toFixed(1) }}×
+          </div>
+          <div class="dcm-label">Compound</div>
+        </div>
+        <div class="dcm">
+          <div
+            class="dcm-val"
+            [style.color]="selectedActivity()!.color">
+            {{ dm.clarity }}%
+          </div>
+          <div class="dcm-label">Clarity tư duy</div>
+        </div>
+        <div class="dcm">
+          <div
+            class="dcm-val"
+            [style.color]="selectedActivity()!.color">
+            {{ dm.network }}%
+          </div>
+          <div class="dcm-label">Kết nối ý tưởng</div>
+        </div>
+      </div>
+
+      @for (bar of selectedActivity()!.bars; track $index) {
+        <div class="dc-bar-wrap">
+          <div class="dc-bar-label">
+            <span>{{ bar.label }}</span>
+            <span>{{ dm.barValues[$index] }}%</span>
+          </div>
+          <div class="dc-bar-bg">
+            <div
+              class="dc-bar-fill"
+              [style.width.%]="dm.barValues[$index]"
+              [style.background]="bar.color">
+            </div>
+          </div>
+        </div>
+      }
+
+      <div
+        class="dc-insight"
+        [style.border-left-color]="selectedActivity()!.color">
+        {{ dm.insight }}
+      </div>
+    </div>
+  } @else {
+    <div class="hint">Click vào bong bóng để xem phân tích chi tiết</div>
+  }
+
+</div>

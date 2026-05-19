@@ -1,0 +1,20 @@
+<div class="bubble-area">
+  @for (activity of activities(); track trackById($index, activity)) {
+    <div
+      class="bubble"
+      [class.selected]="selectedId() === activity.id"
+      [style.width.px]="getBubbleSize(activity)"
+      [style.height.px]="getBubbleSize(activity)"
+      [style.background]="activity.colorLight"
+      [style.left.%]="activity.pos.x"
+      [style.top.%]="activity.pos.y"
+      (click)="onBubbleClick(activity.id)">
+      <span class="bubble-icon">{{ activity.icon }}</span>
+      <span
+        class="bubble-name"
+        [style.color]="activity.color">
+        {{ activity.name }}
+      </span>
+    </div>
+  }
+</div>

@@ -10,6 +10,7 @@ import { RangeTrackerPageComponent } from './features/weekly-tracker/range-track
 import { ContentExplorerPageComponent } from './features/weekly-tracker/content-explorer-page/content-explorer-page.component';
 import { PdfReaderPageComponent } from './features/pdf-reader/pdf-reader-page/pdf-reader-page.component';
 import { LaputaNotesPageComponent } from './features/laputa-notes/laputa-notes-page/laputa-notes-page.component';
+import { ActivityValueMatrixPageComponent } from './features/activity-value-matrix/activity-value-matrix-page/activity-value-matrix-page.component';
 export const routes: Routes = [
   { path: 'daily-timeline', component: DailyTimelinePageComponent },
   { path: 'yearly-stream', component: YearlyStreamPageComponent },
@@ -21,5 +22,6 @@ export const routes: Routes = [
   { path: 'view-chart', component: ViewChartPageComponent },
   { path: 'pdf-reader', component: PdfReaderPageComponent },
   { path: 'laputa-notes', component: LaputaNotesPageComponent },
-  { path: '', redirectTo: 'laputa-notes', pathMatch: 'full' }
+  { path: 'activity-value-matrix', component: ActivityValueMatrixPageComponent },
+  { path: '', redirectTo: 'activity-value-matrix', pathMatch: 'full' }
 ];

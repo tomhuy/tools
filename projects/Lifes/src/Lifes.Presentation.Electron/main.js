@@ -26,8 +26,8 @@ let apiProcess;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 1280,
-    height: 800,
+    width: 1920,
+    height: 1080,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
@@ -55,31 +55,31 @@ function startDotNetApi() {
     log.info("Running in Dev mode. Please ensure WebAPI is running on https://localhost:7119 or http://localhost:5242 via Visual Studio / dotnet run");
   } else {
     const apiPath = path.join(process.resourcesPath, 'backend', 'Lifes.Presentation.WebApi.exe');
-    
+
     // Khởi tạo biến môi trường mới bằng cách kế thừa môi trường hiện tại
     const backendEnv = Object.assign({}, process.env, {
-        ASPNETCORE_ENVIRONMENT: 'Production', // Báo cho .NET biết đây là bản build Release
-        ASPNETCORE_URLS: 'http://localhost:5110', // Truyền port mặc định (hoặc logic lấy port động nếu cần)
+      ASPNETCORE_ENVIRONMENT: 'Production', // Báo cho .NET biết đây là bản build Release
+      ASPNETCORE_URLS: 'http://localhost:5110', // Truyền port mặc định (hoặc logic lấy port động nếu cần)
     });
-    
+
     log.info("Starting backend at:", apiPath);
-    
+
     apiProcess = spawn(apiPath, [], {
-        env: backendEnv,       // Truyền Environment Variables vào đây
-        windowsHide: true,     // Giấu cửa sổ terminal đen thui
-        stdio: 'pipe'          // Capture stdout/stderr
+      env: backendEnv,       // Truyền Environment Variables vào đây
+      windowsHide: true,     // Giấu cửa sổ terminal đen thui
+      stdio: 'pipe'          // Capture stdout/stderr
     });
 
     apiProcess.stdout.on('data', (data) => {
-        log.info(`[Backend API] ${data}`);
+      log.info(`[Backend API] ${data}`);
     });
 
     apiProcess.stderr.on('data', (data) => {
-        log.error(`[Backend API Error] ${data}`);
+      log.error(`[Backend API Error] ${data}`);
     });
 
     apiProcess.on('close', (code) => {
-        log.info(`Backend process exited with code ${code}`);
+      log.info(`Backend process exited with code ${code}`);
     });
   }
 }

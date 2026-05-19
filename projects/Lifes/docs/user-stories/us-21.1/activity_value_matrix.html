@@ -1,0 +1,294 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.root{padding:1.5rem 0}
+
+.controls{display:flex;gap:8px;margin-bottom:1.5rem;flex-wrap:wrap;align-items:center}
+.ctrl-label{font-size:12px;color:var(--color-text-secondary)}
+.year-btn{font-size:12px;padding:4px 12px;border-radius:20px;border:0.5px solid var(--color-border-tertiary);background:none;cursor:pointer;color:var(--color-text-secondary);transition:all .15s}
+.year-btn.active{background:var(--color-text-primary);color:var(--color-background-primary);border-color:var(--color-text-primary)}
+
+.matrix-wrap{position:relative;margin-bottom:2rem}
+
+.axis-label-y{position:absolute;left:-32px;top:50%;transform:translateY(-50%) rotate(-90deg);font-size:11px;color:var(--color-text-tertiary);white-space:nowrap;letter-spacing:.06em;text-transform:uppercase}
+.axis-label-x{text-align:center;font-size:11px;color:var(--color-text-tertiary);margin-top:8px;letter-spacing:.06em;text-transform:uppercase}
+
+.matrix-inner{position:relative;margin-left:48px}
+
+.quad-grid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:4px;height:420px}
+
+.quad{border-radius:var(--border-radius-lg);padding:16px;display:flex;flex-direction:column;position:relative;overflow:hidden;border:0.5px solid var(--color-border-tertiary)}
+.quad-label{font-size:10px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;margin-bottom:8px;opacity:.6}
+
+.bubble-area{flex:1;position:relative}
+
+.bubble{position:absolute;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column;cursor:pointer;transition:transform .2s, box-shadow .2s;border:2px solid transparent}
+.bubble:hover{transform:scale(1.08);z-index:10}
+.bubble.selected{border-color:var(--color-text-primary);box-shadow:0 0 0 3px var(--color-background-primary),0 0 0 5px var(--color-text-primary)}
+.bubble-icon{font-size:18px}
+.bubble-name{font-size:9px;font-weight:500;text-align:center;margin-top:2px;line-height:1.2;max-width:64px}
+
+.axis-line-h{position:absolute;left:0;right:0;height:1px;background:var(--color-border-secondary);pointer-events:none}
+.axis-line-v{position:absolute;top:0;bottom:0;width:1px;background:var(--color-border-secondary);pointer-events:none}
+.axis-arrow-r{position:absolute;right:-6px;top:-4px;font-size:10px;color:var(--color-text-tertiary)}
+.axis-arrow-u{position:absolute;top:-12px;left:-4px;font-size:10px;color:var(--color-text-tertiary)}
+
+.detail-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-top:.5rem}
+.dc-top{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.dc-icon{font-size:28px}
+.dc-name{font-size:16px;font-weight:500;color:var(--color-text-primary)}
+.dc-subtitle{font-size:12px;color:var(--color-text-secondary);margin-top:1px}
+.dc-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.dcm{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px;text-align:center}
+.dcm-val{font-size:20px;font-weight:500;color:var(--color-text-primary)}
+.dcm-label{font-size:10px;color:var(--color-text-tertiary);margin-top:2px;letter-spacing:.04em;text-transform:uppercase}
+.dc-bar-wrap{margin-bottom:10px}
+.dc-bar-label{display:flex;justify-content:space-between;font-size:11px;color:var(--color-text-secondary);margin-bottom:4px}
+.dc-bar-bg{height:6px;background:var(--color-background-secondary);border-radius:3px;overflow:hidden}
+.dc-bar-fill{height:100%;border-radius:3px;transition:width .5s ease}
+.dc-insight{font-size:12px;color:var(--color-text-secondary);line-height:1.65;padding:10px 12px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);border-left:2px solid transparent}
+
+.hint{font-size:12px;color:var(--color-text-tertiary);text-align:center;margin-top:.5rem}
+</style>
+
+<div class="root">
+
+<div class="controls">
+  <span class="ctrl-label">Xem sau</span>
+  <button class="year-btn" onclick="setYear(1,this)">1 năm</button>
+  <button class="year-btn active" onclick="setYear(3,this)">3 năm</button>
+  <button class="year-btn" onclick="setYear(5,this)">5 năm</button>
+  <button class="year-btn" onclick="setYear(10,this)">10 năm</button>
+</div>
+
+<div class="matrix-wrap">
+  <div class="axis-label-y">Giá trị dài hạn</div>
+  <div class="matrix-inner">
+
+    <div class="quad-grid" id="quad-grid">
+
+      <div class="quad" style="background:rgba(29,158,117,0.06);grid-column:1;grid-row:1" id="q-tl">
+        <div class="quad-label" style="color:#0F6E56">Cao giá trị · Ít thời gian</div>
+        <div class="bubble-area" id="ba-tl"></div>
+      </div>
+
+      <div class="quad" style="background:rgba(55,138,221,0.06);grid-column:2;grid-row:1" id="q-tr">
+        <div class="quad-label" style="color:#185FA5">Cao giá trị · Nhiều thời gian</div>
+        <div class="bubble-area" id="ba-tr"></div>
+      </div>
+
+      <div class="quad" style="background:rgba(201,176,106,0.08);grid-column:1;grid-row:2" id="q-bl">
+        <div class="quad-label" style="color:#BA7517">Thấp giá trị · Ít thời gian</div>
+        <div class="bubble-area" id="ba-bl"></div>
+      </div>
+
+      <div class="quad" style="background:rgba(212,83,126,0.06);grid-column:2;grid-row:2" id="q-br">
+        <div class="quad-label" style="color:#993556">Thấp giá trị · Nhiều thời gian</div>
+        <div class="bubble-area" id="ba-br"></div>
+      </div>
+
+    </div>
+
+    <div class="axis-label-x">Thời gian đầu tư</div>
+  </div>
+</div>
+
+<div id="detail-wrap"></div>
+<div class="hint" id="hint">Click vào bong bóng để xem phân tích chi tiết</div>
+
+</div>
+
+<script>
+const ACTIVITIES = {
+  note: {
+    name: 'Ghi chép',
+    icon: '📝',
+    color: '#1D9E75',
+    colorLight: 'rgba(29,158,117,0.15)',
+    timeInvest: 20,
+    desc: 'Ghi chú, journal, capture ý tưởng',
+    quad: 'tl',
+    pos: {x:30, y:25},
+    metrics: {
+      compound: [1.4, 2.8, 5.2, 18],
+      clarity: [15, 35, 60, 90],
+      network: [8, 22, 45, 80],
+    },
+    insights: {
+      1: 'Sau 1 năm: Bắt đầu thấy các pattern tư duy của bản thân. Ý tưởng cũ bắt đầu kết nối với nhau.',
+      3: 'Sau 3 năm: Bạn có một knowledge base cá nhân không ai có. Mỗi ý tưởng mới kết nối với hàng trăm insight cũ — tốc độ học tăng gấp đôi.',
+      5: 'Sau 5 năm: Ghi chép trở thành "second brain" thực sự. Bạn có thể viết, dạy, và build từ kho kiến thức tích lũy — người khác mất 5 năm mới có được.',
+      10: 'Sau 10 năm: Tài sản tri thức không ai lấy đi được. Mỗi ngày bạn đang đứng trên vai của 10 năm bản thân trước đó.',
+    },
+    bars: [
+      {label:'Tốc độ học (compounding)', color:'#1D9E75'},
+      {label:'Clarity tư duy', color:'#5DCAA5'},
+      {label:'Kết nối ý tưởng', color:'#97C459'},
+    ]
+  },
+  learn: {
+    name: 'Học kiến thức mới',
+    icon: '📚',
+    color: '#7F77DD',
+    colorLight: 'rgba(127,119,221,0.15)',
+    timeInvest: 35,
+    desc: 'Đọc sách, khóa học, nghiên cứu',
+    quad: 'tr',
+    pos: {x:28, y:30},
+    metrics: {
+      compound: [1.3, 2.2, 4.1, 12],
+      clarity: [20, 45, 70, 95],
+      network: [12, 30, 55, 85],
+    },
+    insights: {
+      1: 'Sau 1 năm: Mental models mới bắt đầu thay đổi cách bạn nhìn vấn đề. Bạn thấy pattern mà người khác bỏ qua.',
+      3: 'Sau 3 năm: Bạn có nền tảng cross-domain hiếm — kết nối tâm lý học, design, engineering. Mỗi kiến thức mới học nhanh hơn vì có framework sẵn.',
+      5: 'Sau 5 năm: Tư duy hệ thống trở thành bản năng. Bạn giải quyết vấn đề ở tầng gốc rễ trong khi người khác vẫn đang xử lý triệu chứng.',
+      10: 'Sau 10 năm: Không còn ai có cùng combination kiến thức với bạn. Đây là lợi thế cạnh tranh không thể copy.',
+    },
+    bars: [
+      {label:'Depth tư duy', color:'#7F77DD'},
+      {label:'Mental models', color:'#AFA9EC'},
+      {label:'Transfer học tập', color:'#534AB7'},
+    ]
+  },
+  apply: {
+    name: 'Áp dụng kiến thức',
+    icon: '⚡',
+    color: '#EF9F27',
+    colorLight: 'rgba(239,159,39,0.15)',
+    timeInvest: 40,
+    desc: 'Thực hành, experiment, feedback loop',
+    quad: 'tr',
+    pos: {x:62, y:55},
+    metrics: {
+      compound: [1.8, 3.5, 7.2, 25],
+      clarity: [25, 55, 80, 98],
+      network: [20, 45, 75, 92],
+    },
+    insights: {
+      1: 'Sau 1 năm: Khoảng cách giữa biết và làm được thu hẹp nhanh. Bạn fail nhanh, learn nhanh hơn người chỉ đọc.',
+      3: 'Sau 3 năm: Intuition chuyên môn bắt đầu hình thành — bạn nhận ra giải pháp đúng trước khi phân tích xong. Đây là thứ không học được từ sách.',
+      5: 'Sau 5 năm: Pattern recognition sâu đến mức bạn xử lý vấn đề phức tạp gần như tự động. ROI của mỗi giờ làm việc cao hơn người mới gấp 5–10 lần.',
+      10: 'Sau 10 năm: Malcolm Gladwell gọi đây là 10,000 giờ — nhưng thực ra là 10 năm feedback loop chất lượng. Expertise thực sự, không thể giả.',
+    },
+    bars: [
+      {label:'Skill compounding', color:'#EF9F27'},
+      {label:'Intuition chuyên môn', color:'#FAC775'},
+      {label:'Feedback loop speed', color:'#BA7517'},
+    ]
+  },
+  build: {
+    name: 'Build app',
+    icon: '🛠',
+    color: '#D4537E',
+    colorLight: 'rgba(212,83,126,0.12)',
+    timeInvest: 65,
+    desc: 'Coding, ship feature, tinkering',
+    quad: 'br',
+    pos: {x:55, y:40},
+    metrics: {
+      compound: [1.1, 1.4, 1.8, 2.5],
+      clarity: [5, 10, 18, 30],
+      network: [10, 20, 32, 50],
+    },
+    insights: {
+      1: 'Sau 1 năm: Output có thể nhìn thấy nhưng nếu thiếu nền tảng 1+2+3, bạn đang build trên cát. Technical debt tích lũy nhanh.',
+      3: 'Sau 3 năm: Người chỉ build mà không học và ghi chép sẽ thấy mình giải đi giải lại cùng một vấn đề. Không có compound effect.',
+      5: 'Sau 5 năm: Nếu không có nền tảng 1+2+3, bạn có thể trở thành senior coder nhưng không bao giờ là problem solver thực sự. Tool tốt nhưng không có wisdom.',
+      10: 'Sau 10 năm: Build app đứng một mình không compound. Nhưng Build + (Ghi chép + Học + Áp dụng) = exponential. Thiếu 3 cái kia, cái này chỉ là linear.',
+    },
+    bars: [
+      {label:'Output ngắn hạn', color:'#D4537E'},
+      {label:'Compound value', color:'#ED93B1'},
+      {label:'Wisdom tích lũy', color:'#993556'},
+    ]
+  }
+}
+
+const YEAR_IDX = {1:0, 3:1, 5:2, 10:3}
+let currentYear = 3
+let selectedId = null
+
+function setYear(y, btn) {
+  currentYear = y
+  document.querySelectorAll('.year-btn').forEach(b => b.classList.remove('active'))
+  btn.classList.add('active')
+  renderBubbles()
+  if (selectedId) showDetail(selectedId)
+}
+
+function getBubbleSize(id) {
+  const a = ACTIVITIES[id]
+  const idx = YEAR_IDX[currentYear]
+  const compound = a.metrics.compound[idx]
+  const base = id === 'build' ? 54 : 52
+  return Math.round(base + compound * 10)
+}
+
+function renderBubbles() {
+  ['tl','tr','bl','br'].forEach(q => {
+    document.getElementById('ba-'+q).innerHTML = ''
+  })
+  Object.entries(ACTIVITIES).forEach(([id, a]) => {
+    const area = document.getElementById('ba-'+a.quad)
+    if (!area) return
+    const size = getBubbleSize(id)
+    const el = document.createElement('div')
+    el.className = 'bubble' + (selectedId === id ? ' selected' : '')
+    el.style.cssText = `width:${size}px;height:${size}px;background:${a.colorLight};left:${a.pos.x}%;top:${a.pos.y}%;transform:translate(-50%,-50%)`
+    el.innerHTML = `<span class="bubble-icon">${a.icon}</span><span class="bubble-name" style="color:${a.color}">${a.name}</span>`
+    el.onclick = () => { selectedId = id; renderBubbles(); showDetail(id) }
+    area.appendChild(el)
+  })
+}
+
+function showDetail(id) {
+  const a = ACTIVITIES[id]
+  const idx = YEAR_IDX[currentYear]
+  const compound = a.metrics.compound[idx]
+  const clarity = a.metrics.clarity[idx]
+  const network = a.metrics.network[idx]
+  const insightText = a.insights[currentYear]
+  const barVals = [clarity, network, Math.round(compound*10)]
+  const isLowValue = id === 'build'
+  const borderColor = isLowValue ? '#D4537E' : a.color
+
+  document.getElementById('hint').style.display = 'none'
+  document.getElementById('detail-wrap').innerHTML = `
+    <div class="detail-card">
+      <div class="dc-top">
+        <span class="dc-icon">${a.icon}</span>
+        <div>
+          <div class="dc-name">${a.name}</div>
+          <div class="dc-subtitle">${a.desc}</div>
+        </div>
+      </div>
+      <div class="dc-metrics">
+        <div class="dcm">
+          <div class="dcm-val" style="color:${a.color}">${compound.toFixed(1)}×</div>
+          <div class="dcm-label">Compound</div>
+        </div>
+        <div class="dcm">
+          <div class="dcm-val" style="color:${a.color}">${clarity}%</div>
+          <div class="dcm-label">Clarity tư duy</div>
+        </div>
+        <div class="dcm">
+          <div class="dcm-val" style="color:${a.color}">${network}%</div>
+          <div class="dcm-label">Kết nối ý tưởng</div>
+        </div>
+      </div>
+      ${a.bars.map((b,i) => `
+        <div class="dc-bar-wrap">
+          <div class="dc-bar-label"><span>${b.label}</span><span>${barVals[i]}%</span></div>
+          <div class="dc-bar-bg"><div class="dc-bar-fill" style="width:${barVals[i]}%;background:${b.color}"></div></div>
+        </div>
+      `).join('')}
+      <div class="dc-insight" style="border-left-color:${borderColor}">${insightText}</div>
+    </div>
+  `
+}
+
+renderBubbles()
+</script>

@@ -11,4 +11,5 @@ public class MoodMetadataDefinition
     public string InputType { get; set; } = "text"; // text, number, select, checkbox, radio, textarea, date, time, datetime, duration
     public List<string> Options { get; set; } = new(); // for select, checkbox, radio
     public bool Enabled { get; set; } = true;
+    public int Order { get; set; }
 }

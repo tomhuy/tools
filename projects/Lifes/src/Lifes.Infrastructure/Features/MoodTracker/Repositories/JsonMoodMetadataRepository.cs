@@ -74,7 +74,7 @@ public class JsonMoodMetadataRepository : IMoodMetadataRepository
     {
         lock (_definitions)
         {
-            return Task.FromResult(_definitions.AsEnumerable());
+            return Task.FromResult(_definitions.OrderBy(d => d.Order).AsEnumerable());
         }
     }
 
@@ -95,9 +95,14 @@ public class JsonMoodMetadataRepository : IMoodMetadataRepository
                 existing.InputType = definition.InputType;
                 existing.Options = definition.Options ?? new List<string>();
                 existing.Enabled = definition.Enabled;
+                existing.Order = definition.Order;
             }
             else
             {
+                if (definition.Order == 0 && _definitions.Count > 0)
+                {
+                    definition.Order = _definitions.Max(d => d.Order) + 1;
+                }
                 _definitions.Add(definition);
             }
         }

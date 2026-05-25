@@ -36,8 +36,10 @@ export class MoodEntryEditorComponent implements OnInit {
 
     this.metadataApi.getAll().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (data) => {
-        // Lọc các trường được kích hoạt
-        const enabledFields = data.filter(f => f.enabled);
+        // Lọc các trường được kích hoạt và sắp xếp theo thứ tự hiển thị
+        const enabledFields = data
+          .filter(f => f.enabled)
+          .sort((a, b) => (a.order || 0) - (b.order || 0));
         this.activeFields.set(enabledFields);
 
         // Khởi tạo giá trị mặc định cho form

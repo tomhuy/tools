@@ -29,6 +29,7 @@ export interface MoodMetadataDefinition {
   inputType: string; // text, number, select, checkbox, textarea, etc.
   options?: string[]; // for select, radio, checkbox options list
   enabled: boolean;
+  order: number;
 }
 
 export interface DaySummary {

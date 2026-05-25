@@ -70,6 +70,7 @@ Tính năng Mood Tracker cho phép người dùng ghi chép chi tiết trạng t
 - **Path**: `src/app/features/weekly-tracker/entry-editor/`
 - **Role**: Modal nhập liệu tâm trạng và hoạt động.
 - **Dynamic fields**: Tự động load danh sách metadata active và render động 3 loại component đầu vào chính: **Text**, **Select (Dropdown)** và **Checkbox**.
+- **Defensive Field Sorting**: Áp dụng sắp xếp động phòng thủ các trường metadata theo thứ tự `order` tăng dần trước khi render trên giao diện nhập liệu.
 - **Memory safety**: Tích hợp toán tử dọn dẹp `takeUntilDestroyed` từ Angular Core để tự động hủy luồng khi modal đóng.
 
 #### 9. MoodMetadataApiService *(US-18.5)*
@@ -81,6 +82,7 @@ Tính năng Mood Tracker cho phép người dùng ghi chép chi tiết trạng t
 - **Role**: Modal quản lý (CRUD) danh sách cấu hình các trường thông tin bổ sung. Giao diện kính mờ (glassmorphism) sang trọng.
 - **Auto key generation**: Cơ chế tự động sinh key duy nhất (dạng chữ thường không dấu, phân cách bằng dấu gạch dưới, ví dụ: `luong_nuoc_uong`).
 - **Flexible Options**: Cho phép nhập danh sách tùy chọn dưới 2 định dạng: chuỗi text phân cách bằng dấu phẩy (`Tên hiển thị:giá trị lưu`) hoặc mảng JSON objects.
+- **Optimistic Reordering & Sequential Queue**: Bổ sung hai nút Up/Down sắp xếp. Cập nhật state UI tức thì (Optimistic UI) và xếp các luồng lưu vào hàng đợi `reorderQueue` (Subject + concatMap + concat) để thực thi tuần tự hoàn hảo trên DB, chống race condition.
 
 ### Backend (.NET Core)
 
@@ -102,7 +104,7 @@ Tính năng Mood Tracker cho phép người dùng ghi chép chi tiết trạng t
 
 #### 5. IMoodMetadataRepository & JsonMoodMetadataRepository *(US-18.5)*
 - **Path**: `src/Lifes.Infrastructure/Features/MoodTracker/Repositories/JsonMoodMetadataRepository.cs`
-- **Role**: Repository lưu trữ danh sách định nghĩa cấu hình metadata an toàn, thread-safe vào file `database/mood_metadata_definitions.json`.
+- **Role**: Repository lưu trữ danh sách định nghĩa cấu hình metadata an toàn, thread-safe vào file `database/mood_metadata_definitions.json`, hỗ trợ tự động gán order mới và lấy danh sách sắp xếp sẵn theo `Order` tăng dần.
 
 ## Data Models
 
@@ -122,6 +124,7 @@ Tính năng Mood Tracker cho phép người dùng ghi chép chi tiết trạng t
 - `inputType: string` — Loại trường hiển thị (text, select, checkbox, textarea...)
 - `enabled: boolean` — Trạng thái kích hoạt
 - `options: string[]` — Mảng chứa các tùy chọn (cho select/radio) dưới dạng text thô hoặc JSON string
+- `order: number` — Chỉ số thứ tự hiển thị sắp xếp (tăng dần)
 
 ### ColorPalette
 - `id: string`
@@ -138,3 +141,4 @@ Tính năng Mood Tracker cho phép người dùng ghi chép chi tiết trạng t
 - **Key Slugification Rules**: Hệ thống tự động chuyển đổi chữ hiển thị sang dạng thường, bỏ dấu tiếng Việt, thay khoảng trắng/ký tự đặc biệt bằng dấu gạch dưới `_` để tạo key duy nhất (ví dụ: `luong_nuoc_uong`).
 - **Flexible options parsing**: Cho phép nhập danh sách select options linh hoạt dưới dạng chuỗi `Tên:giá trị` hoặc dạng Mảng JSON Objects, hỗ trợ tự động hiển thị dạng indented JSON định dạng hoàn chỉnh.
 - **takeUntilDestroyed**: Quản lý vòng đời dọn dẹp subscription bằng toán tử RxJS hiện đại từ Angular Core để giải phóng bộ nhớ triệt để khi destroy component.
+- **Optimistic UI & Sequential Save Queue (concatMap)**: Để triệt tiêu race condition (xung đột tài nguyên file JSON ở backend) khi người dùng click sắp xếp quá nhanh mà vẫn giữ giao diện mượt mà tức thời, ứng dụng áp dụng optimistic UI update local signal, đồng thời đẩy các hành động hoán đổi vào một Subject hàng đợi `reorderQueue` xử lý lưu tuần tự tuyệt đối bằng `concatMap` và `concat`.

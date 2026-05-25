@@ -476,6 +476,7 @@ Khi xây dựng tính năng Metadata Customization và Dynamic Form Fields cho M
 - (A) Luồng xử lý CRUD: Component quản lý tự gọi API trực tiếp hay qua Parent Page?
 - (B) Giao diện cấu hình Options cho kiểu `select`: Hỗ trợ những định dạng nhập liệu nào?
 - (C) Cơ chế quản lý bộ nhớ (Memory Safety) đối với Subscription: Sử dụng phương pháp nào?
+- (D) Cơ chế sắp xếp thứ tự hiển thị: Làm thế nào để phản hồi tức thì và chống lỗi tranh chấp ghi (Race Conditions) khi click liên tục?
 
 **2. Các phương án đã được gợi ý:**
 - **Vấn đề A — Phương án 1 (Indirect CRUD)**: Page component quản lý toàn bộ các lượt gọi API CRUD và truyền dữ liệu xuống Manager Component qua `@Input` và nhận sự kiện qua `@Output`.
@@ -484,6 +485,8 @@ Khi xây dựng tính năng Metadata Customization và Dynamic Form Fields cho M
 - **Vấn đề B — Phương án 2 (Unified Parsing Parser - Lựa chọn)**: Hỗ trợ linh hoạt cả chuỗi thường, chuỗi ngăn cách dấu hai chấm (`Tên hiển thị:giá trị`) và mảng JSON Object hoàn chỉnh (`[{"label":"X","value":"Y"}]`).
 - **Vấn đề C — Phương án 1 (Manual Subscription)**: Đóng Subscription thủ công trong `ngOnDestroy` bằng việc gán biến hoặc dùng `Subject` + `takeUntil`.
 - **Vấn đề C — Phương án 2 (takeUntilDestroyed - Lựa chọn)**: Sử dụng toán tử `takeUntilDestroyed` kết hợp `DestroyRef` của Angular Core.
+- **Vấn đề D — Phương án 1 (Direct Sequential Calls)**: Lưu cặp item hoán đổi trực tiếp bằng cách lồng subscription (`save(1).subscribe(() => save(2).subscribe())`). Phương án này hoạt động tốt nếu click chậm, nhưng nếu click liên tục sẽ tạo ra nhiều luồng lưu song song bất đồng bộ, gây race conditions (lỗi tranh chấp ghi tệp JSON ở backend).
+- **Vấn đề D — Phương án 2 (Optimistic UI + reorderQueue with concatMap - Lựa chọn)**: Cập nhật local signal ngay lập tức (Optimistic UI) giúp giao diện thay đổi tức thì. Đồng thời đẩy các yêu cầu lưu vào một Subject hàng đợi `reorderQueue` trung tâm, sử dụng `concatMap` và `concat` để đảm bảo các tiến trình lưu API diễn ra tuần tự tuyệt đối từ trước ra sau.
 
 **3. Lựa chọn và lý do lựa chọn:**
 - **Vấn đề A — Lựa chọn: Phương án 2 (Direct/Self-Inject CRUD)**.
@@ -495,3 +498,6 @@ Khi xây dựng tính năng Metadata Customization và Dynamic Form Fields cho M
 - **Vấn đề C — Lựa chọn: Phương án 2 (takeUntilDestroyed)**.
     - **Hiện đại và sạch sẽ**: Loại bỏ hoàn toàn sự cồng kềnh khi phải khai báo hook `ngOnDestroy` thủ công và tạo thêm biến `Subject` chỉ để gọi `unsubscribe`.
     - **Đồng bộ hóa vòng đời**: `takeUntilDestroyed` tự động quản lý việc giải phóng Subscription cực kỳ đáng tin cậy ngay khi Component bị hủy, ngăn ngừa hoàn toàn lỗi rò rỉ bộ nhớ (memory leak).
+- **Vấn đề D — Lựa chọn: Phương án 2 (Optimistic UI + reorderQueue with concatMap)**.
+    - **UX xuất sắc**: Nhờ Optimistic UI, người dùng thấy các trường nhảy vị trí lập tức mà không có độ trễ của HTTP request.
+    - **Độ tin cậy tuyệt đối**: Sự kết hợp giữa `Subject` + `concatMap` + `concat` tuần tự hóa triệt để mọi request API. Yêu cầu lưu của item/nút click trước bắt buộc phải hoàn thành trọn vẹn trước khi tiến trình lưu của lần click sau được khởi động, giữ cho file JSON lưu trữ ở backend không bao giờ bị ghi đè chồng lấn gây hỏng thứ tự dữ liệu.

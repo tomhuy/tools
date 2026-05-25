@@ -116,12 +116,14 @@
 - [x] **Task 3.1**: Tạo component `MoodMetadataManagerComponent` cho giao diện CRUD cấu hình fields.
 - [x] **Task 3.2**: Hiện thực hóa logic thêm, sửa (không đổi key), bật/tắt (enabled), và xóa field.
 - [x] **Task 3.3**: Triển khai thiết kế glassmorphism đồng bộ với design system của ứng dụng.
+- [x] **Task 3.4**: Bổ sung cơ chế sắp xếp thứ tự hiển thị bằng các nút Up/Down với Sequential Queue (Subject + concatMap) để chống Race Condition.
 
 ### Phase 4: Dynamic Form Rendering in Editor
 - [x] **Task 4.1**: Cập nhật `MoodEntryEditorComponent` để fetch danh sách metadata definitions (chỉ lấy các trường `enabled === true`).
 - [x] **Task 4.2**: Triển khai template render động 3 dynamic component: Text, Select (dropdown), Checkbox.
 - [x] **Task 4.3**: Bind data đã có của entry lên form khi mở.
 - [x] **Task 4.4**: Thực hiện lưu trữ an toàn (Upsert logic - ghi đè key mới, giữ lại key cũ).
+- [x] **Task 4.5**: Đồng bộ sắp xếp thứ tự các metadata động hiển thị trong Form Mood Entry Editor.
 
 ---
 

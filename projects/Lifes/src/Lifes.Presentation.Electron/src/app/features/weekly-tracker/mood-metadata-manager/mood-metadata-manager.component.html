@@ -44,7 +44,7 @@
               </button>
             </div>
           } @else {
-            @for (field of fields(); track field.key) {
+            @for (field of fields(); track field.key; let idx = $index) {
               <div
                 class="field-item"
                 [class.active]="selectedField()?.key === field.key"
@@ -61,6 +61,22 @@
                 </div>
                 
                 <div class="field-item-actions">
+                  <button
+                    type="button"
+                    class="order-btn"
+                    [disabled]="idx === 0"
+                    (click)="moveUp(idx, $event)"
+                    title="Di chuyển lên">
+                    <i class="fas fa-arrow-up"></i>
+                  </button>
+                  <button
+                    type="button"
+                    class="order-btn"
+                    [disabled]="idx === fields().length - 1"
+                    (click)="moveDown(idx, $event)"
+                    title="Di chuyển xuống">
+                    <i class="fas fa-arrow-down"></i>
+                  </button>
                   <button
                     type="button"
                     class="status-toggle-btn"

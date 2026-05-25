@@ -2,6 +2,7 @@ import { Component, inject, signal, OnInit, Output, EventEmitter, DestroyRef } f
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { concatMap, concat, Subject, tap } from 'rxjs';
 import { MoodMetadataApiService } from '../services/mood-metadata-api.service';
 import { MoodMetadataDefinition } from '../../../models/weekly-tracker.model';
 
@@ -22,6 +23,27 @@ export class MoodMetadataManagerComponent implements OnInit {
   fields = signal<MoodMetadataDefinition[]>([]);
   selectedField = signal<MoodMetadataDefinition | null>(null);
   isEditMode = signal(false);
+
+  private readonly reorderQueue = new Subject<MoodMetadataDefinition[]>();
+
+  constructor() {
+    this.reorderQueue.pipe(
+      concatMap(items => {
+        const saves = items.map(item => this.apiService.save(item));
+        return concat(...saves).pipe(
+          tap({
+            complete: () => this.loadFields()
+          })
+        );
+      }),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: () => {
+        this.changed.emit();
+      },
+      error: (err) => console.error('Error in sequential reorder queue', err)
+    });
+  }
 
   // Form Model
   formKey = '';
@@ -165,7 +187,8 @@ export class MoodMetadataManagerComponent implements OnInit {
       description: this.formDescription.trim(),
       inputType: this.formInputType,
       enabled: this.formEnabled,
-      options: options.length > 0 ? options : undefined
+      options: options.length > 0 ? options : undefined,
+      order: this.selectedField()?.order ?? (this.fields().length + 1)
     };
 
     this.apiService.save(payload).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
@@ -180,6 +203,39 @@ export class MoodMetadataManagerComponent implements OnInit {
         alert('Có lỗi xảy ra khi lưu trường dữ liệu!');
       }
     });
+  }
+
+  moveUp(index: number, event: Event) {
+    event.stopPropagation();
+    if (index === 0) return;
+    this.swap(index, index - 1);
+  }
+
+  moveDown(index: number, event: Event) {
+    event.stopPropagation();
+    const list = this.fields();
+    if (index === list.length - 1) return;
+    this.swap(index, index + 1);
+  }
+
+  private swap(idx1: number, idx2: number) {
+    const list = [...this.fields()];
+    
+    // Swap the elements in array
+    const temp = list[idx1];
+    list[idx1] = list[idx2];
+    list[idx2] = temp;
+
+    // Re-index all orders to be continuous
+    list.forEach((field, index) => {
+      field.order = index + 1;
+    });
+
+    // Update the UI signal optimistically!
+    this.fields.set(list);
+
+    // Queue sequential saves for the swapped pair
+    this.reorderQueue.next([list[idx1], list[idx2]]);
   }
 
   onDelete(field: MoodMetadataDefinition) {

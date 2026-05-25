@@ -31,7 +31,19 @@
       <app-view-selector-bar></app-view-selector-bar>
 
       <div class="settings-wrap">
-        <button class="settings-btn" [class.active]="isSettingsOpen()" (click)="toggleSettings()">
+        <button
+          class="settings-btn"
+          (click)="openMetadataManager()"
+          title="Cấu hình Metadata">
+          <i class="fas fa-tags"></i>
+        </button>
+      </div>
+
+      <div class="settings-wrap">
+        <button
+          class="settings-btn"
+          [class.active]="isSettingsOpen()"
+          (click)="toggleSettings()">
           <i class="fas fa-sliders-h"></i>
         </button>
         @if (isSettingsOpen()) {
@@ -144,4 +156,8 @@
 
 @if (isEditorOpen()) {
   <app-entry-editor [entry]="selectedEntry()!" (close)="closeEditor()" (save)="closeEditor()" (delete)="closeEditor()"></app-entry-editor>
+}
+
+@if (isMetadataManagerOpen()) {
+  <app-mood-metadata-manager (close)="closeMetadataManager()" (changed)="onMetadataChanged()"></app-mood-metadata-manager>
 }

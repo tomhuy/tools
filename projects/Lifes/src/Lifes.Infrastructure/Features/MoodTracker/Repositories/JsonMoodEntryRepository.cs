@@ -98,6 +98,7 @@ public class JsonMoodEntryRepository : IMoodEntryRepository
                 existing.Tags = entry.Tags;
                 existing.Note = entry.Note;
                 existing.Reason = entry.Reason;
+                existing.Metadata = entry.Metadata;
             }
             else
             {

@@ -371,21 +371,23 @@ ETL Deployment Tools Suite cung cấp:
 
 ---
 
-### 16. Mood & Activity Tracker (US-18.1, US-18.2, US-18.3)
-**Status**: 🔄 In Progress (US-18.3 Phase 1 completed)
-**User Stories**: US-18.1 (UI), US-18.2 (API Integration), US-18.3 (Pluggable View & Content Filter)
+### 16. Mood & Activity Tracker (US-18.1, US-18.2, US-18.3, US-18.4, US-18.5)
+**Status**: ✅ Completed
+**User Stories**: US-18.1 (UI), US-18.2 (API Integration), US-18.3 (Pluggable View & Content Filter), US-18.4 (Intensity Blocks & Heatmap), US-18.5 (Metadata Customization & Dynamic Fields)
 **Documentation**: [fea-mood-tracker-structure.md](./docs/structures/fea-mood-tracker-structure.md)
 
-**Purpose**: Giao diện theo dõi tâm trạng và hoạt động theo từng khung giờ (Range Tracker). Tích hợp chế độ **Content Explorer** chuyên dụng cho nội dung văn bản. Đã chuyển đổi hoàn toàn từ mock data sang backend API thực tế. US-18.3 đang bổ sung hệ thống hiển thị linh hoạt (content filter) và tối ưu text truncation.
+**Purpose**: Giao diện theo dõi tâm trạng và hoạt động theo từng khung giờ (Range Tracker). Tích hợp chế độ **Content Explorer** chuyên dụng cho nội dung văn bản, chế độ **Intensity Blocks** (Heatmap) với bộ chỉ số average ribbon / mini dots thông minh, và trình cấu hình **Metadata Customizer** (dynamic form fields) để thêm các trường thông tin phụ động tùy chỉnh (văn bản, lựa chọn dropdown, hộp đánh dấu).
 
 **Key Components**:
 - **MoodTrackerService**: Quản lý trạng thái và đồng bộ dữ liệu với Backend.
-- **MoodApiService**: Service giao tiếp REST API với Backend .NET.
+- **MoodApiService & MoodMetadataApiService**: Services giao tiếp REST API với Backend .NET.
 - **RangeTrackerPageComponent**: Container — quản lý navigation, filter state, editor state.
-- **MoodMatrixGridComponent**: Grid component độc lập (extracted từ US-18.3), nhận display mode qua service, emit cellClick.
+- **MoodMatrixGridComponent**: Grid component độc lập, nhận display mode qua service, emit cellClick.
+- **IntensityBlocksGridComponent**: Grid dạng heatmap biểu diễn màu sắc theo thang đo bão hòa của bảng palette lựa chọn (Default, Sky-Ghibli...) kèm các tính năng Pattern Aids (Hỗ trợ phát hiện điểm sụt giảm cảm xúc kéo dài).
+- **MoodMetadataManagerComponent**: Trình quản lý CRUD cấu hình các trường phụ với cơ chế tự động sinh key (slugify), hỗ trợ options dạng array JSON object hoặc text.
 - **ContentExplorerPageComponent**: Chế độ xem nội dung chuyên sâu với bộ lọc danh mục và CSS Isolation.
-- **MoodEntryEditorComponent**: Modal glassmorphism cho việc nhập liệu/chỉnh sửa tâm trạng.
-- **JsonMoodEntryRepository**: Backend repository lưu trữ dữ liệu dưới dạng JSON.
+- **MoodEntryEditorComponent**: Modal glassmorphism cho việc nhập liệu/chỉnh sửa tâm trạng, hỗ trợ tự động render động các trường metadata được kích hoạt và tự động dọn dẹp Subscription bằng `takeUntilDestroyed`.
+- **JsonMoodEntryRepository & JsonMoodMetadataRepository**: Backend repositories lưu trữ dữ liệu dưới dạng JSON.
 
 ---
 

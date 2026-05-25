@@ -466,3 +466,32 @@ Trong Intensity Blocks View, mỗi cell cần thể hiện cả mood intensity (
     - **Alignment**: Flex row đảm bảo mood letter và action text luôn căn trái, không bị đè lên nhau.
     - **Truncation tự nhiên**: `flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis` trên action text span — không cần position tricks.
     - **Scalability**: Khi thêm content mode mới (ví dụ hiện tag), chỉ cần thêm span vào flex row, không cần tính toán position.
+
+## ADR 24: Mood Tracker Metadata Customization & Dynamic Form Fields (US-18.5)
+**Ngày ra quyết định: 2026-05-25**
+**Người viết: AI, huy**
+
+**1. Vấn đề/Concern/Feature đang cần ra quyết định:**
+Khi xây dựng tính năng Metadata Customization và Dynamic Form Fields cho Mood Tracker, ta cần đưa ra các quyết định thiết kế quan trọng sau:
+- (A) Luồng xử lý CRUD: Component quản lý tự gọi API trực tiếp hay qua Parent Page?
+- (B) Giao diện cấu hình Options cho kiểu `select`: Hỗ trợ những định dạng nhập liệu nào?
+- (C) Cơ chế quản lý bộ nhớ (Memory Safety) đối với Subscription: Sử dụng phương pháp nào?
+
+**2. Các phương án đã được gợi ý:**
+- **Vấn đề A — Phương án 1 (Indirect CRUD)**: Page component quản lý toàn bộ các lượt gọi API CRUD và truyền dữ liệu xuống Manager Component qua `@Input` và nhận sự kiện qua `@Output`.
+- **Vấn đề A — Phương án 2 (Direct/Self-Inject CRUD - Lựa chọn)**: Manager Component tự inject `MoodMetadataApiService` và tự gọi các API `save` và `delete`. Sau khi hoàn tất thành công, nó gửi sự kiện `changed` và `close` để báo cho Parent Page cập nhật dữ liệu.
+- **Vấn đề B — Phương án 1 (Simple Comma-Separated)**: Chỉ cho phép nhập các giá trị ngăn cách bởi dấu phẩy, dùng chung giá trị làm hiển thị (Label) và dữ liệu lưu (Value).
+- **Vấn đề B — Phương án 2 (Unified Parsing Parser - Lựa chọn)**: Hỗ trợ linh hoạt cả chuỗi thường, chuỗi ngăn cách dấu hai chấm (`Tên hiển thị:giá trị`) và mảng JSON Object hoàn chỉnh (`[{"label":"X","value":"Y"}]`).
+- **Vấn đề C — Phương án 1 (Manual Subscription)**: Đóng Subscription thủ công trong `ngOnDestroy` bằng việc gán biến hoặc dùng `Subject` + `takeUntil`.
+- **Vấn đề C — Phương án 2 (takeUntilDestroyed - Lựa chọn)**: Sử dụng toán tử `takeUntilDestroyed` kết hợp `DestroyRef` của Angular Core.
+
+**3. Lựa chọn và lý do lựa chọn:**
+- **Vấn đề A — Lựa chọn: Phương án 2 (Direct/Self-Inject CRUD)**.
+    - **Tính tự đóng gói (Self-Containment)**: Trình quản lý metadata (`MoodMetadataManagerComponent`) chịu trách nhiệm trọn vẹn về nghiệp vụ CRUD cấu hình, giúp Page component cực kỳ gọn gàng, chỉ làm nhiệm vụ mở/đóng modal.
+    - **Độc lập**: Page component chỉ cần lắng nghe sự kiện `changed` để load lại danh sách các trường hiển thị trong Entry Editor.
+- **Vấn đề B — Lựa chọn: Phương án 2 (Unified Parsing Parser)**.
+    - **Đáp ứng yêu cầu nghiệp vụ**: Người dùng mong muốn cấu hình label và value khác nhau ("display label còn khi chọn thì save value") và nhập tùy chọn dạng array json object.
+    - **Trải nghiệm người dùng tốt**: Cho phép người dùng cấu hình nhanh bằng chuỗi text đơn giản lẫn cấu hình chi tiết, phức tạp thông qua giao diện nhập liệu thông minh (tự động format và căn lề JSON).
+- **Vấn đề C — Lựa chọn: Phương án 2 (takeUntilDestroyed)**.
+    - **Hiện đại và sạch sẽ**: Loại bỏ hoàn toàn sự cồng kềnh khi phải khai báo hook `ngOnDestroy` thủ công và tạo thêm biến `Subject` chỉ để gọi `unsubscribe`.
+    - **Đồng bộ hóa vòng đời**: `takeUntilDestroyed` tự động quản lý việc giải phóng Subscription cực kỳ đáng tin cậy ngay khi Component bị hủy, ngăn ngừa hoàn toàn lỗi rò rỉ bộ nhớ (memory leak).

@@ -1,0 +1,208 @@
+<div
+  class="modal-overlay"
+  (click)="onCancel()">
+  <div
+    class="manager-card"
+    (click)="$event.stopPropagation()">
+    
+    <header class="manager-header">
+      <div class="header-left">
+        <h2 class="title">Cấu hình trường Metadata</h2>
+        <p class="subtitle">Tùy biến các trường thông tin phụ khi ghi chép tâm trạng</p>
+      </div>
+      <button
+        class="close-btn"
+        (click)="onCancel()"
+        aria-label="Close dialog">
+        ×
+      </button>
+    </header>
+
+    <div class="manager-body">
+      <!-- Left Column: List of Fields -->
+      <div class="fields-list-pane">
+        <div class="pane-header">
+          <span class="pane-title">DANH SÁCH TRƯỜNG</span>
+          <button
+            type="button"
+            class="add-new-btn"
+            (click)="onAddNew()">
+            <i class="fas fa-plus"></i> Thêm trường
+          </button>
+        </div>
+
+        <div class="fields-scroll">
+          @if (fields().length === 0) {
+            <div class="empty-state">
+              <i class="fas fa-cubes"></i>
+              <p>Chưa cấu hình trường metadata nào.</p>
+              <button
+                type="button"
+                class="empty-btn"
+                (click)="onAddNew()">
+                Tạo trường đầu tiên
+              </button>
+            </div>
+          } @else {
+            @for (field of fields(); track field.key) {
+              <div
+                class="field-item"
+                [class.active]="selectedField()?.key === field.key"
+                (click)="onSelectField(field)">
+                <div class="field-item-details">
+                  <div class="field-item-top">
+                    <span class="field-label">{{ field.labelDisplay }}</span>
+                    <span class="field-type-badge">{{ field.inputType }}</span>
+                  </div>
+                  <span class="field-key">key: {{ field.key }}</span>
+                  @if (field.description) {
+                    <span class="field-desc">{{ field.description }}</span>
+                  }
+                </div>
+                
+                <div class="field-item-actions">
+                  <button
+                    type="button"
+                    class="status-toggle-btn"
+                    [class.enabled]="field.enabled"
+                    (click)="onToggleEnabled(field, $event)"
+                    [title]="field.enabled ? 'Vô hiệu hóa' : 'Kích hoạt'">
+                    <i
+                      class="fas"
+                      [class.fa-eye]="field.enabled"
+                      [class.fa-eye-slash]="!field.enabled"></i>
+                  </button>
+                  <button
+                    type="button"
+                    class="field-delete-btn"
+                    (click)="onDelete(field)"
+                    title="Xóa trường">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </div>
+            }
+          }
+        </div>
+      </div>
+
+      <!-- Right Column: Edit/Create Form Pane -->
+      <div class="form-pane">
+        @if (isEditMode()) {
+          <div class="form-pane-content">
+            <h3 class="pane-title-form">
+              {{ selectedField() ? 'CẬP NHẬT TRƯỜNG' : 'THÊM MỚI TRƯỜNG' }}
+            </h3>
+
+            <div class="form-scroll">
+              <!-- Label display -->
+              <div class="form-group">
+                <label class="form-label">Tên hiển thị (Label display)</label>
+                <input
+                  type="text"
+                  class="glass-input"
+                  [(ngModel)]="formLabelDisplay"
+                  (ngModelChange)="onAutoGenerateKey()"
+                  placeholder="Ví dụ: Lượng nước uống, Độ tập trung" />
+              </div>
+
+              <!-- Key -->
+              <div class="form-group">
+                <label class="form-label">Key định danh (Duy nhất)</label>
+                <input
+                  type="text"
+                  class="glass-input"
+                  [(ngModel)]="formKey"
+                  [disabled]="!!selectedField()"
+                  placeholder="Ví dụ: luong_nuoc_uong" />
+                @if (!selectedField()) {
+                  <small class="helper-text">
+                    Sẽ tự động chuyển thành định dạng chữ thường, không dấu, ngăn cách bằng dấu gạch dưới.
+                  </small>
+                } @else {
+                  <small class="helper-text warning">
+                    Không cho phép chỉnh sửa Key định danh sau khi đã tạo để bảo toàn dữ liệu lịch sử.
+                  </small>
+                }
+              </div>
+
+              <!-- Input Type -->
+              <div class="form-group">
+                <label class="form-label">Loại hiển thị (Input Type)</label>
+                <select
+                  class="glass-select"
+                  [(ngModel)]="formInputType">
+                  @for (t of inputTypes; track t.value) {
+                    <option [value]="t.value">{{ t.label }}</option>
+                  }
+                </select>
+              </div>
+
+              <!-- Description -->
+              <div class="form-group">
+                <label class="form-label">Mô tả chi tiết</label>
+                <textarea
+                  class="glass-textarea"
+                  [(ngModel)]="formDescription"
+                  placeholder="Nhập mô tả cho trường này..."></textarea>
+              </div>
+
+              <!-- Options (for select, radio, checkbox) -->
+              @if (formInputType === 'select' || formInputType === 'checkbox' || formInputType === 'radio') {
+                <div class="form-group">
+                  <label class="form-label">
+                    Danh sách tùy chọn
+                  </label>
+                  <textarea
+                    class="glass-textarea"
+                    style="min-height: 80px;"
+                    [(ngModel)]="formOptionsText"
+                    placeholder="Ví dụ: Cao:high, Trung bình:medium, Thấp:low hoặc định dạng JSON array..."></textarea>
+                  <small class="helper-text">
+                    Hỗ trợ 2 định dạng:<br/>
+                    1. <strong>Chuỗi ngăn cách dấu phẩy</strong>: <code>Tên hiển thị:giá trị lưu</code> (Ví dụ: <code>Cao:high, Trung bình:medium</code>).<br/>
+                    2. <strong>Mảng JSON Object</strong>: <code>[{{ '{' }}&quot;label&quot;: &quot;Cao&quot;, &quot;value&quot;: &quot;high&quot;{{ '}' }}, {{ '{' }}&quot;label&quot;: &quot;Thấp&quot;, &quot;value&quot;: &quot;low&quot;{{ '}' }}]</code>.
+                  </small>
+                </div>
+              }
+
+              <!-- Enabled -->
+              <div class="form-group checkbox-row">
+                <input
+                  type="checkbox"
+                  id="formEnabled"
+                  class="glass-checkbox"
+                  [(ngModel)]="formEnabled" />
+                <label
+                  for="formEnabled"
+                  class="form-label-cb">
+                  Kích hoạt trường này (Chỉ trường kích hoạt mới được hiển thị lúc ghi chép)
+                </label>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button
+                type="button"
+                class="glass-btn cancel-edit-btn"
+                (click)="onCancelEdit()">
+                Hủy bỏ
+              </button>
+              <button
+                type="button"
+                class="glass-btn save-field-btn"
+                (click)="onSave()">
+                Lưu lại
+              </button>
+            </div>
+          </div>
+        } @else {
+          <div class="form-placeholder">
+            <i class="fas fa-edit"></i>
+            <p>Chọn một trường từ danh sách để sửa hoặc nhấn "Thêm trường" để tạo mới.</p>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

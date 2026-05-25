@@ -69,6 +69,7 @@ try
 
     // Mood Tracker Services
     builder.Services.AddSingleton<IMoodEntryRepository, Lifes.Infrastructure.Features.MoodTracker.Repositories.JsonMoodEntryRepository>();
+    builder.Services.AddSingleton<IMoodMetadataRepository, Lifes.Infrastructure.Features.MoodTracker.Repositories.JsonMoodMetadataRepository>();
 
     // Sprint Board & Users Services
     builder.Services.AddSingleton<IUserRepository, JsonUserRepository>();

@@ -6,6 +6,7 @@ import { MoodMatrixGridComponent } from '../mood-matrix-grid/mood-matrix-grid.co
 import { IntensityBlocksGridComponent } from '../intensity-blocks-grid/intensity-blocks-grid.component';
 import { ViewSelectorBarComponent } from '../view-selector-bar/view-selector-bar.component';
 import { RangeTrackerSettingsPanelComponent } from '../range-tracker-settings-panel/range-tracker-settings-panel.component';
+import { MoodMetadataManagerComponent } from '../mood-metadata-manager/mood-metadata-manager.component';
 import { MOODS, MoodEntry, DisplayMode, FilterMode } from '../../../models/weekly-tracker.model';
 import { format, addHours, startOfDay } from 'date-fns';
 import { vi } from 'date-fns/locale';
@@ -13,7 +14,7 @@ import { vi } from 'date-fns/locale';
 @Component({
   selector: 'app-range-tracker-page',
   standalone: true,
-  imports: [CommonModule, MoodEntryEditorComponent, MoodMatrixGridComponent, IntensityBlocksGridComponent, ViewSelectorBarComponent, RangeTrackerSettingsPanelComponent],
+  imports: [CommonModule, MoodEntryEditorComponent, MoodMatrixGridComponent, IntensityBlocksGridComponent, ViewSelectorBarComponent, RangeTrackerSettingsPanelComponent, MoodMetadataManagerComponent],
   templateUrl: './range-tracker-page.component.html',
   styleUrl: './range-tracker-page.component.css'
 })
@@ -28,6 +29,7 @@ export class RangeTrackerPageComponent implements OnInit, OnDestroy {
   isFilterDropdownOpen = signal(false);
   isRangeDropdownOpen = signal(false);
   isSettingsOpen = signal(false);
+  isMetadataManagerOpen = signal(false);
 
   ngOnInit() {
     this.trackerService.rangeDays.set(7);
@@ -81,5 +83,18 @@ export class RangeTrackerPageComponent implements OnInit, OnDestroy {
   closeEditor() {
     this.isEditorOpen.set(false);
     this.selectedEntry.set(null);
+  }
+
+  openMetadataManager() {
+    this.isMetadataManagerOpen.set(true);
+  }
+
+  closeMetadataManager() {
+    this.isMetadataManagerOpen.set(false);
+  }
+
+  onMetadataChanged() {
+    // We can reload entries or triggers if needed, but the service handles state.
+    // However, the mood entry editor fetches the latest config whenever it's opened.
   }
 }

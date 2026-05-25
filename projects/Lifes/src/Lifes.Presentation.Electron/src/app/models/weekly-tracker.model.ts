@@ -19,6 +19,16 @@ export interface MoodEntry {
   tags: string[];
   note?: string;
   reason?: string;
+  metadata?: { [key: string]: any };
+}
+
+export interface MoodMetadataDefinition {
+  key: string; // unique, e.g. luong_nuoc_uong
+  labelDisplay: string;
+  description?: string;
+  inputType: string; // text, number, select, checkbox, textarea, etc.
+  options?: string[]; // for select, radio, checkbox options list
+  enabled: boolean;
 }
 
 export interface DaySummary {

@@ -1,4 +1,4 @@
-# Feature Structure: Mood & Activity Tracker (US-18.1, US-18.2, US-18.3)
+# Feature Structure: Mood & Activity Tracker (US-18.1, US-18.2, US-18.3, US-18.4, US-18.5)
 
 ## Overview
 
@@ -9,6 +9,7 @@ Tính năng Mood Tracker cho phép người dùng ghi chép chi tiết trạng t
 - ✅ **US-18.2**: Tích hợp Backend API, chuyển đổi từ mock data sang persistence storage (JSON Repository).
 - ✅ **US-18.3**: Pluggable View System & Content Filter — extract grid thành component, content filter bar, text truncation.
 - ✅ **US-18.4**: Intensity Blocks View & Settings Panel — new heatmap view, palette system, pattern aids, settings panel.
+- ✅ **US-18.5**: Mood Tracker — Metadata Customization & Dynamic Form Fields.
 
 ## Architecture
 
@@ -65,9 +66,21 @@ Tính năng Mood Tracker cho phép người dùng ghi chép chi tiết trạng t
 - **Role**: Settings panel (absolute positioned) với 4 sections: VIEW MODE, COLOR PALETTE, PATTERN AIDS, DENSITY.
 - **Controls**: View mode selector, palette picker (fg color swatches), 4 pattern aid toggles, compact rows toggle.
 
-#### 8. MoodEntryEditorComponent
+#### 8. MoodEntryEditorComponent *(US-18.5 updated)*
 - **Path**: `src/app/features/weekly-tracker/entry-editor/`
 - **Role**: Modal nhập liệu tâm trạng và hoạt động.
+- **Dynamic fields**: Tự động load danh sách metadata active và render động 3 loại component đầu vào chính: **Text**, **Select (Dropdown)** và **Checkbox**.
+- **Memory safety**: Tích hợp toán tử dọn dẹp `takeUntilDestroyed` từ Angular Core để tự động hủy luồng khi modal đóng.
+
+#### 9. MoodMetadataApiService *(US-18.5)*
+- **Path**: `src/app/features/weekly-tracker/services/mood-metadata-api.service.ts`
+- **Role**: API Client giao tiếp trực tiếp với Backend REST API để lấy và lưu cấu hình các trường metadata phụ.
+
+#### 10. MoodMetadataManagerComponent *(US-18.5)*
+- **Path**: `src/app/features/weekly-tracker/mood-metadata-manager/`
+- **Role**: Modal quản lý (CRUD) danh sách cấu hình các trường thông tin bổ sung. Giao diện kính mờ (glassmorphism) sang trọng.
+- **Auto key generation**: Cơ chế tự động sinh key duy nhất (dạng chữ thường không dấu, phân cách bằng dấu gạch dưới, ví dụ: `luong_nuoc_uong`).
+- **Flexible Options**: Cho phép nhập danh sách tùy chọn dưới 2 định dạng: chuỗi text phân cách bằng dấu phẩy (`Tên hiển thị:giá trị lưu`) hoặc mảng JSON objects.
 
 ### Backend (.NET Core)
 
@@ -83,6 +96,14 @@ Tính năng Mood Tracker cho phép người dùng ghi chép chi tiết trạng t
 - **Path**: `src/Lifes.Core/Models/MoodEntry.cs`
 - **Role**: Domain model dùng chung cho toàn hệ thống.
 
+#### 4. MoodMetadataController *(US-18.5)*
+- **Path**: `src/Lifes.Presentation.WebApi/Controllers/MoodMetadataController.cs`
+- **Role**: REST controller expose các endpoints cho frontend CRUD định nghĩa metadata (`GET`, `POST`, `DELETE`).
+
+#### 5. IMoodMetadataRepository & JsonMoodMetadataRepository *(US-18.5)*
+- **Path**: `src/Lifes.Infrastructure/Features/MoodTracker/Repositories/JsonMoodMetadataRepository.cs`
+- **Role**: Repository lưu trữ danh sách định nghĩa cấu hình metadata an toàn, thread-safe vào file `database/mood_metadata_definitions.json`.
+
 ## Data Models
 
 ### MoodEntry
@@ -92,15 +113,28 @@ Tính năng Mood Tracker cho phép người dùng ghi chép chi tiết trạng t
 - `tags: string[]`
 - `note: string`
 - `reason: string`
+- `metadata: Dictionary<string, object>` *(US-18.5)* — lưu trữ động các giá trị của các trường thông tin phụ được cấu hình thêm.
+
+### MoodMetadataDefinition *(US-18.5)*
+- `key: string` — Key định danh duy nhất (dạng slug, ví dụ: `luong_nuoc_uong`)
+- `labelDisplay: string` — Nhãn hiển thị trên giao diện
+- `description: string` — Mô tả chi tiết / placeholder
+- `inputType: string` — Loại trường hiển thị (text, select, checkbox, textarea...)
+- `enabled: boolean` — Trạng thái kích hoạt
+- `options: string[]` — Mảng chứa các tùy chọn (cho select/radio) dưới dạng text thô hoặc JSON string
 
 ### ColorPalette
 - `id: string`
 - `label: string`
-- `fg: string[]` — 8 màu saturated (index 0 = weight 1 = D/worst, index 7 = weight 8 = A/best). Dùng cho border trái và mood letter.
-- `bg: string[]` — 8 màu translucent tương ứng. Dùng cho fill background của cell.
-- **Palettes có sẵn**: `default` (green→red), `sky-ghibli` (Ghibli-inspired blue→red với oklch BG colors).
+- `fg: string[]` — 8 màu saturated.
+- `bg: string[]` — 8 màu translucent tương ứng.
 
 ## Technical Decisions (ADR)
 - **JSON Storage**: Sử dụng file JSON để lưu trữ đơn giản, dễ backup và không cần database server phức tạp.
 - **Clean Architecture**: Tách biệt hoàn toàn Core Models và Infrastructure để dễ dàng thay đổi database engine (SQL/NoSQL) trong tương lai.
 - **ISO Dates**: Toàn bộ dữ liệu ngày tháng được chuẩn hóa sang ISO string trước khi gửi lên API để tránh lỗi múi giờ.
+- **Option B (CRUD API Flow)**: Component quản lý metadata tự inject `MoodMetadataApiService` và trực tiếp lưu/xóa qua API. Nó emit các event `close` và `changed` để Parent page component biết khi nào cần đóng hoặc xử lý cập nhật.
+- **Option A (Access Entrypoint)**: Tích hợp button/tab cấu hình ngay bên cạnh View Selector Bar của Mood Tracker Page. Khi click, hiển thị modal kính mờ `app-mood-metadata-manager`.
+- **Key Slugification Rules**: Hệ thống tự động chuyển đổi chữ hiển thị sang dạng thường, bỏ dấu tiếng Việt, thay khoảng trắng/ký tự đặc biệt bằng dấu gạch dưới `_` để tạo key duy nhất (ví dụ: `luong_nuoc_uong`).
+- **Flexible options parsing**: Cho phép nhập danh sách select options linh hoạt dưới dạng chuỗi `Tên:giá trị` hoặc dạng Mảng JSON Objects, hỗ trợ tự động hiển thị dạng indented JSON định dạng hoàn chỉnh.
+- **takeUntilDestroyed**: Quản lý vòng đời dọn dẹp subscription bằng toán tử RxJS hiện đại từ Angular Core để giải phóng bộ nhớ triệt để khi destroy component.

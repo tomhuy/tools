@@ -11,4 +11,5 @@ public class MoodEntry
     public List<string> Tags { get; set; } = new();
     public string? Note { get; set; }
     public string? Reason { get; set; }
+    public Dictionary<string, object>? Metadata { get; set; } = new();
 }

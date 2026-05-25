@@ -23,6 +23,7 @@ src/
 │   │   ├── ITagRepository.cs       # US-9.2
 │   │   ├── INoteRepository.cs      # US-20.3
 │   │   ├── IMoodEntryRepository.cs # US-18.2
+│   │   ├── IMoodMetadataRepository.cs # US-18.5
 │   │   ├── IUserRepository.cs      # US-11.4
 │   │   └── ISprintBoardRepository.cs # US-11.4
 │   └── Models/
@@ -34,10 +35,12 @@ src/
 │       ├── MementoModel.cs         # US-9.1 — Recursive hierarchy (TagIds, IsAchieved support)
 │       ├── TagModel.cs             # US-9.2 — Tagging system
 │       ├── MementoQueryModel.cs    # US-9.2 — Filtering model (ShowAchieved support - US-15.1)
-│       ├── MoodEntry.cs            # US-18.2 — Mood tracker entity
+│       ├── MoodEntry.cs            # US-18.2 — Mood tracker entity (Updated Metadata - US-18.5)
+│       ├── MoodMetadataDefinition.cs # US-18.5 — Mood tracker metadata definition
 │       ├── User.cs                 # US-11.4 — Global team member
 │       ├── Epic.cs                 # US-11.4 — Sprint Board epic
 │       └── SprintTask.cs           # US-11.4 — Sprint Board subtask
+│
 │
 ├── Lifes.Domain/                # Business logic and entities
 │   ├── Common/                     # US-1.2.1
@@ -83,7 +86,8 @@ src/
 │               └── ObsidianNoteRepository.cs # Markdown-based storage
 │       └── MoodTracker/            # US-18.2
 │           └── Repositories/
-│               └── JsonMoodEntryRepository.cs # JSON-based storage
+│               ├── JsonMoodEntryRepository.cs # JSON-based storage
+│               └── JsonMoodMetadataRepository.cs # US-18.5 — Metadata JSON storage
 │       ├── SprintBoard/             # US-11.4
 │       │   └── Repositories/
 │       │       ├── JsonUserRepository.cs
@@ -124,6 +128,7 @@ src/
 │   ├── Controllers/                # REST endpoints routing to Application Commands
 │   │   ├── NotesController.cs      # US-20.3
 │   │   ├── MoodController.cs       # US-18.2
+│   │   ├── MoodMetadataController.cs # US-18.5 — Metadata configurations API
 │   │   ├── UsersController.cs      # US-11.4
 │   │   └── SprintBoardController.cs # US-11.4
 │   └── Program.cs                  # WebAPI Bootstrap

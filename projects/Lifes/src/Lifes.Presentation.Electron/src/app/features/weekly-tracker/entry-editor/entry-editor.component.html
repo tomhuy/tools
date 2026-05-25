@@ -35,6 +35,56 @@
         </div>
       </section>
 
+      <!-- Dynamic Metadata Fields -->
+      @if (activeFields().length > 0) {
+        <section class="form-section">
+          <label class="section-label">Thông tin bổ sung</label>
+          <div class="metadata-form-grid">
+            @for (field of activeFields(); track field.key) {
+              <div class="metadata-field-group">
+                <label class="metadata-field-label">{{ field.labelDisplay }}</label>
+                
+                <!-- 1. Text (covers text, number, date, time, etc.) -->
+                @if (field.inputType === 'text' || field.inputType === 'number' || field.inputType === 'textarea' || field.inputType === 'date' || field.inputType === 'time' || field.inputType === 'datetime' || field.inputType === 'duration') {
+                  <input
+                    [type]="field.inputType === 'number' ? 'number' : 'text'"
+                    class="form-input-single"
+                    [(ngModel)]="entry.metadata![field.key]"
+                    [placeholder]="field.description || ('Nhập ' + field.labelDisplay)" />
+                }
+                
+                <!-- 2. Select Component -->
+                @if (field.inputType === 'select') {
+                  <select
+                    class="form-select-single"
+                    [(ngModel)]="entry.metadata![field.key]">
+                    @for (opt of field.options; track opt) {
+                      <option [value]="parseOption(opt).value">{{ parseOption(opt).label }}</option>
+                    }
+                  </select>
+                }
+                
+                <!-- 3. Checkbox Component -->
+                @if (field.inputType === 'checkbox' || field.inputType === 'radio') {
+                  <div class="metadata-cb-row">
+                    <input
+                      type="checkbox"
+                      [id]="'cb_' + field.key"
+                      class="glass-checkbox"
+                      [(ngModel)]="entry.metadata![field.key]" />
+                    <label
+                      [for]="'cb_' + field.key"
+                      class="metadata-cb-label">
+                      {{ field.description || 'Có / Kích hoạt' }}
+                    </label>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </section>
+      }
+
       <!-- Free Text -->
       <section class="form-section">
         <label class="section-label">Hoặc ghi tự do</label>

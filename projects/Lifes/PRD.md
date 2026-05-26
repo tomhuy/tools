@@ -371,12 +371,12 @@ ETL Deployment Tools Suite cung cấp:
 
 ---
 
-### 16. Mood & Activity Tracker (US-18.1, US-18.2, US-18.3, US-18.4, US-18.5)
+### 16. Mood & Activity Tracker (US-18.1, US-18.2, US-18.3, US-18.4, US-18.5, US-18.5.1)
 **Status**: ✅ Completed
-**User Stories**: US-18.1 (UI), US-18.2 (API Integration), US-18.3 (Pluggable View & Content Filter), US-18.4 (Intensity Blocks & Heatmap), US-18.5 (Metadata Customization & Dynamic Fields)
+**User Stories**: US-18.1 (UI), US-18.2 (API Integration), US-18.3 (Pluggable View & Content Filter), US-18.4 (Intensity Blocks & Heatmap), US-18.5 (Metadata Customization & Dynamic Fields), US-18.5.1 (Extended Modal & Grid Layout)
 **Documentation**: [fea-mood-tracker-structure.md](./docs/structures/fea-mood-tracker-structure.md)
 
-**Purpose**: Giao diện theo dõi tâm trạng và hoạt động theo từng khung giờ (Range Tracker). Tích hợp chế độ **Content Explorer** chuyên dụng cho nội dung văn bản, chế độ **Intensity Blocks** (Heatmap) với bộ chỉ số average ribbon / mini dots thông minh, và trình cấu hình **Metadata Customizer** (dynamic form fields) để thêm các trường thông tin phụ động tùy chỉnh (văn bản, lựa chọn dropdown, hộp đánh dấu).
+**Purpose**: Giao diện theo dõi tâm trạng và hoạt động theo từng khung giờ (Range Tracker). Tích hợp chế độ **Content Explorer** chuyên dụng cho nội dung văn bản, chế độ **Intensity Blocks** (Heatmap) với bộ chỉ số average ribbon / mini dots thông minh, trình cấu hình **Metadata Customizer** (dynamic form fields) để thêm các trường thông tin phụ động tùy chỉnh, và giao diện **Extended Edit Modal (1100px)** phân bổ lưới 3 cột cho các trường thông tin động để tối ưu trải nghiệm nhập liệu chuyên nghiệp.
 
 **Key Components**:
 - **MoodTrackerService**: Quản lý trạng thái và đồng bộ dữ liệu với Backend.
